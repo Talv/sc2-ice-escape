@@ -53,8 +53,9 @@ To solve this problem a custom tool was made. To provide complete texture map da
 
 Proper docs are yet to be made. But here is something to get you started:
 
-1. Download `SEF-IBE.SC2Mod` and `SEF-IBE-Assets.SC2Mod` from *Releases* section, and put them into `Mods` folder in your SC2 directory.
-2. Download and open in editor `Example-map-cv.SC2Map` which contains 6 challenges from *Cold Voyage*. Try to learn basing on examples! By modifying existing stuff.
+1. [Download mods & example map](https://gitlab.com/Talv/sc2-sef/repository/master/archive.zip) from this repository
+2. Copy `SEF-IBE.SC2Mod` and `SEF-IBE-Assets.SC2Mod` into `Mods` folder in your SC2 directory.
+3. Open in editor `Example-map-cv.SC2Map` which contains 6 challenges from *Cold Voyage*. Try to learn basing on examples! By modifying existing stuff.
 
 *(Any changes made to terrain textures require rebuild of internal mappings used for collisions. Use mentioned tool: [sc2-texture-scanner](https://github.com/Talv/sc2-texture-scanner/releases))*
 
