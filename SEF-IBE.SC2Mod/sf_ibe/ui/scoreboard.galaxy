@@ -1,0 +1,266 @@
+const int gv_MAX_GRID_ROWS_COLUMNS = 15;
+
+struct gs_DialogItemGrid {
+    int[gv_MAX_GRID_ROWS_COLUMNS + 1] lv_columnWidths;
+    int[gv_MAX_GRID_ROWS_COLUMNS + 1][gv_MAX_GRID_ROWS_COLUMNS + 1] lv_items;
+    int lv_rows;
+    int lv_cols;
+    int lv_dialog;
+};
+
+int gv_scoreBoardStatsPanel;
+int gv_scoreBoardMinimizeButton;
+int gv_scoreBoardTitle;
+int gv_scoreBoardWidth;
+// int[gv__MAX_PLAYERS + 1] gv_leaderboard_dialogItemGridRowForPlayer;
+gs_DialogItemGrid[2] gv_dialogItemGrid;
+// int[gv__MAX_PLAYERS + 1][2] gv_playerStats;
+
+void gf_CreateDialogItemGrid(int lp_dialog, int lp_panel, int lp_dialogItemGridIndex, int lp_dialogItemType, string lp_fontStyle, int lp_columns, int lp_rows, int lp_defaultColWidth, int lp_totalHeight, int lp_anchor, int lp_offsetX, int lp_offsetY) {
+    int auto20540390_ae;
+    int auto20540390_ai;
+    int auto974604F6_ae;
+    int auto974604F6_ai;
+    int auto4C9A03EE_ae;
+    int auto4C9A03EE_ai;
+    int lv_row;
+    int lv_col;
+    int lv_totalWidth;
+    int lv_offsetX;
+    int lv_offsetY;
+    int lv_rowHeight;
+    int lv_colWidth;
+    int lv_x;
+    gv_dialogItemGrid[lp_dialogItemGridIndex].lv_rows = lp_rows;
+    gv_dialogItemGrid[lp_dialogItemGridIndex].lv_cols = lp_columns;
+    gv_dialogItemGrid[lp_dialogItemGridIndex].lv_dialog = lp_dialog;
+    lv_offsetX = lp_offsetX;
+    lv_offsetY = lp_offsetY;
+    auto20540390_ae = lp_columns - 1;
+    auto20540390_ai = 1;
+    lv_col = 0;
+    for (; ((auto20540390_ai >= 0) && (lv_col <= auto20540390_ae)) || ((auto20540390_ai <= 0) && (lv_col >= auto20540390_ae)); lv_col += auto20540390_ai) {
+        if (gv_dialogItemGrid[lp_dialogItemGridIndex].lv_columnWidths[lv_col] <= 0) {
+            gv_dialogItemGrid[lp_dialogItemGridIndex].lv_columnWidths[lv_col] = lp_defaultColWidth;
+            lv_totalWidth = lv_totalWidth + lp_defaultColWidth;
+        }
+        else {
+            lv_totalWidth = lv_totalWidth + gv_dialogItemGrid[lp_dialogItemGridIndex].lv_columnWidths[lv_col];
+        }
+    }
+    if (lp_anchor == c_anchorCenter) {
+        lv_offsetX = lv_offsetX - (lv_totalWidth / 2);
+        lv_offsetY = lv_offsetY - (lp_totalHeight / 2);
+    }
+    else {
+        if ((lp_anchor == c_anchorTop) || (lp_anchor == c_anchorBottom)) {
+            lv_offsetX = lv_offsetX - (lv_totalWidth / 2);
+        }
+        else {
+            if ((lp_anchor == c_anchorLeft) || (lp_anchor == c_anchorRight)) {
+                lv_offsetY = lv_offsetY - (lp_totalHeight / 2);
+            }
+            else {
+            }
+        }
+    }
+    lv_rowHeight = lp_totalHeight / lp_rows;
+    auto974604F6_ae = lp_rows - 1;
+    auto974604F6_ai = 1;
+    lv_row = 0;
+    for (; ((auto974604F6_ai >= 0) && (lv_row <= auto974604F6_ae)) || ((auto974604F6_ai <= 0) && (lv_row >= auto974604F6_ae)); lv_row += auto974604F6_ai) {
+        lv_x = 0;
+        auto4C9A03EE_ae = lv_col - 1;
+        auto4C9A03EE_ai = 1;
+        lv_col = 0;
+        for (; ((auto4C9A03EE_ai >= 0) && (lv_col <= auto4C9A03EE_ae)) || ((auto4C9A03EE_ai <= 0) && (lv_col >= auto4C9A03EE_ae)); lv_col += auto4C9A03EE_ai) {
+            lv_colWidth = gv_dialogItemGrid[lp_dialogItemGridIndex].lv_columnWidths[lv_col];
+            if (((lp_anchor == c_anchorCenter) || (lp_anchor == c_anchorTop)) || (lp_anchor == c_anchorBottom)) {
+                lv_x = lv_x + (lv_colWidth / 2);
+            }
+            else {
+            }
+            if (lp_panel != c_invalidDialogControlId) {
+                DialogControlCreateInPanel(lp_panel, lp_dialogItemType);
+            }
+            else {
+                DialogControlCreate(lp_dialog, lp_dialogItemType);
+            }
+            DialogControlSetPosition(DialogControlLastCreated(), PlayerGroupAll(), lp_anchor, lv_x + lv_offsetX, lv_offsetY + (lv_rowHeight * lv_row));
+            DialogControlSetSize(DialogControlLastCreated(), PlayerGroupAll(), lv_colWidth, lv_rowHeight);
+            libNtve_gf_SetDialogItemStyle(DialogControlLastCreated(), lp_fontStyle, PlayerGroupAll());
+            gv_dialogItemGrid[lp_dialogItemGridIndex].lv_items[lv_row][lv_col] = DialogControlLastCreated();
+            if (((lp_anchor == c_anchorCenter) || (lp_anchor == c_anchorTop)) || (lp_anchor == c_anchorBottom)) {
+                lv_x = (lv_x + lv_colWidth) - (lv_colWidth / 2);
+            }
+            else {
+                lv_x = lv_x + lv_colWidth;
+            }
+        }
+    }
+}
+
+void gf_UpdatePlayerScoreboardRow (int lp_player, int lp_row) {
+    // Variable Declarations
+    int lv_row;
+    int lv_p;
+    color lv_color;
+
+    // Variable Initialization
+    lv_color = Color(12.16, 12.16, 12.16);
+
+    // Implementation
+    lv_p = lp_player;
+    lv_row = lp_row;
+    if ((PlayerGroupHasPlayer(PlayerGroupActive(), lv_p) == true)) {
+        lv_color = libNtve_gf_ConvertPlayerColorToColor(PlayerGetColorIndex(lv_p, false));
+    }
+
+    libNtve_gf_SetDialogItemText(gv_dialogItemGrid[0].lv_items[lv_row][0], TextWithColor(PlayerName(lv_p), lv_color), PlayerGroupAll());
+    libNtve_gf_SetDialogItemText(gv_dialogItemGrid[0].lv_items[lv_row][1], TextWithColor(IntToText(sf_stat_session_stats[lv_p].revives), lv_color), PlayerGroupAll());
+    libNtve_gf_SetDialogItemText(gv_dialogItemGrid[0].lv_items[lv_row][2], TextWithColor(IntToText(sf_stat_session_stats[lv_p].deaths), lv_color), PlayerGroupAll());
+    if (UnitIsValid(gm_players[lv_p].hero.mainUnit)) {
+        libNtve_gf_SetDialogItemText(gv_dialogItemGrid[0].lv_items[lv_row][3], TextWithColor(IntToText(UnitLevel(gm_players[lv_p].hero.mainUnit)), lv_color), PlayerGroupAll());
+    }
+    else {
+        libNtve_gf_SetDialogItemText(gv_dialogItemGrid[0].lv_items[lv_row][3], TextWithColor(StringToText("0"), lv_color), PlayerGroupAll());
+    }
+}
+
+void gf_Minimize_Maximize_Scoreboard(int lp_player, bool lp_minOrMaximize) {
+    if (lp_minOrMaximize == false) {
+        DialogControlSetVisible(gv_scoreBoardStatsPanel, PlayerGroupSingle(lp_player), true);
+        libNtve_gf_SetDialogItemImage(gv_scoreBoardMinimizeButton, "Assets\\Textures\\ui_button_collapselist_normalpressed.dds", PlayerGroupSingle(lp_player));
+        libNtve_gf_SetDialogItemImage2(gv_scoreBoardMinimizeButton, "Assets\\Textures\\ui_button_collapselist_normalpressed.dds", PlayerGroupSingle(lp_player));
+    }
+    else {
+        DialogControlSetVisible(gv_scoreBoardStatsPanel, PlayerGroupSingle(lp_player), false);
+        libNtve_gf_SetDialogItemImage(gv_scoreBoardMinimizeButton, "Assets\\Textures\\ui_button_expandlist_normalpressed.dds", PlayerGroupSingle(lp_player));
+        libNtve_gf_SetDialogItemImage2(gv_scoreBoardMinimizeButton, "Assets\\Textures\\ui_button_expandlist_normalpressed.dds", PlayerGroupSingle(lp_player));
+    }
+}
+
+bool gt_updateScoresInUI_Func(bool testConds, bool runActions) {
+    playergroup auto3DC949B5_g;
+    int auto3DC949B5_p;
+    int lv_n;
+    if (!runActions) {
+        return true;
+    }
+    // gf_updateStatsDialogColumnsText();
+    // gf_updateStatsDialogColumnLabels();
+    // auto3DC949B5_g = gv_initGamePlayerGroup;
+    // auto3DC949B5_p = 1;
+    // for (; auto3DC949B5_p <= PlayerGroupCount(auto3DC949B5_g); auto3DC949B5_p += BoolToInt(lv_n == PlayerGroupPlayer(auto3DC949B5_g, auto3DC949B5_p))) {
+    //     lv_n = PlayerGroupPlayer(auto3DC949B5_g, auto3DC949B5_p);
+    //     gf_UpdatePlayerScoreboardRow(lv_n, gv_leaderboard_dialogItemGridRowForPlayer[lv_n]);
+    // }
+    libNtve_gf_SetDialogItemText(gv_scoreBoardTitle, StringToText("Challenge: ") + (IntToText(lv_completedTotal + 1) + (StringToText(" / ") + IntToText(lv_getTotalCount()))), PlayerGroupAll());
+    return true;
+}
+
+void gf_initScoreboard () {
+    playergroup auto1699625B_g;
+    int auto1699625B_p;
+    playergroup autoDACD1C30_g;
+    int autoDACD1C30_p;
+
+    // Variable Declarations
+    int lv_row;
+    int lv_p;
+    int lv_headingSize;
+    int lv_scoreBoardWidth;
+
+    // Variable Initialization
+    lv_headingSize = 16;
+
+    // Implementation
+    gv_scoreBoardWidth = 300;
+    DialogCreate(gv_scoreBoardWidth, 420, c_anchorTopRight, 5, 35, true);
+    DialogSetImageVisible(DialogLastCreated(), false);
+    gv_scoreBoard = DialogLastCreated();
+    // libNtve_gf_CreateDialogItemButton(DialogLastCreated(), 36, 36, c_anchorTopRight, 2, 2, StringToText(""), StringToText(""), "");
+    // libNtve_gf_SetDialogItemImage(DialogControlLastCreated(), "Assets\\Textures\\ui_button_expandlist_normalpressed.dds", PlayerGroupAll());
+    // libNtve_gf_SetDialogItemImage2(DialogControlLastCreated(), "Assets\\Textures\\ui_button_expandlist_normalpressed.dds", PlayerGroupAll());
+    // libNtve_gf_SetDialogItemImageType(DialogControlLastCreated(), c_triggerImageTypeNormal, PlayerGroupAll());
+    // gv_scoreBoardMinimizeButton = DialogControlLastCreated();
+
+    // Challenge: 1/28
+    libNtve_gf_CreateDialogItemLabel(DialogLastCreated(), gv_scoreBoardWidth, 50, c_anchorTop, 0, 0, StringToText("Challenge: x"), ColorWithAlpha(0,0,0,0), false, 2.0);
+    libNtve_gf_SetDialogItemStyle(DialogControlLastCreated(), "ModRightSize24Bold", PlayerGroupAll());
+    gv_scoreBoardTitle = DialogControlLastCreated();
+
+    // DialogControlCreate(DialogLastCreated(), c_triggerControlTypePanel);
+    // DialogControlSetFullDialog(DialogControlLastCreated(), PlayerGroupAll(), true);
+    // libNtve_gf_SetDialogItemRenderPriority(DialogControlLastCreated(), 510, PlayerGroupAll());
+    // gv_scoreBoardStatsPanel = DialogControlLastCreated();
+    // DialogControlCreateInPanel(gv_scoreBoardStatsPanel, c_triggerControlTypeImage);
+    // DialogControlSetPosition(DialogControlLastCreated(), PlayerGroupAll(), c_anchorTopLeft, 0, 0);
+    // DialogControlSetFullDialog(DialogControlLastCreated(), PlayerGroupAll(), true);
+    // DialogControlFadeTransparency(DialogControlLastCreated(), PlayerGroupAll(), 0.0, 20.0);
+    // libNtve_gf_SetDialogItemImage(DialogControlLastCreated(), "Assets\\Textures\\ui_streaming_movie_progressbarborder.dds", PlayerGroupAll());
+    // libNtve_gf_SetDialogItemImageType(DialogControlLastCreated(), c_triggerImageTypeBorder, PlayerGroupAll());
+    // libNtve_gf_SetDialogItemRenderPriority(DialogControlLastCreated(), 1, PlayerGroupAll());
+    // gv_dialogItemGrid[0].lv_columnWidths[0] = 150;
+    // gv_dialogItemGrid[0].lv_columnWidths[1] = 92;
+    // gv_dialogItemGrid[0].lv_columnWidths[3] = 60;
+    // gf_CreateDialogItemGrid(c_invalidDialogId, gv_scoreBoardStatsPanel, 0, c_triggerControlTypeLabel, "ModLeftSize16", 4, 12, 85, 400, c_anchorTop, 0, 50);
+    // lv_row = 0;
+    // libNtve_gf_SetDialogItemText(gv_dialogItemGrid[0].lv_items[lv_row][0], (StringToText("<s val=\"ModLeftSize") + IntToText(lv_headingSize) + StringToText("Bold\">Player</s>")), PlayerGroupAll());
+    // libNtve_gf_SetDialogItemText(gv_dialogItemGrid[0].lv_items[lv_row][1], (StringToText("<s val=\"ModLeftSize") + IntToText(lv_headingSize) + StringToText("Bold\">Revives</s>")), PlayerGroupAll());
+    // libNtve_gf_SetDialogItemText(gv_dialogItemGrid[0].lv_items[lv_row][2], (StringToText("<s val=\"ModLeftSize") + IntToText(lv_headingSize) + StringToText("Bold\">Deaths</s>")), PlayerGroupAll());
+    // libNtve_gf_SetDialogItemText(gv_dialogItemGrid[0].lv_items[lv_row][3], (StringToText("<s val=\"ModLeftSize") + IntToText(lv_headingSize) + StringToText("Bold\">Level</s>")), PlayerGroupAll());
+    // lv_row = (lv_row + 1);
+    // auto1699625B_g = gv_initGamePlayerGroup;
+    // auto1699625B_p = 1;
+    // for ( ; auto1699625B_p <= PlayerGroupCount(auto1699625B_g) ; auto1699625B_p += BoolToInt(lv_p == PlayerGroupPlayer(auto1699625B_g, auto1699625B_p)) ) {
+    //     lv_p = PlayerGroupPlayer(auto1699625B_g, auto1699625B_p);
+    //     gf_UpdatePlayerScoreboardRow(lv_p, lv_row);
+    //     gv_leaderboard_dialogItemGridRowForPlayer[lv_p] = lv_row;
+    //     lv_row = (lv_row + 1);
+    // }
+    autoDACD1C30_g = gv_initGamePlayerGroup;
+    autoDACD1C30_p = 1;
+    for ( ; autoDACD1C30_p <= PlayerGroupCount(autoDACD1C30_g) ; autoDACD1C30_p += BoolToInt(lv_p == PlayerGroupPlayer(autoDACD1C30_g, autoDACD1C30_p)) ) {
+        lv_p = PlayerGroupPlayer(autoDACD1C30_g, autoDACD1C30_p);
+        // if ((gv_playerSettingIsEnabled[lv_p].lv_leaderBoardIsMinimized == true)) {
+        //     gf_Minimize_Maximize_Scoreboard(lv_p, true);
+        // }
+        // else {
+        //     gf_Minimize_Maximize_Scoreboard(lv_p, false);
+        // }
+        if ((gv_playerSettingIsEnabled[lv_p].lv_leaderboard == false)) {
+            DialogSetVisible(gv_scoreBoard, PlayerGroupSingle(lv_p), false);
+        }
+        else {
+            DialogSetVisible(gv_scoreBoard, PlayerGroupSingle(lv_p), true);
+        }
+    }
+
+    // TriggerAddEventDialogControl(TriggerCreate("gt_scoreboard_event"), c_playerAny, c_invalidDialogControlId, c_triggerControlEventTypeClick);
+    // TriggerAddEventGeneric(TriggerCreate("ibe_on_scoreboard_update"), "sf_scoreboard_update");
+    sf_chal_add_event_challenge_ready(TriggerCreate("gt_updateScoresInUI_Func"));
+}
+
+bool gt_scoreboard_event(bool test_conds, bool run_actions)
+{
+    if (EventDialogControl() == gv_scoreBoardMinimizeButton) {
+        if ((gv_playerSettingIsEnabled[EventPlayer()].lv_leaderBoardIsMinimized) == false) {
+            gv_playerSettingIsEnabled[EventPlayer()].lv_leaderBoardIsMinimized = true;
+            gf_Minimize_Maximize_Scoreboard(EventPlayer(), true);
+        }
+        else {
+            gv_playerSettingIsEnabled[EventPlayer()].lv_leaderBoardIsMinimized = false;
+            gf_Minimize_Maximize_Scoreboard(EventPlayer(), false);
+        }
+    }
+
+    return true;
+}
+
+// bool ibe_on_scoreboard_update(bool test_conds, bool run_actions)
+// {
+//     int player = sf_core_event_get_int("player");
+//     gf_UpdatePlayerScoreboardRow(player, gv_leaderboard_dialogItemGridRowForPlayer[player]);
+//     return true;
+// }

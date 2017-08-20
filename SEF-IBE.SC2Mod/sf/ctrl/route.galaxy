@@ -1,0 +1,509 @@
+static unitgroup sf_ctrl_route_ugroup_all = UnitGroupEmpty();
+static unitgroup sf_ctrl_route_ugroup_current = UnitGroupEmpty();
+
+static int sf_ctrl_route_apply_orders(structref<sf_ctrl_controller_t> ctl, unit munit)
+{
+    int i;
+    // int applied_orders = 0;
+    int queue_free_slots;
+    bool is_going_backward;
+    int current_action;
+
+    // use built in patrol
+    // TODO: disabled until it supports initial position shifted from the first action
+    // if (ctl.route.action_count <= 8 && ctl.route.loop == SF_CTRL_ROUTE_LOOP_BACKWARD) {
+    //     // TODO: check if all actions are move abilcmd
+    //     for (i = 0; i < ctl.route.action_count; i += 1) {
+    //         UnitIssueOrder(munit, OrderTargetingPoint(AbilityCommand("move", 1), ctl.route.actions[i].pos), c_orderQueueAddToEnd);
+    //     }
+    //     return -1;
+    // }
+
+    if (!ctl.enabled) {
+        return 0;
+    }
+
+    current_action = FixedToInt(UnitGetCustomValue(munit, UNIT_CUSTOM_CONTROLLER_ACTION));
+
+    queue_free_slots = 30 - UnitOrderCount(munit);
+
+    if (UnitGetCustomValue(munit, UNIT_CUSTOM_CONTROLLER_BACKWARD) == 1.0) {
+        is_going_backward = true;
+    }
+    else {
+        is_going_backward = false;
+    }
+
+    if (UnitTestState(munit, c_unitStateIdle) && ctl.route.reset_on_idle) {
+        is_going_backward = false;
+        current_action = 0;
+    }
+
+    // fill unit's order queue
+    for (; queue_free_slots > 0; queue_free_slots -= 1) {
+        // set straight to next action point when resuming from idle state
+        if (UnitTestState(munit, c_unitStateIdle) && UnitTypeTestFlag(UnitGetType(munit), c_unitFlagTurnable)) {
+            UnitSetFacing(munit, AngleBetweenPoints(UnitGetPosition(munit), ctl.route.actions[current_action].pos), 0.0);
+        }
+
+        UnitIssueOrder(munit, OrderTargetingPoint(ctl.route.actions[current_action].abil, ctl.route.actions[current_action].pos), c_orderQueueAddToEnd);
+
+        if (is_going_backward) {
+            current_action -= 1;
+
+            if (current_action < 0) {
+                current_action = 1;
+                is_going_backward = false;
+            }
+        }
+        else {
+            current_action += 1;
+
+            if (current_action >= ctl.route.action_count) {
+                if (ctl.route.loop == SF_CTRL_ROUTE_LOOP_NO) {
+                    break;
+                }
+                else if (ctl.route.loop == SF_CTRL_ROUTE_LOOP_FORWARD) {
+                    current_action = 0;
+                }
+                else if (ctl.route.loop == SF_CTRL_ROUTE_LOOP_BACKWARD) {
+                    current_action -= 2;
+                    is_going_backward = true;
+                }
+            }
+        }
+    }
+
+    if (is_going_backward) {
+        UnitSetCustomValue(munit, UNIT_CUSTOM_CONTROLLER_BACKWARD, 1.0);
+    }
+    else {
+        UnitSetCustomValue(munit, UNIT_CUSTOM_CONTROLLER_BACKWARD, 0.0);
+    }
+    UnitSetCustomValue(munit, UNIT_CUSTOM_CONTROLLER_ACTION, FixedToInt(current_action));
+
+    if (ctl.route.loop != SF_CTRL_ROUTE_LOOP_NO && (current_action - 1) >= ctl.route.action_count) {
+        return -1;
+    }
+    else if (!is_going_backward) {
+        return (current_action - 1) - ctl.route.action_count;
+    }
+    else {
+        return current_action;
+    }
+}
+
+static fixed sf_ctrl_route_completion_time(unit munit, structref<sf_ctrl_route_action_t> act_a, structref<sf_ctrl_route_action_t> act_b)
+{
+    fixed distance;
+    fixed move_speed;
+
+    distance = DistanceBetweenPoints(act_a.pos, act_b.pos);
+    move_speed = UnitGetPropertyFixed(munit, c_unitPropMovementSpeed, true);
+
+    return distance / move_speed;
+}
+
+int sf_ctrl_route_create()
+{
+    return sf_ctrl_controller_create(SF_CTRL_TYPE_ROUTE);
+}
+
+void sf_ctrl_route_set_loop(int cl_id, int loop)
+{
+    sf_ctrl_controllers[cl_id].route.loop = loop;
+}
+
+int sf_ctrl_route_get_loop(int cl_id)
+{
+    return sf_ctrl_controllers[cl_id].route.loop;
+}
+
+void sf_ctrl_route_set_reset_on_idle(int cl_id, bool reset_on_idle)
+{
+    sf_ctrl_controllers[cl_id].route.reset_on_idle = reset_on_idle;
+}
+
+int sf_ctrl_route_get_action_count(int cl_id)
+{
+    return sf_ctrl_controllers[cl_id].route.action_count;
+}
+
+unitgroup sf_ctrl_route_get_unit_group(int cl_id)
+{
+    return UnitGroupCopy(sf_ctrl_controllers[cl_id].ugroup);
+}
+
+point sf_ctrl_route_get_action_position(int cl_id, int index)
+{
+    return sf_ctrl_controllers[cl_id].route.actions[index].pos;
+}
+
+void sf_ctrl_route_remove_action(int cl_id, int index)
+{
+    // TODO: so far it's working only fast last action..
+    sf_ctrl_controllers[cl_id].route.action_count -= 1;
+}
+
+void sf_ctrl_route_append_order(int cl_id, order ord)
+{
+    structref<sf_ctrl_controller_t> ctl;
+    int target_type;
+
+    ctl = sf_ctrl_controllers[cl_id];
+
+    target_type = OrderGetTargetType(ord);
+    if (target_type == c_orderTargetPoint) {
+        if (ctl.route.action_count >= SF_CTRL_ROUTE_ACTION_MAX) {
+            // TODO: log overflow
+            return;
+        }
+        ctl.route.actions[ctl.route.action_count].pos = OrderGetTargetPoint(ord);
+        ctl.route.actions[ctl.route.action_count].abil = OrderGetAbilityCommand(ord);
+        ctl.route.action_count += 1;
+    }
+}
+
+void sf_ctrl_route_append_waypoint(int cl_id, point pos)
+{
+    sf_ctrl_route_append_order(cl_id, OrderTargetingPoint(AbilityCommand("move", 0), pos));
+}
+
+void sf_ctrl_route_append_waypoints_range(int cl_id, string pn_start, string pn_end)
+{
+    string common_name;
+    string longer_word;
+    bool prefix_zero = false;
+    int index_start;
+    int index_end;
+    int index_greater;
+    int i;
+    string tmp_word;
+
+    if (StringLength(pn_start) == StringLength(pn_end)) {
+        prefix_zero = true;
+        longer_word = pn_end;
+    }
+    else if (StringLength(pn_start) < StringLength(pn_end)) {
+        longer_word = pn_end;
+    }
+    else {
+        longer_word = pn_start;
+    }
+
+    // find index of common base word
+    for (i = 1; i <= StringLength(longer_word); i += 1) {
+        if (!StringEqual(StringSub(pn_start, 1, i), StringSub(pn_end, 1, i), true)) {
+            i -= 1;
+            break;
+        }
+    }
+
+    // back off until there are no numeric characters at the end of common base word
+    for (; i >= 1; i -= 1) {
+        tmp_word = StringSub(longer_word, i, i);
+        // Dbg("tmp_word = " + tmp_word + " int = ");
+        if (!sf_is_numeric(tmp_word)) {
+            break;
+        }
+    }
+
+    if (i < 1) {
+        i = 1;
+    }
+
+    // Dbg("longer word = " + longer_word);
+
+    // both points are the same
+    if (i >= StringLength(longer_word)) {
+        sf_ctrl_route_append_waypoint(cl_id, PointFromName(pn_start));
+        return;
+    }
+
+    common_name = StringSub(pn_start, 1, i);
+    index_start = StringToInt(StringSub(pn_start, i + 1, StringLength(pn_start)));
+    index_end = StringToInt(StringSub(pn_end, i + 1, StringLength(pn_end)));
+    // Dbg(common_name);
+    // Dbg(IntToString(index_start));
+    // Dbg(IntToString(index_end));
+
+    if (index_end > index_start) {
+        index_greater = index_end;
+    }
+    else {
+        index_greater = index_start;
+    }
+
+    for (i = index_start;;) {
+        tmp_word = StringSub(common_name, 1, StringLength(common_name));
+        if (prefix_zero) {
+            if (i < 10 && index_greater >= 10) {
+                tmp_word += "0";
+            }
+            if (i < 100 && index_greater >= 100) {
+                tmp_word += "0";
+            }
+        }
+        tmp_word += IntToString(i);
+        sf_ctrl_route_append_waypoint(cl_id, PointFromName(tmp_word));
+
+        if (index_end > index_start) {
+            i += 1;
+            if (i > index_end) {
+                break;
+            }
+        }
+        else {
+            i -= 1;
+            if (i < index_end) {
+                break;
+            }
+        }
+    }
+}
+
+void sf_ctrl_route_append_waypoints_range_with_offset(int cl_id, string pn_start, string pn_end, fixed offset, fixed angle)
+{
+    structref<sf_ctrl_controller_t> ctl;
+    int i;
+    int mn;
+    fixed relative_angle;
+    point prev_pos;
+
+    ctl = sf_ctrl_controllers[cl_id];
+    mn = ctl.route.action_count;
+
+    sf_ctrl_route_append_waypoints_range(cl_id, pn_start, pn_end);
+
+    // prev_pos = ctl.route.actions[ctl.route.action_count - 2].pos;
+    // for (i = ctl.route.action_count - 1; i >= mn; i -= 1) {
+    //     relative_angle = AngleBetweenPoints(ctl.route.actions[i].pos, prev_pos);
+    //     prev_pos = ctl.route.actions[i].pos;
+
+    //     // Dbg("[route/waypointoff] #" + IntToString(i));
+    //     // Dbg("[route/waypointoff] Relative Angle = " + FixedToString(relative_angle, 0));
+    //     ctl.route.actions[i].pos = PointWithOffsetPolar(ctl.route.actions[i].pos, offset, relative_angle + angle);
+    // }
+
+    // prev_pos = ctl.route.actions[mn + 1].pos;
+    for (i = mn; i < ctl.route.action_count; i += 1) {
+        if (prev_pos == null) {
+            relative_angle = AngleBetweenPoints(ctl.route.actions[i + 1].pos, ctl.route.actions[i].pos);
+        }
+        else {
+            relative_angle = AngleBetweenPoints(ctl.route.actions[i].pos, prev_pos);
+        }
+        prev_pos = ctl.route.actions[i].pos;
+
+        // Dbg("[route/waypointoff] #" + IntToString(i));
+        // Dbg("[route/waypointoff] Relative Angle = " + FixedToString(relative_angle, 0));
+        ctl.route.actions[i].pos = PointWithOffsetPolar(ctl.route.actions[i].pos, offset, relative_angle + angle);
+    }
+}
+
+void sf_ctrl_route_commit_unit(int cl_id, unit munit, int action_index)
+{
+    structref<sf_ctrl_controller_t> ctl;
+    point pos;
+    int i;
+    point pos_offset;
+
+    ctl = sf_ctrl_controllers[cl_id];
+
+    // if (action_index == -1) {
+    //     // TODO: try to guess closest action by comparing distance
+    //     action_index = 0;
+    // }
+
+    // if (pos_shift_factor > 0.0) {
+    //     pos = ctl.route.actions[action_index].pos;
+    //     if ((ctl.route.action_count - 1) > action_index) {
+    //         pos_offset = ctl.route.actions[action_index + 1].pos;
+    //     }
+    //     else {
+    //         pos_offset = ctl.route.actions[0].pos;
+    //     }
+    //     pos_offset -= ctl.route.actions[action_index].pos;
+    //     pos_offset = Point(
+    //         PointGetX(pos_offset) * pos_shift_factor,
+    //         PointGetY(pos_offset) * pos_shift_factor
+    //     );
+    //     UnitSetPosition(munit, pos + pos_offset, false);
+    // }
+    // else if (action_index != -1) {
+    //     UnitSetPosition(munit, ctl.route.actions[action_index].pos, false);
+    // }
+
+    // Dbg("[ctl/commit] cl #" + IntToString(cl_id));
+    // for (i = 0; i < ctl.route.action_count; i += 1) {
+    //     Dbg("[ctl/commit] Action #" + IntToString(i) + " pos =" + sf_point_to_string(ctl.route.actions[i].pos));
+    // }
+    // Dbg("[ctl/commit] distancef = " + FixedToString(DistanceBetweenPoints(ctl.route.actions[0].pos, ctl.route.actions[1].pos), 4));
+
+    UnitSetCustomValue(munit, UNIT_CUSTOM_CONTROLLER_ID, FixedToInt(cl_id + 1));
+    UnitSetCustomValue(munit, UNIT_CUSTOM_CONTROLLER_ACTION, action_index);
+
+    // UnitIssueOrder(munit, Order(AbilityCommand("stop", 0)), c_orderQueueReplace);
+
+    // if we are at position of first action lets just shift to the next one
+    // if (UnitGetPosition(munit) == ctl.route.actions[action_index].pos) {
+    //     action_index += 1;
+    //     action_index %= ctl.route.action_count;
+    // }
+
+    if (sf_ctrl_route_apply_orders(ctl, munit) != -1) {
+        UnitGroupAdd(sf_ctrl_route_ugroup_all, munit);
+    }
+}
+
+void sf_ctrl_route_attach_unit(int cl_id, unit munit)
+{
+    UnitGroupAdd(sf_ctrl_controllers[cl_id].ugroup, munit);
+}
+
+void sf_ctrl_route_engage(int cl_id) {
+    int i;
+    unit tmp_unit;
+    structref<sf_ctrl_controller_t> ctl;
+
+    ctl = sf_ctrl_controllers[cl_id];
+
+    for (i = 1; i <= UnitGroupCount(sf_ctrl_controllers[cl_id].ugroup, c_unitCountAll); i += 1) {
+        tmp_unit = UnitGroupUnit(sf_ctrl_controllers[cl_id].ugroup, i);
+
+        if (sf_ctrl_route_apply_orders(ctl, tmp_unit) != -1) {
+            UnitGroupAdd(sf_ctrl_route_ugroup_all, tmp_unit);
+        }
+    }
+}
+
+void sf_ctrl_route_shift_unit_position(int cl_id, unit munit, fixed route_offset)
+{
+    structref<sf_ctrl_controller_t> ctl;
+    structref<sf_ctrl_route_action_t> act_a;
+    structref<sf_ctrl_route_action_t> act_b;
+    fixed [SF_CTRL_ROUTE_ACTION_MAX]time_table;
+    fixed total_time = 0.0;
+    fixed accumulated_time = 0.0;
+    fixed current_factor = 0.0;
+    fixed upcoming_factor = 0.0;
+    int i;
+    int current_action_id;
+    int next_action_id;
+    fixed shift_factor;
+
+    ctl = sf_ctrl_controllers[cl_id];
+    // Dbg("[route/shift_pos] unit = " + UnitGetType(munit) + "; offset = " + FixedToString(route_offset, 3));
+
+    for (i = 0; i < ctl.route.action_count; i += 1) {
+        act_a = ctl.route.actions[i];
+        if (i >= (ctl.route.action_count - 1)) {
+            act_b = ctl.route.actions[0];
+        }
+        else {
+            act_b = ctl.route.actions[i + 1];
+        }
+        time_table[i] = sf_ctrl_route_completion_time(munit, act_a, act_b);
+        total_time += time_table[i];
+        // Dbg("[route/shift_pos] time_table[" + IntToString(i) + "] = " + FixedToString(time_table[i], 3));
+    }
+    // Dbg("[route/shift_pos] total_time = " + FixedToString(total_time, 3));
+
+    for (i = 0; i < ctl.route.action_count; i += 1) {
+        upcoming_factor += time_table[i] / total_time;
+        if (upcoming_factor >= route_offset) {
+            break;
+        }
+        current_factor = upcoming_factor;
+        accumulated_time += time_table[i];
+    }
+    // Dbg(
+    //     "[route/shift_pos] i = " + IntToString(i) +
+    //     "; current_factor = " + FixedToString(current_factor, 3) +
+    //     "; upcoming_factor = " + FixedToString(upcoming_factor, 3)
+    // );
+
+    if (upcoming_factor - current_factor > 0) {
+        shift_factor = (route_offset - current_factor) / (upcoming_factor - current_factor);
+    }
+    else {
+        shift_factor = 0;
+    }
+
+    // Dbg("[route/shift_pos] shift_factor = " + FixedToString(shift_factor, 3));
+
+    current_action_id = i;
+    if (current_action_id >= ctl.route.action_count) {
+        current_action_id = 0;
+    }
+    next_action_id = i + 1;
+    if (next_action_id >= ctl.route.action_count) {
+        next_action_id = 0;
+    }
+
+    UnitSetCustomValue(munit, UNIT_CUSTOM_CONTROLLER_ID, FixedToInt(cl_id + 1));
+    UnitSetCustomValue(munit, UNIT_CUSTOM_CONTROLLER_ACTION, next_action_id);
+    UnitSetPosition(
+        munit,
+        libNtve_gf_PointOffsetTowardsPoint(
+            ctl.route.actions[current_action_id].pos,
+            DistanceBetweenPoints(ctl.route.actions[current_action_id].pos, ctl.route.actions[next_action_id].pos) * shift_factor,
+            ctl.route.actions[next_action_id].pos
+        ),
+        false
+    );
+    UnitSetFacing(munit, AngleBetweenPoints(ctl.route.actions[current_action_id].pos, ctl.route.actions[next_action_id].pos), .0);
+}
+
+bool sf_ctrl_on_route_periodic(bool testConds, bool runActions) {
+    int i;
+    int max;
+    unit munit;
+    int tmp;
+    int cl_id;
+
+    max = UnitGroupCount(sf_ctrl_route_ugroup_all, c_unitCountAll) / 3;
+    if (max < 1) {
+        max = 1;
+    }
+
+    if (max > UnitGroupCount(sf_ctrl_route_ugroup_current, c_unitCountAll)) {
+        max = UnitGroupCount(sf_ctrl_route_ugroup_current, c_unitCountAll);
+    }
+
+    for (i = 1; i <= max; i += 1) {
+        munit = UnitGroupRandomUnit(sf_ctrl_route_ugroup_current, c_unitCountAll);
+        cl_id = sf_ctrl_controller_get_from_unit(munit);
+        if (cl_id != -1) {
+            tmp = sf_ctrl_route_apply_orders(sf_ctrl_controllers[cl_id], munit);
+        }
+        else {
+            // unit was dettached
+            tmp = -1;
+        }
+        if (tmp == -1) {
+            UnitGroupRemove(sf_ctrl_route_ugroup_all, munit);
+        }
+        UnitGroupRemove(sf_ctrl_route_ugroup_current, munit);
+    }
+
+    if (UnitGroupCount(sf_ctrl_route_ugroup_current, c_unitCountAll) == 0) {
+        UnitGroupAddUnitGroup(sf_ctrl_route_ugroup_current, sf_ctrl_route_ugroup_all);
+    }
+
+    // TODO: delay between runs should be dynamic
+
+    return true;
+}
+
+bool sf_ctrl_on_route_idle_unit(bool testConds, bool runActions) {
+    unit tmp_unit = EventUnit();
+
+    if (!UnitGroupHasUnit(sf_ctrl_route_ugroup_all, tmp_unit)) {
+        return false;
+    }
+
+    sf_ctrl_route_apply_orders(sf_ctrl_controllers[sf_ctrl_controller_get_from_unit(tmp_unit)], tmp_unit);
+
+    return true;
+}

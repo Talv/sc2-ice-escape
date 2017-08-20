@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CSoundtrack id="LostViking_MusicGameLoop2" parent="Music">
+        <CueArray>
+            <MasterLayer Sound="tribalFusionGameLoop"/>
+        </CueArray>
+        <Flags index="Continuous" value="0"/>
+    </CSoundtrack>
+    <CSoundtrack id="LostViking_MusicGameLoop22" parent="Music">
+        <CueArray>
+            <MasterLayer Sound="tribalFusionGameLoop2"/>
+        </CueArray>
+        <Flags index="Continuous" value="0"/>
+    </CSoundtrack>
+    <CSoundtrack id="LostViking_MusicGameLoop222" parent="Music">
+        <CueArray>
+            <MasterLayer Sound="tribalFusionGameLoop22"/>
+        </CueArray>
+        <Flags index="Continuous" value="0"/>
+    </CSoundtrack>
+    <CSoundtrack id="LostViking_MusicGameLoop223" parent="Music">
+        <CueArray>
+            <MasterLayer Sound="tribalFusionGameLoop222"/>
+        </CueArray>
+        <Flags index="Continuous" value="0"/>
+    </CSoundtrack>
+    <CSoundtrack id="LostViking_MusicGameLoop23" parent="Music">
+        <CueArray>
+            <MasterLayer Sound="tribalFusionGameLoop2222"/>
+        </CueArray>
+        <Flags index="Continuous" value="0"/>
+    </CSoundtrack>
+    <CSoundtrack id="winterWind">
+        <CueArray>
+            <MasterLayer Sound="WinterWind3"/>
+        </CueArray>
+    </CSoundtrack>
+    <CSoundtrack id="KeygenMusic">
+        <CueArray>
+            <MasterLayer Sound="KeygenMusic"/>
+            <SlaveLayers/>
+            <SlaveLayers/>
+            <SlaveLayers/>
+            <SlaveLayers/>
+        </CueArray>
+    </CSoundtrack>
+</Catalog>

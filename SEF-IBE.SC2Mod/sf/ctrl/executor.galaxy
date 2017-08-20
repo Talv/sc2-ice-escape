@@ -1,0 +1,320 @@
+const int SF_CTRL_EXECUTOR_SEQUENCE_MAX = 32;
+const int SF_CTRL_EXECUTOR_PROP_MAX = 5;
+const int SF_CTRL_EXECUTOR_UNIT_MAX = 16;
+
+const int SF_CTRL_EXECUTOR_PROP_DELAY = 0;
+const int SF_CTRL_EXECUTOR_PROP_POSITION = 1;
+const int SF_CTRL_EXECUTOR_PROP_ROTATION = 2;
+const int SF_CTRL_EXECUTOR_PROP_HEIGHT = 3;
+const int SF_CTRL_EXECUTOR_PROP_MOVE_SPEED = 4;
+
+struct sf_ctrl_executor_sequence_prop_t {
+    fixed val_a;
+    fixed val_b;
+};
+
+struct sf_ctrl_executor_sequence_t {
+    int easing_func;
+    fixed time_start;
+    fixed time_end;
+    string identifier;
+    sf_ctrl_executor_sequence_prop_t [SF_CTRL_EXECUTOR_PROP_MAX]props;
+};
+
+struct sf_ctrl_executor_t {
+    int loop;
+    int sequence_count;
+    sf_ctrl_executor_sequence_t [SF_CTRL_EXECUTOR_SEQUENCE_MAX]sequences;
+    fixed total_time;
+};
+
+sf_ctrl_executor_t [SF_CTRL_CONTROLLER_MAX]sf_ctrl_executors;
+trigger sf_ctrl_executor_trig_periodic;
+trigger sf_ctrl_executor_trig_process_sequence;
+
+static int sf_ctrl_executor_frame_count(fixed time)
+{
+    int ret = FixedToInt(time / TICK_PERIOD);
+
+    if (time % TICK_PERIOD > 0.0) {
+        ret += 1;
+    }
+
+    return ret;
+}
+
+static fixed sf_ctrl_executor_func_value(int func, fixed offset)
+{
+    if (func == 1) {
+        return offset;
+    }
+    if (func == 2) {
+        return Sin(offset * 90.0);
+    }
+    else {
+        return 0.0;
+    }
+}
+
+void sf_ctrl_executor_cleanup()
+{
+    if (sf_ctrl_executor_trig_periodic != null) {
+        TriggerStop(sf_ctrl_executor_trig_periodic);
+        TriggerDestroy(sf_ctrl_executor_trig_periodic);
+        sf_ctrl_executor_trig_periodic = null;
+    }
+
+    if (sf_ctrl_executor_trig_process_sequence != null) {
+        TriggerStop(sf_ctrl_executor_trig_process_sequence);
+        TriggerDestroy(sf_ctrl_executor_trig_process_sequence);
+        sf_ctrl_executor_trig_process_sequence = null;
+    }
+
+}
+
+void sf_ctrl_executor_destroy(int cl_id)
+{
+    int i;
+    int l;
+
+    for (i = 0; i < sf_ctrl_executors[cl_id].sequence_count; i += 1) {
+        sf_ctrl_executors[cl_id].sequences[i].easing_func = 0;
+        sf_ctrl_executors[cl_id].sequences[i].time_start = 0;
+        sf_ctrl_executors[cl_id].sequences[i].time_end = 0;
+        sf_ctrl_executors[cl_id].sequences[i].identifier = null;
+
+        for (l = 0; l < SF_CTRL_EXECUTOR_PROP_MAX; l += 1) {
+            sf_ctrl_executors[cl_id].sequences[i].props[l].val_a = 0.0;
+            sf_ctrl_executors[cl_id].sequences[i].props[l].val_b = 0.0;
+        }
+    }
+
+    sf_ctrl_executors[cl_id].loop = 0;
+    sf_ctrl_executors[cl_id].sequence_count = 0;
+    sf_ctrl_executors[cl_id].total_time = 0;
+}
+
+int sf_ctrl_executor_create(int loop)
+{
+    int cl_id;
+
+    cl_id = sf_ctrl_controller_create(SF_CTRL_TYPE_EXECUTOR);
+    sf_ctrl_executors[cl_id].loop = loop;
+
+    return cl_id;
+}
+
+void sf_ctrl_executor_insert_sequence_at(int cl_id, int easing_func, fixed time_start, fixed duration, string identifier, int prop_type, fixed prop_val_a, fixed prop_val_b)
+{
+    structref<sf_ctrl_executor_t> exe;
+
+    exe = sf_ctrl_executors[cl_id];
+
+    if (time_start == -1.0) {
+        if (exe.sequence_count == 0) {
+            time_start = 0;
+        }
+        else {
+            time_start = exe.sequences[exe.sequence_count - 1].time_end;
+        }
+    }
+
+    exe.sequences[exe.sequence_count].easing_func = easing_func;
+    exe.sequences[exe.sequence_count].time_start = time_start;
+    exe.sequences[exe.sequence_count].time_end = time_start + duration;
+    exe.sequences[exe.sequence_count].identifier = identifier;
+    exe.sequences[exe.sequence_count].props[prop_type].val_a = prop_val_a;
+    exe.sequences[exe.sequence_count].props[prop_type].val_b = prop_val_b;
+
+    if (exe.sequences[exe.sequence_count].time_end > exe.total_time) {
+        exe.total_time = exe.sequences[exe.sequence_count].time_end;
+    }
+
+    exe.sequence_count += 1;
+}
+
+void sf_ctrl_executor_append_sequence(int cl_id, int easing_func, fixed duration, string identifier, int prop_type, fixed prop_val_a, fixed prop_val_b)
+{
+    sf_ctrl_executor_insert_sequence_at(cl_id, easing_func, -1.0, duration, identifier, prop_type, prop_val_a, prop_val_b);
+}
+
+void sf_ctrl_executor_append_delay(int cl_id, fixed duration, string identifier)
+{
+    sf_ctrl_executor_insert_sequence_at(cl_id, 0, -1.0, duration, identifier, SF_CTRL_EXECUTOR_PROP_DELAY, 0.0, 0.0);
+}
+
+// void sf_ctrl_executor_set_play_mode(int cl_id, bool forward)
+// {
+// }
+
+// void sf_ctrl_executor_set_play_time_scale(int cl_id, fixed scale)
+// {
+// }
+
+void sf_ctrl_executor_attach_unit(int cl_id, unit munit)
+{
+    UnitGroupAdd(sf_ctrl_controllers[cl_id].ugroup, munit);
+}
+
+void sf_ctrl_executor_play(int cl_id, bool play)
+{
+    if (sf_ctrl_executor_trig_periodic == null) {
+        sf_ctrl_executor_trig_periodic = TriggerCreate("sf_ctrl_executor_on_periodic");
+        TriggerExecute(sf_ctrl_executor_trig_periodic, false, false);
+    }
+    if (sf_ctrl_executor_trig_process_sequence == null) {
+        sf_ctrl_executor_trig_process_sequence = TriggerCreate("sf_ctrl_executor_on_process_sequence");
+        TriggerAddEventGeneric(sf_ctrl_executor_trig_process_sequence, sf_ctrl_ce_executor_process_sequence);
+    }
+}
+
+bool sf_ctrl_executor_on_periodic(bool test_conds, bool run_actions)
+{
+    int i;
+    int l;
+    int curr_seq;
+    unit tmp_unit;
+    int curr_frame;
+    bool going_backward;
+    structref<sf_ctrl_executor_t> exe;
+
+    for (;;) {
+        for (i = 0; i < SF_CTRL_CONTROLLER_MAX; i += 1) {
+            if (sf_ctrl_controllers[i].type != SF_CTRL_TYPE_EXECUTOR) { continue; }
+            exe = sf_ctrl_executors[i];
+
+            for (l = 1; l <= UnitGroupCount(sf_ctrl_controllers[i].ugroup, c_unitCountAll); l += 1) {
+                tmp_unit = UnitGroupUnit(sf_ctrl_controllers[i].ugroup, l);
+                curr_frame = FixedToInt(UnitGetCustomValue(tmp_unit, SF_GAME_UVAL_EXECUTOR_TIME_FRAME));
+                going_backward = false;
+                if (UnitGetCustomValue(tmp_unit, UNIT_CUSTOM_CONTROLLER_BACKWARD) == 1.0) {
+                    going_backward = true;
+                }
+
+                // Dbg("[executor/periodic] frame = " + IntToString(curr_frame) + " anim = " + exe.sequences[curr_seq].identifier + " unit = " + UnitGetType(tmp_unit) + " backward = " + IntToString(BoolToInt(going_backward)));
+                for (curr_seq = 0; curr_seq < exe.sequence_count; curr_seq += 1) {
+                    // Dbg(
+                    //     "[executor/periodic] seq = " + IntToString(curr_seq) +
+                    //     " sframe = " + IntToString(sf_ctrl_executor_frame_count(exe.sequences[curr_seq].time_start)) +
+                    //     " eframe = " + IntToString(sf_ctrl_executor_frame_count(exe.sequences[curr_seq].time_end))
+                    // );
+                    if (!going_backward && curr_frame != sf_ctrl_executor_frame_count(exe.sequences[curr_seq].time_start)) { continue; }
+                    if (going_backward && (curr_frame + 1) != sf_ctrl_executor_frame_count(exe.sequences[curr_seq].time_end)) { continue; }
+                    // Dbg("[executor/periodic] run seq = " + IntToString(curr_seq));
+                    DataTableSetInt(false, TriggerEventParamName(sf_ctrl_ce_executor_process_sequence, sf_ctrl_cep_executor_process_cl), i);
+                    DataTableSetInt(false, TriggerEventParamName(sf_ctrl_ce_executor_process_sequence, sf_ctrl_cep_executor_process_seq), curr_seq);
+                    DataTableSetUnit(false, TriggerEventParamName(sf_ctrl_ce_executor_process_sequence, sf_ctrl_cep_executor_process_unit), tmp_unit);
+                    DataTableSetBool(false, TriggerEventParamName(sf_ctrl_ce_executor_process_sequence, sf_ctrl_cep_executor_process_backward), going_backward);
+                    TriggerSendEvent(sf_ctrl_ce_executor_process_sequence);
+                }
+
+                if (!going_backward) {
+                    curr_frame += 1;
+                }
+                else {
+                    curr_frame -= 1;
+                }
+                if (curr_frame >= sf_ctrl_executor_frame_count(exe.total_time) || curr_frame < 0) {
+                    if (exe.loop == SF_CTRL_ROUTE_LOOP_FORWARD) {
+                        curr_frame = 0;
+                    }
+                    else if (exe.loop == SF_CTRL_ROUTE_LOOP_BACKWARD && !going_backward) {
+                        curr_frame -= 1;
+                        UnitSetCustomValue(tmp_unit, UNIT_CUSTOM_CONTROLLER_BACKWARD, 1.0);
+                    }
+                    else if (exe.loop == SF_CTRL_ROUTE_LOOP_BACKWARD && going_backward) {
+                        curr_frame += 1;
+                        UnitSetCustomValue(tmp_unit, UNIT_CUSTOM_CONTROLLER_BACKWARD, 0.0);
+                    }
+                    else {
+                        // TODO: destroy should be event based
+                        sf_ctrl_controller_destroy(i);
+                        break;
+                        // sf_core_event_prepare("executor_finished");
+                        // sf_core_event_send();
+                    }
+                }
+                UnitSetCustomValue(tmp_unit, SF_GAME_UVAL_EXECUTOR_TIME_FRAME, curr_frame);
+            }
+        }
+
+        Wait(TICK_PERIOD, c_timeGame);
+    }
+
+    return true;
+}
+
+bool sf_ctrl_executor_on_process_sequence(bool test_conds, bool run_actions)
+{
+    int cl_id;
+    int seq_id;
+    unit munit;
+    bool going_backward;
+    structref<sf_ctrl_executor_t> exe;
+    structref<sf_ctrl_executor_sequence_t> seq;
+    int i;
+    int l;
+    int total_frames;
+    int obj_id;
+    sf_ctrl_executor_sequence_prop_t [SF_CTRL_EXECUTOR_PROP_MAX]prop_snapshot;
+    fixed offset;
+
+    cl_id = DataTableGetInt(false, TriggerEventParamName(sf_ctrl_ce_executor_process_sequence, sf_ctrl_cep_executor_process_cl));
+    seq_id = DataTableGetInt(false, TriggerEventParamName(sf_ctrl_ce_executor_process_sequence, sf_ctrl_cep_executor_process_seq));
+    munit = DataTableGetUnit(false, TriggerEventParamName(sf_ctrl_ce_executor_process_sequence, sf_ctrl_cep_executor_process_unit));
+    going_backward = DataTableGetBool(false, TriggerEventParamName(sf_ctrl_ce_executor_process_sequence, sf_ctrl_cep_executor_process_backward));
+
+    exe = sf_ctrl_executors[cl_id];
+    seq = exe.sequences[seq_id];
+    total_frames = sf_ctrl_executor_frame_count(seq.time_end - seq.time_start);
+
+    prop_snapshot[SF_CTRL_EXECUTOR_PROP_POSITION].val_a = PointGetX(UnitGetPosition(munit));
+    prop_snapshot[SF_CTRL_EXECUTOR_PROP_POSITION].val_b = PointGetY(UnitGetPosition(munit));
+    prop_snapshot[SF_CTRL_EXECUTOR_PROP_ROTATION].val_a = UnitGetFacing(munit);
+    prop_snapshot[SF_CTRL_EXECUTOR_PROP_HEIGHT].val_a = UnitGetHeight(munit);
+    prop_snapshot[SF_CTRL_EXECUTOR_PROP_MOVE_SPEED].val_a = UnitGetPropertyFixed(munit, c_unitPropMovementSpeed, true);
+
+    // Dbg("[executor/process] move speed = " + FixedToString(prop_snapshot[SF_CTRL_EXECUTOR_PROP_MOVE_SPEED].val_a, -1));
+
+    for (i = 0; i < total_frames; i += 1) {
+        if (!UnitIsValid(munit)) { break; }
+
+        offset = sf_ctrl_executor_func_value(seq.easing_func, IntToFixed(i + 1) / IntToFixed(total_frames));
+        if (going_backward) {
+            offset *= -1.0;
+        }
+
+        for (l = 0; l < SF_CTRL_EXECUTOR_PROP_MAX; l += 1) {
+            if (seq.props[l].val_a == 0.0 && seq.props[l].val_b == 0.0) { continue; }
+
+            if (l == SF_CTRL_EXECUTOR_PROP_POSITION) {
+                UnitSetPosition(
+                    munit,
+                    PointWithOffset(
+                        Point(prop_snapshot[SF_CTRL_EXECUTOR_PROP_POSITION].val_a, prop_snapshot[SF_CTRL_EXECUTOR_PROP_POSITION].val_b),
+                        offset * seq.props[l].val_a,
+                        offset * seq.props[l].val_b
+                    ),
+                    true
+                );
+            }
+            else if (l == SF_CTRL_EXECUTOR_PROP_ROTATION) {
+                UnitSetFacing(munit, prop_snapshot[SF_CTRL_EXECUTOR_PROP_ROTATION].val_a + offset * seq.props[l].val_a, TICK_PERIOD);
+            }
+            else if (l == SF_CTRL_EXECUTOR_PROP_HEIGHT) {
+                UnitSetHeight(munit, prop_snapshot[SF_CTRL_EXECUTOR_PROP_HEIGHT].val_a + offset * seq.props[l].val_a, TICK_PERIOD);
+            }
+            else if (l == SF_CTRL_EXECUTOR_PROP_MOVE_SPEED) {
+                UnitSetPropertyFixed(munit, c_unitPropMovementSpeed, prop_snapshot[SF_CTRL_EXECUTOR_PROP_MOVE_SPEED].val_a + offset * seq.props[l].val_a);
+            }
+
+            obj_id = sf_envi_object_get_by_unit(munit);
+            if (obj_id != -1 && sf_envi_object_instances[obj_id].type_id == SF_ENVI_OBJECT_TYPE_IMITATOR) {
+                sf_envi_imitator_relayout(obj_id);
+            }
+        }
+        Wait(TICK_PERIOD, c_timeGame);
+    }
+
+    return true;
+}

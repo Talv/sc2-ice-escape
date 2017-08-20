@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Desc>
+    <!--<Frame type="VictoryPanelStatisticListBoxItem" name="VictoryPanelStatisticListBoxItemTemplate">
+        <Width val="555"/>
+        <Height val="70"/>
+
+        <Frame type="Image" name="ValueBackgroundImage">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="3"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Texture val="@UI/LotV_ListBullet"/>
+        </Frame>
+
+        <Frame type="Label" name="TextLabel">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent/ValueBackgroundImage" pos="Max" offset="5"/>
+            <Width val="555"/>
+            <Style val="Void_VictoryMissionRewardText"/>
+        </Frame>
+
+        <Frame type="Label" name="ValueLabel">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent/TextLabel" pos="Max" offset="10"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-50"/>
+            <Style val="Void_VictoryMissionRewardText"/>
+        </Frame>
+    </Frame>-->
+
+    <Frame type="Frame" name="ProfileLineTemplate">
+        <Anchor side="Top" relative="$parent" pos="Max" offset="30"/>
+        <Anchor side="Left" relative="$parent" pos="Min" offset="80"/>
+        <Anchor side="Right" relative="$parent" pos="Max" offset="-80"/>
+        <Height val="28"/>
+        <!-- <CollapseLayout val="true"/> -->
+
+        <Frame type="Image" name="LabelBullet">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="3"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Texture val="@UI/LotV_ListBullet"/>
+        </Frame>
+
+        <Frame type="Label" name="TextTitle">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent/LabelBullet" pos="Max" offset="5"/>
+            <Style val="Void_VictoryMissionRewardText"/>
+            <Text val="TextTitle"/>
+            <!-- <CollapseLayout val="true"/> -->
+        </Frame>
+
+        <Frame type="Label" name="TextValue">
+            <Anchor side="Top" relative="$parent/TextTitle" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent" pos="Mid" offset="0"/>
+            <Style val="Void_VictoryMissionRewardText"/>
+            <Text val="TextValue"/>
+            <!-- <CollapseLayout val="true"/> -->
+        </Frame>
+
+        <Animation name="FadeIn">
+            <Event event="Birth" action="Play" frame="$parent"/>
+            <Event event="Birth" action="Reset" frame="$parent"/>
+            <Controller type="Fade" end="Pause">
+                <Key type="Curve" time="0" value="0" out="Linear"/>
+                <Key type="Curve" time="2.55" value="0" out="Linear"/>
+                <Key type="Curve" time="2.65" value="255" in="Linear"/>
+            </Controller>
+        </Animation>
+    </Frame>
+
+    <Frame type="Frame" name="SectionTemplate">
+        <Frame type="Image" name="MissionSectionBg">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+            <Texture val="@UI/LoTV_Shared_BorderBlue"/>
+            <TextureType val="Nineslice"/>
+            <!--<Width val="964"/>-->
+            <!--<Height val="260"/>-->
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.55" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.65" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="SummaryTitleLabelUnderline">
+            <Anchor side="Top" relative="$parent/SummaryHeadingLabel" pos="Min" offset="-20"/>
+            <Anchor side="Left" relative="$parent/SummaryHeadingLabel" pos="Min" offset="-65"/>
+            <Anchor side="Right" relative="$parent/MissionSectionBg" pos="Mid" offset="0"/>
+            <Texture val="@UI/LoTV_Shared_HeaderUnderline"/>
+            <Height val="60"/>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.55" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.65" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Label" name="SummaryHeadingLabel">
+            <Anchor side="Top" relative="$parent/MissionSectionBg" pos="Min" offset="35"/>
+            <Anchor side="Left" relative="$parent/MissionSectionBg" pos="Min" offset="80"/>
+            <Anchor side="Right" relative="$parent/MissionSectionBg" pos="Max" offset="0"/>
+            <Style val="Void_VictoryMissionRewardTitle"/>
+            <Text val="SummaryHeadingLabel"/>
+            <CollapseLayout val="true"/>
+            <PreserveAnchorOffset val="false"/>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.55" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.65" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+    </Frame>
+
+    <!--<Frame type="Frame" name="Profile" template="IBE_GenericTemplates/DefaultWindow">-->
+    <Frame type="Frame" name="Profile">
+        <Frame type="Pulldown" name="PlayerPulldown">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="50"/>
+            <Anchor side="Left" relative="$parent" pos="Mid" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Mid" offset="0"/>
+            <NormalImage val="NormalImage"/>
+            <HoverImage val="HoverImage"/>
+            <ArrowImage val="PulldownArrow"/>
+            <ArrowHoverImage val="PulldownArrowHover"/>
+            <ItemContainer val="ItemContainer"/>
+            <Menu val="MenuListBox"/>
+            <HighlightOnHover val="true"/>
+            <Height val="80"/>
+            <Width val="280"/>
+            <MenuShownSound val="@UI_DropdownSelect"/>
+            <MenuHiddenSound val="@UI_DropdownClose"/>
+            <Style val="@DifficultyPulldown_Prot"/>
+
+            <Frame type="Image" name="NormalImage">
+                <Texture val="@@UI/DifficultyPulldownNormal"/>
+                <TextureType val="Border"/>
+                <StateCount val="2"/>
+                <Tiled val="true"/>
+                <LayerColor val="#StandardBorder_Prot"/>
+                <DescFlags val="Internal"/>
+            </Frame>
+
+            <Frame type="Image" name="HoverImage">
+                <Texture val="@@UI/DifficultyPulldownHover"/>
+                <TextureType val="Border"/>
+                <StateCount val="2"/>
+                <Tiled val="true"/>
+                <LayerColor val="#StandardBorder_Prot"/>
+                <DescFlags val="Internal"/>
+            </Frame>
+
+            <Frame type="Image" name="PulldownArrow">
+                <Anchor side="Top" relative="$parent" pos="Mid" offset="0"/>
+                <Anchor side="Bottom" relative="$parent" pos="Mid" offset="0"/>
+                <Anchor side="Right" relative="$parent" pos="Max" offset="-15"/>
+                <Texture val="@@UI/DifficultyPulldownArrow"/>
+                <TextureType val="Normal"/>
+                <StateCount val="2"/>
+                <Tiled val="false"/>
+                <LayerColor val="#StandardBorder_Prot"/>
+                <DescFlags val="Internal"/>
+            </Frame>
+
+            <Frame type="Image" name="PulldownArrowHover">
+                <Anchor side="Top" relative="$parent" pos="Mid" offset="0"/>
+                <Anchor side="Bottom" relative="$parent" pos="Mid" offset="0"/>
+                <Anchor side="Right" relative="$parent" pos="Max" offset="-15"/>
+                <Texture val="@@UI/DifficultyPulldownArrowHover"/>
+                <TextureType val="Normal"/>
+                <StateCount val="2"/>
+                <Tiled val="false"/>
+                <LayerColor val="#StandardBorder_Prot"/>
+                <DescFlags val="Internal"/>
+            </Frame>
+
+            <Frame type="ListBox" name="MenuListBox">
+                <ItemHeight val="34"/>
+                <Insets top="16" left="16" bottom="16" right="16"/>
+                <HighlightInsets top="-4" left="-10" bottom="-4" right="-10"/>
+                <BackgroundImage val="BackgroundImage"/>
+                <SelectedImage val="SelectedImage"/>
+                <HoverImage val="HoverImage"/>
+                <HighlightOnHover val="true"/>
+                <ItemClickSound val="@UI_DropdownListSelect"/>
+                <DescFlags val="Internal"/>
+                <Style val="@DifficultyPulldown_Prot"/>
+
+                <Frame type="Image" name="BackgroundImage">
+                    <Texture val="@@UI/DifficultyPulldownMenuBackground"/>
+                    <TextureType val="HorizontalBorder"/>
+                    <Tiled val="true"/>
+                    <LayerColor val="#StandardBorder_Prot"/>
+                    <DescFlags val="Internal"/>
+                </Frame>
+
+                <Frame type="Image" name="SelectedImage">
+                    <Texture val="@@UI/DifficultyPulldownMenuSelected"/>
+                    <TextureType val="Border"/>
+                    <Tiled val="true"/>
+                    <LayerColor val="#StandardBorder_Prot"/>
+                    <DescFlags val="Internal"/>
+                </Frame>
+
+                <Frame type="Image" name="HoverImage">
+                    <Texture val="@@UI/DifficultyPulldownMenuHover"/>
+                    <TextureType val="Border"/>
+                    <Tiled val="true"/>
+                    <LayerColor val="#StandardBorder_Prot"/>
+                    <DescFlags val="Internal"/>
+                </Frame>
+            </Frame>
+
+            <Frame type="Frame" name="ItemContainer">
+                <Anchor side="Top" relative="$parent" pos="Min" offset="8"/>
+                <Anchor side="Left" relative="$parent" pos="Min" offset="8"/>
+                <Anchor side="Bottom" relative="$parent" pos="Max" offset="-8"/>
+                <Anchor side="Right" relative="$parent" pos="Max" offset="-30"/>
+                <DescFlags val="Internal"/>
+            </Frame>
+        </Frame>
+
+        <!--<Frame type="Frame" name="PrimarySection" template="IBE_Profile/SectionTemplate">
+            <Anchor side="Top" relative="$parent/PlayerPulldown" pos="Max" offset="20"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="40"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-40"/>
+            <Height val="300" />
+
+            <Frame type="Frame" name="Info1" template="IBE_Profile/ProfileLineTemplate">
+                <Anchor side="Top" relative="$parent" pos="Min" offset="90"/>
+            </Frame>
+            <Frame type="Frame" name="Info2" template="IBE_Profile/ProfileLineTemplate">
+                <Anchor side="Top" relative="$parent/Info1" pos="Max" offset="0"/>
+            </Frame>
+        </Frame>-->
+    </Frame>
+</Desc>

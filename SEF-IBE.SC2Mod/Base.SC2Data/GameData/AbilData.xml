@@ -1,0 +1,443 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CAbilEffectTarget id="RavagerCorrosiveBile">
+        <Cost index="0">
+            <Cooldown TimeUse="0"/>
+        </Cost>
+        <Range index="0" value="20"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="Shade">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="30"/>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="30"/>
+            <Cooldown TimeUse="15"/>
+        </Cost>
+        <AbilSetId value="Shade"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="ShadeSelfKill">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <CastIntroTime value="6"/>
+        <ShowProgressArray index="Cast" value="1"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="ShadeUse">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <AbilSetId value="ShadeUse"/>
+        <Cost>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="ART">
+        <AbilSetId value="ART"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Flags index="AbortOnAllianceChange" value="0"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="20"/>
+            <Charge HideCount="1" Link=""/>
+            <Cooldown TimeUse="12"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="10"/>
+            <Charge HideCount="1" Link=""/>
+            <Cooldown TimeUse="6.5"/>
+        </Cost>
+        <AutoCastFilters value="-;-"/>
+        <AINotifyEffect value=""/>
+        <EffectRange index="0" value="0,0"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="ART">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="ARTSwitch">
+        <CmdButtonArray index="Execute" DefaultButtonFace="ARTSwitch"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <AbilSetId value="ARTSwitch"/>
+        <Flags index="Transient" value="1"/>
+    </CAbilEffectInstant>
+    <CAbilLearn id="HeroLearn">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <InfoArray index="Learn1" Abil="IceBoost" VeterancyLevelMin="1">
+            <Button DefaultButtonFace="IceBoost"/>
+        </InfoArray>
+        <InfoArray index="Learn2" Abil="LandBoost" VeterancyLevelMin="2">
+            <Button DefaultButtonFace="LandBoost"/>
+        </InfoArray>
+        <InfoArray index="Learn3" Abil="ReviveCoin" VeterancyLevelMin="2">
+            <Button DefaultButtonFace="ReviveCoin"/>
+        </InfoArray>
+        <InfoArray index="Learn4" Abil="ART" VeterancyLevelMin="3">
+            <Button DefaultButtonFace="ART"/>
+        </InfoArray>
+        <InfoArray index="Learn6" Abil="Shade" VeterancyLevelMin="3">
+            <Button DefaultButtonFace="Shade"/>
+        </InfoArray>
+        <InfoArray index="Learn7" VeterancyLevelMin="4"/>
+        <Flags index="HideOnPointsSpent" value="1"/>
+        <Flags index="Transient" value="1"/>
+        <PointsPerLevel value="1"/>
+        <AbilSetId value="HeroLearn"/>
+    </CAbilLearn>
+    <CAbilEffectInstant id="IceBoost">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Cost>
+            <Charge>
+                <CountMax value="1"/>
+                <CountStart value="1"/>
+                <CountUse value="1"/>
+                <Location value="Unit"/>
+                <TimeStart value="20"/>
+                <TimeUse value="20"/>
+            </Charge>
+            <Cooldown Location="Unit" TimeUse="2.5"/>
+        </Cost>
+        <Cost>
+            <Charge>
+                <CountMax value="2"/>
+                <CountStart value="2"/>
+                <CountUse value="1"/>
+                <Location value="Unit"/>
+                <TimeStart value="20"/>
+                <TimeUse value="20"/>
+            </Charge>
+            <Cooldown Location="Unit" TimeUse="2.5"/>
+        </Cost>
+        <Cost>
+            <Charge>
+                <CountMax value="3"/>
+                <CountStart value="3"/>
+                <CountUse value="1"/>
+                <Location value="Unit"/>
+                <TimeStart value="20"/>
+                <TimeUse value="20"/>
+            </Charge>
+            <Cooldown Location="Unit" TimeUse="2.5"/>
+        </Cost>
+        <Flags index="Transient" value="1"/>
+        <AbilSetId value="IceBoost"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="LandBoost">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Effect index="0" value="LandBoost1"/>
+        <Effect value="LandBoost2"/>
+        <Effect value="LandBoost3"/>
+        <Cost>
+            <Vital index="Life" value="50"/>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <Cost>
+            <Vital index="Life" value="40"/>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <Cost>
+            <Vital index="Life" value="30"/>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <AINotifyEffect value="LandBoost1"/>
+        <Flags index="Transient" value="1"/>
+        <AbilSetId value="LandBoost"/>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="ReviveCoin">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Cooldown TimeUse="1"/>
+        </Cost>
+        <AbilSetId value="ReviveCoin"/>
+    </CAbilEffectInstant>
+    <CAbilMorph id="SecurityGateDiagonalBLURLowered">
+        <InfoArray index="0" Unit="SecurityGateDiagonalBLURLowered">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="2.5"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Duration" value="2.5"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="2.5"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="SecurityGateDiagonalULBR2" parent="SecurityGateDefaultRaise">
+        <Cost>
+            <Cooldown Link="Abil/SecurityGateDiagonalULBR"/>
+        </Cost>
+        <InfoArray index="0" Unit="SecurityGateDiagonalULBR2">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="1"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="SecurityGateDiagonalULBRLowered2" parent="SecurityGateDefaultLower">
+        <ActorKey value="SecurityGateDiagonalULBR2Lowered"/>
+        <InfoArray index="0" Unit="SecurityGateDiagonalULBR2Lowered">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="1"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="SecurityGateStraightHorizontalBF2" parent="SecurityGateDefaultRaise"/>
+    <CAbilMorph id="SecurityGateStraightHorizontalBFLowered22" parent="SecurityGateDefaultLower">
+        <ActorKey value="SecurityGateStraightHorizontalBF22Lowered"/>
+        <InfoArray index="0" Unit="SecurityGateStraightHorizontalBF22Lowered">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="1"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="SecurityGateStraightHorizontalBF22" parent="SecurityGateDefaultRaise">
+        <InfoArray index="0" Unit="SecurityGateStraightHorizontalBF22">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Duration" value="1"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="1"/>
+            </SectionArray>
+        </InfoArray>
+    </CAbilMorph>
+    <CAbilMorph id="SecurityGateStraightHorizontalBFLowered2" parent="SecurityGateDefaultLower">
+        <InfoArray index="0" Unit="SecurityGateStraightHorizontalBF2Lowered"/>
+    </CAbilMorph>
+    <CAbilEffectInstant id="TimeShift">
+        <AbilSetId value="timeShift"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" removed="1"/>
+        <Flags index="AbortOnAllianceChange" value="0"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="40"/>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="10"/>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <AutoCastFilters value="-;-"/>
+        <AINotifyEffect value=""/>
+        <EffectRange index="0" value="0,0"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="TimeShift">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilMorph id="BurrowBanelingDown">
+        <EditorCategories value="AbilityorEffectType:MorphsandBurrows"/>
+    </CAbilMorph>
+    <CAbilEffectTarget id="Pickup">
+        <Flags index="AllowMovement" value="1"/>
+    </CAbilEffectTarget>
+    <CAbilEffectInstant id="PowerBoost">
+        <AbilSetId value="PowerBoost"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" value="PowerBoost1"/>
+        <Effect value="PowerBoost2"/>
+        <Effect value="PowerBoost3"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Life" value="50"/>
+            <Charge HideCount="1"/>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <Cost>
+            <Vital index="Life" value="40"/>
+            <Charge HideCount="1" Link=""/>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <Cost>
+            <Vital index="Life" value="30"/>
+            <Charge HideCount="1" Link=""/>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <CmdButtonArray index="Execute" DefaultButtonFace="PowerBoost">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="Propel">
+        <AbilSetId value="Propel"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" removed="1"/>
+        <Flags index="AbortOnAllianceChange" value="0"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Charge HideCount="1" Link=""/>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <AutoCastFilters value="-;-"/>
+        <AINotifyEffect value=""/>
+        <EffectRange index="0" value="0,0"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="Propel">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilMorph id="SecurityGateStraightVerticalLF2" parent="SecurityGateDefaultRaise">
+        <ActorKey value="SecurityGateStraightVerticalLF"/>
+        <Cost>
+            <Charge Link="Abil/SecurityGateStraightVerticalLF150pc"/>
+            <Cooldown Link="Abil/SecurityGateStraightVerticalLF"/>
+        </Cost>
+    </CAbilMorph>
+    <CAbilMorph id="SecurityGateStraightVerticalLFLowered2" parent="SecurityGateDefaultLower">
+        <ActorKey value="SecurityGateStraightVerticalLFLowered"/>
+        <Cost>
+            <Charge Link="Abil/SecurityGateStraightVerticalLFLowered150pc"/>
+            <Cooldown Link="Abil/SecurityGateStraightVerticalLFLowered150pc"/>
+        </Cost>
+        <InfoArray index="0" Unit="SecurityGateStraightVerticalLFLowered2">
+            <SectionArray index="Actor">
+                <DurationArray index="Duration" value="0"/>
+            </SectionArray>
+            <SectionArray index="Mover">
+                <DurationArray index="Duration" value="0"/>
+            </SectionArray>
+            <SectionArray index="Stats">
+                <DurationArray index="Delay" value="0"/>
+            </SectionArray>
+        </InfoArray>
+        <InfoArray RallyResetPhase="Delay" RallyResetSection="Abils"/>
+    </CAbilMorph>
+    <CAbilEffectInstant id="Switch">
+        <AbilSetId value="Switch"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" removed="1"/>
+        <Flags index="AbortOnAllianceChange" value="0"/>
+        <Flags index="RequireTargetVision" value="0"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Charge HideCount="1" Link=""/>
+            <Cooldown Location="Unit" TimeUse="0.1"/>
+        </Cost>
+        <AutoCastFilters value="-;-"/>
+        <AINotifyEffect value=""/>
+        <EffectRange index="0" value="0,0"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="ARTswitch">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilEffectInstant id="ThrowEssence">
+        <AbilSetId value="ThrowEssence"/>
+        <EditorCategories value="Race:Zerg,AbilityorEffectType:Units"/>
+        <InfoTooltipPriority value="1"/>
+        <Effect index="0" removed="1"/>
+        <Flags index="Transient" value="1"/>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Charge HideCount="1"/>
+            <Cooldown TimeUse="30"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Charge HideCount="1" Link=""/>
+            <Cooldown TimeUse="20"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Charge HideCount="1" Link=""/>
+            <Cooldown TimeUse="10"/>
+        </Cost>
+        <Cost>
+            <Vital index="Energy" value="25"/>
+            <Charge Link=""/>
+            <Cooldown TimeUse="1"/>
+        </Cost>
+        <AINotifyEffect value="PowerBoost"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="ThrowEssence">
+            <Flags index="ToSelection" value="1"/>
+        </CmdButtonArray>
+    </CAbilEffectInstant>
+    <CAbilInteract id="TowerCapture">
+        <Range value="0.5"/>
+    </CAbilInteract>
+    <CAbilEffectTarget id="attackGround">
+        <EditorCategories value="Race:Protoss,AbilityorEffectType:Units"/>
+        <Effect index="0" value="KarassPsiStormPersistent"/>
+        <Flags index="AllowMovement" value="1"/>
+        <Cost/>
+        <Range value="9"/>
+        <CastOutroTime value="0"/>
+        <Marker Link="Abil/KarassPsiStorm"/>
+        <CursorEffect value="KarassPsiStormSearch"/>
+        <AINotifyEffect value="KarassPsiStorm"/>
+        <CmdButtonArray index="Execute" DefaultButtonFace="PsiStorm"/>
+    </CAbilEffectTarget>
+    <CAbilLearn id="icebanelearn">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <InfoArray index="Learn1" Abil="PowerBoost">
+            <Charge CountMax="3"/>
+            <Button DefaultButtonFace="PowerBoost"/>
+        </InfoArray>
+        <InfoArray index="Learn2" Abil="Propel">
+            <Charge CountMax="1"/>
+            <Button DefaultButtonFace="Propel"/>
+        </InfoArray>
+        <InfoArray index="Learn3" Abil="ThrowEssence">
+            <Charge CountMax="3"/>
+            <Button DefaultButtonFace="ThrowEssence" Requirements="EssenceThrowReq"/>
+        </InfoArray>
+        <InfoArray index="Learn4" Abil="ART">
+            <Charge CountMax="1"/>
+            <Button DefaultButtonFace="ART" Requirements="EssenceThrowReq"/>
+        </InfoArray>
+        <InfoArray index="Learn5" Abil="Shade">
+            <Button DefaultButtonFace="Shade" Requirements="EssenceThrowReq"/>
+        </InfoArray>
+        <PointsPerLevel value="1"/>
+    </CAbilLearn>
+    <CAbilMove id="move">
+        <EditorCategories value="AbilityorEffectType:Units,Race:Neutral"/>
+        <FleeRange value="0"/>
+        <FleeTime value="0"/>
+        <CmdButtonArray index="Turn">
+            <Flags index="AllowSelfCast" value="1"/>
+            <Flags index="Hidden" value="1"/>
+            <Flags index="ShowInGlossary" value="1"/>
+        </CmdButtonArray>
+    </CAbilMove>
+    <CAbilStop id="stop2">
+        <CmdButtonArray index="HoldFire" DefaultButtonFace="HoldFireSpecial"/>
+    </CAbilStop>
+    <CAbilEffectInstant id="Stone">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+    </CAbilEffectInstant>
+</Catalog>

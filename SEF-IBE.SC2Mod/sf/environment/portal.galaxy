@@ -1,0 +1,208 @@
+// IBE values
+const fixed PORTAL_TRANSIT_TIME = 0.25;
+const fixed PORTAL_RADIUS = 0.65;
+const fixed PORTAL_Y_OFFSET = 0.2;
+// in ibe activity point is actually shifted down a bit in relation to model, to acomodate for in-game camera perspective. but we don't wan't it
+bool auto_gf_TeleportEssence (unit lp_torus, point lp_targetLocation);
+
+struct sf_envi_portal_t {
+    trigger trig_range;
+    int target_object_id;
+};
+
+sf_envi_portal_t [SF_ENVI_OBJECT_INSTANCE_LIMIT]sf_envi_portals;
+
+static void sf_envi_portal_on_destroy(int obj_id)
+{
+    if (TriggerGetFunction(sf_envi_portals[obj_id].trig_range) != null) {
+        TriggerStop(sf_envi_portals[obj_id].trig_range);
+        TriggerDestroy(sf_envi_portals[obj_id].trig_range);
+    }
+    sf_envi_portals[obj_id].target_object_id = -1;
+}
+
+void sf_envi_portal_init()
+{
+    sf_envi_object_type_t obj_type;
+
+    obj_type.name = "portal";
+    obj_type.fn_destroy = sf_envi_portal_on_destroy;
+    sf_envi_object_register_type_at(obj_type, SF_ENVI_OBJECT_TYPE_PORTAL);
+}
+
+int sf_envi_portal_create(string unit_name, point pos)
+{
+    int obj_id;
+    structref<sf_envi_portal_t> port;
+    fixed radius;
+
+    obj_id = sf_envi_object_create_main_at(SF_ENVI_OBJECT_TYPE_PORTAL, unit_name, pos);
+    port = sf_envi_portals[obj_id];
+
+    radius = cl_getUnitRadius(sf_envi_object_instances[obj_id].main_unit, 0.0);
+
+    port.trig_range = TriggerFind("sf_envi_on_portal_range");
+    if (port.trig_range == null) {
+        port.trig_range = TriggerCreate("sf_envi_on_portal_range");
+    }
+
+    TriggerAddEventUnitRange(
+        port.trig_range,
+        null,
+        sf_envi_object_instances[obj_id].main_unit,
+        radius,
+        true
+    );
+
+    return obj_id;
+}
+
+void sf_envi_portal_set_target(int obj_id, int target_object_id)
+{
+    sf_envi_portals[obj_id].target_object_id = target_object_id;
+}
+
+bool sf_envi_on_portal_range(bool test_conds, bool run_actions)
+{
+    int i;
+    int obj_id = -1;
+    structref<sf_envi_portal_t> port;
+    structref<HERO> hero;
+    bool is_hero;
+    unit tmp_unit;
+    unit port_unit;
+    fixed portal_angle;
+    point target_position;
+    fixed target_angle;
+    fixed unit_angle;
+
+    tmp_unit = EventUnit();
+    port_unit = EventUnitRangeUnit();
+
+    if (sf_phys_is_unit_during_jump(tmp_unit)) {
+        return false;
+    }
+
+    if (!UnitIsAlive(tmp_unit)) {
+        return false;
+    }
+
+    if (UnitGroupHasUnit(gm_herogroup, tmp_unit)) {
+        is_hero = true;
+        hero = gm_players[gm_getPlayerByUnit(tmp_unit)].hero;
+    }
+
+    if (!UnitTestState(tmp_unit, c_unitStateRadarable)) {
+        return false;
+    }
+
+    for (i = 0; i < SF_ENVI_OBJECT_INSTANCE_LIMIT; i += 1) {
+        // TODO: set ID as unit's custom value
+        if (sf_envi_object_instances[i].main_unit == port_unit) {
+            obj_id = i;
+            break;
+        }
+    }
+    if (obj_id == -1) {
+        return false;
+    }
+    port = sf_envi_portals[obj_id];
+
+    // ActorScopeSend(
+    //     ActorScopeFromUnit(sf_envi_object_instances[port.target_object_id].main_unit),
+    //     "Signal a"
+    // );
+
+    target_position = UnitGetPosition(sf_envi_object_instances[port.target_object_id].main_unit);
+
+    if (UnitGetType(tmp_unit) == "ShapeTorus") {
+        return auto_gf_TeleportEssence(tmp_unit, target_position);
+    }
+
+    target_angle = UnitGetFacing(sf_envi_object_instances[port.target_object_id].main_unit);
+    portal_angle = UnitGetFacing(sf_envi_object_instances[obj_id].main_unit);
+
+    UnitSetState(tmp_unit, c_unitStateHidden, true);
+    UnitSetState(tmp_unit, c_unitStateInvulnerable, true);
+
+    if (is_hero) {
+        if (sf_phys_is_point_on_land(UnitGetPosition(hero.mainUnit))) {
+            UnitIssueOrder(tmp_unit, Order(AbilityCommand("stop", 0)), c_orderQueueReplace);
+            UnitIssueOrder(hero.guideUnit, Order(AbilityCommand("stop", 0)), c_orderQueueReplace);
+        }
+        hero.paused = true;
+        sf_core_event_prepare("portal_prep");
+        sf_core_event_set_int("player", UnitGetOwner(hero.mainUnit));
+        sf_core_event_set_point("target", target_position);
+        sf_core_event_send();
+    }
+    else {
+        // UnitIssueOrder(tmp_unit, Order(AbilityCommand("stop", 0)), c_orderQueueReplace);
+    }
+
+    // Dbg("[Portal] Portal angle: " + FixedToString(portal_angle, 0));
+    // Dbg("[Portal] Target angle: " + FixedToString(target_angle, 0));
+    // Dbg("[Portal] Unit angle: " + FixedToString(unit_angle, 0));
+
+    libNtve_gf_CreateModelAtPoint("HybridDAttackImpact", libNtve_gf_PointWithZOffset(UnitGetPosition(tmp_unit), 0.3));
+    libNtve_gf_KillModel(libNtve_gf_ActorLastCreated());
+    Wait(PORTAL_TRANSIT_TIME, c_timeGame);
+
+    target_position = UnitGetPosition(sf_envi_object_instances[port.target_object_id].main_unit);
+    if (is_hero) {
+        if (sf_phys_is_point_on_ice(UnitGetPosition(hero.mainUnit))) {
+            unit_angle = UnitGetFacing(hero.guideUnit);
+        }
+        else {
+            unit_angle = UnitGetFacing(hero.mainUnit);
+        }
+    }
+    else {
+        unit_angle = UnitGetFacing(tmp_unit);
+    }
+
+    if (is_hero) {
+        hero.paused = false;
+        gm_setHeroPosition(
+            hero,
+            target_position,
+            target_angle - (portal_angle - unit_angle),
+            0
+        );
+    }
+    else {
+        UnitSetPosition(tmp_unit, target_position, false);
+        UnitSetFacing(tmp_unit, target_angle - (portal_angle - unit_angle), 0.0);
+    }
+    UnitSetState(tmp_unit, c_unitStateHidden, false);
+    UnitSetState(tmp_unit, c_unitStateInvulnerable, false);
+
+    SoundPlayAtPoint(SoundLink("PortalWarpOneWayArrive", -1), PlayerGroupAll(), UnitGetPosition(tmp_unit), 0.3, 170.0, 0.0);
+    libNtve_gf_CreateActorAtPoint("ShadeImpact", UnitGetPosition(tmp_unit));
+
+    return true;
+}
+
+// HACK: tmp fix for teleporting ring essences from ibe
+bool auto_gf_TeleportEssence (unit lp_torus, point lp_targetLocation) {
+    // Variable Declarations
+    point lv_newTorusTargetPoint;
+
+    // Variable Initialization
+
+    // Implementation
+    UnitIssueOrder(lp_torus, Order(AbilityCommand("stop", 0)), c_orderQueueReplace);
+    libNtve_gf_ShowHideUnit(lp_torus, false);
+    Wait(0.0, c_timeGame);
+    SoundPlayAtPoint(SoundLink("PortalWarpOneWayArrive", -1), PlayerGroupAll(), lp_targetLocation, 0.3, 170.0, 0.0);
+    libNtve_gf_CreateModelAtPoint("HybridDAttackImpact", libNtve_gf_PointWithZOffset(lp_targetLocation, 0.3));
+    libNtve_gf_KillModel(libNtve_gf_ActorLastCreated());
+    Wait(PORTAL_TRANSIT_TIME, c_timeGame);
+    lv_newTorusTargetPoint = PointWithOffsetPolar(lp_targetLocation, (UnitGetCustomValue(lp_torus, 1) - DistanceBetweenPoints(UnitGetPosition(lp_torus), Point(UnitGetCustomValue(lp_torus, 3), UnitGetCustomValue(lp_torus, 4)))), UnitGetCustomValue(lp_torus, 2));
+    UnitSetPosition(lp_torus, lp_targetLocation, false);
+    UnitSetCustomValue(lp_torus, 5, PointGetX(lv_newTorusTargetPoint));
+    UnitSetCustomValue(lp_torus, 6, PointGetY(lv_newTorusTargetPoint));
+    UnitIssueOrder(lp_torus, OrderTargetingPoint(AbilityCommand("move", 0), lv_newTorusTargetPoint), c_orderQueueReplace);
+    libNtve_gf_ShowHideUnit(lp_torus, true);
+    return true;
+}

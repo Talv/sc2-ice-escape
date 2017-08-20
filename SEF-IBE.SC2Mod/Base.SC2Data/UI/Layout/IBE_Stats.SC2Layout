@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Desc>
+    <Frame type="Label" name="TableTh">
+        <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+        <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+
+        <Width val="180"/>
+
+        <Style val="BoardTd"/>
+    </Frame>
+
+    <Frame type="Frame" name="TableRow">
+        <Anchor side="Left" relative="$parent" pos="Min" offset="30"/>
+        <Anchor side="Right" relative="$parent" pos="Max" offset="-30"/>
+
+        <Height val="50"/>
+
+        <Frame type="Label" name="Player" template="IBE_Stats/TableTh">
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Width val="240"></Width>
+        </Frame>
+        <Frame type="Label" name="Revives" template="IBE_Stats/TableTh">
+            <Anchor side="Left" relative="$parent/Player" pos="Max" offset="0"/>
+        </Frame>
+        <Frame type="Label" name="Deaths" template="IBE_Stats/TableTh">
+            <Anchor side="Left" relative="$parent/Revives" pos="Max" offset="0"/>
+        </Frame>
+        <Frame type="Label" name="RDRatio" template="IBE_Stats/TableTh">
+            <Anchor side="Left" relative="$parent/Deaths" pos="Max" offset="0"/>
+        </Frame>
+        <Frame type="Label" name="LevelsCompleted" template="IBE_Stats/TableTh">
+            <Anchor side="Left" relative="$parent/RDRatio" pos="Max" offset="0"/>
+        </Frame>
+        <Frame type="Label" name="BonusesTaken" template="IBE_Stats/TableTh">
+            <Anchor side="Left" relative="$parent/LevelsCompleted" pos="Max" offset="0"/>
+        </Frame>
+        <Frame type="Label" name="CurrentLevel" template="IBE_Stats/TableTh">
+            <Anchor side="Left" relative="$parent/BonusesTaken" pos="Max" offset="0"/>
+        </Frame>
+        <!--times escaped-->
+        <!--best time-->
+    </Frame>
+
+    <Frame type="Frame" name="StatsTemplate">
+        <Anchor side="Left" relative="$parent" pos="Mid" offset="-700"/>
+        <Anchor side="Top" relative="$parent" pos="Mid" offset="-450"/>
+        <Width val="1400"/>
+        <Height val="900"/>
+
+         <Frame type="Image" name="Background">
+            <Anchor side="Left" relative="$parent" pos="Min" offset="40"/>
+            <Anchor side="Top" relative="$parent" pos="Min" offset="50"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-40"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="-50"/>
+            <LayerColor val="000000"/>
+            <Alpha val="180"/>
+            <Visible val="true"/>
+        </Frame>
+
+        <Frame type="Image" name="BoardFrame">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+
+            <!-- <Texture val="Assets/Textures/ui_battlenet_challenge_frame_achievement.dds"/>
+            <TextureType val="HorizontalBorder"/> -->
+            <!--Assets\Textures\ui_battlenet_glues_pageassets_dialog_hexpatternorange.dds-->
+            <!--Assets\Textures\ui_hots_shared_achievementframeorange.dds-->
+            <!--Assets\Textures\ui_ingame_bulletpoint_orange.dds-->
+
+            <Texture val="@UI/HotS_Shared_Border_DescriptionOrange"/>
+            <TextureType val="Nineslice"/>
+        </Frame>
+
+        <Frame type="Label" name="ScreenTitleLabel">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="50"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+
+            <Height val="50"/>
+
+            <!--<Style val="NiceTitle1"/>-->
+            <Style val="SwarmCampaignScoreScreenTitle" />
+            <Text val="Statistics"/>
+        </Frame>
+
+        <Frame type="Frame" name="TableHeader">
+            <Anchor side="Top" relative="$parent/ScreenTitleLabel" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="30"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-30"/>
+
+            <Height val="40"/>
+
+            <Frame type="Label" name="Player" template="IBE_Stats/TableTh">
+                <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+                <Width val="240"></Width>
+
+                <Style val="BoardTh"/>
+                <Text val="Player"/>
+            </Frame>
+            <Frame type="Label" name="Revives" template="IBE_Stats/TableTh">
+                <Anchor side="Left" relative="$parent/Player" pos="Max" offset="0"/>
+                <Style val="BoardTh"/>
+                <Text val="Revives"/>
+            </Frame>
+            <Frame type="Label" name="Deaths" template="IBE_Stats/TableTh">
+                <Anchor side="Left" relative="$parent/Revives" pos="Max" offset="0"/>
+                <Style val="BoardTh"/>
+                <Text val="Deaths"/>
+            </Frame>
+            <Frame type="Label" name="RDRatio" template="IBE_Stats/TableTh">
+                <Anchor side="Left" relative="$parent/Deaths" pos="Max" offset="0"/>
+                <Style val="BoardTh"/>
+                <Text val="R/D Ratio"/>
+            </Frame>
+            <Frame type="Label" name="LevelsCompleted" template="IBE_Stats/TableTh">
+                <Anchor side="Left" relative="$parent/RDRatio" pos="Max" offset="0"/>
+                <Style val="BoardTh"/>
+                <Text val="Challenges completed"/>
+                <Options val="NewLineIfTruncated"/>
+            </Frame>
+            <Frame type="Label" name="BonusesTaken" template="IBE_Stats/TableTh">
+                <Anchor side="Left" relative="$parent/LevelsCompleted" pos="Max" offset="0"/>
+                <Style val="BoardTh"/>
+                <Text val="Acquired essences"/>
+            </Frame>
+            <Frame type="Label" name="CurrentLevel" template="IBE_Stats/TableTh">
+                <Anchor side="Left" relative="$parent/BonusesTaken" pos="Max" offset="0"/>
+                <Style val="BoardTh"/>
+                <Text val="Current level"/>
+            </Frame>
+        </Frame>
+
+        <Frame type="Frame" name="TableRow00" template="IBE_Stats/TableRow">
+            <Anchor side="Top" relative="$parent/TableHeader" pos="Max" offset="0"/>
+        </Frame>
+        <Frame type="Frame" name="TableRow01" template="IBE_Stats/TableRow">
+            <Anchor side="Top" relative="$parent/TableRow00" pos="Max" offset="0"/>
+        </Frame>
+        <Frame type="Frame" name="TableRow02" template="IBE_Stats/TableRow">
+            <Anchor side="Top" relative="$parent/TableRow01" pos="Max" offset="0"/>
+        </Frame>
+        <Frame type="Frame" name="TableRow03" template="IBE_Stats/TableRow">
+            <Anchor side="Top" relative="$parent/TableRow02" pos="Max" offset="0"/>
+        </Frame>
+        <Frame type="Frame" name="TableRow04" template="IBE_Stats/TableRow">
+            <Anchor side="Top" relative="$parent/TableRow03" pos="Max" offset="0"/>
+        </Frame>
+        <Frame type="Frame" name="TableRow05" template="IBE_Stats/TableRow">
+            <Anchor side="Top" relative="$parent/TableRow04" pos="Max" offset="0"/>
+        </Frame>
+        <Frame type="Frame" name="TableRow06" template="IBE_Stats/TableRow">
+            <Anchor side="Top" relative="$parent/TableRow05" pos="Max" offset="0"/>
+        </Frame>
+        <Frame type="Frame" name="TableRow07" template="IBE_Stats/TableRow">
+            <Anchor side="Top" relative="$parent/TableRow06" pos="Max" offset="0"/>
+        </Frame>
+        <Frame type="Frame" name="TableRow08" template="IBE_Stats/TableRow">
+            <Anchor side="Top" relative="$parent/TableRow07" pos="Max" offset="0"/>
+        </Frame>
+        <Frame type="Frame" name="TableRow09" template="IBE_Stats/TableRow">
+            <Anchor side="Top" relative="$parent/TableRow08" pos="Max" offset="0"/>
+        </Frame>
+
+    </Frame>
+</Desc>

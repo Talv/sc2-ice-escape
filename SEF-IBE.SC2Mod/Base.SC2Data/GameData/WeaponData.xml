@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CWeaponLegacy id="HammerSecurity">
+        <TargetFilters value="-;-"/>
+        <Range value="9"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="VolatileBurst2">
+        <EditorCategories value="Race:Zerg"/>
+        <Options index="Hidden" value="1"/>
+        <Options index="Melee" value="1"/>
+        <Icon value="Assets\Textures\btn-ability-zerg-explode.dds"/>
+        <TargetFilters value="Ground,Visible;Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <AcquireFilters value="Ground,Visible;Self,Player,Ally,Neutral,Structure,Missile,Stasis,Dead,Hidden,Invulnerable"/>
+        <Range value="0.25"/>
+        <Period value="0.833"/>
+        <DamagePoint value="0"/>
+        <LegacyOptions index="NoDeceleration" value="1"/>
+        <AllowedMovement value="Moving"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="PhaseDisruptors">
+        <RangeSlop value="1.2"/>
+    </CWeaponLegacy>
+    <CWeaponLegacy id="ThermalLances">
+        <Range value="5.5"/>
+    </CWeaponLegacy>
+</Catalog>

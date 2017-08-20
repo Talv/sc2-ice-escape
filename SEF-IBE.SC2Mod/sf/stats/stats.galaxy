@@ -1,0 +1,24 @@
+
+void sf_stat_init()
+{
+}
+
+void sf_stat_session_clear()
+{
+    int i;
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        // if (!gm_players[i].active) { continue; }
+        sf_stat_session_stats[i].deaths = 0;
+        sf_stat_session_stats[i].revives = 0;
+        sf_stat_session_stats[i].challenges_completed = 0;
+        sf_stat_session_stats[i].powerups = 0;
+    }
+}
+
+void sf_stat_session_expire(int player)
+{
+    sf_core_event_prepare("scoreboard_update");
+    sf_core_event_set_int("player", player);
+    sf_core_event_send();
+}

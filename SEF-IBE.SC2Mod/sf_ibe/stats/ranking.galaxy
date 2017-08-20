@@ -1,0 +1,58 @@
+void ibe_stat_rk_process_player(int player)
+{
+    int i;
+    int l;
+
+    for (i = 0; i < IBE_GM_MAX; i += 1) {
+        for (l = 0; l < IBE_STAT_CHALLENGE_MAX; l += 1) {
+            if (!ibe_stat_profiles[player].gm[i].chal[l].completions) { continue; }
+            ibe_stat_rk_chals[ibe_stat_rk_chal_counter].gm_code = i;
+            ibe_stat_rk_chals[ibe_stat_rk_chal_counter].chal_id = l;
+            ibe_stat_rk_chals[ibe_stat_rk_chal_counter].player = player;
+            ibe_stat_rk_chals[ibe_stat_rk_chal_counter].time = ibe_stat_profiles[player].gm[i].chal[l].best_time;
+            ibe_stat_rk_chal_counter += 1;
+            // Dbg(
+            //     "[rk/chal] " + sf_string_width_space(IntToString(l), 2) +
+            //     "; time = " + FixedToString(ibe_stat_profiles[player].gm[i].chal[l].best_time, -1)
+            // );
+        }
+    }
+}
+
+void ibe_stat_rk_set_challenge(int gm_code, int chal_id, int player, fixed time)
+{
+    int i;
+    int idx = -1;
+
+    for (i = 0; i < ibe_stat_rk_chal_counter; i += 1) {
+        if (ibe_stat_rk_chals[i].gm_code != gm_code) { continue; }
+        if (ibe_stat_rk_chals[i].chal_id != chal_id) { continue; }
+        if (ibe_stat_rk_chals[i].player != player) { continue; }
+        idx = i;
+        break;
+    }
+
+    if (idx == -1) {
+        idx = ibe_stat_rk_chal_counter;
+        ibe_stat_rk_chal_counter += 1;
+    }
+
+    ibe_stat_rk_chals[idx].gm_code = gm_code;
+    ibe_stat_rk_chals[idx].chal_id = chal_id;
+    ibe_stat_rk_chals[idx].player = player;
+    ibe_stat_rk_chals[idx].time = time;
+}
+
+void ibe_stat_rk_init()
+{
+    int player;
+
+    ibe_stat_rk_chal_counter = 0;
+
+    for (player = 1; player <= MAX_PLAYERS; player += 1) {
+        if (PlayerType(player) != c_playerTypeUser) { continue; }
+        if (PlayerStatus(player) != c_playerStatusActive) { continue; }
+
+        ibe_stat_rk_process_player(player);
+    }
+}

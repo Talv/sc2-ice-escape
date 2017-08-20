@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTexture id="Terrain_IceTextureDiffuse">
+        <File value="Assets\Textures\niflheim_ice_smooth.dds"/>
+        <Slot value="main.diffuse"/>
+        <PropsAdd value="zhakuldas"/>
+        <PropsSet value="zhakuldas"/>
+    </CTexture>
+    <CTexture id="Terrain_IceTextureNormal">
+        <File value="Assets\Textures\niflheim_ice_smoothnormal.dds"/>
+        <Slot value="main.normal"/>
+        <PropsAdd value="zhakuldas"/>
+        <PropsSet value="zhakuldas"/>
+    </CTexture>
+    <CTexture id="Terrain_SnowTextureSpecular">
+        <File value="Assets\Textures\niflheim_snow.dds"/>
+        <Slot value="main.specular"/>
+        <PropsAdd value="zhakuldas"/>
+        <PropsSet value="zhakuldas"/>
+    </CTexture>
+    <CTexture id="Terrain_IceTextureSpecular">
+        <File value="Assets\Textures\niflheim_ice_smooth.dds"/>
+        <Slot value="main.specular"/>
+        <PropsAdd value="zhakuldas"/>
+        <PropsSet value="zhakuldas"/>
+    </CTexture>
+    <CTexture id="Terrain_SnowTextureNormal">
+        <File value="Assets\Textures\iceworld_4normal.dds"/>
+        <Slot value="main.normal"/>
+        <PropsAdd value="zhakuldas"/>
+        <PropsSet value="zhakuldas"/>
+    </CTexture>
+    <CTexture id="Terrain_SnowTextureDiffuse">
+        <File value="Assets\Textures\niflheim_snow.dds"/>
+        <Slot value="main.diffuse"/>
+        <PropsAdd value="zhakuldas"/>
+        <PropsSet value="zhakuldas"/>
+    </CTexture>
+</Catalog>

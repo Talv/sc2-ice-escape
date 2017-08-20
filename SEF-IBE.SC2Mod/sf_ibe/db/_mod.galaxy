@@ -1,0 +1,49 @@
+//
+//
+//
+
+// const int DB_TABLE_MAX = 8;
+const int DB_TABLE_COLUMN_MAX = 32;
+const int DB_TABLE_RECORD_MAX = 1024;
+// const int DB_GLOBAL_RECORD_MAX = 1024;
+
+const int DB_DTYPE_INTEGER = 1;
+const int DB_DTYPE_FIXED = 2;
+const int DB_DTYPE_STRING = 3;
+
+struct db_table_column_t {
+    string name;
+    int type;
+};
+
+struct db_table_t {
+    string name;
+    int version;
+    db_table_column_t[DB_TABLE_COLUMN_MAX] columns;
+    int column_count;
+};
+
+// struct db_record_t {
+//     int val_id;
+// };
+
+struct db_storage_t {
+    // db_record_t[DB_TABLE_RECORD_MAX] records;
+    // int[DB_TABLE_RECORD_MAX] records;
+    string[DB_TABLE_RECORD_MAX] records;
+};
+
+// struct db_record_value_t {
+//     bool used;
+//     int v_integer;
+//     fixed v_fixed;
+//     string v_string;
+// };
+
+// db_record_value_t[DB_GLOBAL_RECORD_MAX] db_global_values;
+
+//
+// STREAM
+//
+
+string db_stream_serialize_int(int number);

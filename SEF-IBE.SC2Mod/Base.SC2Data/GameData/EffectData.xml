@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CEffectCreatePersistent id="250mmStrikeCannonsCreatePersistent">
+        <WhichLocation Value="TargetPoint"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="250mmStrikeCannonsDamage">
+        <ImpactLocation Value="TargetPoint"/>
+        <KindSplash value="Splash"/>
+        <Amount value="200"/>
+    </CEffectDamage>
+    <CEffectSet id="250mmStrikeCannonsSet">
+        <TargetLocationType value="Point"/>
+    </CEffectSet>
+    <CEffectTeleport id="Blink4">
+        <ValidatorArray value="CasterNotFungalGrowthed"/>
+        <EditorCategories value="Race:Protoss"/>
+        <WhichUnit Value="Caster"/>
+        <ClearQueuedOrders value="0"/>
+        <PlacementAround Value="CasterUnit"/>
+        <PlacementRange value="8"/>
+        <Range value="8"/>
+        <TargetLocation Value="TargetPoint"/>
+    </CEffectTeleport>
+    <CEffectDamage id="DominionKillTeamDamage">
+        <KindSplash value="Ranged"/>
+        <Amount value="500"/>
+        <AreaArray>
+            <Radius value="1.25"/>
+            <Bonus value="1"/>
+            <Fraction value="1"/>
+            <Validator value="NotInvulnerable"/>
+        </AreaArray>
+        <SearchFilters value="-;Invulnerable"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="DominionKillTeamLM">
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="DominionKillTeamSet">
+        <TargetLocationType value="UnitOrPoint"/>
+    </CEffectSet>
+    <CEffectDamage id="Feedback">
+        <VitalFractionCurrent index="Energy" value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="HammerSecurityDamage">
+        <KindSplash value="Ranged"/>
+        <Amount value="500"/>
+        <AreaArray Arc="0"/>
+    </CEffectDamage>
+    <!--    <CEffectCreatePersistent id="HammerSecurityBurst">-->
+    <!--        <EditorCategories value="Race:Terran"/>-->
+    <!--        <WhichLocation Value="TargetUnit"/>-->
+    <!--        <Flags index="Channeled" value="1"/>-->
+    <!--        <PeriodCount value="2"/>-->
+    <!--        <PeriodicEffectArray value="HammerSecurityLMOne"/>-->
+    <!--        <PeriodicEffectArray value="HammerSecurityLMTwo"/>-->
+    <!--        <PeriodicPeriodArray value="0"/>-->
+    <!--        <PeriodicPeriodArray value="0.5"/>-->
+    <!--    </CEffectCreatePersistent> -->
+    <CEffectLaunchMissile id="HammerSecurityLM">
+        <ImpactLocation Value="TargetUnitOrPoint"/>
+    </CEffectLaunchMissile>
+    <CEffectSet id="HammerSecuritySet">
+        <TargetLocationType value="UnitOrPoint"/>
+    </CEffectSet>
+    <CEffectDamage id="KarassPsiStormDamage">
+        <Amount value="0"/>
+    </CEffectDamage>
+    <CEffectDamage id="KarassPsiStormDamageInitial">
+        <Amount value="200"/>
+    </CEffectDamage>
+    <CEffectCreatePersistent id="KarassPsiStormPersistent">
+        <PeriodCount value="1"/>
+        <PeriodicPeriodArray index="0" value="0.2"/>
+    </CEffectCreatePersistent>
+    <CEffectEnumArea id="KarassPsiStormSearch">
+        <AINotifyFlags index="HurtFriend" value="0"/>
+        <AreaArray index="0" Radius="0.45" Effect="KarassPsiStormApplyBehavior"/>
+    </CEffectEnumArea>
+    <CEffectEnumArea id="MarauderSlowAOE">
+        <ValidatorArray index="0" removed="1"/>
+        <AreaArray index="0" Radius="0.45" Effect="HammerSecurityDamage"/>
+    </CEffectEnumArea>
+    <CEffectApplyBehavior id="PowerBoost1">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="PowerBoostLevel1"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="PowerBoost12">
+        <EditorCategories value="Race:Terran"/>
+        <Behavior value="PowerBoostLevel12"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="PowerBoost2">
+        <ValidatorArray index="0" value="PowerBoost1TargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Effect/PowerBoost1"/>
+        <Behavior value="PowerBoostLevel2"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="PowerBoost22">
+        <ValidatorArray index="0" value="PowerBoost1TargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Effect/PowerBoost1"/>
+        <Behavior value="PowerBoostLevel22"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="PowerBoost3">
+        <ValidatorArray index="0" value="PowerBoost1TargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Effect/PowerBoost1"/>
+        <Behavior value="PowerBoostLevel03"/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="PowerBoost32">
+        <ValidatorArray index="0" value="PowerBoost1TargetFilters"/>
+        <EditorCategories value="Race:Terran"/>
+        <Marker Link="Effect/PowerBoost1"/>
+        <Behavior value="PowerBoostLevel032"/>
+    </CEffectApplyBehavior>
+    <CEffectCreatePersistent id="RavagerCorrosiveBileCP">
+        <ExpireDelay value="0.45"/>
+    </CEffectCreatePersistent>
+    <CEffectDamage id="RavagerCorrosiveBileDamage">
+        <Amount value="500"/>
+    </CEffectDamage>
+    <CEffectSet id="Shade">
+        <ValidatorArray value="IsNotInFlight"/>
+        <EditorCategories value=""/>
+    </CEffectSet>
+    <CEffectModifyUnit id="slabSwitchPutUpInstantly">
+        <EditorCategories value=""/>
+        <Height value="0.22"/>
+        <HeightTime value="0.001"/>
+    </CEffectModifyUnit>
+    <CEffectApplyBehavior id="ART">
+        <EditorCategories value=""/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="IceBoost">
+        <EditorCategories value=""/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="LandBoost1">
+        <EditorCategories value=""/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="LandBoost2">
+        <EditorCategories value=""/>
+    </CEffectApplyBehavior>
+    <CEffectApplyBehavior id="LandBoost3">
+        <EditorCategories value=""/>
+    </CEffectApplyBehavior>
+    <CEffectDamage id="PhaseDisruptors">
+        <Kind value="Splash"/>
+        <Amount value="200"/>
+        <AreaArray Radius="1.5" Fraction="1"/>
+        <SearchFilters value="-;Invulnerable"/>
+    </CEffectDamage>
+    <CEffectDamage id="PsiStormDamage">
+        <Amount value="200"/>
+    </CEffectDamage>
+    <CEffectDamage id="PsiStormDamageInitial">
+        <Amount value="200"/>
+    </CEffectDamage>
+    <CEffectSet id="ReviveCoinImpact">
+        <EditorCategories value=""/>
+    </CEffectSet>
+    <CEffectDamage id="TempestDamage">
+        <Kind value="Splash"/>
+        <Amount value="200"/>
+        <AreaArray Radius="1.5" Fraction="1"/>
+        <SearchFilters value="-;Air,Armored,Invulnerable"/>
+        <ImpactLocation Value="TargetPoint"/>
+    </CEffectDamage>
+    <CEffectLaunchMissile id="TempestLaunchMissile">
+        <ImpactLocation Value="TargetPoint"/>
+    </CEffectLaunchMissile>
+    <CEffectLaunchMissile id="ReviveCoinLaunchMissile">
+        <EditorCategories value=""/>
+        <ImpactLocation Value="TargetPoint"/>
+        <ImpactEffect value="ReviveCoinImpact"/>
+        <AmmoUnit value="ReviveCoin"/>
+    </CEffectLaunchMissile>
+    <CEffectDamage id="ThermalLancesMU">
+        <Amount value="1500"/>
+    </CEffectDamage>
+</Catalog>

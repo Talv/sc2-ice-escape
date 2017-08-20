@@ -1,0 +1,196 @@
+int ibe_menu_rank_ch_current_chal_id = -1;
+int ibe_menu_rank_ch_current_gmode_id = -1;
+
+int ibe_menu_rank_ch_row_count()
+{
+    return ibe_stat_rk_chal_counter;
+}
+
+text ibe_menu_rank_ch_cell_text(int idx, int col, int row)
+{
+    int i;
+    text txt = StringToText("");
+
+    if (col == 0) {
+        txt = StringToText(IntToString(row + 1) + ".");
+    }
+    else if (col == 1) {
+        txt = StringToText(sf_chal_name(ibe_stat_rk_chals[idx].chal_id, true));
+    }
+    else if (col == 2) {
+        txt = ibe_gm_name_diff(ibe_gm_diff_from_code(ibe_stat_rk_chals[idx].gm_code));
+    }
+    else if (col == 3) {
+        txt = ibe_gm_name_speed(ibe_gm_speed_from_code(ibe_stat_rk_chals[idx].gm_code));
+    }
+    else if (col == 4) {
+        txt = sf_player_name_colored(ibe_stat_rk_chals[idx].player);
+    }
+    else if (col == 5) {
+        if (ibe_stat_rk_chals[idx].time < 0) {
+            txt = StringToText("bugged = " + FixedToString(ibe_stat_rk_chals[idx].time, -1));
+            return txt;
+        }
+        if (ibe_stat_rk_chals[idx].time >= 3600.0) {
+            txt += TextTimeFormat(
+                StringToText("<hour/>:"),
+                FixedToInt(ibe_stat_rk_chals[idx].time)
+            );
+        }
+        txt += TextTimeFormat(
+            StringToText("<min2/>:<sec2/>"),
+            FixedToInt(ibe_stat_rk_chals[idx].time)
+        );
+    }
+
+    return txt;
+}
+
+text ibe_menu_rank_ch_cell_tooltip(int idx, int col, int row)
+{
+    text txt = StringToText("");
+
+    if (col == 5) {
+        txt = StringToText(FixedToString(ibe_stat_rk_chals[idx].time, -1));
+    }
+
+    return txt;
+}
+
+int ibe_menu_rank_ch_cell_sort_value(int idx, int col)
+{
+    if (col == 0) {
+        return idx;
+    }
+    else if (col == 1) {
+        return ibe_stat_rk_chals[idx].chal_id;
+    }
+    else if (col == 2) {
+        return ibe_gm_diff_from_code(ibe_stat_rk_chals[idx].gm_code);
+    }
+    else if (col == 3) {
+        return ibe_gm_speed_from_code(ibe_stat_rk_chals[idx].gm_code);
+    }
+    else if (col == 4) {
+        return ibe_stat_rk_chals[idx].player;
+    }
+    else if (col == 5) {
+        if (ibe_stat_rk_chals[idx].time < 0) {
+            return 3600;
+        }
+        return FixedToInt(ibe_stat_rk_chals[idx].time);
+    }
+
+    return 0;
+}
+
+bool ibe_menu_rank_ch_filter_item(int idx)
+{
+    if (ibe_menu_rank_ch_current_chal_id != -1 && ibe_stat_rk_chals[idx].chal_id != ibe_menu_rank_ch_current_chal_id) {
+        return false;
+    }
+
+    if (ibe_menu_rank_ch_current_gmode_id != -1 && ibe_stat_rk_chals[idx].gm_code != ibe_menu_rank_ch_current_gmode_id) {
+        return false;
+    }
+
+    return true;
+}
+
+void ibe_menu_rank_ch_init(structref<ibe_menu_rank_sect_t> rank_sect)
+{
+    int i;
+
+    ibe_menu_rank_ch_dpd = DialogControlCreateInPanelFromTemplate(
+        rank_sect.panel,
+        c_triggerControlTypePulldown,
+        "IBE_GenericTemplates/PulldownTemplate"
+    );
+    DialogControlSetPositionRelative(
+        ibe_menu_rank_ch_dpd,
+        PlayerGroupAll(),
+        c_anchorTopLeft,
+        rank_sect.panel,
+        c_anchorTopLeft,
+        0, 0
+    );
+    DialogControlAddItem(ibe_menu_rank_ch_dpd, PlayerGroupAll(), StringToText("- Any challenge -"));
+    for (i = 0; i <= MAX_LEVELS; i += 1) {
+        if (!lv_info[i].exists) { continue; }
+        DialogControlAddItem(ibe_menu_rank_ch_dpd, PlayerGroupAll(), StringToText(sf_chal_name(i, true)));
+    }
+    DialogControlSelectItem(ibe_menu_rank_ch_dpd, PlayerGroupAll(), 1);
+    DialogControlSetSize(ibe_menu_rank_ch_dpd, PlayerGroupAll(), 640, 70);
+
+    //
+    ibe_menu_rank_gmode_dpd = DialogControlCreateInPanelFromTemplate(
+        rank_sect.panel,
+        c_triggerControlTypePulldown,
+        "IBE_GenericTemplates/PulldownTemplate"
+    );
+    DialogControlSetPositionRelative(
+        ibe_menu_rank_gmode_dpd,
+        PlayerGroupAll(),
+        c_anchorTopLeft,
+        rank_sect.panel,
+        c_anchorTopLeft,
+        640 + 10, 0
+    );
+    DialogControlAddItem(ibe_menu_rank_gmode_dpd, PlayerGroupAll(), StringToText("- Any difficulty -"));
+    for (i = 0; i < IBE_GM_MAX; i += 1) {
+        DialogControlAddItem(ibe_menu_rank_gmode_dpd, PlayerGroupAll(), ibe_gm_name(i));
+    }
+    DialogControlSelectItem(ibe_menu_rank_gmode_dpd, PlayerGroupAll(), 1);
+    DialogControlSetSize(ibe_menu_rank_gmode_dpd, PlayerGroupAll(), 640, 70);
+
+    //
+    TriggerAddEventDialogControl(TriggerCreate("ibe_menu_rank_ch_on_dpd"), c_playerAny, ibe_menu_rank_ch_dpd, c_triggerControlEventTypeSelectionChanged);
+    TriggerAddEventDialogControl(TriggerCreate("ibe_menu_rank_ch_on_dpd"), c_playerAny, ibe_menu_rank_gmode_dpd, c_triggerControlEventTypeSelectionChanged);
+
+    ibe_ui_dg_set_handlers(
+        rank_sect.dg,
+        ibe_menu_rank_ch_row_count,
+        ibe_menu_rank_ch_cell_text,
+        ibe_menu_rank_ch_cell_tooltip,
+        ibe_menu_rank_ch_cell_sort_value,
+        TriggerCreate("ibe_menu_rank_ch_on_btn_sort")
+    );
+    ibe_ui_dg_register_filter(rank_sect.dg, ibe_menu_rank_ch_filter_item);
+    ibe_ui_dg_column_add(rank_sect.dg, StringToText("No."), false);
+    ibe_ui_dg_column_set_size(rank_sect.dg, IBE_UI_DG_COL_LAST_CREATED, 0.5, -1, -1);
+    ibe_ui_dg_column_add(rank_sect.dg, StringToText("Challenge"), true);
+    ibe_ui_dg_column_set_size(rank_sect.dg, IBE_UI_DG_COL_LAST_CREATED, 1.2, -1, -1);
+    ibe_ui_dg_column_add(rank_sect.dg, StringToText("Difficulty"), true);
+    ibe_ui_dg_column_set_size(rank_sect.dg, IBE_UI_DG_COL_LAST_CREATED, 0.8, -1, -1);
+    ibe_ui_dg_column_add(rank_sect.dg, StringToText("Game speed"), true);
+    ibe_ui_dg_column_set_size(rank_sect.dg, IBE_UI_DG_COL_LAST_CREATED, 0.8, -1, -1);
+    ibe_ui_dg_column_add(rank_sect.dg, StringToText("Player"), true);
+    ibe_ui_dg_column_set_size(rank_sect.dg, IBE_UI_DG_COL_LAST_CREATED, 1.9, -1, -1);
+    ibe_ui_dg_column_add(rank_sect.dg, StringToText("Time"), true);
+    ibe_ui_dg_column_set_size(rank_sect.dg, IBE_UI_DG_COL_LAST_CREATED, 0.8, -1, -1);
+    ibe_ui_dg_column_set_default_sort(rank_sect.dg, IBE_UI_DG_COL_LAST_CREATED, true);
+}
+
+bool ibe_menu_rank_ch_on_btn_sort(bool test_conds, bool run_actions)
+{
+    ibe_ui_dg_handle_ui_event(ibe_menu_rank_sections[IBE_MENU_RANK_SECTION_CHALLENGES].dg);
+
+    return true;
+}
+
+bool ibe_menu_rank_ch_on_dpd(bool test_conds, bool run_actions)
+{
+    if (EventDialogControl() == ibe_menu_rank_ch_dpd) {
+        ibe_menu_rank_ch_current_chal_id = DialogControlGetSelectedItem(EventDialogControl(), EventPlayer()) - 1;
+        if (ibe_menu_rank_ch_current_chal_id == 0) {
+            ibe_menu_rank_ch_current_chal_id = -1;
+        }
+    }
+    else if (EventDialogControl() == ibe_menu_rank_gmode_dpd) {
+        ibe_menu_rank_ch_current_gmode_id = DialogControlGetSelectedItem(EventDialogControl(), EventPlayer()) - 2;
+    }
+
+    ibe_ui_dg_view_redraw(ibe_menu_rank_sections[IBE_MENU_RANK_SECTION_CHALLENGES].dg, EventPlayer());
+
+    return true;
+}

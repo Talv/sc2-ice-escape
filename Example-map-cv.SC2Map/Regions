@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Regions>
+    <region id="12">
+        <name value="Level07_Spawn"/>
+        <shape type="rect">
+            <quad value="160.132,16.3566,164.1318,20.3566"/>
+        </shape>
+    </region>
+    <region id="19">
+        <name value="ch07__finish"/>
+        <shape type="circle">
+            <center value="162.1982,11.7856"/>
+            <radius value="1.25"/>
+        </shape>
+    </region>
+    <region id="26">
+        <name value="Level07_MapBounds"/>
+        <color value="255,128,128,255"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="157.3823,6.7536,175.3823,50.7536"/>
+        </shape>
+    </region>
+    <region id="31">
+        <name value="Level10_Spawn"/>
+        <shape type="rect">
+            <quad value="68.376,72.898,73.3757,78.898"/>
+        </shape>
+    </region>
+    <region id="32">
+        <name value="ch10__finish"/>
+        <shape type="circle">
+            <center value="97.9262,56.4501"/>
+            <radius value="1.25"/>
+        </shape>
+    </region>
+    <region id="33">
+        <name value="Level10_MapBounds"/>
+        <color value="255,128,128,255"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="64.0075,51.4321,137.0075,81.4321"/>
+        </shape>
+    </region>
+    <region id="38">
+        <name value="L10-2"/>
+        <shape type="rect">
+            <quad value="73.4218,62.3017,74.5517,63.3483"/>
+        </shape>
+    </region>
+    <region id="39">
+        <name value="L10-1"/>
+        <shape type="diamond">
+            <center value="116.5273,71.2736"/>
+            <width value="1.4"/>
+            <height value="3.5998"/>
+        </shape>
+    </region>
+    <region id="48">
+        <name value="Level11_Spawn"/>
+        <shape type="rect">
+            <quad value="152.5473,61.7812,156.547,65.7812"/>
+        </shape>
+    </region>
+    <region id="49">
+        <name value="ch11__finish"/>
+        <shape type="circle">
+            <center value="184.6105,72.1254"/>
+            <radius value="0.75"/>
+        </shape>
+    </region>
+    <region id="50">
+        <name value="Level11_MapBounds"/>
+        <color value="255,128,128,255"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="139.3298,50.7502,190.3298,80.7502"/>
+        </shape>
+    </region>
+    <region id="51">
+        <name value="L11-1"/>
+        <shape type="rect">
+            <quad value="167.5541,61.639,168.684,62.6855"/>
+        </shape>
+    </region>
+    <region id="52">
+        <name value="L11-2"/>
+        <shape type="diamond">
+            <center value="169.082,66.9306"/>
+            <width value="1.13"/>
+            <height value="1.0498"/>
+        </shape>
+    </region>
+    <region id="53">
+        <name value="L11-3"/>
+        <shape type="rect">
+            <quad value="181.8227,64.7202,182.9526,65.7668"/>
+        </shape>
+    </region>
+    <region id="54">
+        <name value="L11-4"/>
+        <shape type="rect">
+            <quad value="170.3823,71.636,172.052,76.076"/>
+        </shape>
+    </region>
+    <region id="55">
+        <name value="L11-6"/>
+        <shape type="rect">
+            <quad value="152.5551,67.6545,153.685,68.7011"/>
+        </shape>
+    </region>
+    <region id="57">
+        <name value="Level12_MapBounds"/>
+        <color value="255,128,128,255"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="190.1701,48.5576,225.1701,81.5576"/>
+        </shape>
+    </region>
+    <region id="61">
+        <name value="L11-7"/>
+        <shape type="rect">
+            <quad value="178.528,68.4475,179.658,69.4941"/>
+        </shape>
+    </region>
+    <region id="62">
+        <name value="ch13__finish"/>
+        <shape type="circle">
+            <center value="222.8435,92.0146"/>
+            <radius value="1.25"/>
+        </shape>
+    </region>
+    <region id="70">
+        <name value="Level13_Spawn"/>
+        <shape type="rect">
+            <quad value="242.581,53.614,246.5808,57.614"/>
+        </shape>
+    </region>
+    <region id="71">
+        <name value="Level13_MapBounds"/>
+        <color value="255,128,128,255"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="218.422,50.872,251.422,97.872"/>
+        </shape>
+    </region>
+    <region id="72">
+        <name value="L13-1"/>
+        <shape type="rect">
+            <quad value="235.9575,61.046,237.0874,62.0925"/>
+        </shape>
+    </region>
+    <region id="104">
+        <name value="L11-Birds"/>
+        <shape type="rect">
+            <quad value="141.4943,61.0102,148.4943,62.057"/>
+        </shape>
+    </region>
+    <region id="105">
+        <name value="L11-Bears"/>
+        <shape type="rect">
+            <quad value="141.3288,53.043,142.3288,57.0427"/>
+        </shape>
+    </region>
+    <region id="113">
+        <name value="Level18_Spawn"/>
+        <shape type="rect">
+            <quad value="192.37,100.4216,195.8698,103.9216"/>
+        </shape>
+    </region>
+    <region id="114">
+        <name value="ch18__finish"/>
+        <shape type="circle">
+            <center value="213.0021,87.1623"/>
+            <radius value="1.25"/>
+        </shape>
+    </region>
+    <region id="115">
+        <name value="Level18_MapBounds"/>
+        <color value="255,128,128,255"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="190.085,82.038,218.085,106.038"/>
+        </shape>
+    </region>
+    <region id="116">
+        <name value="L18-Pantherend"/>
+        <shape type="diamond">
+            <center value="206.8937,96.9335"/>
+            <width value="0.4384"/>
+            <height value="2.6645"/>
+        </shape>
+    </region>
+    <region id="117">
+        <name value="L18-Pantherstart"/>
+        <shape type="diamond">
+            <center value="195.987,93.6511"/>
+            <width value="1.3176"/>
+            <height value="0.37"/>
+        </shape>
+    </region>
+    <region id="106">
+        <name value="L18-Fence"/>
+        <shape type="diamond">
+            <center value="189.194,94.4013"/>
+            <width value="2.7856"/>
+            <height value="9.8598"/>
+        </shape>
+        <shape type="diamond">
+            <negative/>
+            <center value="192,93.4"/>
+            <width value="2.16"/>
+            <height value="2.16"/>
+        </shape>
+    </region>
+    <region id="135">
+        <name value="L7-Ravager"/>
+        <shape type="rect">
+            <quad value="159.5852,44.0671,165.585,48.067"/>
+        </shape>
+        <shape type="rect">
+            <negative/>
+            <quad value="160.7998,46.15,165.7998,47.15"/>
+        </shape>
+        <shape type="rect">
+            <negative/>
+            <quad value="159.5,43.95,164.5,44.95"/>
+        </shape>
+    </region>
+    <region id="136">
+        <name value="L7-Lyote"/>
+        <shape type="rect">
+            <quad value="166.5974,48.3972,173.4873,51.377"/>
+        </shape>
+    </region>
+    <region id="156">
+        <name value="L13-lyote-circ"/>
+        <shape type="circle">
+            <center value="234.041,72.1884"/>
+            <radius value="7.9797"/>
+        </shape>
+    </region>
+    <region id="166">
+        <name value="ch23__finish"/>
+        <shape type="circle">
+            <center value="242.782,167.877"/>
+            <radius value="1.25"/>
+        </shape>
+    </region>
+    <region id="167">
+        <name value="Level23_Spawn"/>
+        <shape type="rect">
+            <quad value="162.088,135.0424,169.0876,138.0424"/>
+        </shape>
+    </region>
+    <region id="168">
+        <name value="Level23_MapBounds"/>
+        <color value="255,128,128,255"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="159.5112,129.2731,249.5112,174.2731"/>
+        </shape>
+    </region>
+    <region id="169">
+        <name value="L23-Bearkiller"/>
+        <shape type="rect">
+            <quad value="181.0573,172.8955,202.5463,174.6206"/>
+        </shape>
+    </region>
+    <region id="170">
+        <name value="L23-Random"/>
+        <shape type="rect">
+            <quad value="238.2004,130.6726,247.7985,160.091"/>
+        </shape>
+        <shape type="circle">
+            <negative/>
+            <center value="232,146.38"/>
+            <radius value="9.4"/>
+        </shape>
+        <shape type="diamond">
+            <negative/>
+            <center value="245.2,131.38"/>
+            <width value="16.91"/>
+            <height value="10.4"/>
+        </shape>
+    </region>
+    <region id="123">
+        <name value="L13_Creeper"/>
+        <shape type="diamond">
+            <center value="235.0297,89.2402"/>
+            <width value="13.5141"/>
+            <height value="8.0957"/>
+        </shape>
+    </region>
+    <region id="205">
+        <name value="Level07_Revealer 1"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="157.2805,6.9797,175.2805,49.9797"/>
+        </shape>
+    </region>
+    <region id="210">
+        <name value="Level10_Revealer 1"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="62.5852,52.0031,140.5852,83.0031"/>
+        </shape>
+    </region>
+    <region id="211">
+        <name value="Level11_Revealer 1"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="138.7363,52.1076,190.7363,82.1076"/>
+        </shape>
+    </region>
+    <region id="212">
+        <name value="Level12_Revealer 1"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="190.4204,49.88,224.4204,81.88"/>
+        </shape>
+    </region>
+    <region id="213">
+        <name value="Level13_Revealer 1"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="223.6643,51.387,254.6643,99.387"/>
+        </shape>
+    </region>
+    <region id="214">
+        <name value="Level13_Revealer 2"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="218.1772,83.0178,228.1772,100.0178"/>
+        </shape>
+    </region>
+    <region id="215">
+        <name value="Level13_Revealer 3"/>
+        <invisible/>
+        <shape type="diamond">
+            <center value="224.1345,81.341"/>
+            <width value="5.5397"/>
+            <height value="11.0698"/>
+        </shape>
+    </region>
+    <region id="221">
+        <name value="Level18_Revealer 1"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="189.6428,81.1264,218.1926,106.9362"/>
+        </shape>
+    </region>
+    <region id="226">
+        <name value="Level22_Revealer 2"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="188.3166,105.4921,226.8664,130.302"/>
+        </shape>
+    </region>
+    <region id="227">
+        <name value="Level23_Revealer 1"/>
+        <invisible/>
+        <shape type="rect">
+            <quad value="154.18,127.425,255.18,181.4248"/>
+        </shape>
+    </region>
+</Regions>

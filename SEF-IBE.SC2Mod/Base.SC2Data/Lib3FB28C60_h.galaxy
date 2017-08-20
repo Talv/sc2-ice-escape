@@ -1,0 +1,103 @@
+include "TriggerLibs/natives"
+
+//--------------------------------------------------------------------------------------------------
+// Library: SEF - Ice Baneling Escape
+//--------------------------------------------------------------------------------------------------
+// Preset Declarations
+const int lib3FB28C60_ge_SpikesSizeClass_Tiny = 0;
+const int lib3FB28C60_ge_SpikesSizeClass_Small = 1;
+const int lib3FB28C60_ge_SpikesSizeClass_Medium = 2;
+const int lib3FB28C60_ge_SpikesSizeClass_Large = 3;
+const int lib3FB28C60_ge_Coloredzealots_Brownzealot = 0;
+const int lib3FB28C60_ge_Coloredzealots_Bluezealot = 1;
+const int lib3FB28C60_ge_Coloredzealots_Tealzealot = 2;
+const int lib3FB28C60_ge_Coloredzealots_Greenzealot = 3;
+const int lib3FB28C60_ge_Coloredzealots_Yellowzealot = 4;
+const int lib3FB28C60_ge_Coloredzealots_Orangezealot = 5;
+const int lib3FB28C60_ge_Coloredzealots_Redzealot = 6;
+const int lib3FB28C60_ge_ButtonType_StonePushable = 0;
+const int lib3FB28C60_ge_ButtonType_StoneInlay = 1;
+const int lib3FB28C60_ge_ButtonType_LightSwitchRectangle = 2;
+const int lib3FB28C60_ge_ButtonType_LightSwitchCircle = 3;
+
+// Constants
+const fixed lib3FB28C60_gv_banecollisionradius = 0.3;
+const int lib3FB28C60_gv_playersMax = 10;
+const fixed lib3FB28C60_gv_banelingTurnSpeedOnIce = 0.32;
+const fixed lib3FB28C60_gv_banelingSpeedOnIce = 4.4;
+const fixed lib3FB28C60_gv_turnForcerRotationSpeed = 90.0;
+const fixed lib3FB28C60_gv_pI = 3.1416;
+const fixed lib3FB28C60_gv_ufoFloatHeight = 1.0;
+
+// Structures
+struct lib3FB28C60_gs_StartupParametersType {
+    int lv_gamemode;
+    int lv_challengeid;
+    bool lv_skipvotescreen;
+    bool lv_fastuitransitions;
+    bool lv_heroinvulernability;
+    bool lv_heroautorevive;
+    int lv_herohelpsquadron;
+};
+
+// Variable Declarations
+fixed lib3FB28C60_gv_tickPeriod;
+fixed lib3FB28C60_gv_randomMoveNotifyDelay;
+int lib3FB28C60_gv_numoflevelsstartedtotal;
+lib3FB28C60_gs_StartupParametersType lib3FB28C60_gv_iBELaunchParameters;
+
+// Function Declarations
+fixed lib3FB28C60_gf_CircumferenceOfCircle (fixed lp_radius);
+fixed lib3FB28C60_gf_PercentValueToMultiplierFactor (fixed lp_perecent);
+void lib3FB28C60_gf_RegisterTriggerAsTemporaryForCurrentChallenge (trigger lp_trig);
+void lib3FB28C60_gf_ModifyUnitSpeedByPercent (unit lp_unit, fixed lp_percent);
+void lib3FB28C60_gf_PortalCreateSimple (point lp_portalposition, point lp_targetposition);
+void lib3FB28C60_gf_PortalCreateComplex (string lp_portalstartpoint, string lp_portalendpoint, int lp_portalrouteloop, string lp_targetstartpoint, string lp_targetendpoint, int lp_targetrouteloop);
+void lib3FB28C60_gf_TurnForcerCreateSimple (point lp_position, int lp_autorotate, fixed lp_rotationspeed);
+void lib3FB28C60_gf_TurnForcerCreateOnPath (string lp_startpoint, string lp_endpoint, int lp_routeloop);
+void lib3FB28C60_gf_SpikesCreate (point lp_position, int lp_sizeclass, bool lp_initiallyraised);
+void lib3FB28C60_gf_PowerupEssenceCreate (point lp_position);
+void lib3FB28C60_gf_DynamicSurfaceCreate (point lp_position, int lp_surfacekind, fixed lp_radius);
+void lib3FB28C60_gf_RandomMoveZoneCreate (region lp_area, string lp_initialunittype, int lp_initialunitcount, fixed lp_delaybetweenroundsmin, fixed lp_delaybetweenroundsmax, fixed lp_unitcountperroundmin, fixed lp_unitcountperroundmax, fixed lp_distancetonextwaypointmin, fixed lp_distancetonextwaypointmax, fixed lp_unitspreadintesivitymin, fixed lp_unitspreadintesivitymax, bool lp_canmoveonlyforward);
+void lib3FB28C60_gf_StalkerZoneCreate (region lp_area, string lp_initialunittype, int lp_initialunitcount, fixed lp_activationrange);
+void lib3FB28C60_gf_ExecuteSequenceSwing (int lp_object, fixed lp_time, point lp_target);
+void lib3FB28C60_gf_CreateColoredZealot (int lp_kind, point lp_position);
+void lib3FB28C60_gf_UnitShotMissileAtPoint (unit lp_unit, point lp_target);
+void lib3FB28C60_gf_UfoLineCreate (point lp_position, fixed lp_width, fixed lp_angle);
+void lib3FB28C60_gf_UfoSingleFloatUpAndDown (int lp_object, fixed lp_uptime, fixed lp_downtime);
+void lib3FB28C60_gf_UfoCreateExecutor (fixed lp_uptime, fixed lp_downtime);
+void lib3FB28C60_gf_FlamethrowerCreate (point lp_position, fixed lp_flamelength);
+void lib3FB28C60_gf_CrystalWheelCreateBasic (point lp_position, fixed lp_radius, int lp_autorotate, fixed lp_rotationspeed);
+void lib3FB28C60_gf_CrystalWheelCreateSingleEntry (point lp_position, fixed lp_radius, int lp_autorotate, fixed lp_rotationspeed, int lp_entrylength, fixed lp_entryangle);
+void lib3FB28C60_gf_CrystalWheelCreateDoubleEntry (point lp_position, fixed lp_radius, int lp_autorotate, fixed lp_rotationspeed, int lp_entrylength, fixed lp_entryangle, int lp_secondentrylength, fixed lp_secondentryangle);
+void lib3FB28C60_gf_CrystalBlenderCreate (point lp_position, int lp_autorotate, fixed lp_rotationspeed, fixed lp_edge1Width, fixed lp_edge1Angle, fixed lp_edge2Width, fixed lp_edge2Angle, fixed lp_edge3Width, fixed lp_edge3Angle, fixed lp_edge4Width, fixed lp_edge4Angle);
+void lib3FB28C60_gf_CreateCreatureWalkSideBySide (string lp_unittype, int lp_count, int lp_gap, point lp_spawnposition, point lp_finalposition, string lp_routestartpointname, string lp_routeendpointname, fixed lp_angle, fixed lp_distance, fixed lp_delaybetweengroups, fixed lp_delaybetweenunits, bool lp_reversespawningorder);
+void lib3FB28C60_gf_CreatureCreateOnPath (string lp_unittype, string lp_pointstart, string lp_pointend, int lp_loop);
+void lib3FB28C60_gf_CreatureCreateOnRoute (string lp_unittype, int lp_route);
+void lib3FB28C60_gf_PutExistingCreatureOnPath (int lp_object, string lp_pointstart, string lp_pointend, int lp_loop);
+void lib3FB28C60_gf_CreatureCreatePatroller (string lp_unittype, point lp_pointstart, point lp_pointend, fixed lp_initialpositionshift);
+void lib3FB28C60_gf_PatrollersLineChainCreate (point lp_startpoint, point lp_endpoint, fixed lp_chainmaxdistance, fixed lp_chaindirectionangle, string lp_unittype, int lp_unitamount, fixed lp_spawndelay);
+void lib3FB28C60_gf_DistributeCreaturesOnRoute (string lp_unittype, int lp_unitamount, int lp_route, fixed lp_startoffsetfactor, fixed lp_endoffsetfactor);
+void lib3FB28C60_gf_CreatureTrainRouteCreate (string lp_unittype, int lp_unitamount, string lp_pointstart, string lp_pointend, fixed lp_startoffsetfactor, fixed lp_endoffsetfactor);
+int lib3FB28C60_gf_RouteAroundCircleCreate (point lp_center, fixed lp_radius, bool lp_forward);
+void lib3FB28C60_gf_ButtonCreate (int lp_type, point lp_position, bool lp_stayactive, bool lp_releaseonleave, fixed lp_releasetimeout);
+void lib3FB28C60_gf_StoneSwitchCreate (point lp_position, region lp_buttonsregion);
+void lib3FB28C60_gf_StoneInlayCreate (point lp_position);
+void lib3FB28C60_gf_LightSwitchCircleCreate (point lp_position, bool lp_stayactive, fixed lp_releasetimeout);
+void lib3FB28C60_gf_LightSwitchRectCreate (point lp_position);
+void lib3FB28C60_gf_IBEPrepareFramework ();
+bool lib3FB28C60_gf_DifficultyIsExtreme ();
+
+// Trigger Declarations
+trigger lib3FB28C60_gt_Detectpreplacedobstacles;
+trigger lib3FB28C60_gt_Marauderexplosion;
+trigger lib3FB28C60_gt_ChallengeReady;
+trigger lib3FB28C60_gt_ChallengeCompleted;
+trigger lib3FB28C60_gt_IBEReset;
+trigger lib3FB28C60_gt_IBELoad;
+trigger lib3FB28C60_gt_IBEBegin;
+trigger lib3FB28C60_gt_IBEFail;
+
+// Library Initialization
+void lib3FB28C60_InitVariables ();
+

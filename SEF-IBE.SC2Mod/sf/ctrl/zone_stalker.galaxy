@@ -1,0 +1,116 @@
+struct sf_ctrl_zone_stalker_t {
+    region area;
+    trigger trig_periodic;
+    fixed activation_range;
+};
+
+sf_ctrl_zone_stalker_t [SF_CTRL_CONTROLLER_MAX]sf_ctrl_zone_stalkers;
+int sf_ctrl_zone_stalker_tmp_cl_id = -1;
+
+void sf_ctrl_zone_stalker_cleanup()
+{
+}
+
+void sf_ctrl_zone_stalker_destroy(int cl_id)
+{
+    if (sf_ctrl_zone_stalkers[cl_id].trig_periodic != null) {
+        TriggerStop(sf_ctrl_zone_stalkers[cl_id].trig_periodic);
+        TriggerDestroy(sf_ctrl_zone_stalkers[cl_id].trig_periodic);
+        sf_ctrl_zone_stalkers[cl_id].trig_periodic = null;
+    }
+}
+
+int sf_ctrl_zone_stalker_create(region area, fixed activation_range)
+{
+    structref<sf_ctrl_zone_stalker_t> zrn;
+    int cl_id;
+
+    cl_id = sf_ctrl_controller_create(SF_CTRL_TYPE_ZONE_STALKER);
+    zrn = sf_ctrl_zone_stalkers[cl_id];
+
+    zrn.area = area;
+    zrn.activation_range = activation_range;
+
+    sf_ctrl_zone_stalker_tmp_cl_id = cl_id;
+    zrn.trig_periodic = TriggerCreate("sf_ctrl_zone_stalker_on_periodic");
+    TriggerExecute(zrn.trig_periodic, false, false);
+
+    return cl_id;
+}
+
+void sf_ctrl_zone_stalker_append_unit(int cl_id, unit munit, bool preserve_position)
+{
+    UnitGroupAdd(sf_ctrl_controllers[cl_id].ugroup, munit);
+    if (!preserve_position) {
+        UnitSetPosition(munit, RegionRandomPoint(sf_ctrl_zone_stalkers[cl_id].area), false);
+    }
+    UnitSetFacing(munit, RandomFixed(0.0, 360.0), TICK_PERIOD);
+    UnitSetCustomValue(munit, UNIT_CUSTOM_CONTROLLER_ID, cl_id + 1);
+}
+
+void sf_ctrl_zone_stalker_fill(int cl_id, string unit_type, int count)
+{
+    int i;
+    int creature;
+
+    for (i = 0; i < count; i += 1) {
+        creature = sf_envi_creature_create(unit_type, RegionRandomPoint(sf_ctrl_zone_stalkers[cl_id].area));
+        UnitGroupAdd(sf_ctrl_controllers[cl_id].ugroup, sf_envi_object_get_base_unit(creature));
+    }
+}
+
+bool sf_ctrl_zone_stalker_on_periodic(bool test_conds, bool run_actions)
+{
+    int cl_id;
+    structref<sf_ctrl_controller_t> ctl;
+    structref<sf_ctrl_zone_stalker_t> zrn;
+    unit stalker_unit;
+    unit hero_unit;
+    int hero_owner;
+    fixed move_offset;
+    point target;
+    int i;
+    int l;
+    int k;
+
+    cl_id = sf_ctrl_zone_stalker_tmp_cl_id;
+    ctl = sf_ctrl_controllers[cl_id];
+    zrn = sf_ctrl_zone_stalkers[cl_id];
+
+    for (;;) {
+        for (i = 1; i <= UnitGroupCount(ctl.ugroup, c_unitCountAll); i += 1) {
+            stalker_unit = UnitGroupUnit(ctl.ugroup, i);
+
+            for (l = 1; l <= UnitGroupCount(sf_game_hero_get_unitgroup(), c_unitCountAlive); l += 1) {
+                hero_unit = UnitGroupUnit(sf_game_hero_get_unitgroup(), l);
+                hero_owner = UnitGetOwner(hero_unit);
+
+                if (
+                    libNtve_gf_UnitInRegion(hero_unit, zrn.area) &&
+                    DistanceBetweenPoints(UnitGetPosition(stalker_unit), UnitGetPosition(hero_unit)) < zrn.activation_range
+                ) {
+                    if ((UnitGetCustomValue(stalker_unit, SF_GAME_UVAL_CUSTOM + hero_owner) == 0.0)) {
+                        UnitSetCustomValue(stalker_unit, SF_GAME_UVAL_CUSTOM + hero_owner, 1.0);
+                        move_offset = RandomFixed(0.0, zrn.activation_range);
+
+                        for (k = 1; k <= 10; k += 1) {
+                            target = PointWithOffsetPolar(UnitGetPosition(hero_unit), move_offset / IntToFixed(k), UnitGetFacing(hero_unit));
+                            if (RegionContainsPoint(zrn.area, target)) {
+                                UnitIssueOrder(stalker_unit, OrderTargetingPoint(AbilityCommand("move", 0), target), c_orderQueueReplace);
+                            }
+                        }
+
+                        break;
+                    }
+                }
+                else {
+                    UnitSetCustomValue(stalker_unit, SF_GAME_UVAL_CUSTOM + hero_owner, 0.0);
+                }
+            }
+        }
+
+        Wait(TICK_PERIOD, c_timeGame);
+    }
+
+    return true;
+}

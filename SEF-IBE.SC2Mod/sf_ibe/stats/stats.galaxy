@@ -1,0 +1,462 @@
+
+static void ibe_stat_apply_total_time()
+{
+    int i;
+    int player;
+    int secs;
+
+    secs = FixedToInt(TimerGetElapsed(ibe_stat_profile_timer_total));
+
+    for (i = 1; i <= PlayerGroupCount(ibe_stat_profile_pgroup); i += 1) {
+        player = PlayerGroupPlayer(ibe_stat_profile_pgroup, i);
+        ibe_stat_profiles[player].gm[ibe_gm_current_code()].time_played += secs;
+    }
+
+    TimerRestart(ibe_stat_profile_timer_total);
+}
+
+static void ibe_stat_bank_save_current_gresult()
+{
+    int i;
+    int l;
+    int player;
+    unit munit;
+    string section;
+    bool grl_added;
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        if (!ibe_stat_gresult_current.players[i].exists) { continue; }
+        munit = gm_players[i].hero.mainUnit;
+        if (UnitIsValid(munit)) {
+            ibe_stat_gresult_current.players[i].level = FixedToInt(UnitGetPropertyFixed(munit, c_unitPropLevel, true));
+        }
+    }
+
+    for (i = 1; i <= PlayerGroupCount(ibe_stat_profile_pgroup); i += 1) {
+        player = PlayerGroupPlayer(ibe_stat_profile_pgroup, i);
+        if (PlayerType(player) != c_playerTypeUser) { continue; }
+
+        for (l = 0; l < IBE_STAT_GLR_PLAYER_MAX; l += 1) {
+            section = "gr" + IntToString(l);
+            if (BankSectionExists(ibe_stat_profiles[i].storage, section)) { continue; }
+            ibe_stat_gresult_store(ibe_stat_profiles[i].storage, section, ibe_stat_gresult_current);
+            if (!grl_added) {
+                Wait(TICK_PERIOD, c_timeGame);
+                ibe_stat_grl_load_section(player, section);
+                grl_added = true;
+            }
+            break;
+        }
+    }
+}
+
+void ibe_stat_init(string game_name, int game_version, string profile_bank_name)
+{
+    trigger tmp_trig;
+
+    ibe_stat_game_name = game_name;
+    ibe_stat_game_version = game_version;
+    ibe_stat_bank_name = profile_bank_name;
+
+    ibe_stat_profile_chal_timer = TimerCreate();
+    ibe_stat_profile_timer_total = TimerCreate();
+
+    TriggerAddEventPlayerLeft(TriggerCreate("ibe_stat_on_player_left"), c_playerAny, c_gameResultUndecided);
+    sf_core_event_attach(TriggerCreate("ibe_stat_on_session_update"), "scoreboard_update");
+    sf_core_event_attach(TriggerCreate("ibe_stat_on_session_reset"), "game_reset");
+    sf_game_add_event_begin(TriggerCreate("ibe_stat_on_game_begin"));
+    sf_chal_add_event_challenge_completed(TriggerCreate("ibe_stat_on_chal_complete"));
+    sf_chal_add_event_challenge_ready(TriggerCreate("profile_on_chal_ready"));
+    sf_core_event_attach(TriggerCreate("profile_on_powerup_acquire"), "powerup_acquired");
+    sf_core_event_attach(TriggerCreate("profile_on_button_state_changed"), "button_state_changed");
+    sf_core_event_attach(TriggerCreate("profile_on_game_finish"), "game_finish");
+    sf_core_event_attach(TriggerCreate("profile_on_game_fail"), "game_fail");
+    sf_core_event_attach(TriggerCreate("ibe_stat_on_essence_revive"), "throw_essence_revive");
+    sf_core_event_attach(TriggerCreate("ibe_stat_on_art_revive"), "art_revive");
+
+    // abilities
+    tmp_trig = TriggerCreate("profile_on_abil_use");
+    TriggerAddEventUnitAbility(tmp_trig, null, AbilityCommand("PowerBoost", 0), c_unitAbilStageComplete, true);
+    TriggerAddEventUnitAbility(tmp_trig, null, AbilityCommand("Propel", 0), c_unitAbilStageComplete, true);
+    TriggerAddEventUnitAbility(tmp_trig, null, AbilityCommand("ThrowEssence", 0), c_unitAbilStageComplete, true);
+    TriggerAddEventUnitAbility(tmp_trig, null, AbilityCommand("ART", 0), c_unitAbilStageComplete, true);
+    TriggerAddEventUnitAbility(tmp_trig, null, AbilityCommand("Shade", 0), c_unitAbilStageComplete, true);
+    TriggerAddEventUnitAbility(tmp_trig, null, AbilityCommand("ShadeUse", 0), c_unitAbilStageComplete, true);
+
+    TriggerExecute(TriggerCreate("ibe_stat_on_map_init"), true, true);
+}
+
+int ibe_stat_player_encryption_key(int player)
+{
+    string phand;
+
+    phand = PlayerHandle(player);
+
+    if (phand == "") {
+        // Dbg("[enckey] local");
+        return 0x1f34;
+    }
+    else {
+        // Dbg("[enckey] foreign");
+        return StringToInt(StringSub(phand, 8, StringLength(phand)));
+    }
+}
+
+bool ibe_stat_on_map_init(bool test_conds, bool run_actions)
+{
+    int i;
+    int player;
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        if (PlayerType(i) != c_playerTypeUser) { continue; }
+        if (PlayerStatus(i) != c_playerStatusActive) { continue; }
+        PlayerGroupAdd(ibe_stat_profile_pgroup, i);
+    }
+
+    for (i = 1; i <= PlayerGroupCount(ibe_stat_profile_pgroup); i += 1) {
+        player = PlayerGroupPlayer(ibe_stat_profile_pgroup, i);
+        ibe_stat_profile_load(player);
+        ibe_stat_profiles[player].games_started += 1;
+    }
+
+    ibe_stat_grl_init();
+    ibe_stat_rk_init();
+
+    return true;
+}
+
+bool ibe_stat_on_game_begin(bool test_conds, bool run_actions)
+{
+    int i;
+    int player;
+
+    for (i = 1; i <= PlayerGroupCount(ibe_stat_profile_pgroup); i += 1) {
+        player = PlayerGroupPlayer(ibe_stat_profile_pgroup, i);
+        ibe_stat_profiles[player].gm[ibe_gm_current_code()].games_played += 1;
+    }
+
+    ibe_stat_gresult_current.game_version = ibe_stat_game_version;
+    ibe_stat_gresult_current.gm_code = ibe_gm_current_code();
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        if (!gm_players[i].active) { continue; }
+        ibe_stat_gresult_current.players[i].exists = true;
+        ibe_stat_gresult_current.players[i].tname = sf_player_name_colored(i);
+        if (PlayerType(i) == c_playerTypeUser) {
+            ibe_stat_gresult_current.players[i].phandle = PlayerHandle(i);
+        }
+    }
+
+    return true;
+}
+
+bool ibe_stat_on_player_left(bool test_conds, bool run_actions)
+{
+    ibe_stat_apply_total_time();
+
+    ibe_stat_profile_save(EventPlayer());
+    PlayerGroupRemove(ibe_stat_profile_pgroup, EventPlayer());
+
+    ibe_stat_gresult_current.players[EventPlayer()].left = true;
+
+    return true;
+}
+
+bool ibe_stat_on_session_update(bool test_conds, bool run_actions)
+{
+    int player;
+
+    player = sf_core_event_get_int("player");
+
+    ibe_stat_profiles[player].deaths += (
+        sf_stat_session_stats[player].deaths -
+        ibe_stat_profile_prev_stats[player].deaths
+    );
+    ibe_stat_profiles[player].revives += (
+        sf_stat_session_stats[player].revives -
+        ibe_stat_profile_prev_stats[player].revives
+    );
+    ibe_stat_gresult_current.players[player].deaths += (
+        sf_stat_session_stats[player].deaths -
+        ibe_stat_profile_prev_stats[player].deaths
+    );
+    ibe_stat_gresult_current.players[player].revives += (
+        sf_stat_session_stats[player].revives -
+        ibe_stat_profile_prev_stats[player].revives
+    );
+
+    ibe_stat_profile_prev_stats[player].deaths = sf_stat_session_stats[player].deaths;
+    ibe_stat_profile_prev_stats[player].revives = sf_stat_session_stats[player].revives;
+
+    return true;
+}
+
+bool ibe_stat_on_session_reset(bool test_conds, bool run_actions)
+{
+    int i;
+
+    TimerStart(ibe_stat_profile_timer_total, c_timerDurationInfinite, false, c_timeReal);
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        ibe_stat_profile_prev_stats[i].deaths = 0;
+        ibe_stat_profile_prev_stats[i].revives = 0;
+        ibe_stat_profile_prev_stats[i].challenges_completed = 0;
+        ibe_stat_profile_prev_stats[i].powerups = 0;
+    }
+
+    ibe_stat_gresult_reset(ibe_stat_gresult_current);
+
+    return true;
+}
+
+bool ibe_stat_on_chal_complete(bool test_conds, bool run_actions)
+{
+    int i;
+    int player;
+    int chal_id;
+    fixed chal_time;
+
+    ibe_stat_apply_total_time();
+
+    chal_id = sf_core_event_get_int("challenge_id");
+    player = sf_core_event_get_int("player");
+    chal_time = TimerGetElapsed(ibe_stat_profile_chal_timer);
+
+    ibe_stat_profiles[player].gm[ibe_gm_current_code()].chal[chal_id].completions += 1;
+    if (
+        ibe_stat_profiles[player].gm[ibe_gm_current_code()].chal[chal_id].best_time == 0.0 ||
+        ibe_stat_profiles[player].gm[ibe_gm_current_code()].chal[chal_id].best_time > chal_time
+    ) {
+        ibe_stat_profiles[player].gm[ibe_gm_current_code()].chal[chal_id].best_time = chal_time;
+        ibe_stat_rk_set_challenge(ibe_gm_current_code(), chal_id, player, chal_time);
+    }
+
+    ibe_stat_gresult_current.challenges[chal_id].completed_by = player;
+    ibe_stat_gresult_current.challenges[chal_id].time = chal_time;
+
+    for (i = 1; i <= PlayerGroupCount(ibe_stat_profile_pgroup); i += 1) {
+        player = PlayerGroupPlayer(ibe_stat_profile_pgroup, i);
+        ibe_stat_profile_save(player);
+    }
+
+    return true;
+}
+
+bool profile_on_chal_ready(bool test_conds, bool run_actions)
+{
+    TimerStart(ibe_stat_profile_chal_timer, c_timerDurationInfinite, false, c_timeReal);
+    UnitGroupClear(ibe_stat_profile_chal_buttons_pushed);
+
+    if (TriggerFind("sf_stats_profile_on_timer") != null) {
+        TriggerDestroy(TriggerFind("sf_stats_profile_on_timer"));
+    }
+    TriggerAddEventTimePeriodic(TriggerCreate("sf_stats_profile_on_timer"), 60.0, c_timeReal);
+
+    return true;
+}
+
+bool profile_on_powerup_acquire(bool test_conds, bool run_actions)
+{
+    int player;
+    int chal_id;
+    int i;
+
+    chal_id = sf_core_event_get_int("challenge_id");
+    player = sf_core_event_get_int("player");
+
+    ibe_stat_profiles[player].gm[ibe_gm_current_code()].chal[chal_id].powerups += 1;
+
+    for (i = 0; i < IBE_STAT_CHALLENGE_POWERUP_MAX; i += 1) {
+        if (ibe_stat_gresult_current.challenges[chal_id].powerups_by[i] != 0) { continue; }
+        ibe_stat_gresult_current.challenges[chal_id].powerups_by[i] = player;
+        break;
+    }
+
+    return true;
+}
+
+bool profile_on_button_state_changed(bool test_conds, bool run_actions)
+{
+    int player;
+    int chal_id;
+    int button;
+    unit button_unit;
+    int i;
+    bool state;
+
+    chal_id = sf_core_event_get_int("challenge_id");
+    player = sf_core_event_get_int("player");
+    button = sf_core_event_get_int("button");
+    state = sf_core_event_get_bool("state");
+    button_unit = sf_envi_object_get_base_unit(button);
+
+    if (!state) {
+        return false;
+    }
+
+    if (player == -1) {
+        return false;
+    }
+
+    if (UnitGroupHasUnit(ibe_stat_profile_chal_buttons_pushed, button_unit)) {
+        return false;
+    }
+
+    ibe_stat_profiles[player].gm[ibe_gm_current_code()].chal[chal_id].buttons += 1;
+
+    for (i = 0; i < IBE_STAT_CHALLENGE_POWERUP_MAX; i += 1) {
+        if (ibe_stat_gresult_current.challenges[chal_id].buttons_by[i] != 0) { continue; }
+        ibe_stat_gresult_current.challenges[chal_id].buttons_by[i] = player;
+        break;
+    }
+
+    UnitGroupAdd(ibe_stat_profile_chal_buttons_pushed, button_unit);
+
+    return true;
+}
+
+bool profile_on_game_finish(bool test_conds, bool run_actions)
+{
+    int i;
+    int player;
+    fixed ntime;
+
+    sf_core_event_prepare("challenge_completed");
+    sf_core_event_set_int("challenge_id", lv_current);
+    sf_core_event_set_int("player", sf_core_event_get_int("player"));
+    sf_core_event_send();
+    Wait(TICK_PERIOD, c_timeGame);
+
+    ibe_stat_apply_total_time();
+
+    ntime = TimerGetElapsed(gm_timer);
+
+    Dbg("[stat/finish] escape time = " + FixedToString(ntime, 3));
+
+    for (i = 1; i <= PlayerGroupCount(ibe_stat_profile_pgroup); i += 1) {
+        player = PlayerGroupPlayer(ibe_stat_profile_pgroup, i);
+        if (
+            ibe_stat_profiles[player].gm[ibe_gm_current_code()].escape_best_time == 0.0 ||
+            ibe_stat_profiles[player].gm[ibe_gm_current_code()].escape_best_time > ntime
+        ) {
+            ibe_stat_profiles[player].gm[ibe_gm_current_code()].escape_best_time = ntime;
+            UIDisplayMessage(
+                PlayerGroupSingle(player),
+                c_messageAreaChat,
+                StringToText("New personal best escape: ") + TextTimeFormat(StringToText("<hour/>:<min2/>:<sec2/>"), FixedToInt(ntime))
+            );
+        }
+        ibe_stat_profiles[player].gm[ibe_gm_current_code()].games_completed += 1;
+        ibe_stat_profile_save(player);
+    }
+
+    ibe_stat_gresult_current.escape_time = ntime;
+    ibe_stat_bank_save_current_gresult();
+
+    return true;
+}
+
+bool profile_on_game_fail(bool test_conds, bool run_actions)
+{
+    int i;
+    int player;
+
+    ibe_stat_apply_total_time();
+    TimerPause(ibe_stat_profile_timer_total, true);
+
+    if (TriggerFind("sf_stats_profile_on_timer") != null) {
+        TriggerDestroy(TriggerFind("sf_stats_profile_on_timer"));
+    }
+
+    for (i = 1; i <= PlayerGroupCount(ibe_stat_profile_pgroup); i += 1) {
+        player = PlayerGroupPlayer(ibe_stat_profile_pgroup, i);
+        ibe_stat_profile_save(player);
+    }
+
+    ibe_stat_bank_save_current_gresult();
+
+    return true;
+}
+
+bool sf_stats_profile_on_timer(bool test_conds, bool run_actions)
+{
+    int i;
+    int player;
+
+    ibe_stat_apply_total_time();
+
+    for (i = 1; i <= PlayerGroupCount(ibe_stat_profile_pgroup); i += 1) {
+        player = PlayerGroupPlayer(ibe_stat_profile_pgroup, i);
+        ibe_stat_profile_save(player);
+    }
+
+    return true;
+}
+
+bool profile_on_abil_use(bool test_conds, bool run_actions)
+{
+    // structref<HERO> hero;
+    int player;
+    string abil_name;
+    int abil_id = -1;
+
+    if (!UnitGroupHasUnit(gm_herogroup, EventUnit())) {
+        return false;
+    }
+
+    // hero = gm_players[UnitGetOwner(EventUnit())].hero;
+    player = UnitGetOwner(EventUnit());
+    abil_name = AbilityCommandGetAbility(EventUnitAbility());
+
+    if (abil_name == "PowerBoost") {
+        abil_id = IBE_STAT_PROFILE_ABIL_BOOST;
+    }
+    else if (abil_name == "Propel") {
+        abil_id = IBE_STAT_PROFILE_ABIL_CREEP;
+    }
+    else if (abil_name == "ThrowEssence") {
+        abil_id = IBE_STAT_PROFILE_ABIL_THROW_ESSENCE;
+    }
+    else if (abil_name == "ART") {
+        abil_id = IBE_STAT_PROFILE_ABIL_ART;
+    }
+    else if (abil_name == "Shade") {
+        abil_id = IBE_STAT_PROFILE_ABIL_SHADE_CREATE;
+    }
+    else if (abil_name == "ShadeUse") {
+        abil_id = IBE_STAT_PROFILE_ABIL_SHADE_USE;
+    }
+
+    if (abil_id == -1) {
+        return false;
+    }
+
+    ibe_stat_profiles[player].abils[abil_id] += 1;
+    ibe_stat_gresult_current.players[player].abilities_used[abil_id] += 1;
+
+    return true;
+}
+
+bool ibe_stat_on_essence_revive(bool test_conds, bool run_actions)
+{
+    int player;
+
+    player = sf_core_event_get_int("player");
+
+    ibe_stat_profiles[player].abils[IBE_STAT_PROFILE_ABIL_THROW_ESSENCE_REVIVE] += 1;
+    ibe_stat_gresult_current.players[player].abilities_used[IBE_STAT_PROFILE_ABIL_THROW_ESSENCE_REVIVE] += 1;
+
+    return true;
+}
+
+bool ibe_stat_on_art_revive(bool test_conds, bool run_actions)
+{
+    int player;
+
+    player = sf_core_event_get_int("player");
+
+    ibe_stat_profiles[player].abils[IBE_STAT_PROFILE_ABIL_ART_REVIVE] += 1;
+    ibe_stat_gresult_current.players[player].abilities_used[IBE_STAT_PROFILE_ABIL_ART_REVIVE] += 1;
+
+    return true;
+}

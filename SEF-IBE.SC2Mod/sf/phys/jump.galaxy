@@ -1,0 +1,352 @@
+trigger sf_phys_trig_jump_tick;
+sf_phys_jump_info_t [SF_PHYS_JUMP_INFO_MAX]sf_phys_jump_infos;
+
+static void sf_phys_jump_calculate(structref<sf_phys_jump_info_t> jump_info)
+{
+    fixed progress;
+    fixed height_distance;
+    fixed firstPhase;
+    fixed secondPhase;
+    int cliff_diff;
+    int i;
+    fixed sin;
+
+    height_distance = (jump_info.absolute_height - jump_info.start_absolute_height) + (jump_info.absolute_height - jump_info.end_absolute_height);
+
+    for (i = 0; i < jump_info.total_steps; i += 1) {
+        progress = IntToFixed(i) / IntToFixed(jump_info.total_steps - 1);
+        jump_info.snapshots[i].position = Point(
+            (
+                PointGetX(jump_info.start_point) +
+                (PointGetX(jump_info.end_point) - PointGetX(jump_info.start_point)) * progress
+            ),
+            (
+                PointGetY(jump_info.start_point) +
+                (PointGetY(jump_info.end_point) - PointGetY(jump_info.start_point)) * progress
+            )
+        );
+        jump_info.snapshots[i].height = jump_info.absolute_height;
+        if (progress < 0.6) {
+            sin = Sin((progress / 0.6) * 90.0);
+            jump_info.snapshots[i].height -= (1.0 - sin) * (jump_info.absolute_height - jump_info.start_absolute_height);
+        }
+        else {
+            sin = Sin(90.0 + ((progress - 0.6) / 0.4) * 90.0);
+            jump_info.snapshots[i].height -= (1.0 - sin) * (jump_info.absolute_height - jump_info.end_absolute_height);
+        }
+        // Dbg(
+        //     "[" + FixedToString(progress, 2) + "]" +
+        //     " Sin: " + FixedToString(sin, 3) +
+        //     " H: " + FixedToString(jump_info.snapshots[i].height, 3)
+        // );
+    }
+}
+
+void sf_phys_jump_init()
+{
+    sf_phys_trig_jump_tick = TriggerCreate("sf_phys_on_jump_tick");
+    TriggerEnable(sf_phys_trig_jump_tick, false);
+    TriggerAddEventTimePeriodic(sf_phys_trig_jump_tick, TICK_PERIOD, c_timeGame);
+}
+
+bool sf_phys_jump_launch(unit munit, point landing_point, fixed flight_height, fixed height_boost)
+{
+    int i;
+    fixed map_distance;
+    fixed flight_distance;
+    structref<sf_phys_jump_info_t> jump_info;
+
+    //
+    for (i = 0; i < SF_PHYS_JUMP_INFO_MAX; i += 1) {
+        if (sf_phys_jump_infos[i].active) { continue; }
+        jump_info = sf_phys_jump_infos[i];
+        break;
+    }
+    if (i == SF_PHYS_JUMP_INFO_MAX) {
+        Dbg("SF_PHYS_JUMP_INFO_MAX overflow");
+        return false;
+    }
+
+    if (sf_phys_is_unit_during_jump(munit)) {
+        return false;
+    }
+
+    // Dbg("Calculating jump of '" + UnitGetType(munit) + "' #" + IntToString(i));
+
+    //
+    jump_info.active = true;
+    jump_info.munit = munit;
+    jump_info.start_point = UnitGetPosition(munit);
+    jump_info.end_point = landing_point;
+    jump_info.start_absolute_height = WorldHeight(c_heightMapGround, jump_info.start_point);
+    jump_info.end_absolute_height = WorldHeight(c_heightMapGround, jump_info.end_point);
+    jump_info.landing_angle = AngleBetweenPoints(jump_info.start_point, jump_info.end_point);
+    map_distance = DistanceBetweenPoints(jump_info.start_point, jump_info.end_point);
+
+    //
+    if (flight_height == 0.0) {
+        jump_info.relative_height = 1.6 + map_distance * 0.2;
+    }
+    else {
+        jump_info.relative_height = flight_height;
+    }
+    jump_info.relative_height += height_boost;
+
+    if (jump_info.start_absolute_height >= jump_info.end_absolute_height) {
+        jump_info.absolute_height = jump_info.start_absolute_height;
+    }
+    else {
+        jump_info.absolute_height = jump_info.end_absolute_height;
+    }
+    jump_info.absolute_height += jump_info.relative_height;
+
+    flight_distance = (
+        map_distance / 1.2 +
+        ( (jump_info.absolute_height * 2) - jump_info.start_absolute_height - jump_info.end_absolute_height )
+    );
+
+    //
+    jump_info.total_steps = FixedToInt(flight_distance / 0.9);
+    jump_info.current_step = 0;
+
+    // Dbg("Map distance: " + FixedToString(map_distance, 3));
+    // Dbg("Flight distance: " + FixedToString(flight_distance, 3));
+    // Dbg("Total steps: " + IntToString(jump_info.total_steps));
+    // Dbg("Relative height: " + FixedToString(jump_info.relative_height, 3));
+    // Dbg("Start height: " + FixedToString(jump_info.start_absolute_height, 3));
+    // Dbg("End height: " + FixedToString(jump_info.end_absolute_height, 3));
+
+    UnitSetCustomValue(jump_info.munit, SF_GAME_UNIT_CUSTOM_IN_JUMP, 1.0);
+    if (UnitGetCustomValue(jump_info.munit, SF_GAME_UVAL_PREPARE_CHAIN_JUMP) == 0.0) {
+        UnitSetState(jump_info.munit, c_unitStateIgnoreTerrainZ, true);
+        UnitSetHeight(jump_info.munit, jump_info.start_absolute_height, 0);
+    }
+    else {
+        UnitSetCustomValue(jump_info.munit, SF_GAME_UVAL_PREPARE_CHAIN_JUMP, 0.0);
+    }
+    sf_phys_jump_calculate(jump_info);
+
+    //
+    if (!TriggerIsEnabled(sf_phys_trig_jump_tick)) {
+        TriggerEnable(sf_phys_trig_jump_tick, true);
+    }
+
+    // return IntToFixed(jump_info.total_steps) * TICK_PERIOD;
+    return true;
+}
+
+bool sf_phys_is_unit_during_jump(unit munit)
+{
+    if (UnitGetCustomValue(munit, SF_GAME_UNIT_CUSTOM_IN_JUMP) == 1.0) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool sf_phys_get_unit_jump_info(unit munit, structref<sf_phys_jump_info_t> jump_info) {
+    int i;
+    int l;
+
+    for (i = 0; i < SF_PHYS_JUMP_INFO_MAX; i += 1) {
+        if (!sf_phys_jump_infos[i].active) { continue; }
+        if (sf_phys_jump_infos[i].munit != munit) { continue; }
+
+        jump_info.relative_height = sf_phys_jump_infos[i].relative_height;
+        jump_info.start_absolute_height = sf_phys_jump_infos[i].start_absolute_height;
+        jump_info.end_absolute_height = sf_phys_jump_infos[i].end_absolute_height;
+        jump_info.absolute_height = sf_phys_jump_infos[i].absolute_height;
+        jump_info.active = sf_phys_jump_infos[i].active;
+        jump_info.munit = sf_phys_jump_infos[i].munit;
+        jump_info.start_point = sf_phys_jump_infos[i].start_point;
+        jump_info.end_point = sf_phys_jump_infos[i].end_point;
+        jump_info.landing_angle = sf_phys_jump_infos[i].landing_angle;
+        jump_info.current_step = sf_phys_jump_infos[i].current_step;
+        jump_info.total_steps = sf_phys_jump_infos[i].total_steps;
+        jump_info.skid_speed = sf_phys_jump_infos[i].skid_speed;
+
+        for (l = 0; l < sf_phys_jump_infos[i].total_steps; l += 1) {
+            jump_info.snapshots[l].position = sf_phys_jump_infos[i].snapshots[l].position;
+            jump_info.snapshots[l].height = sf_phys_jump_infos[i].snapshots[l].height;
+        }
+
+        return true;
+    }
+
+    return false;
+}
+
+void sf_phys_restore_unit_jump_info(unit munit, structref<sf_phys_jump_info_t> jump_info)
+{
+    int i;
+    int jmp_id = -1;
+
+    for (i = 0; i < SF_PHYS_JUMP_INFO_MAX; i += 1) {
+        if (!sf_phys_jump_infos[i].active) { continue; }
+        if (sf_phys_jump_infos[i].munit != munit) { continue; }
+        jmp_id = i;
+        break;
+    }
+
+    if (jmp_id == -1) {
+        for (i = 0; i < SF_PHYS_JUMP_INFO_MAX; i += 1) {
+            if (sf_phys_jump_infos[i].active) { continue; }
+            jmp_id = i;
+            break;
+        }
+    }
+
+    sf_phys_jump_infos[jmp_id].relative_height = jump_info.relative_height;
+    sf_phys_jump_infos[jmp_id].start_absolute_height = jump_info.start_absolute_height;
+    sf_phys_jump_infos[jmp_id].end_absolute_height = jump_info.end_absolute_height;
+    sf_phys_jump_infos[jmp_id].absolute_height = jump_info.absolute_height;
+    sf_phys_jump_infos[jmp_id].active = jump_info.active;
+    sf_phys_jump_infos[jmp_id].munit = jump_info.munit;
+    sf_phys_jump_infos[jmp_id].start_point = jump_info.start_point;
+    sf_phys_jump_infos[jmp_id].end_point = jump_info.end_point;
+    sf_phys_jump_infos[jmp_id].landing_angle = jump_info.landing_angle;
+    sf_phys_jump_infos[jmp_id].current_step = jump_info.current_step;
+    sf_phys_jump_infos[jmp_id].total_steps = jump_info.total_steps;
+    sf_phys_jump_infos[jmp_id].skid_speed = jump_info.skid_speed;
+
+    for (i = 0; i < sf_phys_jump_infos[jmp_id].total_steps; i += 1) {
+        sf_phys_jump_infos[jmp_id].snapshots[i].position = jump_info.snapshots[i].position;
+        sf_phys_jump_infos[jmp_id].snapshots[i].height = jump_info.snapshots[i].height;
+    }
+
+    UnitSetCustomValue(munit, SF_GAME_UNIT_CUSTOM_IN_JUMP, 1.0);
+    UnitSetState(jump_info.munit, c_unitStateIgnoreTerrainZ, true);
+
+    if (!TriggerIsEnabled(sf_phys_trig_jump_tick)) {
+        TriggerEnable(sf_phys_trig_jump_tick, true);
+    }
+}
+
+void sf_phys_abort_unit_jump(unit munit)
+{
+    int i;
+    int jmp_id = -1;
+
+    for (i = 0; i < SF_PHYS_JUMP_INFO_MAX; i += 1) {
+        if (!sf_phys_jump_infos[i].active) { continue; }
+        if (sf_phys_jump_infos[i].munit != munit) { continue; }
+        jmp_id = i;
+        break;
+    }
+
+    if (jmp_id != -1) {
+        sf_phys_jump_infos[jmp_id].active = false;
+        UnitSetCustomValue(munit, SF_GAME_UNIT_CUSTOM_IN_JUMP, 0.0);
+        UnitSetState(munit, c_unitStateIgnoreTerrainZ, false);
+        UnitSetHeight(munit, 0.0, 0);
+        UnitSetCustomValue(munit, SF_GAME_UVAL_PREPARE_CHAIN_JUMP, 0.0);
+    }
+}
+
+bool sf_phys_jump_process(structref<sf_phys_jump_info_t> jump_info)
+{
+    structref<HERO> hero;
+    bool is_hero = false;
+
+    // in case it dies in flight
+    if (!UnitIsValid(jump_info.munit) || !UnitIsAlive(jump_info.munit)) {
+        jump_info.active = false;
+
+        // reset props if unit is still valid - thus can be revived
+        if (UnitIsValid(jump_info.munit)) {
+            UnitSetCustomValue(jump_info.munit, SF_GAME_UNIT_CUSTOM_IN_JUMP, 0.0);
+            UnitSetState(jump_info.munit, c_unitStateIgnoreTerrainZ, false);
+            UnitSetHeight(jump_info.munit, 0, 0);
+        }
+
+        return false;
+    }
+
+    if (UnitGroupHasUnit(gm_herogroup, jump_info.munit)) {
+        hero = gm_players[gm_getPlayerByUnit(jump_info.munit)].hero;
+        is_hero = true;
+    }
+
+    if (is_hero && hero.paused) {
+        return true;
+    }
+
+    if (jump_info.current_step == 0) {
+        if (sf_phys_is_point_on_land(jump_info.start_point)) {
+            UnitSetFacing(jump_info.munit, jump_info.landing_angle, IntToFixed(jump_info.total_steps) / 2 * TICK_PERIOD);
+        }
+    }
+
+    jump_info.current_step += 1;
+    if (jump_info.current_step == jump_info.total_steps) {
+        if (is_hero) {
+            hero.desiredAngle = jump_info.landing_angle;
+            UnitSetFacing(hero.guideUnit, jump_info.landing_angle, 0.0);
+        }
+
+        UnitSetCustomValue(jump_info.munit, SF_GAME_UNIT_CUSTOM_IN_JUMP, 0.0);
+
+        if (UnitGetCustomValue(jump_info.munit, SF_GAME_UVAL_PREPARE_CHAIN_JUMP) == 1.0) {
+            jump_info.active = false;
+            return false;
+        }
+
+        UnitSetState(jump_info.munit, c_unitStateIgnoreTerrainZ, false);
+        UnitSetHeight(jump_info.munit, 0.0, TICK_PERIOD);
+
+        jump_info.skid_speed = MinF(
+            (IntToFixed(jump_info.total_steps) * 0.042) - (jump_info.relative_height / 9.0),
+            0.85
+        );
+        // Dbg("relative height = " + FixedToString(jump_info.relative_height, 3));
+        // Dbg("skid_peed = " + FixedToString(jump_info.skid_speed, 3));
+    }
+    else if (jump_info.current_step > jump_info.total_steps) {
+        if (jump_info.skid_speed > 0.02 && UnitGetCustomValue(jump_info.munit, SF_GAME_UNIT_CUSTOM_IN_JUMP) == 0.0) {
+            jump_info.skid_speed *= 0.6;
+            UnitSetPosition(jump_info.munit, PointWithOffsetPolar(UnitGetPosition(jump_info.munit), jump_info.skid_speed, jump_info.landing_angle), true);
+            if (is_hero) {
+                UnitSetPosition(hero.guideUnit, PointWithOffsetPolar(UnitGetPosition(jump_info.munit), jump_info.skid_speed, jump_info.landing_angle), true);
+            }
+        }
+        else {
+            jump_info.active = false;
+            return false;
+        }
+    }
+    else {
+        UnitSetPosition(
+            jump_info.munit,
+            jump_info.snapshots[jump_info.current_step].position,
+            true
+        );
+        UnitSetHeight(
+            jump_info.munit,
+            jump_info.snapshots[jump_info.current_step].height,
+            TICK_PERIOD
+        );
+    }
+
+    return true;
+}
+
+bool sf_phys_on_jump_tick(bool testConds, bool runActions) {
+    int i;
+    int counter = 0;
+    structref<sf_phys_jump_info_t> jump_info;
+
+    for (i = 0; i < SF_PHYS_JUMP_INFO_MAX; i += 1) {
+        if (!sf_phys_jump_infos[i].active) { continue; }
+        jump_info = sf_phys_jump_infos[i];
+        if (sf_phys_jump_process(jump_info)) {
+            counter += 1;
+        }
+    }
+
+    if (counter == 0) {
+        TriggerEnable(sf_phys_trig_jump_tick, false);
+    }
+
+    return true;
+}

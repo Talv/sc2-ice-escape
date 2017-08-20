@@ -1,0 +1,164 @@
+static bool[5] ibe_menu_tabs_init;
+
+void ibe_menu_refresh_tab(int player)
+{
+    if (ibe_menu_tab_current == IBE_MENU_TAB_PROFILES) {
+        if (!ibe_menu_tabs_init[IBE_MENU_TAB_PROFILES]) {
+            ibe_profile_init();
+            ibe_menu_tabs_init[IBE_MENU_TAB_PROFILES] = true;
+        }
+        ibe_profile_show(player, player);
+    }
+    else if (ibe_menu_tab_current == IBE_MENU_TAB_RANKING) {
+        ibe_menu_rank_refresh(player);
+    }
+    else if (ibe_menu_tab_current == IBE_MENU_TAB_OVERVIEW) {
+        ibe_menu_ov_refresh(player);
+    }
+}
+
+void ibe_menu_init()
+{
+    TriggerAddEventDialogControl(TriggerCreate("ibe_menu_on_click"), c_playerAny, 0, c_triggerControlEventTypeClick);
+    TriggerAddEventKeyPressed(TriggerCreate("ibe_menu_on_key_press"), c_playerAny, c_keyTab, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+
+    ibe_menu_dialog = DialogCreate(1600, 1200, c_anchorCenter, 0, 0, true);
+    DialogSetImageVisible(ibe_menu_dialog, false);
+    DialogSetFullscreen(ibe_menu_dialog, true);
+    DialogSetVisible(ibe_menu_dialog, PlayerGroupAll(), false);
+
+    ibe_menu_panel = DialogControlCreateFromTemplate(ibe_menu_dialog, c_triggerControlTypePanel, "IBE_Menu/Menu");
+    DialogControlSetFullDialog(ibe_menu_panel, PlayerGroupAll(), true);
+
+    ibe_menu_title = DialogControlHookup(ibe_menu_panel, c_triggerControlTypeLabel, "TitleLabel");
+    DialogControlSetPropertyAsText(ibe_menu_title, c_triggerControlPropertyText, PlayerGroupAll(), StringToText(""));
+    ibe_menu_subtitle = DialogControlHookup(ibe_menu_panel, c_triggerControlTypeLabel, "SubtitleLabel");
+    DialogControlSetPropertyAsText(ibe_menu_subtitle, c_triggerControlPropertyText, PlayerGroupAll(), StringToText(""));
+
+    ibe_menu_btn_close = DialogControlHookup(ibe_menu_panel, c_triggerControlTypeButton, "CloseButton");
+    ibe_menu_btn_overview = DialogControlHookup(ibe_menu_panel, c_triggerControlTypeButton, "OverviewButton");
+    ibe_menu_btn_ranking = DialogControlHookup(ibe_menu_panel, c_triggerControlTypeButton, "RankingButton");
+    ibe_menu_btn_profile = DialogControlHookup(ibe_menu_panel, c_triggerControlTypeButton, "ProfilesButton");
+    ibe_menu_btn_option = DialogControlHookup(ibe_menu_panel, c_triggerControlTypeButton, "OptionsButton");
+
+    ibe_menu_overview_panel = DialogControlHookup(ibe_menu_panel, c_triggerControlTypePanel, "Overview");
+    ibe_menu_rank_panel = DialogControlHookup(ibe_menu_panel, c_triggerControlTypePanel, "Ranking");
+    ibe_profile_panel = DialogControlHookup(ibe_menu_panel, c_triggerControlTypePanel, "Profile");
+    ibe_menu_options_panel = DialogControlHookup(ibe_menu_panel, c_triggerControlTypePanel, "Options");
+
+    ibe_menu_options_init();
+    ibe_menu_rank_init();
+    ibe_menu_ov_init();
+
+    // DialogControlSetVisible(ibe_menu_rank_panel, PlayerGroupAll(), false);
+    // DialogControlSetVisible(ibe_profile_panel, PlayerGroupAll(), false);
+}
+
+void ibe_menu_open(int player, bool open)
+{
+    DialogSetVisible(ibe_menu_dialog, PlayerGroupSingle(player), open);
+    if (!open) { return; }
+
+    if (ibe_menu_tab_current == -1) {
+        ibe_menu_tab_current = IBE_MENU_TAB_OVERVIEW;
+    }
+    ibe_menu_show_tab(player, ibe_menu_tab_current);
+}
+
+void ibe_menu_toggle(int player)
+{
+    ibe_menu_open(player, !DialogIsVisible(ibe_menu_dialog, player));
+}
+
+void ibe_menu_show_tab(int player, int tab)
+{
+    ibe_menu_tab_current = tab;
+    ibe_menu_refresh_tab(player);
+
+    if (tab == IBE_MENU_TAB_PROFILES) {
+        DialogControlSetVisible(ibe_profile_panel, PlayerGroupSingle(player), true);
+    }
+    else {
+        DialogControlSetVisible(ibe_profile_panel, PlayerGroupSingle(player), false);
+    }
+
+    if (tab == IBE_MENU_TAB_RANKING) {
+        DialogControlSetVisible(ibe_menu_rank_panel, PlayerGroupSingle(player), true);
+    }
+    else {
+        DialogControlSetVisible(ibe_menu_rank_panel, PlayerGroupSingle(player), false);
+    }
+
+    if (tab == IBE_MENU_TAB_OPTIONS) {
+        DialogControlSetVisible(ibe_menu_options_panel, PlayerGroupSingle(player), true);
+    }
+    else {
+        DialogControlSetVisible(ibe_menu_options_panel, PlayerGroupSingle(player), false);
+    }
+
+    if (tab == IBE_MENU_TAB_OVERVIEW) {
+        DialogControlSetVisible(ibe_menu_overview_panel, PlayerGroupSingle(player), true);
+    }
+    else {
+        DialogControlSetVisible(ibe_menu_overview_panel, PlayerGroupSingle(player), false);
+    }
+
+    //
+    DialogControlSetPropertyAsBool(
+        ibe_menu_btn_overview,
+        c_triggerControlPropertyToggled,
+        PlayerGroupSingle(player),
+        tab == IBE_MENU_TAB_OVERVIEW
+    );
+    DialogControlSetPropertyAsBool(
+        ibe_menu_btn_ranking,
+        c_triggerControlPropertyToggled,
+        PlayerGroupSingle(player),
+        tab == IBE_MENU_TAB_RANKING
+    );
+    DialogControlSetPropertyAsBool(
+        ibe_menu_btn_profile,
+        c_triggerControlPropertyToggled,
+        PlayerGroupSingle(player),
+        tab == IBE_MENU_TAB_PROFILES
+    );
+    DialogControlSetPropertyAsBool(
+        ibe_menu_btn_option,
+        c_triggerControlPropertyToggled,
+        PlayerGroupSingle(player),
+        tab == IBE_MENU_TAB_OPTIONS
+    );
+    // Assets\Textures\ui_void_storybutton_highlightcallout.dds
+}
+
+bool ibe_menu_on_click(bool test_conds, bool run_actions)
+{
+    if (EventDialogControl() == gv_customUI.lv_menuButton) {
+        ibe_menu_toggle(EventPlayer());
+    }
+    else if (EventDialogControl() == ibe_menu_btn_close) {
+        ibe_menu_open(EventPlayer(), false);
+    }
+    else if (EventDialogControl() == ibe_menu_btn_overview) {
+        ibe_menu_show_tab(EventPlayer(), IBE_MENU_TAB_OVERVIEW);
+    }
+    else if (EventDialogControl() == ibe_menu_btn_ranking) {
+        ibe_menu_show_tab(EventPlayer(), IBE_MENU_TAB_RANKING);
+    }
+    else if (EventDialogControl() == ibe_menu_btn_profile) {
+        ibe_menu_show_tab(EventPlayer(), IBE_MENU_TAB_PROFILES);
+    }
+    else if (EventDialogControl() == ibe_menu_btn_option) {
+        ibe_menu_show_tab(EventPlayer(), IBE_MENU_TAB_OPTIONS);
+    }
+
+    return true;
+}
+
+bool ibe_menu_on_key_press(bool test_conds, bool run_actions)
+{
+    if (EventKeyPressed() == c_keyTab) {
+        ibe_menu_toggle(EventPlayer());
+    }
+    return true;
+}

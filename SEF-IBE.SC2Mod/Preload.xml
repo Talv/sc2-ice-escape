@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Preload>
+<Actor id="SYSTEM_ActorConfig"/>
+<Effect id="HammerSecurityLM"/>
+<Effect id="DominionKillTeamLM"/>
+<Soundtrack id="Music_Silence"/>
+<Soundtrack id="winterWind"/>
+<Unit id="ShapeTorus"/>
+<Unit id="PrisonZealot"/>
+<Unit id="PickupChronoRiftCharge"/>
+<Unit id="LightSwitch"/>
+<Unit id="LightSwitchRect"/>
+<Unit id="StoneButton"/>
+<Unit id="DirectionArrow"/>
+<Unit id="Portal"/>
+<Unit id="PortalTargetStandard"/>
+<Unit id="DarkTemplarNoAttack"/>
+<Unit id="IceTerrainFlatMoving"/>
+<Unit id="StoneInlay"/>
+<Unit id="Ufo"/>
+<Unit id="PortalDestination"/>
+<Unit id="Beacon_ZergSmall2"/>
+<Unit id="IceBaneling"/>
+<Unit id="iceRingComponent"/>
+<Unit id="sfBushLarge"/>
+<Unit id="sfBushSmall"/>
+<Unit id="sfBushMedium"/>
+<Unit id="spikes"/>
+</Preload>

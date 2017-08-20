@@ -1,0 +1,20 @@
+// -------------------------------
+// --------- STATISTICS ----------
+// -------------------------------
+
+
+struct STATS_SESSION {
+    int deaths;
+    int revives;
+    int challenges_completed;
+    int powerups;
+};
+
+struct STATS_TOTAL {
+    int deaths;
+    int revives;
+    int levelsCompletedTotal;
+    int levelsCompletedAlone;
+    fixed bestTime;
+    int gamesCompleted;
+};

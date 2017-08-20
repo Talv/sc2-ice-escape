@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CRequirementCountBehavior id="CountBehaviorIceBaneLevelingCompleteOnlyAtUnit">
+        <Flags index="TechTreeCheat" value="0"/>
+        <Tooltip value=""/>
+        <Count Link="IceBaneLeveling" State="CompleteOnlyAtUnit"/>
+    </CRequirementCountBehavior>
+    <CRequirementGTE id="GTE3215068160CountBehaviorIceBaneLevelingCompleteOnlyAtUnit2">
+        <OperandArray index="0" value="CountBehaviorIceBaneLevelingCompleteOnlyAtUnit"/>
+        <OperandArray index="1" value="2"/>
+    </CRequirementGTE>
+</Catalog>

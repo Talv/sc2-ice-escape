@@ -1,0 +1,407 @@
+void ibe_legacy_init();
+
+void ibe_init() {
+    int i;
+    int player;
+
+    libHash_InitLib();
+
+    // TriggerAddEventChatMessage(TriggerCreate("ibe_on_cmd"), c_playerAny, "-", false);
+    TriggerAddEventTimePeriodic(TriggerCreate("ibe_on_periodic"), TICK_PERIOD, c_timeGame);
+    sf_core_event_attach(TriggerCreate("ibe_on_game_finish"), "game_finish");
+
+    GameSetSpeedValue(c_gameSpeedNormal);
+    if (!GameIsTestMap(false)) {
+        GameSetSpeedLocked(true);
+        GameCheatAllow(c_gameCheatAny, false);
+    }
+
+    //
+    for (i = 1; i <= PlayerGroupCount(PlayerGroupActive()); i += 1) {
+        player = PlayerGroupPlayer(PlayerGroupActive(), i);
+        gv_playerSettingIsEnabled[player].lv_leaderboard = true;
+        gv_playerSettingIsEnabled[player].lv_leaderBoardIsMinimized = true;
+        gv_playerSettingIsEnabled[player].lv_ui = false;
+        gv_playerSettingIsEnabled[player].lv_minimap = true;
+        gv_playerSettingIsEnabled[player].lv_minimapCommandsEnabled = true;
+        gv_playerSettingIsEnabled[player].lv_commandCard = true;
+        gv_playerSettingIsEnabled[player].lv_currentGameTimer = true;
+    }
+
+    //
+    // ibe_stat_init();
+    // ibe_menu_init();
+
+    //
+    sf_tool_cmd_register("kick", ibe_votekick_cmdhand_kick);
+    sf_tool_cmd_register("c", ibe_votekick_cmdhand_c);
+
+    sf_core_event_attach(TriggerCreate("ibe_on_button_enter"), "button_unit_enter");
+    sf_core_event_attach(TriggerCreate("ibe_on_button_state_changed"), "button_state_changed");
+    sf_core_event_attach(TriggerCreate("ibe_on_hero_revived"), "hero_revive");
+    sf_core_event_attach(TriggerCreate("ibe_on_challenge_ready"), "challenge_ready");
+    sf_core_event_attach(TriggerCreate("ibe_on_portal_prep"), "portal_prep");
+
+    // blackscreen
+    CinematicFade(false, 0, c_fadeStyleNormal, Color(0.00, 0.00, 0.00), 0.0, true);
+}
+
+void ibe_post_init()
+{
+    ibe_legacy_init();
+}
+
+
+void ibe_legacy_init()
+{
+    int i;
+    int player;
+
+    UISetResourceTradingAllowed(c_resourceTypeMinerals, false);
+    UISetResourceTradingAllowed(c_resourceTypeVespene, false);
+
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeResourcePanel, false);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeAllianceButton, true);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeTeamResourceButton, false);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeArmyButton, false);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeIdleWorkerButton, false);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeHeroPanel, false);
+    UISetFrameVisible(PlayerGroupAll(), c_syncFrameTypeAchievementMenuButton, false);
+
+    HelpPanelShowTechTreeRace(PlayerGroupAll(), "Prot", false);
+    HelpPanelShowTechTreeRace(PlayerGroupAll(), "Terr", false);
+    HelpPanelShowTechTreeRace(PlayerGroupAll(), "Zerg", false);
+    HelpPanelEnableTechGlossaryButton(PlayerGroupAll(), false);
+    HelpPanelEnableTechTreeButton(PlayerGroupAll(), false);
+    UISetGameMenuItemVisible(PlayerGroupAll(), c_gameMenuDialogRestartButton, false);
+    UISetGameMenuItemVisible(PlayerGroupAll(), c_gameMenuDialogSaveButton, false);
+    UISetGameMenuItemVisible(PlayerGroupAll(), c_gameMenuDialogLoadButton, false);
+    SoundChannelSetVolume(PlayerGroupAll(), c_soundCategoryCombat, 20.0, 0.0);
+    gf_applyAllPlayersUISettings();
+    UIFlyerHelperOverride(PlayerGroupAll(), libNtve_ge_FlyerHelperDisplay_c_flyerDisplayNone);
+
+    // disable yellow
+    UIUnitColorStyleOverride(PlayerGroupAll(), c_unitColorStyleNormal);
+
+    // simple command card
+    for (i = 1; i <= PlayerGroupCount(PlayerGroupActive()); i += 1) {
+        player = PlayerGroupPlayer(PlayerGroupActive(), i);
+        PlayerOptionOverride(player, "simplecommandcard", "0");
+        PlayerOptionOverride(player, "selectuncontrolable", "1");
+        PlayerOptionOverride(player, "displayunitstatus", "All"); // for shade progress bar
+    }
+
+    UISetCustomMenuItemVisible(PlayerGroupAll(), c_gameMenuDialogPauseButton, true);
+    UISetCustomMenuItemVisible(PlayerGroupAll(), c_gameMenuDialogOptionsButton, true);
+    UISetCustomMenuItemVisible(PlayerGroupAll(), c_gameMenuDialogReturnToGameplayButton, true);
+    UISetCustomMenuItemVisible(PlayerGroupAll(), c_gameMenuDialogQuitButton, true);
+
+    // help
+    HelpPanelDestroyAllTips();
+    HelpPanelDestroyAllTutorials();
+    // HelpPanelAddTip(PlayerGroupAll(), libNtve_gf_FormatTipTitle(StringExternal("Param/Value/26AB12D2"), libNtve_ge_TipType_NormalTip), StringExternal("Param/Value/9F3487C9"), StringToText(""), "Assets\\Textures\\ui-editoricon-niflheim_snow_cracked.dds");
+    // HelpPanelAddTip(PlayerGroupAll(), libNtve_gf_FormatTipTitle(StringExternal("Param/Value/5381263A"), libNtve_ge_TipType_NormalTip), StringExternal("Param/Value/26D58297"), StringToText(""), "Assets\\Textures\\ui-editoricon-niflheim_snow_cracked.dds");
+    // HelpPanelAddTip(PlayerGroupAll(), libNtve_gf_FormatTipTitle(StringExternal("Param/Value/A692CBF6"), libNtve_ge_TipType_NormalTip), StringExternal("Param/Value/04E1A951"), StringToText(""), "Assets\\Textures\\ui-editoricon-niflheim_snow_cracked.dds");
+    // HelpPanelAddTip(PlayerGroupAll(), libNtve_gf_FormatTipTitle(StringExternal("Param/Value/E5BF37AD"), libNtve_ge_TipType_MissionStrategy), StringExternal("Param/Value/74DB2A04"), StringToText(""), "Assets\\Textures\\ui-editoricon-niflheim_snow_cracked.dds");
+    TipAlertPanelClear(PlayerGroupAll());
+
+    gf_HookupGameUIdialogItems();
+
+    DialogSetVisible(DialogControlGetDialog(gv_gameUI.lv_helpButton), PlayerGroupAll(), true);
+    DialogControlSetVisible(gv_gameUI.lv_helpButton, PlayerGroupAll(), true);
+
+    // weather
+    lib197EC33E_gf_ActivateDeactivateSFX(2, 0, 1, 0, RegionEntireMap());
+    lib197EC33E_gf_Weather(2, 0, RegionEntireMap(), 0, 20, 120, 8, 20);
+    lib197EC33E_gf_ActivateDeactivateSFX(2, 0, 1, 0, RegionEntireMap());
+    lib197EC33E_gf_ActivateDeactivateSFX(2, 0, 1, 1, RegionEntireMap());
+    lib197EC33E_gf_Weather(2, 0, RegionEntireMap(), 1, 20, 120, 10, 25);
+    lib197EC33E_gf_ActivateDeactivateSFX(2, 0, 1, 1, RegionEntireMap());
+
+    //
+    gf_initDialogUIElements();
+}
+
+bool ibe_legacy_restart()
+{
+    int i;
+    int player;
+
+    gv_initGamePlayerGroup = PlayerGroupEmpty();
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        if (!gm_players[i].active) { continue; }
+        PlayerGroupAdd(gv_initGamePlayerGroup, i);
+    }
+
+    if (sf_game_dbg_fast_ui) {
+        CinematicFade(true, 1.5, c_fadeStyleNormal, Color(0.00, 0.00, 0.00), 0.0, false);
+    }
+
+    return true;
+}
+
+void ibe_legacy_begin()
+{
+    int i;
+    int player;
+
+    // DialogDestroyAll();
+    // gf_initStatsDialog();
+    if (sf_game_dbg_fast_ui) {
+        gf_fadeInDialogUIElements(0.0, 0.0);
+    }
+    else {
+        gf_fadeInDialogUIElements(0.0, 1.5);
+    }
+    // CinematicFade(true, 1.5, c_fadeStyleNormal, Color(0.00, 0.00, 0.00), 0.0, false);
+    if (gv_scoreBoard == c_invalidDialogControlId) {
+        gf_initScoreboard();
+    }
+
+    for (i = 1; i <= PlayerGroupCount(PlayerGroupActive()); i += 1) {
+        player = PlayerGroupPlayer(PlayerGroupActive(), i);
+        gf_RefreshPlayerUiMode(player);
+    }
+}
+
+void ibe_legacy_fail() {
+    Wait(TICK_PERIOD, c_timeGame);
+    if (!sf_game_dbg_fast_ui) {
+        Wait(1.5, c_timeGame);
+        CinematicFade(false, 1.0, c_fadeStyleSine, Color(0.00, 0.00, 0.00), 0.0, true);
+        // SoundPlay(SoundLink("GameOver", -1), PlayerGroupAll(), 100.0, 0.0);
+        SoundtrackStop(PlayerGroupAll(), c_soundtrackCategoryMusic, false);
+        SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "TZeratul04MusicIntro", c_soundtrackCueAny, c_soundtrackIndexAny, false);
+        SoundtrackDefault(PlayerGroupAll(), c_soundtrackCategoryMusic, "Music_Silence", c_soundtrackCueAny, c_soundtrackIndexAny);
+    }
+    if (!sf_game_dbg_fast_ui) {
+        UIDisplayMessage(PlayerGroupActive(), c_messageAreaObjective, StringToText("Game over. Restarting in 5 seconds.."));
+        Wait(5.0, c_timeReal);
+    }
+    // BoardDestroy(gv_scoreBoard);
+}
+
+bool ibe_on_periodic(bool test_conds, bool run_actions)
+{
+    int i;
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        if (gv_following[i]) {
+            gf_MakePlayerFollowSelectedUnit(i, 0.125);
+        }
+    }
+
+    return true;
+}
+
+bool ibe_on_game_finish(bool test_conds, bool run_actions)
+{
+    int i;
+
+    Wait(1.0, c_timeReal);
+    SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "LostViking_MusicGameLoop23", c_soundtrackCueAny, c_soundtrackIndexAny, true);
+    Wait(1.0, c_timeReal);
+
+    UIDisplayMessage(PlayerGroupAll(), c_messageAreaCinematic, StringToText("<c val=\"7ADEEF\">You've escaped!</c>"));
+    VictoryPanelSetBackgroundFilePath("Assets\\Textures\\ui_gamemenu_victory_icons_zerg.dds");
+    VictoryPanelSetVictoryText(StringToText("YOU ESCAPED!"));
+    Wait(9.0, c_timeReal);
+
+    for (i = 30; i >= 0; i -= 1) {
+        UIDisplayMessage(PlayerGroupAll(), c_messageAreaObjective, (StringToText("<c val=\"7ADEEF\">Victory in ") + (IntToText(i) + StringToText("</c>"))));
+        Wait(1.0, c_timeReal);
+    }
+    Wait(0.125, c_timeReal);
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        if (!gm_players[i].active) { continue; }
+        GameOver(i, c_gameOverVictory, false, true);
+    }
+
+    return true;
+}
+
+bool ibe_on_button_enter(bool test_conds, bool run_actions)
+{
+    int btn_obj_id;
+    unit btn_unit;
+    unit munit;
+    bool entered;
+
+    entered = sf_core_event_get_bool("enter");
+    btn_obj_id = sf_core_event_get_int("button");
+    munit = sf_core_event_get_unit("unit");
+    btn_unit = sf_envi_object_get_base_unit(btn_obj_id);
+
+    if (!UnitGroupHasUnit(gm_herogroup, munit)) {
+        return false;
+    }
+
+    if (UnitGetType(btn_unit) != "StoneButton") {
+        return false;
+    }
+
+    if (!entered) {
+        return false;
+    }
+
+    while (true) {
+        if (!UnitIsAlive(munit)) { break; }
+        if (sf_envi_buttons[btn_obj_id].rg_act == null) { break; }
+        if (!libNtve_gf_UnitInRegion(munit, sf_envi_buttons[btn_obj_id].rg_act)) { break; }
+        UnitSetHeight(munit, UnitGetHeight(btn_unit) + 0.15, TICK_PERIOD);
+
+        Wait(TICK_PERIOD, c_timeGame);
+    }
+
+    UnitSetHeight(munit, 0.0, TICK_PERIOD);
+
+    return true;
+}
+
+bool ibe_on_button_state_changed(bool test_conds, bool run_actions)
+{
+    int button;
+    int player;
+    fixed state_time;
+    bool state;
+    unit munit;
+    int i;
+
+    button = sf_core_event_get_int("button");
+    player = sf_core_event_get_int("player");
+    state_time = sf_core_event_get_fixed("state_time");
+    state = sf_core_event_get_bool("state");
+    munit = sf_envi_object_get_base_unit(button);
+
+    if (UnitGetType(munit) == "StoneButton") {
+        if (state) {
+            SoundPlayOnUnitForPlayer(SoundLink("slabSwitchDown", -1), c_maxPlayers, PlayerGroupAll(), munit, 0.0, 100.0, 0.0);
+            UnitSetHeight(munit, 0.0, 1.0);
+        }
+        else {
+            SoundPlayOnUnitForPlayer(SoundLink("slabSwitchUp", -1), c_maxPlayers, PlayerGroupAll(), munit, 0.0, 100.0, 0.0);
+        }
+    }
+    else if (UnitGetType(munit) == "StoneInlay") {
+        if (state) {
+            SoundPlayOnUnitForPlayer(SoundLink("difficultySelection_ExtremeHitFinal2", -1), c_maxPlayers, PlayerGroupAll(), munit, 0.0, 100.0, 0.0);
+            libNtve_gf_PlayAnimation(libNtve_gf_MainActorofUnit(munit), c_animNameDefault, "A", 0, c_animTimeDefault);
+        }
+    }
+    else if (UnitGetType(munit) == "LightSwitch" || UnitGetType(munit) == "LightSwitchRect") {
+        if (state) {
+            SoundPlayOnUnitForPlayer(SoundLink("FX_Lab02_PartingShot", -1), c_maxPlayers, PlayerGroupAll(), munit, 0.0, 100.0, 0.0);
+            if (state_time == -1.0) {
+                ActorScopeSend(ActorScopeFromUnit(munit), "SetTintColor {0,255,0 1.600000} 0.150000");
+            }
+            else {
+                while (sf_envi_buttons[button].pressed) {
+                    ActorScopeSend(ActorScopeFromUnit(munit), "SetTintColor {0,255,0 1.600000} 0.3");
+                    Wait(0.3, c_timeGame);
+                    for (i = 0; i < 5 && sf_envi_buttons[button].pressed; i += 1) {
+                        Wait(0.1, c_timeGame);
+                    }
+                    ActorScopeSend(ActorScopeFromUnit(munit), "SetTintColor {0,255,10 4.600000} 0.3");
+                    Wait(0.3, c_timeGame);
+                }
+                ActorScopeSend(ActorScopeFromUnit(munit), "ClearTintColor 0.150000");
+            }
+        }
+        else {
+            ActorScopeSend(ActorScopeFromUnit(munit), "ClearTintColor 0.150000");
+        }
+    }
+
+    return true;
+}
+
+void ibe_handle_as(int player, int reason)
+{
+    unitgroup selected_units;
+    bool foregin_ctrl;
+    structref<HERO> hero;
+    bool as;
+    int value;
+
+    hero = gm_players[player].hero;
+
+    selected_units = UnitGroupSelected(player);
+    if (
+        UnitGroupCount(selected_units, c_unitCountAlive) > 0 &&
+        PlayerGetAlliance(UnitGetOwner(UnitGroupUnit(selected_units, 1)), c_allianceIdControl, player) &&
+        gm_players[UnitGetOwner(UnitGroupUnit(selected_units, 1))].hero.ctrl_player == player
+    ) {
+        foregin_ctrl = true;
+    }
+
+    if (reason == HERO_POSITION_CHANGE_REASON_NEW_MAP) {
+        value = ibe_menu_option_player_value(player, IBE_MENU_OPTION_AS_NEW_CHAL);
+    }
+    else if (reason == HERO_POSITION_CHANGE_REASON_REVIVE) {
+        value = ibe_menu_option_player_value(player, IBE_MENU_OPTION_AS_REVIVE_GENERIC);
+    }
+    else if (reason == HERO_POSITION_CHANGE_REASON_ART) {
+        value = ibe_menu_option_player_value(player, IBE_MENU_OPTION_AS_REVIVE_ART);
+    }
+    else {
+        return;
+    }
+
+    if (
+        (value == IBE_MENU_OPT_AS_VAL_NEVER) ||
+        (value == IBE_MENU_OPT_AS_VAL_WHEN_EMPTY_SELECTION && UnitGroupCount(selected_units, c_unitCountAlive) > 0) ||
+        (value == IBE_MENU_OPT_AS_VAL_WHEN_NOT_IN_CTRL && foregin_ctrl)
+    ) {
+        return;
+    }
+
+    if (UnitGroupCount(selected_units, c_unitCountAll) > 0) {
+        UnitClearSelection(player);
+    }
+    UnitSelect(hero.mainUnit, player, true);
+
+    if (
+        (reason == HERO_POSITION_CHANGE_REASON_ART && ibe_menu_option_player_value(player, IBE_MENU_OPTION_CAMERA_PAN) == 1) &&
+        !gf_PointIsBeingLookedAtByPlayerCamera(UnitGetPosition(hero.mainUnit), player)
+    ) {
+        CameraPan(player, UnitGetPosition(hero.mainUnit), 0.3, 0.6, 1.0, true);
+    }
+}
+
+bool ibe_on_hero_revived(bool test_conds, bool run_actions)
+{
+    ibe_handle_as(sf_core_event_get_int("player"), sf_core_event_get_int("reason"));
+
+    return true;
+}
+
+bool ibe_on_challenge_ready(bool test_conds, bool run_actions)
+{
+    int i;
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        if (!gm_players[i].active) { continue; }
+        ibe_handle_as(i, HERO_POSITION_CHANGE_REASON_NEW_MAP);
+    }
+
+    return true;
+}
+
+bool ibe_on_portal_prep(bool test_conds, bool run_actions)
+{
+    int player;
+    point target;
+
+    player = sf_core_event_get_int("player");
+    target = sf_core_event_get_point("target");
+
+    if (
+        ibe_menu_option_player_value(player, IBE_MENU_OPTION_CAMERA_PAN) == 1 &&
+        !gf_PointIsBeingLookedAtByPlayerCamera(target, player)
+    ) {
+        CameraPan(player, target, 0.3, 0.6, 1.0, true);
+    }
+
+    return true;
+}

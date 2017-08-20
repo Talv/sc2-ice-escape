@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Desc>
+    <Frame type="Frame" name="SectionTemplate">
+        <Anchor side="Top" relative="$parent" pos="Min" offset="120"/>
+        <Height val="250"/>
+
+        <Frame type="Image" name="MissionSectionBg">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+            <Texture val="@UI/LoTV_Shared_BorderBlue"/>
+            <TextureType val="Nineslice"/>
+            <!--<Width val="964"/>-->
+            <!--<Height val="260"/>-->
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.55" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.65" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="SummaryTitleLabelUnderline">
+            <Anchor side="Top" relative="$parent/SummaryHeadingLabel" pos="Min" offset="-20"/>
+            <Anchor side="Left" relative="$parent/SummaryHeadingLabel" pos="Min" offset="-65"/>
+            <Anchor side="Right" relative="$parent/MissionSectionBg" pos="Mid" offset="0"/>
+            <Texture val="@UI/LoTV_Shared_HeaderUnderline"/>
+            <Height val="60"/>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.55" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.65" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Label" name="SummaryHeadingLabel">
+            <Anchor side="Top" relative="$parent/MissionSectionBg" pos="Min" offset="35"/>
+            <Anchor side="Left" relative="$parent/MissionSectionBg" pos="Min" offset="80"/>
+            <Anchor side="Right" relative="$parent/MissionSectionBg" pos="Max" offset="0"/>
+            <Style val="Void_VictoryMissionRewardTitle"/>
+            <Text val="SummaryHeadingLabel"/>
+            <CollapseLayout val="true"/>
+            <PreserveAnchorOffset val="false"/>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.55" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.65" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Button" name="VoteButton1" template="VoidShared_GenericTemplates/StoryButtonTemplate">
+            <Anchor side="Top" relative="$parent/SummaryHeadingLabel" pos="Max" offset="30"/>
+            <Anchor side="Left" relative="$parent/MissionSectionBg" pos="Min" offset="30"/>
+            <Width val="300"/>
+            <Height val="100"/>
+            <Text val="VoteButton1"/>
+            <ClickSound val="@UI_ActionButtonSelect"/>
+        </Frame>
+
+        <Frame type="Button" name="VoteButton2" template="VoidShared_GenericTemplates/StoryButtonTemplate">
+            <Anchor side="Top" relative="$parent/SummaryHeadingLabel" pos="Max" offset="30"/>
+            <Anchor side="Right" relative="$parent/MissionSectionBg" pos="Max" offset="-30"/>
+            <Width val="300"/>
+            <Height val="100"/>
+            <Text val="VoteButton2"/>
+            <ClickSound val="@UI_ActionButtonSelect"/>
+        </Frame>
+    </Frame>
+
+    <Frame type="Frame" name="ModeSelection" template="IBE_GenericTemplates/DefaultWindow">
+        <Frame type="Frame" name="Panel">
+            <Anchor side="Top" relative="$parent/StatFrame" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent/StatFrame" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent/StatFrame" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent/StatFrame" pos="Max" offset="0"/>
+
+            <Frame type="Frame" name="Header">
+                <Anchor side="Top" relative="$parent" pos="Min" offset="20"/>
+                <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+                <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+                <Height val="180"/>
+
+                <Frame type="Label" name="Timeleft">
+                    <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+                    <Anchor side="Left" relative="$parent" pos="Mid" offset="0"/>
+                    <Anchor side="Right" relative="$parent" pos="Mid" offset="0"/>
+                    <Text val="-"/>
+                    <Style val="Void_VictoryTimerTitle"/>
+                    <Height val="30"/>
+                </Frame>
+
+                <Frame type="Label" name="Title">
+                    <Anchor side="Top" relative="$parent/Timeleft" pos="Min" offset="20"/>
+                    <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+                    <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+                    <Style val="Void_VictoryTitleLabel"/>
+                    <Text val="Choose game mode"/>
+                    <Height val="70"/>
+                </Frame>
+            </Frame>
+
+            <!--  -->
+            <Frame type="Frame" name="DifficultySection" template="IBE_ModeSelection/SectionTemplate">
+                <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+                <Anchor side="Right" relative="$parent" pos="Mid" offset="-20"/>
+
+                <Frame type="Label" name="SummaryHeadingLabel">
+                    <Text val="Difficulty"/>
+                </Frame>
+                <Frame type="Button" name="VoteButton1">
+                    <Text val="NORMAL"/>
+                </Frame>
+                <Frame type="Button" name="VoteButton2">
+                    <Text val="EXTREME"/>
+                    <Enabled val="false" />
+                    <Tooltip val="Coming soon ™" />
+                </Frame>
+            </Frame>
+
+            <!--  -->
+            <Frame type="Frame" name="SpeedSection" template="IBE_ModeSelection/SectionTemplate">
+                <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+                <Anchor side="Left" relative="$parent" pos="Mid" offset="20"/>
+
+                <Frame type="Label" name="SummaryHeadingLabel">
+                    <Text val="Speed"/>
+                </Frame>
+                <Frame type="Button" name="VoteButton1">
+                    <Text val="NORMAL"/>
+                </Frame>
+                <Frame type="Button" name="VoteButton2">
+                    <Text val="FAST"/>
+                </Frame>
+            </Frame>
+        </Frame>
+    </Frame>
+</Desc>

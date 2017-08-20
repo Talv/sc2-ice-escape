@@ -1,0 +1,71 @@
+// -------------------------------
+// --------- PHYSICS -------------
+// -------------------------------
+
+//
+// SLIDING
+//
+
+const fixed SF_PHYS_TICKS_DIV = 0;
+const fixed SF_PHYS_TICKS_INTERVAL = SF_PHYS_TICKS_DIV * TICK_PERIOD;
+const fixed TURN_SPEED_ICE = 0.32;
+const fixed MOVE_SPEED_ICE = 0.275 / 2;
+const fixed FAST_ICE_MULTIPLIER = 2.5;
+
+//
+// JUMPS
+//
+
+const int SF_PHYS_JUMP_INFO_MAX = 32;
+const int SF_PHYS_JUMP_SNAPSHOT_MAX = 128;
+
+struct sf_phys_jump_snapshot_t {
+    point position;
+    fixed height;
+};
+
+struct sf_phys_jump_info_t {
+    fixed relative_height;
+    fixed start_absolute_height;
+    fixed end_absolute_height;
+    fixed absolute_height;
+
+    bool active;
+    unit munit;
+    point start_point;
+    point end_point;
+    fixed landing_angle;
+    sf_phys_jump_snapshot_t [SF_PHYS_JUMP_SNAPSHOT_MAX]snapshots;
+    int current_step;
+    int total_steps;
+    fixed skid_speed;
+};
+
+
+//
+// COLLISIONS
+//
+
+const int COLLISIONS_INFO_SIZE = 64;
+
+const int CL_TYPE_KILLER = 1;
+const int CL_TYPE_HERO_CORPSE = 2;
+
+const int SF_PHYS_COLLIDER_SHAPE_CIRCLE = 1;
+const int SF_PHYS_COLLIDER_SHAPE_SQUARE = 2;
+
+struct COLLISION_INFO {
+    string unit_type;
+    fixed radius;
+    bool exclude_collider_radius;
+};
+
+const int SURFACE_SNOW = 1;
+const int SURFACE_LAND = 2;
+const int SURFACE_NORMAL_ICE = 3;
+const int SURFACE_REVERSE_ICE = 4;
+const int SURFACE_STRAIGHT_ICE = 5;
+const int SURFACE_FAST_ICE = 6;
+const int SURFACE_REVERSE_FAST_ICE = 7;
+const int SURFACE_90DEG_ICE = 8;
+const int SURFACE_REVERSE_GROUND = 9;

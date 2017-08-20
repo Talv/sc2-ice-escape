@@ -1,0 +1,427 @@
+
+
+void gf_MoveTimerForPlayer (int lp_player) {
+    // Variable Declarations
+    int lv_p;
+
+    // Variable Initialization
+
+    // Implementation
+    lv_p = lp_player;
+    if ((gv_playerSettingIsEnabled[lv_p].lv_currentGameTimer == true)) {
+        DialogSetVisible(DialogControlGetDialog(gv_customUI.lv_gameTimer), PlayerGroupSingle(lv_p), true);
+        DialogControlSetVisible(gv_customUI.lv_gameTimer, PlayerGroupSingle(lp_player), true);
+        if ((gv_playerSettingIsEnabled[lv_p].lv_ui == true)) {
+            DialogControlSetPosition(gv_customUI.lv_gameTimer, PlayerGroupAll(), c_anchorTopRight, -65, -8);
+        }
+        else {
+            DialogControlSetPosition(gv_customUI.lv_gameTimer, PlayerGroupAll(), c_anchorTopRight, 5, 60);
+        }
+    }
+    else {
+        DialogControlSetVisible(gv_customUI.lv_gameTimer, PlayerGroupSingle(lp_player), false);
+    }
+}
+
+void gf_initDialogUIElements () {
+    playergroup auto40E6AAA7_g;
+    int auto40E6AAA7_p;
+
+    // Variable Declarations
+    int lv_n;
+    int lv_menuButtonHeight;
+    int lv_menuButtonWidth;
+
+    // Variable Initialization
+    lv_menuButtonHeight = 84;
+    lv_menuButtonWidth = 147;
+
+    // Implementation
+    DialogCreate(140, 217, c_anchorBottomRight, 451, 11, true);
+    DialogSetImage(DialogLastCreated(), "Assets\\Textures\\black.dds");
+    libNtve_gf_CreateDialogItemImage(DialogLastCreated(), 140, 217, c_anchorTopLeft, 0, 0, StringToText(""), "uiBgPortrait.tga", c_triggerImageTypeHorizontalBorder, true, Color(22*100/255,128*100/255,0), c_triggerBlendModeNormal);
+    DialogControlSetFullDialog(DialogControlLastCreated(), PlayerGroupAll(), true);
+    libNtve_gf_SetDialogItemColor(DialogControlLastCreated(), Color(0,0,0), PlayerGroupAll());
+    gv_uiBgPortraitCoverup = DialogLastCreated();
+    DialogCreate(33, 250, c_anchorBottomRight, 885, 0, true);
+    libNtve_gf_CreateDialogItemImage(DialogLastCreated(), 33, 250, c_anchorTopLeft, 0, 0, StringToText(""), "uiSlider2.tga", c_triggerImageTypeNormal, false, Color(100,100,100), c_triggerBlendModeNormal);
+    gv_sliderDialog = DialogLastCreated();
+    DialogSetTransparency(DialogLastCreated(), 100.0);
+    DialogCreate(7, 225, c_anchorBottomRight, 610, 12, true);
+    libNtve_gf_CreateDialogItemImage(DialogLastCreated(), 7, 225, c_anchorTopLeft, 0, 0, StringToText(""), "uiSlider1Extra.tga", c_triggerImageTypeNormal, false, Color(100,100,100), c_triggerBlendModeNormal);
+    DialogSetTransparency(DialogLastCreated(), 100.0);
+    gv_rightSliderAddonDialog = DialogLastCreated();
+    DialogCreate(1000, 400, c_anchorTopRight, 0, 0, true);
+    DialogSetImageVisible(DialogLastCreated(), false);
+    libNtve_gf_CreateDialogItemLabel(DialogLastCreated(), 300, 70, c_anchorTopRight, 0, 0, StringToText("Help"), ColorWithAlpha(0,0,0,0), false, 2.0);
+    libNtve_gf_SetDialogItemStyle(DialogControlLastCreated(), "ModRightSize24Bold", PlayerGroupAll());
+    gv_customUI.lv_gameTimer = DialogControlLastCreated();
+    DialogCreate(138, 216, c_anchorBottomRight, 452, 11, true);
+    gv_menuDialog = DialogLastCreated();
+    DialogSetImage(DialogLastCreated(), "Assets\\Textures\\black.dds");
+    libNtve_gf_SetDialogItemBorderImage(DialogControlLastCreated(), "Assets\\Textures\\black.dds", PlayerGroupAll());
+    libNtve_gf_CreateDialogItemImage(DialogLastCreated(), 137, 216, c_anchorTopLeft, 0, 0, StringToText(""), "uiBgPortrait.tga", c_triggerImageTypeHorizontalBorder, true, Color(22*100/255,128*100/255,0), c_triggerBlendModeNormal);
+    DialogSetTransparency(DialogLastCreated(), 100.0);
+    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_menuButtonWidth, lv_menuButtonHeight, c_anchorTopLeft, -6, -6, StringToText(""), StringToText("Help"), "");
+    gv_helpButton = DialogControlLastCreated();
+    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_menuButtonWidth, lv_menuButtonHeight, c_anchorLeft, -6, 0, StringToText(""), StringToText("<s val=\"ModCenterSize16\">Commands</s>"), "");
+    gv_menuButton = DialogControlLastCreated();
+    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), lv_menuButtonWidth, lv_menuButtonHeight, c_anchorBottomLeft, -6, -6, StringToText(""), StringToText("Stats"), "");
+    gv_statsButton = DialogControlLastCreated();
+    DialogCreate(265, 180, c_anchorBottomRight, 618, 24, true);
+    gv_deathReportDialog = DialogLastCreated();
+    DialogSetImage(DialogLastCreated(), "Assets\\Textures\\black.dds");
+    libNtve_gf_CreateDialogItemLabel(DialogLastCreated(), 265, 180, c_anchorTopLeft, 0, 0, StringToText(""), ColorWithAlpha(0,0,0,0), false, 2.0);
+    libNtve_gf_SetDialogItemRenderPriority(DialogControlLastCreated(), 1, PlayerGroupAll());
+    gv_iceBaneDeathReportDialogLabel = DialogControlLastCreated();
+    DialogCreate(350, 390, c_anchorBottomLeft, 2, -50, true);
+    DialogSetImage(DialogLastCreated(), "Assets\\Textures\\ui_ingame_portraitframe_protoss.dds");
+    gv_minimapBorder = DialogLastCreated();
+    DialogSetTransparency(DialogLastCreated(), 100.0);
+    DialogCreate(940, 903, c_anchorTop, 0, 10, false);
+
+    gv_commandsDialog = DialogLastCreated();
+    DialogSetTransparency(DialogLastCreated(), 0.0);
+    libNtve_gf_CreateDialogItemLabel(DialogLastCreated(), 840, 830, c_anchorTop, 0, 70, StringExternal("Param/Value/2181D320"), ColorWithAlpha(0,0,0,0), false, 2.0);
+    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), 300, 70, c_anchorBottom, 0, 50, StringToText(""), StringExternal("Param/Value/12E0127D"), "");
+    gv_commandsDialogCloseButton = DialogControlLastCreated();
+
+    DialogCreate(890, 300, c_anchorBottom, -4, -195, true);
+    DialogSetImage(DialogLastCreated(), "Assets\\Textures\\ui_ingame_portraitframe_protoss.dds");
+    gv_customUI.lv_commandCardBackground = DialogLastCreated();
+    DialogCreate(100, 100, c_anchorBottomLeft, 0, 0, true);
+    DialogSetImageVisible(DialogLastCreated(), false);
+    DialogSetFullscreen(DialogLastCreated(), true);
+    DialogSetTransparency(DialogLastCreated(), 100.0);
+
+    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), 43, 42, c_anchorBottomLeft, 0, 0, StringToText(""), StringToText(""), "");
+    gv_customUI.lv_cameraFollowButton = DialogControlLastCreated();
+    libNtve_gf_SetDialogItemImage(gv_customUI.lv_cameraFollowButton, "Textures\\cameraFollowButtonA.dds", PlayerGroupAll());
+    libNtve_gf_SetDialogItemImage2(gv_customUI.lv_cameraFollowButton, "Textures\\cameraFollowButtonA_hover.dds", PlayerGroupAll());
+    libNtve_gf_SetDialogItemImageType(gv_customUI.lv_cameraFollowButton, c_triggerImageTypeNormal, PlayerGroupAll());
+    libNtve_gf_SetDialogItemTooltip(gv_customUI.lv_cameraFollowButton, StringToText("Turns camera auto-follow on/off.<n/>[<c val=\"FFFFFF\">SPACE</c>]"), PlayerGroupAll());
+
+    libNtve_gf_CreateDialogItemButton(DialogLastCreated(), 83, 42, c_anchorBottomLeft, 0, 0, StringToText(""), StringToText("<s val=\"ModCenterSize16Bold\">IBE</c>"), "");
+    gv_customUI.lv_menuButton = DialogControlLastCreated();
+    DialogControlSetSize(gv_customUI.lv_menuButton, PlayerGroupAll(), 50, 39);
+    DialogControlSetPosition(gv_customUI.lv_menuButton, PlayerGroupAll(), c_anchorTopRight, 230, 0);
+    // libNtve_gf_SetDialogItemImage(gv_customUI.lv_menuButton, "Textures\\cameraFollowButtonA.dds", PlayerGroupAll());
+    // libNtve_gf_SetDialogItemImage2(gv_customUI.lv_menuButton, "Textures\\cameraFollowButtonA_hover.dds", PlayerGroupAll());
+    libNtve_gf_SetDialogItemImageType(gv_customUI.lv_menuButton, c_triggerImageTypeNormal, PlayerGroupAll());
+    libNtve_gf_SetDialogItemImage(gv_customUI.lv_menuButton, "Assets\\Textures\\ui_gamemenu_menubutton_normalpressed_protoss.dds", PlayerGroupAll());
+    libNtve_gf_SetDialogItemImage2(gv_customUI.lv_menuButton, "Assets\\Textures\\ui_gamemenu_menubutton_normaloverpressedover_protoss.dds", PlayerGroupAll());
+    libNtve_gf_SetDialogItemTooltip(gv_customUI.lv_menuButton, StringToText("IBE specific submenu. <n/>[<c val=\"FFFFFF\">TAB</c>]"), PlayerGroupAll());
+
+    auto40E6AAA7_g = PlayerGroupActive();
+    auto40E6AAA7_p = 1;
+    for ( ; auto40E6AAA7_p <= PlayerGroupCount(auto40E6AAA7_g) ; auto40E6AAA7_p += BoolToInt(lv_n == PlayerGroupPlayer(auto40E6AAA7_g, auto40E6AAA7_p)) ) {
+        lv_n = PlayerGroupPlayer(auto40E6AAA7_g, auto40E6AAA7_p);
+        gv_playerSettingIsEnabled[lv_n].lv_commandsHelpVisible = false;
+        if ((gv_playerSettingIsEnabled[lv_n].lv_ui == true)) {
+            DialogSetVisible(DialogControlGetDialog(gv_menuButton), PlayerGroupSingle(lv_n), true);
+            DialogSetVisible(DialogControlGetDialog(gv_iceBaneDeathReportDialogLabel), PlayerGroupSingle(lv_n), true);
+            DialogSetVisible(gv_sliderDialog, PlayerGroupSingle(lv_n), true);
+            DialogSetVisible(gv_uiBgPortraitCoverup, PlayerGroupSingle(lv_n), true);
+            DialogSetVisible(gv_rightSliderAddonDialog, PlayerGroupSingle(lv_n), true);
+        }
+        else {
+            if ((gv_playerSettingIsEnabled[lv_n].lv_minimap == true)) {
+                DialogSetVisible(gv_minimapBorder, PlayerGroupSingle(lv_n), true);
+            }
+
+        }
+    }
+
+    TriggerAddEventDialogControl(TriggerCreate("ibe_on_ui_event"), c_playerAny, c_invalidDialogControlId, c_triggerControlEventTypeClick);
+    TriggerAddEventKeyPressed(TriggerCreate("ibe_on_key_press"), c_playerAny, c_keySpace, true, c_keyModifierStateIgnore, c_keyModifierStateIgnore, c_keyModifierStateIgnore);
+    TriggerAddEventTimePeriodic(TriggerCreate("ibe_on_timer"), 1.0, c_timeReal);
+
+}
+
+void gf_HookupGameUIdialogItems () {
+    // Implementation
+    DialogControlHookupStandard(c_triggerControlTypePanel, "UIContainer/ConsoleUIContainer/CommandPanel");
+    gv_gameUI.lv_commandPanel = DialogControlLastCreated();
+    libNtve_gf_SetDialogItemRenderPriority(DialogControlLastCreated(), 500, PlayerGroupAll());
+    DialogControlCreateInPanel(gv_gameUI.lv_commandPanel, c_triggerControlTypeImage);
+    libNtve_gf_SetDialogItemColor(DialogControlLastCreated(), Color(0,0,0), PlayerGroupAll());
+    DialogControlSetSize(DialogControlLastCreated(), PlayerGroupAll(), 910, 85);
+    DialogControlSetPosition(DialogControlLastCreated(), PlayerGroupAll(), c_anchorBottom, 120, 0);
+    libNtve_gf_SetDialogItemRenderPriority(DialogControlLastCreated(), 400, PlayerGroupAll());
+    IntLoopBegin(0, 14);
+    for ( ; !IntLoopDone() ; IntLoopStep() ) {
+        if ((IntLoopCurrent() < 10)) {
+            DialogControlHookupStandard(c_triggerControlTypeButton, ("UIContainer/ConsoleUIContainer/CommandPanel/CommandButton0" + IntToString(IntLoopCurrent())));
+        }
+        else {
+            DialogControlHookupStandard(c_triggerControlTypeButton, ("UIContainer/ConsoleUIContainer/CommandPanel/CommandButton" + IntToString(IntLoopCurrent())));
+        }
+        gv_gameUI.lv_commandButtons[IntLoopCurrent()] = DialogControlLastCreated();
+        libNtve_gf_SetDialogItemRenderPriority(DialogControlLastCreated(), 1001, PlayerGroupAll());
+    }
+    IntLoopEnd();
+    DialogControlHookupStandard(c_triggerControlTypeLabel, "UIContainer/ConsoleUIContainer/CommandPanel/CommandTargetName");
+    gv_gameUI.lv_commandTargetName = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeLabel, "UIContainer/ConsoleUIContainer/CommandPanel/CommandTargetPrompt");
+    gv_gameUI.lv_commandTargetPrompt = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeImage, "UIContainer/ConsoleUIContainer/CommandPanel/CommandTargetImage");
+    gv_gameUI.lv_commandTargetImage = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypePanel, "WorldPanel/CommandTooltipAnchor");
+    gv_gameUI.lv_commandTooltipAnchor = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypePanel, "UIContainer/ConsoleUIContainer/MinimapPanel/Minimap");
+    gv_gameUI.lv_minimap = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypePanel, "UIContainer/FullscreenUpperContainer/MenuBar");
+    gv_gameUI.lv_menuBar = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeImage, "UIContainer/FullscreenUpperContainer/MenuBar/MenuBarBackgroundImage");
+    gv_gameUI.lv_menuBarBackground = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeButton, "UIContainer/FullscreenUpperContainer/MenuBar/MenuButton");
+    gv_gameUI.lv_menuButton = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeButton, "UIContainer/FullscreenUpperContainer/MenuBar/HelpButton");
+    gv_gameUI.lv_helpButton = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeButton, "UIContainer/FullscreenUpperContainer/MenuBar/SocialButton");
+    gv_gameUI.lv_socialButton = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeLabel, "UIContainer/FullscreenUpperContainer/MenuBar/SocialButton/CountLabel");
+    gv_gameUI.lv_socialButtonCountLabel = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeButton, "UIContainer/FullscreenUpperContainer/MenuBar/ChatButton");
+    gv_gameUI.lv_chatButton = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeButton, "UIContainer/FullscreenUpperContainer/AllianceButton");
+    gv_gameUI.lv_allianceButton = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeButton, "UIContainer/ConsoleUIContainer/MinimapPanel/PingButton");
+    gv_gameUI.lv_pingButton = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypePanel, "UIContainer/ConsoleUIContainer/InfoPanel");
+    gv_gameUI.lv_infoPanel = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeLabel, "UIContainer/ConsoleUIContainer/InfoPanel/InfoPaneHero/ExperienceLabel");
+    gv_gameUI.lv_experienceLabel = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeLabel, "UIContainer/ConsoleUIContainer/InfoPanel/UnitPanel/LifeLabel");
+    gv_gameUI.lv_lifeLabel = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeLabel, "UIContainer/ConsoleUIContainer/InfoPanel/UnitPanel/EnergyLabel");
+    gv_gameUI.lv_energyLabel = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeProgressBar, "UIContainer/ConsoleUIContainer/InfoPanel/InfoPaneHero/ExperienceBar");
+    gv_gameUI.lv_experienceBar = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeLabel, "UIContainer/ConsoleUIContainer/InfoPanel/InfoPaneHero/NameLabel");
+    gv_gameUI.lv_heroNameLabel = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeButton, "UIContainer/ConsoleUIContainer/InfoPanel/UnitPanel/UnitWireframe");
+    gv_gameUI.lv_unitWireframe = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypePanel, "UIContainer/ConsoleUIContainer/InfoPanel/InfoPaneGroup");
+    gv_gameUI.lv_infoPaneGroup = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeLabel, "UIContainer/ConsoleUIContainer/CommandPanel/UncontrollableUnitFrame/UncontrollableUnitPromptLabel");
+    gv_gameUI.lv_uncontrollableUnitPromptLabel = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeLabel, "UIContainer/ConsoleUIContainer/CommandPanel/UncontrollableUnitFrame/UncontrollableUnitTitleLabel");
+    gv_gameUI.lv_uncontrollableUnitTitleLabel = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypePanel, "UIContainer/ConsoleUIContainer/CommandPanel/UncontrollableUnitFrame");
+    gv_gameUI.lv_uncontrollableUnitFrame = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypePanel, "UIContainer/ConsoleUIContainer/InfoPanel/InfoPaneUnit");
+    gv_gameUI.lv_infoPaneUnit = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeLabel, "UIContainer/ConsoleUIContainer/InfoPanel/InfoPaneUnit/SubtitleLabel");
+    gv_gameUI.lv_infoPaneSubtitle = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeLabel, "UIContainer/ConsoleUIContainer/InfoPanel/InfoPaneUnit/NameLabel");
+    gv_gameUI.lv_infoPaneNameLabel = DialogControlLastCreated();
+    DialogControlHookupStandard(c_triggerControlTypeLabel, "UIContainer/ConsoleUIContainer/InfoPanel/InfoPaneUnit/TypeLabel");
+    gv_gameUI.lv_infoPaneTypeLabel = DialogControlLastCreated();
+}
+
+void gf_RefreshPlayerUiMode (int lp_player) {
+    // Variable Declarations
+    int lv_p;
+    int lv_gap;
+
+    // Variable Initialization
+
+    // Implementation
+    lv_p = lp_player;
+
+    // MINIMAL UI
+    DialogControlSetPosition(gv_gameUI.lv_pingButton, PlayerGroupSingle(lv_p), c_anchorBottomLeft, -500, -500);
+    IntLoopBegin(0, 14);
+    for ( ; !IntLoopDone() ; IntLoopStep() ) {
+        if ((IntLoopCurrent() != 8)) {
+            DialogControlSetSize(gv_gameUI.lv_commandButtons[IntLoopCurrent()], PlayerGroupSingle(lv_p), 64, 64);
+        }
+        else {
+            DialogControlSetSize(gv_gameUI.lv_commandButtons[IntLoopCurrent()], PlayerGroupSingle(lv_p), 40, 40);
+        }
+    }
+    IntLoopEnd();
+    DialogControlSetSize(gv_gameUI.lv_commandPanel, PlayerGroupSingle(lv_p), 1000, 150);
+    if ((gv_playerSettingIsEnabled[lv_p].lv_commandCard == false)) {
+        DialogControlSetPosition(gv_gameUI.lv_commandPanel, PlayerGroupSingle(lv_p), c_anchorBottomRight, 21, -500);
+        DialogSetVisible(gv_customUI.lv_commandCardBackground, PlayerGroupSingle(lv_p), false);
+        UISetFrameVisible(PlayerGroupSingle(lv_p), c_syncFrameTypeInfoPanel, false);
+    }
+    else {
+        DialogControlSetPosition(gv_gameUI.lv_commandPanel, PlayerGroupSingle(lv_p), c_anchorBottom, -90, -1);
+        DialogSetVisible(gv_customUI.lv_commandCardBackground, PlayerGroupSingle(lv_p), true);
+        UISetFrameVisible(PlayerGroupSingle(lv_p), c_syncFrameTypeInfoPanel, true);
+    }
+    DialogControlSetPosition(gv_gameUI.lv_commandButtons[0], PlayerGroupSingle(lv_p), c_anchorBottom, 34, 0);
+    DialogControlSetPosition(gv_gameUI.lv_commandButtons[5], PlayerGroupSingle(lv_p), c_anchorBottom, 0, -100);
+    DialogControlSetPosition(gv_gameUI.lv_commandButtons[8], PlayerGroupSingle(lv_p), c_anchorBottom, -87, 0);
+    DialogControlSetPosition(gv_gameUI.lv_commandButtons[9], PlayerGroupSingle(lv_p), c_anchorBottom, 359, 0);
+    DialogControlSetPosition(gv_gameUI.lv_commandButtons[10], PlayerGroupSingle(lv_p), c_anchorBottom, -292, 0);
+    DialogControlSetPosition(gv_gameUI.lv_commandTooltipAnchor, PlayerGroupSingle(lv_p), c_anchorBottom, 221, 80);
+    DialogControlSetPosition(gv_gameUI.lv_menuBar, PlayerGroupSingle(lv_p), c_anchorTopRight, 0, 0);
+    DialogControlSetVisible(gv_gameUI.lv_menuBarBackground, PlayerGroupSingle(lv_p), false);
+    DialogControlSetPosition(gv_gameUI.lv_menuButton, PlayerGroupSingle(lv_p), c_anchorTopRight, 0, 0);
+    lv_gap = 1;
+    DialogControlSetSize(gv_customUI.lv_cameraFollowButton, PlayerGroupSingle(lv_p), 40, 39);
+    DialogControlSetPosition(gv_customUI.lv_cameraFollowButton, PlayerGroupSingle(lv_p), c_anchorTopRight, 189, 0);
+    libNtve_gf_SetDialogItemToggled(gv_customUI.lv_cameraFollowButton, gv_following[lv_p], PlayerGroupSingle(lv_p));
+    DialogSetVisible(DialogControlGetDialog(gv_customUI.lv_cameraFollowButton), PlayerGroupSingle(lv_p), true);
+    DialogSetVisible(DialogControlGetDialog(gv_customUI.lv_menuButton), PlayerGroupSingle(lv_p), true);
+    DialogControlSetPosition(gv_gameUI.lv_helpButton, PlayerGroupSingle(lv_p), c_anchorTopRight, 149, 0);
+    DialogControlSetVisible(gv_gameUI.lv_helpButton, PlayerGroupSingle(lv_p), true);
+    DialogControlSetPosition(gv_gameUI.lv_chatButton, PlayerGroupSingle(lv_p), c_anchorTopRight, (111 + (lv_gap * 1)), 0);
+    DialogControlSetSize(gv_gameUI.lv_chatButton, PlayerGroupSingle(lv_p), 38, 38);
+    DialogControlSetPosition(gv_gameUI.lv_socialButton, PlayerGroupSingle(lv_p), c_anchorTopRight, (72 + (lv_gap * 2)), 0);
+    DialogControlSetSize(gv_gameUI.lv_socialButton, PlayerGroupSingle(lv_p), 38, 38);
+    DialogControlSetPosition(gv_gameUI.lv_socialButtonCountLabel, PlayerGroupSingle(lv_p), c_anchorBottomLeft, 1, 1);
+    libNtve_gf_SetDialogItemImage(gv_gameUI.lv_socialButton, "Textures\\ui_gamemenu_battlebuddy_normalpressed_protoss_New.dds", PlayerGroupSingle(lv_p));
+    libNtve_gf_SetDialogItemImage2(gv_gameUI.lv_socialButton, "Textures\\ui_gamemenu_battlebuddy_normaloverpressedover_protoss_New.dds", PlayerGroupSingle(lv_p));
+    DialogControlSetSize(gv_gameUI.lv_allianceButton, PlayerGroupSingle(lv_p), 46, 46);
+    DialogControlSetPosition(gv_gameUI.lv_allianceButton, PlayerGroupSingle(lv_p), c_anchorTopRight, 280, -4);
+    DialogControlSetPosition(gv_gameUI.lv_infoPanel, PlayerGroupSingle(lv_p), c_anchorBottom, 354, -20);
+    DialogControlSetPosition(gv_gameUI.lv_experienceLabel, PlayerGroupSingle(lv_p), c_anchorTop, 0, 140);
+    DialogControlSetPosition(gv_gameUI.lv_experienceBar, PlayerGroupSingle(lv_p), c_anchorTop, 2000, 48);
+    DialogControlSetVisible(gv_gameUI.lv_experienceBar, PlayerGroupSingle(lv_p), false);
+    DialogControlSetVisible(gv_gameUI.lv_unitWireframe, PlayerGroupSingle(lv_p), false);
+    DialogControlSetVisible(gv_gameUI.lv_heroNameLabel, PlayerGroupSingle(lv_p), false);
+    DialogControlSetVisible(gv_gameUI.lv_infoPaneGroup, PlayerGroupSingle(lv_p), false);
+    DialogControlSetVisible(gv_gameUI.lv_infoPaneUnit, PlayerGroupSingle(lv_p), false);
+    DialogControlSetVisible(gv_gameUI.lv_uncontrollableUnitFrame, PlayerGroupSingle(lv_p), false);
+    DialogControlSetVisible(gv_gameUI.lv_uncontrollableUnitPromptLabel, PlayerGroupSingle(lv_p), false);
+    DialogControlSetVisible(gv_gameUI.lv_uncontrollableUnitTitleLabel, PlayerGroupSingle(lv_p), false);
+    DialogControlSetVisible(gv_gameUI.lv_infoPaneSubtitle, PlayerGroupSingle(lv_p), false);
+    DialogControlSetVisible(gv_gameUI.lv_infoPaneNameLabel, PlayerGroupSingle(lv_p), false);
+    DialogControlSetVisible(gv_gameUI.lv_infoPaneTypeLabel, PlayerGroupSingle(lv_p), false);
+    DialogControlFadeTransparency(gv_gameUI.lv_commandTargetPrompt, PlayerGroupSingle(lv_p), 0.0, 100.0);
+    DialogControlFadeTransparency(gv_gameUI.lv_commandTargetName, PlayerGroupSingle(lv_p), 0.0, 100.0);
+    DialogControlFadeTransparency(gv_gameUI.lv_commandTargetImage, PlayerGroupSingle(lv_p), 0.0, 100.0);
+    DialogControlSetVisible(gv_gameUI.lv_commandTargetPrompt, PlayerGroupSingle(lv_p), false);
+    DialogControlSetVisible(gv_gameUI.lv_commandTargetName, PlayerGroupSingle(lv_p), false);
+    DialogControlSetVisible(gv_gameUI.lv_commandTargetImage, PlayerGroupSingle(lv_p), false);
+    UISetFrameVisible(PlayerGroupSingle(lv_p), c_syncFrameTypeMissionTimePanel, false);
+    UISetFrameVisible(PlayerGroupSingle(lv_p), c_syncFrameTypeConsolePanel, false);
+    if ((gv_playerSettingIsEnabled[lv_p].lv_minimap == true)) {
+        UISetFrameVisible(PlayerGroupSingle(lv_p), c_syncFrameTypeMinimapPanel, true);
+        DialogSetVisible(gv_minimapBorder, PlayerGroupSingle(lv_p), true);
+    }
+    else {
+        UISetFrameVisible(PlayerGroupSingle(lv_p), c_syncFrameTypeMinimapPanel, false);
+        DialogSetVisible(gv_minimapBorder, PlayerGroupSingle(lv_p), false);
+    }
+    DialogSetVisible(DialogControlGetDialog(gv_menuButton), PlayerGroupSingle(lv_p), false);
+    DialogSetVisible(DialogControlGetDialog(gv_iceBaneDeathReportDialogLabel), PlayerGroupSingle(lv_p), false);
+    DialogSetVisible(gv_sliderDialog, PlayerGroupSingle(lv_p), false);
+    DialogSetVisible(gv_uiBgPortraitCoverup, PlayerGroupSingle(lv_p), false);
+    DialogSetVisible(gv_rightSliderAddonDialog, PlayerGroupSingle(lv_p), false);
+
+    gf_MoveTimerForPlayer(lv_p);
+}
+
+
+void gf_applyAllPlayersUISettings () {
+    playergroup auto38E7A980_g;
+    int auto38E7A980_p;
+
+    // Variable Declarations
+    int lv_n;
+
+    // Variable Initialization
+
+    // Implementation
+    auto38E7A980_g = PlayerGroupActive();
+    auto38E7A980_p = 1;
+    for ( ; auto38E7A980_p <= PlayerGroupCount(auto38E7A980_g) ; auto38E7A980_p += BoolToInt(lv_n == PlayerGroupPlayer(auto38E7A980_g, auto38E7A980_p)) ) {
+        lv_n = PlayerGroupPlayer(auto38E7A980_g, auto38E7A980_p);
+        if ((gv_playerSettingIsEnabled[lv_n].lv_minimap == false)) {
+            UISetFrameVisible(PlayerGroupSingle(lv_n), c_syncFrameTypeMinimapPanel, false);
+        }
+        else {
+            UISetFrameVisible(PlayerGroupSingle(lv_n), c_syncFrameTypeMinimapPanel, true);
+        }
+        if ((gv_playerSettingIsEnabled[lv_n].lv_ui == false)) {
+            UISetFrameVisible(PlayerGroupSingle(lv_n), c_syncFrameTypeMissionTimePanel, false);
+            UISetFrameVisible(PlayerGroupSingle(lv_n), c_syncFrameTypeConsolePanel, false);
+            UISetFrameVisible(PlayerGroupSingle(lv_n), c_syncFrameTypeHelpMenuButton, false);
+        }
+        else {
+            UISetFrameVisible(PlayerGroupSingle(lv_n), c_syncFrameTypeMissionTimePanel, true);
+            UISetFrameVisible(PlayerGroupSingle(lv_n), c_syncFrameTypeConsolePanel, true);
+            UISetFrameVisible(PlayerGroupSingle(lv_n), c_syncFrameTypeInfoPanel, true);
+            UISetFrameVisible(PlayerGroupSingle(lv_n), c_syncFrameTypeHelpMenuButton, true);
+        }
+    }
+}
+
+fixed auto_gf_fadeInDialogUIElements_lp_delay;
+fixed auto_gf_fadeInDialogUIElements_lp_fadeTime;
+trigger auto_gf_fadeInDialogUIElements_Trigger;
+void gf_fadeInDialogUIElements (fixed lp_delay, fixed lp_fadeTime) {
+    auto_gf_fadeInDialogUIElements_lp_delay = lp_delay;
+    auto_gf_fadeInDialogUIElements_lp_fadeTime = lp_fadeTime;
+
+    if (auto_gf_fadeInDialogUIElements_Trigger == null) {
+        auto_gf_fadeInDialogUIElements_Trigger = TriggerCreate("auto_gf_fadeInDialogUIElements_TriggerFunc");
+    }
+
+    TriggerExecute(auto_gf_fadeInDialogUIElements_Trigger, false, false);
+}
+
+bool auto_gf_fadeInDialogUIElements_TriggerFunc (bool testConds, bool runActions) {
+    fixed lp_delay = auto_gf_fadeInDialogUIElements_lp_delay;
+    fixed lp_fadeTime = auto_gf_fadeInDialogUIElements_lp_fadeTime;
+
+    // Variable Declarations
+    fixed lv_timeRemaining;
+
+    // Variable Initialization
+
+    // Implementation
+    lv_timeRemaining = lp_fadeTime;
+    Wait(lp_delay, c_timeReal);
+    DialogControlSetVisible(gv_customUI.lv_cameraFollowButton, PlayerGroupAll(), true);
+    DialogSetTransparency(gv_uiBgPortraitCoverup, 0.0);
+    while ((lv_timeRemaining > 0.0)) {
+        DialogSetTransparency(DialogControlGetDialog(gv_customUI.lv_cameraFollowButton), ((lv_timeRemaining / lp_fadeTime) * 100.0));
+        DialogSetTransparency(gv_rightSliderAddonDialog, ((lv_timeRemaining / lp_fadeTime) * 100.0));
+        DialogSetTransparency(gv_sliderDialog, ((lv_timeRemaining / lp_fadeTime) * 100.0));
+        DialogSetTransparency(gv_menuDialog, ((lv_timeRemaining / lp_fadeTime) * 100.0));
+        DialogSetTransparency(gv_minimapBorder, ((lv_timeRemaining / lp_fadeTime) * 100.0));
+        DialogSetTransparency(gv_deathReportDialog, ((lv_timeRemaining / lp_fadeTime) * 100.0));
+        Wait(0.0625, c_timeReal);
+        lv_timeRemaining = (lv_timeRemaining - 0.0625);
+    }
+    DialogSetTransparency(DialogControlGetDialog(gv_customUI.lv_cameraFollowButton), 0.0);
+    DialogSetTransparency(gv_rightSliderAddonDialog, 0.0);
+    DialogSetTransparency(gv_sliderDialog, 0.0);
+    DialogSetTransparency(gv_menuDialog, 0.0);
+    DialogSetTransparency(gv_minimapBorder, 0.0);
+    DialogSetTransparency(gv_deathReportDialog, 0.0);
+    return true;
+}
+
+bool ibe_on_ui_event(bool test_conds, bool run_actions)
+{
+    if (EventDialogControl() == gv_customUI.lv_cameraFollowButton) {
+        gf_ToggleCameraAutoFollow(EventPlayer());
+    }
+
+    return true;
+}
+
+bool ibe_on_key_press(bool test_conds, bool run_actions)
+{
+    if (EventKeyPressed() == c_keySpace) {
+        gf_ToggleCameraAutoFollow(EventPlayer());
+    }
+
+    return true;
+}
+
+
+bool ibe_on_timer(bool test_conds, bool run_actions)
+{
+    libNtve_gf_SetDialogItemText(gv_customUI.lv_gameTimer, TextTimeFormat(StringToText("<hour2/>:<min2/>:<sec2/>"), FixedToInt(TimerGetElapsed(gm_timer))), PlayerGroupAll());
+
+    return true;
+}

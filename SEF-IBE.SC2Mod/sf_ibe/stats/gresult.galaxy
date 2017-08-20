@@ -1,0 +1,253 @@
+static void ibe_stat_gresult_save_to_stream(structref<ibe_stat_gresult_t> gresult, structref<db_stream_t> stream)
+{
+    int i;
+    int l;
+
+    db_stream_push_int(stream, gresult.game_version);
+    db_stream_push_int(stream, gresult.gm_code);
+    db_stream_push_fixed(stream, gresult.escape_time);
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        db_stream_push_bool(stream, gresult.players[i].exists);
+        if (!gresult.players[i].exists) { continue; }
+        db_stream_push_string(stream, gresult.players[i].phandle);
+        db_stream_push_bool(stream, gresult.players[i].left);
+
+        db_stream_push_int(stream, gresult.players[i].level);
+        db_stream_push_int(stream, gresult.players[i].deaths);
+        db_stream_push_int(stream, gresult.players[i].revives);
+
+        for (l = 0; l < IBE_STAT_ABIL_MAX; l += 1) {
+            db_stream_push_int(stream, gresult.players[i].abilities_used[l]);
+        }
+    }
+
+    for (i = 0; i < IBE_STAT_CHALLENGE_MAX; i += 1) {
+        db_stream_push_int(stream, gresult.challenges[i].completed_by);
+        if (!gresult.challenges[i].completed_by) { continue; }
+        db_stream_push_fixed(stream, gresult.challenges[i].time);
+
+        for (l = 0; l < IBE_STAT_CHALLENGE_BUTTON_MAX; l += 1) {
+            db_stream_push_int(stream, gresult.challenges[i].buttons_by[l]);
+        }
+
+        for (l = 0; l < IBE_STAT_CHALLENGE_POWERUP_MAX; l += 1) {
+            db_stream_push_int(stream, gresult.challenges[i].powerups_by[l]);
+        }
+    }
+}
+
+static void ibe_stat_gresult_load_from_stream(structref<ibe_stat_gresult_t> gresult, structref<db_stream_t> stream)
+{
+    int i;
+    int l;
+
+    gresult.game_version = db_stream_pop_int(stream);
+    gresult.gm_code = db_stream_pop_int(stream);
+    gresult.escape_time = db_stream_pop_fixed(stream);
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        gresult.players[i].exists = db_stream_pop_bool(stream);
+        if (!gresult.players[i].exists) { continue; }
+        gresult.players[i].phandle = db_stream_pop_string(stream);
+        gresult.players[i].left = db_stream_pop_bool(stream);
+
+        gresult.players[i].level = db_stream_pop_int(stream);
+        gresult.players[i].deaths = db_stream_pop_int(stream);
+        gresult.players[i].revives = db_stream_pop_int(stream);
+
+        for (l = 0; l < IBE_STAT_ABIL_MAX; l += 1) {
+            gresult.players[i].abilities_used[l] = db_stream_pop_int(stream);
+        }
+    }
+
+    for (i = 0; i < IBE_STAT_CHALLENGE_MAX; i += 1) {
+        gresult.challenges[i].completed_by = db_stream_pop_int(stream);
+        if (!gresult.challenges[i].completed_by) { continue; }
+        gresult.challenges[i].time = db_stream_pop_fixed(stream);
+
+        for (l = 0; l < IBE_STAT_CHALLENGE_BUTTON_MAX; l += 1) {
+            gresult.challenges[i].buttons_by[l] = db_stream_pop_int(stream);
+        }
+
+        for (l = 0; l < IBE_STAT_CHALLENGE_POWERUP_MAX; l += 1) {
+            gresult.challenges[i].powerups_by[l] = db_stream_pop_int(stream);
+        }
+    }
+}
+
+void ibe_stat_gresult_reset(structref<ibe_stat_gresult_t> gresult)
+{
+    int i;
+    int l;
+
+    gresult.game_version = 0;
+    gresult.gm_code = 0;
+    gresult.escape_time = 0.0;
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        gresult.players[i].exists = false;
+        gresult.players[i].phandle = null;
+        gresult.players[i].left = false;
+        gresult.players[i].level = 0;
+        gresult.players[i].deaths = 0;
+        gresult.players[i].revives = 0;
+
+        for (l = 0; l < IBE_STAT_ABIL_MAX; l += 1) {
+            gresult.players[i].abilities_used[l] = 0;
+        }
+    }
+
+    for (i = 0; i < IBE_STAT_CHALLENGE_MAX; i += 1) {
+        gresult.challenges[i].completed_by = 0;
+        gresult.challenges[i].time = 0.0;
+
+        for (l = 0; l < IBE_STAT_CHALLENGE_BUTTON_MAX; l += 1) {
+            gresult.challenges[i].buttons_by[l] = 0;
+        }
+
+        for (l = 0; l < IBE_STAT_CHALLENGE_POWERUP_MAX; l += 1) {
+            gresult.challenges[i].powerups_by[l] = 0;
+        }
+    }
+}
+
+string ibe_stat_gresult_hash(structref<ibe_stat_gresult_t> gresult)
+{
+    int i;
+
+    libHash_InitializeHashInput();
+
+    libHash_AddIntegerToHashInput(gresult.game_version);
+    libHash_AddIntegerToHashInput(gresult.gm_code);
+    libHash_AddRealToHashInput(gresult.escape_time);
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        if (gresult.players[i].exists) {
+            libHash_AddStringToHashInput(gresult.players[i].phandle);
+            libHash_AddIntegerToHashInput(gresult.players[i].level);
+            libHash_AddIntegerToHashInput(gresult.players[i].deaths);
+            libHash_AddIntegerToHashInput(gresult.players[i].revives);
+        }
+    }
+
+    return libHash_GenerateSha256HashCode();
+}
+
+void ibe_stat_gresult_store(bank bstorage, string section, structref<ibe_stat_gresult_t> gresult)
+{
+    db_stream_t stream;
+    string buff;
+    int i;
+
+    db_stream_init(stream);
+    ibe_stat_gresult_save_to_stream(gresult, stream);
+    // Dbg("[gres/store] stream = " + stream.buff);
+
+    if (BankSectionExists(bstorage, section)) {
+        BankSectionRemove(bstorage, section);
+    }
+    BankSectionCreate(bstorage, section);
+
+    BankValueSetFromInt(bstorage, section, "v", IBE_STAT_GRESULT_CURRENT_VERSION);
+
+    buff = db_crypt_encrypt(ibe_stat_player_encryption_key(BankPlayer(bstorage)), stream.buff);
+    ibe_stat_bk_set_value_str(bstorage, section, "d", buff);
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        if (!gresult.players[i].exists) { continue; }
+        BankValueSetFromText(bstorage, section, "p" + IntToString(i), gresult.players[i].tname);
+    }
+
+    BankSave(bstorage);
+}
+
+bool ibe_stat_gresult_migrate(structref<db_stream_t> stream, int from_version)
+{
+    ibe_stat_gresult_t gresult;
+    int i;
+    int l;
+
+    if (from_version <= 1) {
+        return false;
+    }
+
+    if (from_version <= 2) {
+        ibe_stat_gresult_load_from_stream(gresult, stream);
+
+        for (i = 1; i <= MAX_PLAYERS; i += 1) {
+            if (!gresult.players[i].exists) { continue; }
+            gresult.players[i].deaths = 0;
+            gresult.players[i].revives = 0;
+
+            for (l = 0; l < IBE_STAT_ABIL_MAX; l += 1) {
+                gresult.players[i].abilities_used[l] = 0;
+            }
+        }
+
+        db_stream_init(stream);
+        ibe_stat_gresult_save_to_stream(gresult, stream);
+    }
+
+    if (from_version <= 3) {
+        ibe_stat_gresult_load_from_stream(gresult, stream);
+
+        if (ibe_gm_speed_from_code(gresult.gm_code) == 1) {
+            return false;
+        }
+
+        db_stream_init(stream);
+        ibe_stat_gresult_save_to_stream(gresult, stream);
+    }
+
+    return true;
+}
+
+bool ibe_stat_gresult_load(bank bstorage, string section, structref<ibe_stat_gresult_t> gresult)
+{
+    db_stream_t stream;
+    string buff;
+    int i;
+    int version;
+    int tmp;
+
+    db_stream_init(stream);
+
+    version = BankValueGetAsInt(bstorage, section, "v");
+
+    buff = ibe_stat_bk_get_value_str(bstorage, section, "d");
+    tmp = db_crypt_validate(buff);
+
+    if (tmp != 0) {
+        if (tmp == DB_CRYPT_ERR_NOT_VALID) {
+            Dbg("[gres/load] DB_CRYPT_ERR_NOT_VALID");
+        }
+        else if (tmp == DB_CRYPT_ERR_CHECKSUM_MISSMATCH) {
+            Dbg("[gres/load] DB_CRYPT_ERR_CHECKSUM_MISSMATCH");
+        }
+        return false;
+    }
+
+    stream.buff = db_crypt_decrypt(ibe_stat_player_encryption_key(BankPlayer(bstorage)), buff);
+    if (version < IBE_STAT_GRESULT_CURRENT_VERSION) {
+        if (!ibe_stat_gresult_migrate(stream, version)) {
+            BankSectionRemove(bstorage, section);
+            return false;
+        }
+        else {
+            BankValueSetFromInt(bstorage, section, "v", IBE_STAT_GRESULT_CURRENT_VERSION);
+            buff = db_crypt_encrypt(ibe_stat_player_encryption_key(BankPlayer(bstorage)), stream.buff);
+            ibe_stat_bk_set_value_str(bstorage, section, "d", buff);
+        }
+    }
+
+    // Dbg("[gres/load] stream = " + stream.buff);
+    ibe_stat_gresult_load_from_stream(gresult, stream);
+
+    for (i = 0; i < MAX_PLAYERS; i += 1) {
+        if (!gresult.players[i].exists) { continue; }
+        gresult.players[i].tname = BankValueGetAsText(bstorage, section, "p" + IntToString(i));
+    }
+
+    return true;
+}

@@ -1,0 +1,1071 @@
+include "TriggerLibs/NativeLib"
+include "Lib197EC33E"
+include "LibEBBC9C87_h"
+
+include "Lib3FB28C60_h"
+
+//--------------------------------------------------------------------------------------------------
+// Library: SEF - Ice Baneling Escape
+//--------------------------------------------------------------------------------------------------
+// External Library Initialization
+void lib3FB28C60_InitLibraries () {
+    libNtve_InitVariables();
+    lib197EC33E_InitVariables();
+    libEBBC9C87_InitVariables();
+}
+
+// Variable Initialization
+bool lib3FB28C60_InitVariables_completed = false;
+
+void lib3FB28C60_InitVariables () {
+    if (lib3FB28C60_InitVariables_completed) {
+        return;
+    }
+
+    lib3FB28C60_InitVariables_completed = true;
+
+    lib3FB28C60_gv_tickPeriod = 0.0625;
+    lib3FB28C60_gv_randomMoveNotifyDelay = 0.3;
+    lib3FB28C60_gv_iBELaunchParameters.lv_gamemode = -1;
+    lib3FB28C60_gv_iBELaunchParameters.lv_challengeid = -1;
+}
+
+// Custom Script
+//--------------------------------------------------------------------------------------------------
+// Custom Script: Preload IBE
+//--------------------------------------------------------------------------------------------------
+include "sf/entry.galaxy"
+include "sf_ibe/entry.galaxy"
+
+void lib3FB28C60_InitCustomScript () {
+    ibe_init();
+}
+
+// Presets
+// Functions
+fixed lib3FB28C60_gf_CircumferenceOfCircle (fixed lp_radius) {
+    // Implementation
+    return (lp_radius * 2.0 * lib3FB28C60_gv_pI);
+}
+
+fixed lib3FB28C60_gf_PercentValueToMultiplierFactor (fixed lp_perecent) {
+    // Implementation
+    return (lp_perecent / 100.0);
+}
+
+void lib3FB28C60_gf_RegisterTriggerAsTemporaryForCurrentChallenge (trigger lp_trig) {
+    // Implementation
+    LevelRegisterTemporaryTrigger(lp_trig);
+}
+
+void lib3FB28C60_gf_ModifyUnitSpeedByPercent (unit lp_unit, fixed lp_percent) {
+    // Implementation
+    UnitSetPropertyFixed(lp_unit, c_unitPropMovementSpeed, (UnitGetPropertyFixed(lp_unit, c_unitPropMovementSpeed, c_unitPropNormal) * lib3FB28C60_gf_PercentValueToMultiplierFactor(lp_percent)));
+}
+
+void lib3FB28C60_gf_PortalCreateSimple (point lp_portalposition, point lp_targetposition) {
+    // Variable Declarations
+    int lv_tmp;
+
+    // Variable Initialization
+    lv_tmp = -1;
+
+    // Implementation
+    sf_envi_generic_create("PortalDestination", lp_targetposition);
+    lv_tmp = sf_envi_object_last_created();
+    sf_envi_portal_create("Portal", lp_portalposition);
+    sf_envi_portal_set_target(sf_envi_object_last_created(), lv_tmp);
+}
+
+void lib3FB28C60_gf_PortalCreateComplex (string lp_portalstartpoint, string lp_portalendpoint, int lp_portalrouteloop, string lp_targetstartpoint, string lp_targetendpoint, int lp_targetrouteloop) {
+    // Variable Declarations
+    int lv_tmp;
+
+    // Variable Initialization
+    lv_tmp = -1;
+
+    // Implementation
+    sf_envi_generic_create("PortalTargetStandard", PointFromName(lp_targetstartpoint));
+    sf_ctrl_route_create();
+    sf_ctrl_route_set_loop(sf_ctrl_controller_last_created(), lp_targetrouteloop);
+    sf_ctrl_route_append_waypoints_range(sf_ctrl_controller_last_created(), lp_targetstartpoint, lp_targetendpoint);
+    sf_ctrl_controller_attach_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(sf_envi_object_last_created()));
+    lv_tmp = sf_envi_object_last_created();
+    sf_envi_portal_create("Portal", PointFromName(lp_portalstartpoint));
+    sf_envi_portal_set_target(sf_envi_object_last_created(), lv_tmp);
+    sf_ctrl_route_create();
+    sf_ctrl_route_set_loop(sf_ctrl_controller_last_created(), lp_portalrouteloop);
+    sf_ctrl_route_append_waypoints_range(sf_ctrl_controller_last_created(), lp_portalstartpoint, lp_portalendpoint);
+    sf_ctrl_controller_attach_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(sf_envi_object_last_created()));
+}
+
+void lib3FB28C60_gf_TurnForcerCreateSimple (point lp_position, int lp_autorotate, fixed lp_rotationspeed) {
+    // Implementation
+    sf_envi_turn_forcer_create("DirectionArrow", lp_position);
+    sf_envi_turn_forcer_set_rotation_factor(sf_envi_object_last_created(), lib3FB28C60_gv_turnForcerRotationSpeed);
+    sf_envi_turn_forcer_set_auto_rotate(sf_envi_object_last_created(), lp_autorotate);
+}
+
+void lib3FB28C60_gf_TurnForcerCreateOnPath (string lp_startpoint, string lp_endpoint, int lp_routeloop) {
+    // Implementation
+    sf_envi_turn_forcer_create("DirectionArrow", PointFromName(lp_startpoint));
+    sf_envi_turn_forcer_set_rotation_factor(sf_envi_object_last_created(), lib3FB28C60_gv_turnForcerRotationSpeed);
+    sf_ctrl_route_create();
+    sf_ctrl_route_append_waypoints_range(sf_ctrl_controller_last_created(), lp_startpoint, lp_endpoint);
+    sf_ctrl_route_set_loop(sf_ctrl_controller_last_created(), lp_routeloop);
+    sf_ctrl_controller_attach_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(sf_envi_object_last_created()));
+}
+
+void lib3FB28C60_gf_SpikesCreate (point lp_position, int lp_sizeclass, bool lp_initiallyraised) {
+    // Variable Declarations
+    fixed lv_sizevalue;
+
+    // Variable Initialization
+
+    // Implementation
+    if ((lp_sizeclass == lib3FB28C60_ge_SpikesSizeClass_Tiny)) {
+        lv_sizevalue = 1.0;
+    }
+    else if ((lp_sizeclass == lib3FB28C60_ge_SpikesSizeClass_Small)) {
+        lv_sizevalue = 1.25;
+    }
+    else if ((lp_sizeclass == lib3FB28C60_ge_SpikesSizeClass_Medium)) {
+        lv_sizevalue = 1.5;
+    }
+    else if ((lp_sizeclass == lib3FB28C60_ge_SpikesSizeClass_Large)) {
+        lv_sizevalue = 2.0;
+    }
+    sf_envi_spike_create("spikes", lp_position, lv_sizevalue);
+    sf_envi_spike_raise(sf_envi_object_last_created(), lp_initiallyraised);
+}
+
+void lib3FB28C60_gf_PowerupEssenceCreate (point lp_position) {
+    // Implementation
+    sf_envi_powerup_create("PickupChronoRiftCharge", lp_position);
+}
+
+void lib3FB28C60_gf_DynamicSurfaceCreate (point lp_position, int lp_surfacekind, fixed lp_radius) {
+    // Variable Declarations
+    region lv_rg;
+    fixed lv_scalefactor;
+
+    // Variable Initialization
+    lv_scalefactor = (lp_radius / 2.0);
+
+    // Implementation
+    lv_rg = RegionCircle(Point(0.0, 0.0), lp_radius);
+    sf_envi_surface_create("IceTerrainFlatMoving", lp_position, lp_surfacekind, lv_rg, false);
+    RegionAttachToUnit(lv_rg, UnitLastCreated(), Point((lv_scalefactor * -0.02), (lv_scalefactor * -0.07)));
+}
+
+void lib3FB28C60_gf_RandomMoveZoneCreate (region lp_area, string lp_initialunittype, int lp_initialunitcount, fixed lp_delaybetweenroundsmin, fixed lp_delaybetweenroundsmax, fixed lp_unitcountperroundmin, fixed lp_unitcountperroundmax, fixed lp_distancetonextwaypointmin, fixed lp_distancetonextwaypointmax, fixed lp_unitspreadintesivitymin, fixed lp_unitspreadintesivitymax, bool lp_canmoveonlyforward) {
+    int autoD7C47609_ae;
+    int autoD7C47609_ai;
+
+    // Variable Declarations
+    int lv_i;
+
+    // Variable Initialization
+
+    // Implementation
+    sf_ctrl_zone_random_create(lp_area, lp_delaybetweenroundsmin, lp_delaybetweenroundsmax, lp_unitcountperroundmin, lp_unitcountperroundmax, lp_distancetonextwaypointmin, lp_distancetonextwaypointmax, lp_unitspreadintesivitymin, lp_unitspreadintesivitymax, lib3FB28C60_gv_randomMoveNotifyDelay, false, lp_canmoveonlyforward);
+    autoD7C47609_ae = lp_initialunitcount;
+    autoD7C47609_ai = 1;
+    lv_i = 1;
+    for ( ; ( (autoD7C47609_ai >= 0 && lv_i <= autoD7C47609_ae) || (autoD7C47609_ai <= 0 && lv_i >= autoD7C47609_ae) ) ; lv_i += autoD7C47609_ai ) {
+        sf_envi_creature_create(lp_initialunittype, RegionRandomPoint(lp_area));
+        sf_ctrl_zone_random_append_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(sf_envi_object_last_created()), false);
+    }
+}
+
+void lib3FB28C60_gf_StalkerZoneCreate (region lp_area, string lp_initialunittype, int lp_initialunitcount, fixed lp_activationrange) {
+    int auto12034E21_ae;
+    int auto12034E21_ai;
+
+    // Variable Declarations
+    int lv_i;
+
+    // Variable Initialization
+
+    // Implementation
+    sf_ctrl_zone_stalker_create(lp_area, lp_activationrange);
+    auto12034E21_ae = lp_initialunitcount;
+    auto12034E21_ai = 1;
+    lv_i = 1;
+    for ( ; ( (auto12034E21_ai >= 0 && lv_i <= auto12034E21_ae) || (auto12034E21_ai <= 0 && lv_i >= auto12034E21_ae) ) ; lv_i += auto12034E21_ai ) {
+        sf_envi_creature_create(lp_initialunittype, RegionRandomPoint(lp_area));
+        UnitSetTeamColorIndex(sf_envi_object_get_base_unit(sf_envi_object_last_created()), 1);
+        if ((lib3FB28C60_gf_DifficultyIsExtreme() == true)) {
+            UnitSetPropertyFixed(sf_envi_object_get_base_unit(sf_envi_object_last_created()), c_unitPropBaseMovementSpeed, 1.8);
+        }
+        else {
+            UnitSetPropertyFixed(sf_envi_object_get_base_unit(sf_envi_object_last_created()), c_unitPropBaseMovementSpeed, 1.5);
+        }
+        sf_ctrl_zone_stalker_append_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(sf_envi_object_last_created()), false);
+    }
+}
+
+void lib3FB28C60_gf_ExecuteSequenceSwing (int lp_object, fixed lp_time, point lp_target) {
+    // Variable Declarations
+    point lv_currpos;
+
+    // Variable Initialization
+    lv_currpos = UnitGetPosition(sf_envi_object_get_base_unit(lp_object));
+
+    // Implementation
+    sf_ctrl_executor_create(SF_CTRL_ROUTE_LOOP_BACKWARD);
+    sf_ctrl_executor_insert_sequence_at(sf_ctrl_controller_last_created(), 2, 0.0, lp_time, "", SF_CTRL_EXECUTOR_PROP_POSITION, (PointGetX(lp_target) - PointGetX(lv_currpos)), (PointGetY(lp_target) - PointGetY(lv_currpos)));
+    sf_ctrl_executor_attach_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(lp_object));
+    sf_ctrl_executor_play(sf_ctrl_controller_last_created(), true);
+}
+
+void lib3FB28C60_gf_CreateColoredZealot (int lp_kind, point lp_position) {
+    // Variable Declarations
+    fixed lv_speed;
+    int lv_teamcolor;
+
+    // Variable Initialization
+    lv_teamcolor = 1;
+
+    // Implementation
+    sf_envi_creature_create("PrisonZealot", lp_position);
+    if ((lp_kind == lib3FB28C60_ge_Coloredzealots_Brownzealot)) {
+        lv_speed = 1.7;
+        lv_teamcolor = 12;
+    }
+    else if ((lp_kind == lib3FB28C60_ge_Coloredzealots_Bluezealot)) {
+        lv_speed = (lib3FB28C60_gv_banelingSpeedOnIce * 0.5);
+        lv_teamcolor = 2;
+    }
+    else if ((lp_kind == lib3FB28C60_ge_Coloredzealots_Tealzealot)) {
+        lv_speed = (lib3FB28C60_gv_banelingSpeedOnIce * 0.65);
+        lv_teamcolor = 3;
+    }
+    else if ((lp_kind == lib3FB28C60_ge_Coloredzealots_Greenzealot)) {
+        lv_speed = (lib3FB28C60_gv_banelingSpeedOnIce * 1.0);
+        lv_teamcolor = 13;
+    }
+    else if ((lp_kind == lib3FB28C60_ge_Coloredzealots_Yellowzealot)) {
+        lv_speed = (lib3FB28C60_gv_banelingSpeedOnIce + 0.8);
+        lv_teamcolor = 5;
+    }
+    else if ((lp_kind == lib3FB28C60_ge_Coloredzealots_Orangezealot)) {
+        lv_speed = (lib3FB28C60_gv_banelingSpeedOnIce + 2.1);
+        lv_teamcolor = 6;
+    }
+    else if ((lp_kind == lib3FB28C60_ge_Coloredzealots_Redzealot)) {
+        lv_speed = (lib3FB28C60_gv_banelingSpeedOnIce + 3.5);
+        lv_teamcolor = 1;
+    }
+    UnitSetPropertyFixed(sf_envi_object_get_base_unit(sf_envi_object_last_created()), c_unitPropBaseMovementSpeed, lv_speed);
+    UnitSetTeamColorIndex(sf_envi_object_get_base_unit(sf_envi_object_last_created()), lv_teamcolor);
+}
+
+void lib3FB28C60_gf_UnitShotMissileAtPoint (unit lp_unit, point lp_target) {
+    // Implementation
+    if ((UnitGetType(lp_unit) == "HammerSecurity")) {
+        libNtve_gf_MakeUnitFacePoint(lp_unit, lp_target, lib3FB28C60_gv_tickPeriod);
+        UnitCreateEffectPoint(lp_unit, "HammerSecurityLM", lp_target);
+    }
+    else if ((UnitGetType(lp_unit) == "DominionKillTeam")) {
+        libNtve_gf_MakeUnitFacePoint(lp_unit, lp_target, lib3FB28C60_gv_tickPeriod);
+        UnitCreateEffectPoint(lp_unit, "DominionKillTeamLM", lp_target);
+    }
+    else if ((UnitGetType(lp_unit) == "Ravager")) {
+        UnitIssueOrder(lp_unit, OrderTargetingPoint(AbilityCommand("RavagerCorrosiveBile", 0), lp_target), c_orderQueueReplace);
+    }
+}
+
+void lib3FB28C60_gf_UfoLineCreate (point lp_position, fixed lp_width, fixed lp_angle) {
+    // Implementation
+    sf_envi_imitator_create("Ufo", lp_position, 1.0);
+    sf_envi_imitator_compose_line_from_center(sf_envi_object_last_created(), 0.0, lp_angle, lp_width);
+}
+
+void lib3FB28C60_gf_UfoSingleFloatUpAndDown (int lp_object, fixed lp_uptime, fixed lp_downtime) {
+    // Implementation
+    lib3FB28C60_gf_UfoCreateExecutor(lp_uptime, lp_downtime);
+    sf_ctrl_executor_attach_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(lp_object));
+    sf_ctrl_executor_play(sf_ctrl_controller_last_created(), true);
+}
+
+void lib3FB28C60_gf_UfoCreateExecutor (fixed lp_uptime, fixed lp_downtime) {
+    // Implementation
+    sf_ctrl_executor_create(SF_CTRL_ROUTE_LOOP_FORWARD);
+    sf_ctrl_executor_insert_sequence_at(sf_ctrl_controller_last_created(), 2, lp_downtime, 0.3, "", SF_CTRL_EXECUTOR_PROP_HEIGHT, lib3FB28C60_gv_ufoFloatHeight, 0.0);
+    sf_ctrl_executor_insert_sequence_at(sf_ctrl_controller_last_created(), 2, -1.0, lp_uptime, "", SF_CTRL_EXECUTOR_PROP_POSITION, 0.0, 0.0);
+    sf_ctrl_executor_insert_sequence_at(sf_ctrl_controller_last_created(), 2, -1.0, 0.3, "", SF_CTRL_EXECUTOR_PROP_HEIGHT, (lib3FB28C60_gv_ufoFloatHeight * -1.0), 0.0);
+}
+
+void lib3FB28C60_gf_FlamethrowerCreate (point lp_position, fixed lp_flamelength) {
+    // Implementation
+    sf_envi_flamer_create(lp_position);
+    sf_envi_flamer_set_flame_length(sf_envi_object_last_created(), lp_flamelength);
+}
+
+void lib3FB28C60_gf_CrystalWheelCreateBasic (point lp_position, fixed lp_radius, int lp_autorotate, fixed lp_rotationspeed) {
+    // Implementation
+    sf_envi_imitator_create("iceRingComponent", lp_position, 1.0);
+    sf_envi_imitator_compose_wheel(sf_envi_object_last_created(), lp_radius);
+    if ((lp_rotationspeed == 0.0)) {
+        sf_envi_imitator_set_rotation_speed(sf_envi_object_last_created(), (360.0 / (((2.0 * lib3FB28C60_gv_pI) * (lp_radius / 1.0)) / lib3FB28C60_gv_banelingSpeedOnIce)));
+    }
+    else {
+        sf_envi_imitator_set_rotation_speed(sf_envi_object_last_created(), lp_rotationspeed);
+    }
+    sf_envi_imitator_set_auto_rotate(sf_envi_object_last_created(), lp_autorotate);
+}
+
+void lib3FB28C60_gf_CrystalWheelCreateSingleEntry (point lp_position, fixed lp_radius, int lp_autorotate, fixed lp_rotationspeed, int lp_entrylength, fixed lp_entryangle) {
+    int autoBE6D52D7_ae;
+    int autoBE6D52D7_ai;
+
+    // Variable Declarations
+    int lv_i;
+
+    // Variable Initialization
+
+    // Implementation
+    lib3FB28C60_gf_CrystalWheelCreateBasic(lp_position, lp_radius, lp_autorotate, lp_rotationspeed);
+    autoBE6D52D7_ae = lp_entrylength;
+    autoBE6D52D7_ai = 1;
+    lv_i = 1;
+    for ( ; ( (autoBE6D52D7_ai >= 0 && lv_i <= autoBE6D52D7_ae) || (autoBE6D52D7_ai <= 0 && lv_i >= autoBE6D52D7_ae) ) ; lv_i += autoBE6D52D7_ai ) {
+        sf_envi_imitator_remove_segment_from_center(sf_envi_object_last_created(), lp_radius, lp_entryangle);
+    }
+}
+
+void lib3FB28C60_gf_CrystalWheelCreateDoubleEntry (point lp_position, fixed lp_radius, int lp_autorotate, fixed lp_rotationspeed, int lp_entrylength, fixed lp_entryangle, int lp_secondentrylength, fixed lp_secondentryangle) {
+    int auto6CCE0B54_ae;
+    int auto6CCE0B54_ai;
+    int autoCD22ED4E_ae;
+    int autoCD22ED4E_ai;
+
+    // Variable Declarations
+    int lv_i;
+
+    // Variable Initialization
+
+    // Implementation
+    lib3FB28C60_gf_CrystalWheelCreateBasic(lp_position, lp_radius, lp_autorotate, lp_rotationspeed);
+    auto6CCE0B54_ae = lp_entrylength;
+    auto6CCE0B54_ai = 1;
+    lv_i = 1;
+    for ( ; ( (auto6CCE0B54_ai >= 0 && lv_i <= auto6CCE0B54_ae) || (auto6CCE0B54_ai <= 0 && lv_i >= auto6CCE0B54_ae) ) ; lv_i += auto6CCE0B54_ai ) {
+        sf_envi_imitator_remove_segment_from_center(sf_envi_object_last_created(), lp_radius, lp_entryangle);
+    }
+    autoCD22ED4E_ae = lp_secondentrylength;
+    autoCD22ED4E_ai = 1;
+    lv_i = 1;
+    for ( ; ( (autoCD22ED4E_ai >= 0 && lv_i <= autoCD22ED4E_ae) || (autoCD22ED4E_ai <= 0 && lv_i >= autoCD22ED4E_ae) ) ; lv_i += autoCD22ED4E_ai ) {
+        sf_envi_imitator_remove_segment_from_center(sf_envi_object_last_created(), lp_radius, lp_secondentryangle);
+    }
+}
+
+void lib3FB28C60_gf_CrystalBlenderCreate (point lp_position, int lp_autorotate, fixed lp_rotationspeed, fixed lp_edge1Width, fixed lp_edge1Angle, fixed lp_edge2Width, fixed lp_edge2Angle, fixed lp_edge3Width, fixed lp_edge3Angle, fixed lp_edge4Width, fixed lp_edge4Angle) {
+    // Implementation
+    sf_envi_imitator_create("iceRingComponent", lp_position, 1.0);
+    if ((lp_edge1Width > 0.0)) {
+        sf_envi_imitator_compose_line_from_center(sf_envi_object_last_created(), 0.0, lp_edge1Angle, (lp_edge1Width + 1.0));
+        sf_envi_imitator_remove_segment_from_center(sf_envi_object_last_created(), 0.0, 0.0);
+    }
+
+    if ((lp_edge2Width > 0.0)) {
+        sf_envi_imitator_compose_line_from_center(sf_envi_object_last_created(), 0.0, lp_edge2Angle, (lp_edge2Width + 1.0));
+        sf_envi_imitator_remove_segment_from_center(sf_envi_object_last_created(), 0.0, 0.0);
+    }
+
+    if ((lp_edge3Width > 0.0)) {
+        sf_envi_imitator_compose_line_from_center(sf_envi_object_last_created(), 0.0, lp_edge3Angle, (lp_edge3Width + 1.0));
+        sf_envi_imitator_remove_segment_from_center(sf_envi_object_last_created(), 0.0, 0.0);
+    }
+
+    if ((lp_edge4Width > 0.0)) {
+        sf_envi_imitator_compose_line_from_center(sf_envi_object_last_created(), 0.0, lp_edge4Angle, (lp_edge4Width + 1.0));
+        sf_envi_imitator_remove_segment_from_center(sf_envi_object_last_created(), 0.0, 0.0);
+    }
+
+    sf_envi_imitator_compose_line_from_center(sf_envi_object_last_created(), 0.0, 0.0, 1.0);
+    sf_envi_imitator_set_rotation_speed(sf_envi_object_last_created(), lp_rotationspeed);
+    sf_envi_imitator_set_auto_rotate(sf_envi_object_last_created(), lp_autorotate);
+}
+
+trigger auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_Trigger = null;
+string auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_unittype;
+int auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_count;
+int auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_gap;
+point auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_spawnposition;
+point auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_finalposition;
+string auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_routestartpointname;
+string auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_routeendpointname;
+fixed auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_angle;
+fixed auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_distance;
+fixed auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_delaybetweengroups;
+fixed auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_delaybetweenunits;
+bool auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_reversespawningorder;
+
+void lib3FB28C60_gf_CreateCreatureWalkSideBySide (string lp_unittype, int lp_count, int lp_gap, point lp_spawnposition, point lp_finalposition, string lp_routestartpointname, string lp_routeendpointname, fixed lp_angle, fixed lp_distance, fixed lp_delaybetweengroups, fixed lp_delaybetweenunits, bool lp_reversespawningorder) {
+    auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_unittype = lp_unittype;
+    auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_count = lp_count;
+    auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_gap = lp_gap;
+    auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_spawnposition = lp_spawnposition;
+    auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_finalposition = lp_finalposition;
+    auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_routestartpointname = lp_routestartpointname;
+    auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_routeendpointname = lp_routeendpointname;
+    auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_angle = lp_angle;
+    auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_distance = lp_distance;
+    auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_delaybetweengroups = lp_delaybetweengroups;
+    auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_delaybetweenunits = lp_delaybetweenunits;
+    auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_reversespawningorder = lp_reversespawningorder;
+
+    if (auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_Trigger == null) {
+        auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_Trigger = TriggerCreate("auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_TriggerFunc");
+    }
+
+    TriggerExecute(auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_Trigger, false, false);
+}
+
+bool auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_TriggerFunc (bool testConds, bool runActions) {
+    string lp_unittype = auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_unittype;
+    int lp_count = auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_count;
+    int lp_gap = auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_gap;
+    point lp_spawnposition = auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_spawnposition;
+    point lp_finalposition = auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_finalposition;
+    string lp_routestartpointname = auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_routestartpointname;
+    string lp_routeendpointname = auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_routeendpointname;
+    fixed lp_angle = auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_angle;
+    fixed lp_distance = auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_distance;
+    fixed lp_delaybetweengroups = auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_delaybetweengroups;
+    fixed lp_delaybetweenunits = auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_delaybetweenunits;
+    bool lp_reversespawningorder = auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_lp_reversespawningorder;
+
+    int init_i;
+
+    int auto5F4A3F6E_ae;
+    int auto5F4A3F6E_ai;
+    int auto18955829_ae;
+    int auto18955829_ai;
+
+    // Variable Declarations
+    int lv_curr;
+    int lv_to;
+    int lv_from;
+    int lv_inc;
+    int lv_gapthisturn;
+    int lv_gapwidththisturn;
+    int[21] lv_ctl;
+
+    // Variable Initialization
+    for (init_i = 0; init_i <= 20; init_i += 1) {
+        lv_ctl[init_i] = -1;
+    }
+
+    // Implementation
+    lib3FB28C60_gf_RegisterTriggerAsTemporaryForCurrentChallenge(TriggerGetCurrent());
+    auto5F4A3F6E_ae = lp_count;
+    auto5F4A3F6E_ai = 1;
+    lv_curr = 0;
+    for ( ; ( (auto5F4A3F6E_ai >= 0 && lv_curr <= auto5F4A3F6E_ae) || (auto5F4A3F6E_ai <= 0 && lv_curr >= auto5F4A3F6E_ae) ) ; lv_curr += auto5F4A3F6E_ai ) {
+        sf_ctrl_route_create();
+        sf_ctrl_route_append_waypoints_range_with_offset(sf_ctrl_controller_last_created(), lp_routestartpointname, lp_routeendpointname, (IntToFixed(lv_curr) * lp_distance), lp_angle);
+        if ((lp_finalposition != null)) {
+            sf_ctrl_route_append_waypoint(sf_ctrl_controller_last_created(), lp_finalposition);
+        }
+
+        lv_ctl[lv_curr] = sf_ctrl_controller_last_created();
+    }
+    if ((lp_reversespawningorder == false)) {
+        lv_from = 0;
+        lv_to = (lp_count - 1);
+        lv_inc = 1;
+    }
+    else {
+        lv_from = (lp_count - 1);
+        lv_to = 0;
+        lv_inc = -1;
+    }
+    while (true) {
+        lv_gapthisturn = RandomInt(0, (lp_count - 1));
+        auto18955829_ae = lv_to;
+        auto18955829_ai = lv_inc;
+        lv_curr = lv_from;
+        for ( ; ( (auto18955829_ai >= 0 && lv_curr <= auto18955829_ae) || (auto18955829_ai <= 0 && lv_curr >= auto18955829_ae) ) ; lv_curr += auto18955829_ai ) {
+            if ((lp_delaybetweenunits > 0.0)) {
+                Wait(lp_delaybetweenunits, c_timeGame);
+            }
+
+            if ((lp_gap >= 1) && (lv_gapthisturn == lv_curr)) {
+                continue;
+            }
+
+            if ((lp_spawnposition != null)) {
+                sf_envi_creature_create(lp_unittype, lp_spawnposition);
+            }
+            else {
+                sf_envi_creature_create(lp_unittype, PointFromName(lp_routestartpointname));
+            }
+            sf_ctrl_controller_attach_unit(lv_ctl[lv_curr], sf_envi_object_get_base_unit(sf_envi_object_last_created()));
+        }
+        Wait(lp_delaybetweengroups, c_timeGame);
+    }
+    return true;
+}
+
+void lib3FB28C60_gf_CreatureCreateOnPath (string lp_unittype, string lp_pointstart, string lp_pointend, int lp_loop) {
+    // Implementation
+    sf_ctrl_route_create();
+    sf_ctrl_route_set_loop(sf_ctrl_controller_last_created(), lp_loop);
+    sf_ctrl_route_append_waypoints_range(sf_ctrl_controller_last_created(), lp_pointstart, lp_pointend);
+    sf_envi_creature_create(lp_unittype, PointFromName(lp_pointstart));
+    sf_ctrl_controller_attach_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(sf_envi_object_last_created()));
+}
+
+void lib3FB28C60_gf_CreatureCreateOnRoute (string lp_unittype, int lp_route) {
+    // Implementation
+    sf_envi_creature_create(lp_unittype, sf_ctrl_route_get_action_position(lp_route, 0));
+    sf_ctrl_route_commit_unit(lp_route, sf_envi_object_get_base_unit(sf_envi_object_last_created()), 0);
+}
+
+void lib3FB28C60_gf_PutExistingCreatureOnPath (int lp_object, string lp_pointstart, string lp_pointend, int lp_loop) {
+    // Variable Declarations
+    int lv_tmpctrl;
+
+    // Variable Initialization
+    lv_tmpctrl = -1;
+
+    // Implementation
+    lv_tmpctrl = sf_ctrl_controller_get_from_unit(sf_envi_object_get_base_unit(lp_object));
+    if ((lv_tmpctrl != -1)) {
+        sf_ctrl_controller_destroy(lv_tmpctrl);
+    }
+
+    sf_ctrl_route_create();
+    sf_ctrl_route_set_loop(sf_ctrl_controller_last_created(), lp_loop);
+    sf_ctrl_route_append_waypoints_range(sf_ctrl_controller_last_created(), lp_pointstart, lp_pointend);
+    sf_ctrl_controller_attach_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(lp_object));
+}
+
+void lib3FB28C60_gf_CreatureCreatePatroller (string lp_unittype, point lp_pointstart, point lp_pointend, fixed lp_initialpositionshift) {
+    // Variable Declarations
+    point lv_spawnpos;
+
+    // Variable Initialization
+    lv_spawnpos = libNtve_gf_PointOffsetTowardsPoint(lp_pointstart, (DistanceBetweenPoints(lp_pointstart, lp_pointend) * lp_initialpositionshift), lp_pointend);
+
+    // Implementation
+    sf_ctrl_route_create();
+    sf_ctrl_route_set_loop(sf_ctrl_controller_last_created(), SF_CTRL_ROUTE_LOOP_BACKWARD);
+    sf_ctrl_route_append_waypoint(sf_ctrl_controller_last_created(), lp_pointstart);
+    sf_ctrl_route_append_waypoint(sf_ctrl_controller_last_created(), lp_pointend);
+    sf_envi_creature_create(lp_unittype, lv_spawnpos);
+    sf_ctrl_route_commit_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(sf_envi_object_last_created()), 1);
+}
+
+void lib3FB28C60_gf_PatrollersLineChainCreate (point lp_startpoint, point lp_endpoint, fixed lp_chainmaxdistance, fixed lp_chaindirectionangle, string lp_unittype, int lp_unitamount, fixed lp_spawndelay) {
+    int autoA8C123E8_ae;
+    int autoA8C123E8_ai;
+
+    // Variable Declarations
+    int lv_i;
+    point lv_pos_sta;
+    point lv_pos_spawn;
+    point lv_pos_end;
+    fixed lv_pos_shift;
+
+    // Variable Initialization
+
+    // Implementation
+    autoA8C123E8_ae = (lp_unitamount - 1);
+    autoA8C123E8_ai = 1;
+    lv_i = 0;
+    for ( ; ( (autoA8C123E8_ai >= 0 && lv_i <= autoA8C123E8_ae) || (autoA8C123E8_ai <= 0 && lv_i >= autoA8C123E8_ae) ) ; lv_i += autoA8C123E8_ai ) {
+        lv_pos_sta = PointWithOffsetPolar(lp_startpoint, (lp_chainmaxdistance * (IntToFixed(lv_i) / IntToFixed(lp_unitamount))), lp_chaindirectionangle);
+        lv_pos_end = PointWithOffsetPolar(lp_endpoint, (lp_chainmaxdistance * (IntToFixed(lv_i) / IntToFixed(lp_unitamount))), lp_chaindirectionangle);
+        sf_ctrl_route_create();
+        sf_ctrl_route_set_loop(sf_ctrl_controller_last_created(), SF_CTRL_ROUTE_LOOP_BACKWARD);
+        sf_ctrl_route_append_waypoint(sf_ctrl_controller_last_created(), lv_pos_sta);
+        sf_ctrl_route_append_waypoint(sf_ctrl_controller_last_created(), lv_pos_end);
+        sf_envi_creature_create("PrisonZealot", lv_pos_sta);
+        sf_ctrl_route_commit_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(sf_envi_object_last_created()), 1);
+        Wait(lp_spawndelay, c_timeGame);
+    }
+}
+
+void lib3FB28C60_gf_DistributeCreaturesOnRoute (string lp_unittype, int lp_unitamount, int lp_route, fixed lp_startoffsetfactor, fixed lp_endoffsetfactor) {
+    int auto3ACE996D_ae;
+    int auto3ACE996D_ai;
+
+    // Variable Declarations
+    int lv_i;
+    fixed lv_calcoffset;
+
+    // Variable Initialization
+
+    // Implementation
+    auto3ACE996D_ae = (lp_unitamount - 1);
+    auto3ACE996D_ai = 1;
+    lv_i = 0;
+    for ( ; ( (auto3ACE996D_ai >= 0 && lv_i <= auto3ACE996D_ae) || (auto3ACE996D_ai <= 0 && lv_i >= auto3ACE996D_ae) ) ; lv_i += auto3ACE996D_ai ) {
+        lv_calcoffset = (((IntToFixed(lv_i) / IntToFixed(lp_unitamount)) * (lp_endoffsetfactor - lp_startoffsetfactor)) + lp_startoffsetfactor);
+        sf_envi_creature_create(lp_unittype, null);
+        sf_ctrl_route_shift_unit_position(lp_route, sf_envi_object_get_base_unit(sf_envi_object_last_created()), lv_calcoffset);
+        sf_ctrl_route_attach_unit(lp_route, sf_envi_object_get_base_unit(sf_envi_object_last_created()));
+        sf_ctrl_route_engage(lp_route);
+    }
+}
+
+void lib3FB28C60_gf_CreatureTrainRouteCreate (string lp_unittype, int lp_unitamount, string lp_pointstart, string lp_pointend, fixed lp_startoffsetfactor, fixed lp_endoffsetfactor) {
+    // Implementation
+    sf_ctrl_route_create();
+    sf_ctrl_route_set_loop(sf_ctrl_controller_last_created(), SF_CTRL_ROUTE_LOOP_FORWARD);
+    sf_ctrl_route_append_waypoints_range(sf_ctrl_controller_last_created(), lp_pointstart, lp_pointend);
+    lib3FB28C60_gf_DistributeCreaturesOnRoute(lp_unittype, lp_unitamount, sf_ctrl_controller_last_created(), lp_startoffsetfactor, lp_endoffsetfactor);
+}
+
+int lib3FB28C60_gf_RouteAroundCircleCreate (point lp_center, fixed lp_radius, bool lp_forward) {
+    fixed autoD3041EC5_ae;
+    fixed autoD3041EC5_ai;
+
+    // Variable Declarations
+    fixed lv_i;
+    fixed lv_offset;
+
+    // Variable Initialization
+
+    // Implementation
+    sf_ctrl_route_create();
+    sf_ctrl_route_set_loop(sf_ctrl_controller_last_created(), SF_CTRL_ROUTE_LOOP_FORWARD);
+    autoD3041EC5_ae = 359.0;
+    autoD3041EC5_ai = (360.0 / (lib3FB28C60_gf_CircumferenceOfCircle(lp_radius) * 1.7));
+    lv_i = 0.0;
+    for ( ; ( (autoD3041EC5_ai >= 0 && lv_i <= autoD3041EC5_ae) || (autoD3041EC5_ai <= 0 && lv_i >= autoD3041EC5_ae) ) ; lv_i += autoD3041EC5_ai ) {
+        if ((lp_forward == true)) {
+            lv_offset = lv_i;
+        }
+        else {
+            lv_offset = (lv_i * -1.0);
+        }
+        sf_ctrl_route_append_waypoint(sf_ctrl_controller_last_created(), PointWithOffsetPolar(lp_center, lp_radius, lv_offset));
+    }
+    return sf_ctrl_controller_last_created();
+}
+
+void lib3FB28C60_gf_ButtonCreate (int lp_type, point lp_position, bool lp_stayactive, bool lp_releaseonleave, fixed lp_releasetimeout) {
+    // Variable Declarations
+    string lv_unittype;
+    region lv_guessedbtnregion;
+
+    // Variable Initialization
+
+    // Implementation
+    if ((lp_type == lib3FB28C60_ge_ButtonType_LightSwitchCircle)) {
+        lv_unittype = "LightSwitch";
+    }
+    else if ((lp_type == lib3FB28C60_ge_ButtonType_LightSwitchRectangle)) {
+        lv_unittype = "LightSwitchRect";
+        lv_guessedbtnregion = RegionRect(0.0, 0.0, 0.95, 0.95);
+        RegionSetCenter(lv_guessedbtnregion, lp_position);
+    }
+    else if ((lp_type == lib3FB28C60_ge_ButtonType_StoneInlay)) {
+        lv_unittype = "StoneInlay";
+    }
+    sf_envi_button_create(lv_unittype, lp_position, lv_guessedbtnregion);
+    sf_envi_button_set_pushable(sf_envi_object_last_created(), lp_stayactive);
+    sf_envi_button_set_release_on_leave(sf_envi_object_last_created(), lp_releaseonleave);
+    sf_envi_button_set_release_timeout(sf_envi_object_last_created(), lp_releasetimeout);
+}
+
+void lib3FB28C60_gf_StoneSwitchCreate (point lp_position, region lp_buttonsregion) {
+    // Variable Declarations
+    region lv_guessedbtnregion;
+
+    // Variable Initialization
+
+    // Implementation
+    if ((PointGetFacing(lp_position) == 0.0)) {
+        lv_guessedbtnregion = RegionRect(0.0, 0.0, 1.98, 1.76);
+    }
+    else if ((PointGetFacing(lp_position) == 90.0)) {
+        lv_guessedbtnregion = RegionRect(0.0, 0.0, 1.76, 1.98);
+    }
+    if ((lv_guessedbtnregion != null)) {
+        lv_guessedbtnregion = lp_buttonsregion;
+        RegionSetCenter(lv_guessedbtnregion, lp_position);
+    }
+
+    sf_envi_button_create("StoneButton", lp_position, lv_guessedbtnregion);
+}
+
+void lib3FB28C60_gf_StoneInlayCreate (point lp_position) {
+    // Implementation
+    sf_envi_button_create("StoneInlay", lp_position, null);
+    sf_envi_button_set_pushable(sf_envi_object_last_created(), false);
+    sf_envi_button_set_release_on_leave(sf_envi_object_last_created(), false);
+    sf_envi_button_set_release_timeout(sf_envi_object_last_created(), 0.0);
+}
+
+void lib3FB28C60_gf_LightSwitchCircleCreate (point lp_position, bool lp_stayactive, fixed lp_releasetimeout) {
+    // Implementation
+    sf_envi_button_create("LightSwitch", lp_position, null);
+    sf_envi_button_set_pushable(sf_envi_object_last_created(), lp_stayactive);
+    sf_envi_button_set_release_on_leave(sf_envi_object_last_created(), false);
+    sf_envi_button_set_release_timeout(sf_envi_object_last_created(), lp_releasetimeout);
+}
+
+void lib3FB28C60_gf_LightSwitchRectCreate (point lp_position) {
+    // Variable Declarations
+    region lv_guessedbtnregion;
+
+    // Variable Initialization
+
+    // Implementation
+    lv_guessedbtnregion = RegionRect(0.0, 0.0, 0.95, 0.95);
+    RegionSetCenter(lv_guessedbtnregion, lp_position);
+    sf_envi_button_create("LightSwitchRect", lp_position, lv_guessedbtnregion);
+    sf_envi_button_set_pushable(sf_envi_object_last_created(), false);
+    sf_envi_button_set_release_on_leave(sf_envi_object_last_created(), true);
+    sf_envi_button_set_release_timeout(sf_envi_object_last_created(), 0.0);
+}
+
+void lib3FB28C60_gf_IBEPrepareFramework () {
+    // Variable Declarations
+    bool lv_fui;
+
+    // Variable Initialization
+    lv_fui = lib3FB28C60_gv_iBELaunchParameters.lv_fastuitransitions;
+
+    // Implementation
+    sf_game_dbg_fast_ui = lv_fui;
+    ibe_post_init();
+    sf_game_load_up();
+    sf_phys_collision_info_override("sfBushSmall", 0.591, true);
+    sf_phys_collision_info_override("sfBushMedium", 0.695, true);
+    sf_phys_collision_info_override("sfBushLarge", 0.806, true);
+    sf_phys_collision_info_override("DarkTemplarNoAttack", 0.365, true);
+    sf_phys_collision_info_override("Beacon_ZergSmall2", 0.775, false);
+    sf_phys_collision_info_override("ShapeTorus", 0.425, false);
+    sf_phys_collision_info_override("IceBaneling", 0.3, false);
+    sf_phys_collision_info_override("Portal", 0.65, false);
+    SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryAmbience, "winterWind", c_soundtrackCueAny, c_soundtrackIndexAny, true);
+    SoundChannelSetVolume(PlayerGroupAll(), c_soundCategoryAmbient, 50.0, 0.0);
+    SoundChannelSetVolume(PlayerGroupAll(), c_soundCategoryCombat, 20.0, 0.0);
+}
+
+bool lib3FB28C60_gf_DifficultyIsExtreme () {
+    // Implementation
+    if (ibe_game_difficulty == 1) { return true; } else { return false; }
+}
+
+// Triggers
+//--------------------------------------------------------------------------------------------------
+// Trigger: Detect preplaced obstacles
+//--------------------------------------------------------------------------------------------------
+bool lib3FB28C60_gt_Detectpreplacedobstacles_Func (bool testConds, bool runActions) {
+    int autoDF3D7A44_ae;
+    int autoDF3D7A44_ai;
+
+    // Variable Declarations
+    region lv_region;
+    int lv_challengeid;
+    string[5] lv_unittypes;
+    int lv_i;
+
+    // Variable Initialization
+    lv_challengeid = sf_chal_event_param_challenge_id();
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lv_region = lv_info[lv_challengeid].mapBounds;
+    lv_unittypes[0] = "sfBushSmall";
+    lv_unittypes[1] = "sfBushMedium";
+    lv_unittypes[2] = "sfBushLarge";
+    lv_unittypes[3] = "DarkTemplarNoAttack";
+    autoDF3D7A44_ae = 3;
+    autoDF3D7A44_ai = 1;
+    lv_i = 0;
+    for ( ; ( (autoDF3D7A44_ai >= 0 && lv_i <= autoDF3D7A44_ae) || (autoDF3D7A44_ai <= 0 && lv_i >= autoDF3D7A44_ae) ) ; lv_i += autoDF3D7A44_ai ) {
+        UnitGroupLoopBegin(UnitGroup(lv_unittypes[lv_i], c_playerAny, lv_region, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0));
+        for ( ; !UnitGroupLoopDone() ; UnitGroupLoopStep() ) {
+            sf_envi_creature_create_preplaced(UnitGroupLoopCurrent());
+        }
+        UnitGroupLoopEnd();
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib3FB28C60_gt_Detectpreplacedobstacles_Init () {
+    lib3FB28C60_gt_Detectpreplacedobstacles = TriggerCreate("lib3FB28C60_gt_Detectpreplacedobstacles_Func");
+    sf_chal_add_event_challenge_ready(lib3FB28C60_gt_Detectpreplacedobstacles);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Marauder explosion
+//--------------------------------------------------------------------------------------------------
+bool lib3FB28C60_gt_Marauderexplosion_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    libNtve_gf_CreateExplosionAtPoint(libNtve_ge_ExplosionSize_Large, libNtve_ge_ExplosionType_Terran, EventPlayerEffectUsedPoint(c_effectLocationTargetPoint));
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib3FB28C60_gt_Marauderexplosion_Init () {
+    lib3FB28C60_gt_Marauderexplosion = TriggerCreate("lib3FB28C60_gt_Marauderexplosion_Func");
+    TriggerAddEventPlayerEffectUsed(lib3FB28C60_gt_Marauderexplosion, 0, "DominionKillTeamDamage");
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Ready
+//--------------------------------------------------------------------------------------------------
+bool lib3FB28C60_gt_ChallengeReady_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_rand;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((lib3FB28C60_gv_numoflevelsstartedtotal == 0)) {
+        SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "LostViking_MusicGameLoop223", c_soundtrackCueAny, c_soundtrackIndexAny, true);
+    }
+    else {
+        lv_rand = RandomInt(0, 100);
+        if ((lv_rand < 20)) {
+            SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "LostViking_MusicGameLoop2", c_soundtrackCueAny, c_soundtrackIndexAny, true);
+        }
+        else {
+            if ((lv_rand < 40)) {
+                SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "LostViking_MusicGameLoop22", c_soundtrackCueAny, c_soundtrackIndexAny, true);
+            }
+            else {
+                if ((lv_rand < 60)) {
+                    SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "LostViking_MusicGameLoop222", c_soundtrackCueAny, c_soundtrackIndexAny, true);
+                }
+                else {
+                    if ((lv_rand < 80)) {
+                        SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "LostViking_MusicGameLoop223", c_soundtrackCueAny, c_soundtrackIndexAny, true);
+                    }
+                    else {
+                        SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "LostViking_MusicGameLoop", c_soundtrackCueAny, c_soundtrackIndexAny, true);
+                    }
+                }
+            }
+        }
+    }
+    lib3FB28C60_gv_numoflevelsstartedtotal = (lib3FB28C60_gv_numoflevelsstartedtotal + 1);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib3FB28C60_gt_ChallengeReady_Init () {
+    lib3FB28C60_gt_ChallengeReady = TriggerCreate("lib3FB28C60_gt_ChallengeReady_Func");
+    sf_chal_add_event_challenge_ready(lib3FB28C60_gt_ChallengeReady);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Challenge Completed
+//--------------------------------------------------------------------------------------------------
+bool lib3FB28C60_gt_ChallengeCompleted_Func (bool testConds, bool runActions) {
+    unitgroup autoD9781801_g;
+    int autoD9781801_u;
+
+    // Variable Declarations
+    int lv_rand;
+    int lv_completedchallenges;
+    unit lv_unit;
+
+    // Variable Initialization
+    lv_completedchallenges = lv_completedTotal;
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    SoundtrackStop(PlayerGroupAll(), c_soundtrackCategoryMusic, true);
+        SoundtrackDefault(PlayerGroupAll(), c_soundtrackCategoryMusic, "Music_Silence", c_soundtrackCueAny, c_soundtrackIndexAny);
+    lv_rand = RandomInt(0, 100);
+        if ((lv_rand < 31)) {
+            SoundPlay(SoundLink("HighTemplar_Yes", -1), PlayerGroupAll(), 120.0, 0.0);
+        }
+        else {
+            if ((lv_rand < 54)) {
+                SoundPlay(SoundLink("Carrier_What", -1), PlayerGroupAll(), 120.0, 0.0);
+            }
+            else {
+                if ((lv_rand < 77)) {
+                    SoundPlay(SoundLink("Carrier_Yes", -1), PlayerGroupAll(), 120.0, 0.0);
+                }
+                else {
+                    SoundPlay(SoundLink("Urun_Yes", -1), PlayerGroupAll(), 120.0, 0.0);
+                }
+            }
+        }
+    if ((lv_completedchallenges > 0) && (ModI(lv_completedchallenges, 5) == 0)) {
+        UIDisplayMessage(PlayerGroupAll(), c_messageAreaSubtitle, (StringExternal("Param/Value/lib_3FB28C60_3C6EDD4F") + IntToText(lv_completedchallenges) + StringExternal("Param/Value/lib_3FB28C60_DEE63ECE")));
+        autoD9781801_g = sf_game_hero_get_unitgroup();
+        autoD9781801_u = 1;
+        for ( ; autoD9781801_u <= UnitGroupCount(autoD9781801_g, c_unitCountAll) ; autoD9781801_u += BoolToInt(lv_unit == UnitGroupUnit(autoD9781801_g, autoD9781801_u)) ) {
+            lv_unit = UnitGroupUnit(autoD9781801_g, autoD9781801_u);
+            hr_heroLevelUp( gm_players[gm_getPlayerByUnit(lv_unit)].hero );
+        }
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib3FB28C60_gt_ChallengeCompleted_Init () {
+    lib3FB28C60_gt_ChallengeCompleted = TriggerCreate("lib3FB28C60_gt_ChallengeCompleted_Func");
+    sf_chal_add_event_challenge_completed(lib3FB28C60_gt_ChallengeCompleted);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: IBE Reset
+//--------------------------------------------------------------------------------------------------
+bool lib3FB28C60_gt_IBEReset_Func (bool testConds, bool runActions) {
+    int auto60759A9F_ae;
+    int auto60759A9F_ai;
+
+    // Variable Declarations
+    playergroup lv_players;
+    int lv_i;
+
+    // Variable Initialization
+    lv_players = PlayerGroupActive();
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto60759A9F_ae = MinI(lib3FB28C60_gv_iBELaunchParameters.lv_herohelpsquadron, 10);
+    auto60759A9F_ai = 1;
+    lv_i = 1;
+    for ( ; ( (auto60759A9F_ai >= 0 && lv_i <= auto60759A9F_ae) || (auto60759A9F_ai <= 0 && lv_i >= auto60759A9F_ae) ) ; lv_i += auto60759A9F_ai ) {
+        PlayerGroupAdd(lv_players, lv_i);
+    }
+    sf_game_prepare(lv_players);
+    SoundtrackStop(PlayerGroupAll(), c_soundtrackCategoryMusic, true);
+    ibe_legacy_restart();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib3FB28C60_gt_IBEReset_Init () {
+    lib3FB28C60_gt_IBEReset = TriggerCreate("lib3FB28C60_gt_IBEReset_Func");
+    sf_game_add_event_reset(lib3FB28C60_gt_IBEReset);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: IBE Load
+//--------------------------------------------------------------------------------------------------
+bool lib3FB28C60_gt_IBELoad_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    int lv_mode;
+
+    // Variable Initialization
+    lv_mode = lib3FB28C60_gv_iBELaunchParameters.lv_gamemode;
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((lib3FB28C60_gv_iBELaunchParameters.lv_skipvotescreen == false)) {
+        lv_mode = ibe_ui_gms_launch();
+    }
+
+    ibe_gm_current_set(lv_mode);
+    sf_game_begin(lib3FB28C60_gv_iBELaunchParameters.lv_challengeid);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib3FB28C60_gt_IBELoad_Init () {
+    lib3FB28C60_gt_IBELoad = TriggerCreate("lib3FB28C60_gt_IBELoad_Func");
+    sf_game_add_event_load(lib3FB28C60_gt_IBELoad);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: IBE Begin
+//--------------------------------------------------------------------------------------------------
+bool lib3FB28C60_gt_IBEBegin_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    ibe_legacy_begin();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib3FB28C60_gt_IBEBegin_Init () {
+    lib3FB28C60_gt_IBEBegin = TriggerCreate("lib3FB28C60_gt_IBEBegin_Func");
+    sf_game_add_event_begin(lib3FB28C60_gt_IBEBegin);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: IBE Fail
+//--------------------------------------------------------------------------------------------------
+bool lib3FB28C60_gt_IBEFail_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    ibe_legacy_fail();
+    SoundtrackStopCurrent(PlayerGroupAll(), c_soundtrackCategoryMusic, true);
+    SoundtrackPlay(PlayerGroupAll(), c_soundtrackCategoryMusic, "Music_Silence", c_soundtrackCueAny, c_soundtrackIndexAny, false);
+    sf_game_reset();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void lib3FB28C60_gt_IBEFail_Init () {
+    lib3FB28C60_gt_IBEFail = TriggerCreate("lib3FB28C60_gt_IBEFail_Func");
+    sf_game_add_event_fail(lib3FB28C60_gt_IBEFail);
+}
+
+void lib3FB28C60_InitTriggers () {
+    lib3FB28C60_gt_Detectpreplacedobstacles_Init();
+    lib3FB28C60_gt_Marauderexplosion_Init();
+    lib3FB28C60_gt_ChallengeReady_Init();
+    lib3FB28C60_gt_ChallengeCompleted_Init();
+    lib3FB28C60_gt_IBEReset_Init();
+    lib3FB28C60_gt_IBELoad_Init();
+    lib3FB28C60_gt_IBEBegin_Init();
+    lib3FB28C60_gt_IBEFail_Init();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Library Initialization
+//--------------------------------------------------------------------------------------------------
+bool lib3FB28C60_InitLib_completed = false;
+
+void lib3FB28C60_InitLib () {
+    if (lib3FB28C60_InitLib_completed) {
+        return;
+    }
+
+    lib3FB28C60_InitLib_completed = true;
+
+    lib3FB28C60_InitLibraries();
+    lib3FB28C60_InitVariables();
+    lib3FB28C60_InitCustomScript();
+    lib3FB28C60_InitTriggers();
+}
+
+include "LibEBBC9C87"
+

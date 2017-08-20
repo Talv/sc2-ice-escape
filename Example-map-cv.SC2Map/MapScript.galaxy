@@ -1,0 +1,1150 @@
+//==================================================================================================
+// 
+// Generated Map Script
+// 
+// Name:   Ice Baneling Escape - Example map
+// 
+//==================================================================================================
+include "TriggerLibs/NativeLib"
+include "LibEBBC9C87"
+include "Lib3FB28C60"
+
+//--------------------------------------------------------------------------------------------------
+// Library Initialization
+//--------------------------------------------------------------------------------------------------
+void InitLibs () {
+    libNtve_InitLib();
+    libEBBC9C87_InitLib();
+    lib3FB28C60_InitLib();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Constants
+//--------------------------------------------------------------------------------------------------
+const int gv_gameVersion = 1;
+
+//--------------------------------------------------------------------------------------------------
+// Global Preset Declarations
+//--------------------------------------------------------------------------------------------------
+const int ge_ch11ObjectReferences_L11Button1 = 10000;
+const int ge_ch11ObjectReferences_L11Button2 = 10001;
+const int ge_ch11ObjectReferences_L11Button3 = 10002;
+const int ge_ch11ObjectReferences_L11Gate1 = 10003;
+const int ge_ch11ObjectReferences_L11Gate2 = 10004;
+const int ge_ch11ObjectReferences_L11Crystal1 = 10005;
+const int ge_ch11ObjectReferences_L11Marauder1 = 10006;
+const int ge_ch11ObjectReferences_L11Marauder2 = 10007;
+
+//--------------------------------------------------------------------------------------------------
+// Global Function Declarations
+//--------------------------------------------------------------------------------------------------
+void gf_RegisterChallenges ();
+void gf_ApplyDebugParameters ();
+void gf_ch07lyoteshandler (unitgroup lp_lyotesgroup);
+
+//--------------------------------------------------------------------------------------------------
+// Trigger Variables
+//--------------------------------------------------------------------------------------------------
+trigger gt_GameSetup;
+trigger gt_MenuInit;
+trigger gt_ch07Init;
+trigger gt_ch07zealots;
+trigger gt_ch07ravager;
+trigger gt_ch07lyotes;
+trigger gt_ch07walkend;
+trigger gt_ch10Init;
+trigger gt_ch10movingice;
+trigger gt_ch11Init;
+trigger gt_ch11electricfence;
+trigger gt_ch11gatebtn;
+trigger gt_ch11marauderperiodic;
+trigger gt_ch11crystalbtn;
+trigger gt_ch11crystalreset;
+trigger gt_ch11ursadondespawn;
+trigger gt_ch13Init;
+trigger gt_ch13lyotes;
+trigger gt_ch18Init;
+trigger gt_ch18chaser;
+trigger gt_ch18marauders;
+trigger gt_ch23Init;
+trigger gt_ch23flame;
+trigger gt_ch23blender;
+trigger gt_ch23rnd;
+trigger gt_ch23ufo;
+trigger gt_ch23ufos;
+trigger gt_ch23beardespawn;
+
+//--------------------------------------------------------------------------------------------------
+// Global Presets
+//--------------------------------------------------------------------------------------------------
+
+//--------------------------------------------------------------------------------------------------
+// Global Functions
+//--------------------------------------------------------------------------------------------------
+void gf_RegisterChallenges () {
+    int auto26504384_ae;
+    int auto26504384_ai;
+    int auto7894FFED_ae;
+    int auto7894FFED_ai;
+
+    // Variable Declarations
+    int lv_i;
+    int lv_chalid;
+    string lv_tmpname;
+
+    // Variable Initialization
+    lv_tmpname = "";
+
+    // Implementation
+    sf_chal_register_challenge(7, "Stampede", StringToText(""), 1, 2, RegionFromId(26), null, RegionFromId(12), RegionFromId(19));
+    sf_chal_register_challenge(10, "Fast blast", StringToText(""), 1, 2, RegionFromId(33), null, RegionFromId(31), RegionFromId(32));
+    sf_chal_register_challenge(11, "Three challenges", StringToText(""), 1, 2, RegionFromId(50), null, RegionFromId(48), RegionFromId(49));
+    sf_chal_register_challenge(13, "Mating season", StringToText(""), 1, 5, RegionFromId(71), null, RegionFromId(70), RegionFromId(62));
+    sf_chal_register_challenge(18, "Run!", StringToText(""), 1, 0, RegionFromId(115), null, RegionFromId(113), RegionFromId(114));
+    sf_chal_register_challenge(23, "The Great Snake", StringToText(""), 1, 2, RegionFromId(168), null, RegionFromId(167), RegionFromId(166));
+    auto26504384_ae = 27;
+    auto26504384_ai = 1;
+    lv_chalid = 1;
+    for ( ; ( (auto26504384_ai >= 0 && lv_chalid <= auto26504384_ae) || (auto26504384_ai <= 0 && lv_chalid >= auto26504384_ae) ) ; lv_chalid += auto26504384_ai ) {
+        auto7894FFED_ae = 8;
+        auto7894FFED_ai = 1;
+        lv_i = 1;
+        for ( ; ( (auto7894FFED_ai >= 0 && lv_i <= auto7894FFED_ae) || (auto7894FFED_ai <= 0 && lv_i >= auto7894FFED_ae) ) ; lv_i += auto7894FFED_ai ) {
+            lv_tmpname = "Level";
+            if ((lv_chalid < 10)) {
+                lv_tmpname = (lv_tmpname + "0");
+            }
+
+            lv_tmpname = (lv_tmpname + IntToString(lv_chalid));
+            lv_tmpname = (lv_tmpname + "_Revealer ");
+            lv_tmpname = (lv_tmpname + IntToString(lv_i));
+            if ((RegionFromName(lv_tmpname) != null)) {
+                sf_chal_register_reveal_area(lv_chalid, RegionFromName(lv_tmpname));
+            }
+            else {
+                break;
+            }
+        }
+    }
+}
+
+void gf_ApplyDebugParameters () {
+    // Implementation
+    lib3FB28C60_gv_iBELaunchParameters.lv_challengeid = 11;
+    lib3FB28C60_gv_iBELaunchParameters.lv_gamemode = 0;
+    lib3FB28C60_gv_iBELaunchParameters.lv_fastuitransitions = true;
+    lib3FB28C60_gv_iBELaunchParameters.lv_skipvotescreen = true;
+    lib3FB28C60_gv_iBELaunchParameters.lv_herohelpsquadron = 3;
+}
+
+trigger auto_gf_ch07lyoteshandler_Trigger = null;
+unitgroup auto_gf_ch07lyoteshandler_lp_lyotesgroup;
+
+void gf_ch07lyoteshandler (unitgroup lp_lyotesgroup) {
+    auto_gf_ch07lyoteshandler_lp_lyotesgroup = lp_lyotesgroup;
+
+    if (auto_gf_ch07lyoteshandler_Trigger == null) {
+        auto_gf_ch07lyoteshandler_Trigger = TriggerCreate("auto_gf_ch07lyoteshandler_TriggerFunc");
+    }
+
+    TriggerExecute(auto_gf_ch07lyoteshandler_Trigger, false, false);
+}
+
+bool auto_gf_ch07lyoteshandler_TriggerFunc (bool testConds, bool runActions) {
+    unitgroup lp_lyotesgroup = auto_gf_ch07lyoteshandler_lp_lyotesgroup;
+
+    // Variable Declarations
+    unit lv_choosedunit;
+    int lv_i;
+    unitgroup lv_localgroup;
+
+    // Variable Initialization
+    lv_localgroup = lp_lyotesgroup;
+
+    // Implementation
+    lib3FB28C60_gf_RegisterTriggerAsTemporaryForCurrentChallenge(TriggerGetCurrent());
+    Wait(0.1, c_timeGame);
+    while ((UnitGroupCount(lp_lyotesgroup, c_unitCountAlive) > 0)) {
+        lv_choosedunit = UnitGroupRandomUnit(lv_localgroup, c_unitCountAlive);
+        UnitGroupRemove(lv_localgroup, lv_choosedunit);
+        sf_ctrl_executor_create(SF_CTRL_ROUTE_LOOP_NO);
+        sf_ctrl_executor_append_sequence(sf_ctrl_controller_last_created(), 2, 1.5, "", SF_CTRL_EXECUTOR_PROP_MOVE_SPEED, 2.0, 0.0);
+        sf_ctrl_executor_append_sequence(sf_ctrl_controller_last_created(), 1, 1.5, "", SF_CTRL_EXECUTOR_PROP_MOVE_SPEED, -3.3, 0.0);
+        sf_ctrl_executor_append_delay(sf_ctrl_controller_last_created(), 1.6, "");
+        sf_ctrl_executor_append_sequence(sf_ctrl_controller_last_created(), 1, 0.3, "", SF_CTRL_EXECUTOR_PROP_MOVE_SPEED, 1.3, 0.0);
+        sf_ctrl_executor_attach_unit(sf_ctrl_controller_last_created(), lv_choosedunit);
+        sf_ctrl_executor_play(sf_ctrl_controller_last_created(), true);
+        Wait(RandomFixed(2.0, 2.6), c_timeGame);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Game Setup
+//--------------------------------------------------------------------------------------------------
+bool gt_GameSetup_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((GameIsTestMap(false) == true)) {
+        gf_ApplyDebugParameters();
+    }
+
+    gf_RegisterChallenges();
+    lib3FB28C60_gf_IBEPrepareFramework();
+    sf_game_reset();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_GameSetup_Init () {
+    gt_GameSetup = TriggerCreate("gt_GameSetup_Func");
+    TriggerAddEventMapInit(gt_GameSetup);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: Menu Init
+//--------------------------------------------------------------------------------------------------
+bool gt_MenuInit_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    TriggerEnable(TriggerGetCurrent(), false);
+    ibe_stat_init("Ice Baneling Escape - Example map cv", gv_gameVersion, "sefibeexamplecv");
+    ibe_menu_init();
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_MenuInit_Init () {
+    gt_MenuInit = TriggerCreate("gt_MenuInit_Func");
+    sf_game_add_event_reset(gt_MenuInit);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch07 Init
+//--------------------------------------------------------------------------------------------------
+bool gt_ch07Init_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib3FB28C60_gf_CreatureCreatePatroller("Scantipede", PointFromId(413877114), PointFromId(426843127), 1.0);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch07Init_Init () {
+    gt_ch07Init = TriggerCreate("gt_ch07Init_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch07Init, 7, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch07 zealots
+//--------------------------------------------------------------------------------------------------
+bool gt_ch07zealots_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib3FB28C60_gf_PatrollersLineChainCreate(PointFromId(1860312386), PointFromId(527557943), 21.0, 90.0, "PrisonZealot", 20, 0.3);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch07zealots_Init () {
+    gt_ch07zealots = TriggerCreate("gt_ch07zealots_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch07zealots, 7, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch07 ravager
+//--------------------------------------------------------------------------------------------------
+bool gt_ch07ravager_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    sf_envi_creature_create("Ravager", PointFromId(1452945807));
+    while (true) {
+        Wait(2.0, c_timeGame);
+        lib3FB28C60_gf_UnitShotMissileAtPoint(sf_envi_object_get_base_unit(sf_envi_object_last_created()), RegionRandomPoint(RegionFromId(135)));
+        Wait(0.2, c_timeGame);
+        lib3FB28C60_gf_UnitShotMissileAtPoint(sf_envi_object_get_base_unit(sf_envi_object_last_created()), RegionRandomPoint(RegionFromId(135)));
+        Wait(0.2, c_timeGame);
+        lib3FB28C60_gf_UnitShotMissileAtPoint(sf_envi_object_get_base_unit(sf_envi_object_last_created()), RegionRandomPoint(RegionFromId(135)));
+        Wait(2.0, c_timeGame);
+        lib3FB28C60_gf_UnitShotMissileAtPoint(sf_envi_object_get_base_unit(sf_envi_object_last_created()), PointFromId(1853877086));
+        Wait(0.2, c_timeGame);
+        lib3FB28C60_gf_UnitShotMissileAtPoint(sf_envi_object_get_base_unit(sf_envi_object_last_created()), PointFromId(1082433517));
+        Wait(0.2, c_timeGame);
+        lib3FB28C60_gf_UnitShotMissileAtPoint(sf_envi_object_get_base_unit(sf_envi_object_last_created()), PointFromId(1195319791));
+        Wait(0.2, c_timeGame);
+        lib3FB28C60_gf_UnitShotMissileAtPoint(sf_envi_object_get_base_unit(sf_envi_object_last_created()), PointFromId(1375814227));
+        Wait(0.2, c_timeGame);
+        lib3FB28C60_gf_UnitShotMissileAtPoint(sf_envi_object_get_base_unit(sf_envi_object_last_created()), PointFromId(179542909));
+        Wait(0.2, c_timeGame);
+        lib3FB28C60_gf_UnitShotMissileAtPoint(sf_envi_object_get_base_unit(sf_envi_object_last_created()), PointFromId(1049798937));
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch07ravager_Init () {
+    gt_ch07ravager = TriggerCreate("gt_ch07ravager_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch07ravager, 7, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch07 lyotes
+//--------------------------------------------------------------------------------------------------
+bool gt_ch07lyotes_Func (bool testConds, bool runActions) {
+    int init_i;
+
+    int auto83EE1D5C_ae;
+    int auto83EE1D5C_ai;
+    int autoE9FD8B4A_ae;
+    int autoE9FD8B4A_ai;
+
+    // Variable Declarations
+    int[7] lv_route;
+    int lv_i;
+    unitgroup lv_lyotesgroup;
+
+    // Variable Initialization
+    for (init_i = 0; init_i <= 6; init_i += 1) {
+        lv_route[init_i] = -1;
+    }
+    lv_lyotesgroup = UnitGroupEmpty();
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto83EE1D5C_ae = 5;
+    auto83EE1D5C_ai = 1;
+    lv_i = 0;
+    for ( ; ( (auto83EE1D5C_ai >= 0 && lv_i <= auto83EE1D5C_ae) || (auto83EE1D5C_ai <= 0 && lv_i >= auto83EE1D5C_ae) ) ; lv_i += auto83EE1D5C_ai ) {
+        sf_ctrl_route_create();
+        sf_ctrl_route_set_loop(sf_ctrl_controller_last_created(), SF_CTRL_ROUTE_LOOP_NO);
+        if ((lv_i < 3)) {
+            sf_ctrl_route_append_waypoint(sf_ctrl_controller_last_created(), PointWithOffset(PointFromId(716735936), -2.0, 0.0));
+        }
+        else {
+            sf_ctrl_route_append_waypoint(sf_ctrl_controller_last_created(), PointWithOffset(PointFromId(716735936), 7.5, 0.0));
+        }
+        sf_ctrl_route_append_waypoints_range_with_offset(sf_ctrl_controller_last_created(), "L7-Lyote Left 1", "L7-Lyote Left 3", (IntToFixed(lv_i) * 1.1), 90.0);
+        lv_route[lv_i] = sf_ctrl_controller_last_created();
+    }
+    while (true) {
+        lv_lyotesgroup = UnitGroupEmpty();
+        autoE9FD8B4A_ae = 2;
+        autoE9FD8B4A_ai = 1;
+        lv_i = 0;
+        for ( ; ( (autoE9FD8B4A_ai >= 0 && lv_i <= autoE9FD8B4A_ae) || (autoE9FD8B4A_ai <= 0 && lv_i >= autoE9FD8B4A_ae) ) ; lv_i += autoE9FD8B4A_ai ) {
+            lib3FB28C60_gf_CreatureCreateOnRoute("Lyote", lv_route[(2 - lv_i)]);
+            UnitGroupAdd(lv_lyotesgroup, sf_envi_object_get_base_unit(sf_envi_object_last_created()));
+            lib3FB28C60_gf_CreatureCreateOnRoute("Lyote", lv_route[(3 + lv_i)]);
+            UnitGroupAdd(lv_lyotesgroup, sf_envi_object_get_base_unit(sf_envi_object_last_created()));
+            Wait(0.5, c_timeGame);
+        }
+        gf_ch07lyoteshandler(lv_lyotesgroup);
+        Wait(3.0, c_timeGame);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch07lyotes_Init () {
+    gt_ch07lyotes = TriggerCreate("gt_ch07lyotes_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch07lyotes, 7, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch07 walk end
+//--------------------------------------------------------------------------------------------------
+bool gt_ch07walkend_Func (bool testConds, bool runActions) {
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(EventUnit()) == "Lyote"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitRemove(EventUnit());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch07walkend_Init () {
+    gt_ch07walkend = TriggerCreate("gt_ch07walkend_Func");
+    TriggerAddEventUnitRegion(gt_ch07walkend, null, RegionFromId(136), true);
+    sf_chal_add_event_challenge_exclusive(gt_ch07walkend, 7);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch10 Init
+//--------------------------------------------------------------------------------------------------
+bool gt_ch10Init_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    sf_envi_jump_zone_create(RegionFromId(39), 15.8);
+    sf_envi_catapult_create_from_unit(UnitFromId(635628145), RegionFromId(38), PointFromId(460917958));
+    lib3FB28C60_gf_CreatureCreatePatroller("RedstoneLavaCritter", PointFromId(1004275172), PointFromId(1816379299), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("RedstoneLavaCritter", PointFromId(1103913155), PointFromId(1855467969), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("KarakMale", PointFromId(1119047664), PointFromId(585883715), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("KarakMale", PointFromId(1821517242), PointFromId(2039207488), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Scantipede", PointFromId(1695185817), PointFromId(982198820), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Scantipede", PointFromId(891107439), PointFromId(1733407308), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Scantipede", PointFromId(35069417), PointFromId(1500974081), 0.0);
+    lib3FB28C60_gf_CreatureCreateOnPath("UrsadakCalf", "L10-11", "L10-18", SF_CTRL_ROUTE_LOOP_BACKWARD);
+    lib3FB28C60_gf_CreatureCreateOnPath("UrsadakCalf", "L10-19", "L10-29", SF_CTRL_ROUTE_LOOP_BACKWARD);
+    lib3FB28C60_gf_CreatureCreateOnPath("Predator", "L10-30", "L10-37", SF_CTRL_ROUTE_LOOP_FORWARD);
+    lib3FB28C60_gf_PowerupEssenceCreate(PointFromId(1808706326));
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch10Init_Init () {
+    gt_ch10Init = TriggerCreate("gt_ch10Init_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch10Init, 10, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch10 moving ice
+//--------------------------------------------------------------------------------------------------
+bool gt_ch10movingice_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    unit lv_iceunit;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib3FB28C60_gf_DynamicSurfaceCreate(PointFromId(1210245545), SURFACE_NORMAL_ICE, 2.0);
+    lv_iceunit = sf_envi_object_get_base_unit(sf_envi_object_last_created());
+    while (true) {
+        lib3FB28C60_gf_PutExistingCreatureOnPath(sf_envi_object_last_created(), "L10-Land 1", "L10-Land 17", SF_CTRL_ROUTE_LOOP_NO);
+        Wait(0.0, c_timeGame);
+        UnitWaitUntilIdle(lv_iceunit, true);
+        Wait(0.0, c_timeGame);
+        lib3FB28C60_gf_PutExistingCreatureOnPath(sf_envi_object_last_created(), "L10-Land 1", "L10-Land 1", SF_CTRL_ROUTE_LOOP_NO);
+        Wait(0.0, c_timeGame);
+        UnitWaitUntilIdle(lv_iceunit, true);
+        Wait(0.0, c_timeGame);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch10movingice_Init () {
+    gt_ch10movingice = TriggerCreate("gt_ch10movingice_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch10movingice, 10, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch11 Init
+//--------------------------------------------------------------------------------------------------
+bool gt_ch11Init_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    sf_envi_catapult_create_from_unit(UnitFromId(688370969), RegionFromId(51), PointFromId(1505570999));
+    sf_envi_catapult_create_from_unit(UnitFromId(924555633), RegionFromId(52), PointFromId(473089399));
+    sf_envi_catapult_create_from_unit(UnitFromId(113342002), RegionFromId(53), PointFromId(1287297362));
+    sf_envi_catapult_create_from_unit(UnitFromId(907558598), RegionFromId(61), PointFromId(1375251762));
+    sf_envi_catapult_create_from_unit(UnitFromId(1473786589), RegionFromId(55), PointFromId(1498779409));
+    sf_envi_jump_zone_create(RegionFromId(54), 10.6);
+    lib3FB28C60_gf_CreatureCreatePatroller("Scantipede", PointFromId(1877896118), PointFromId(1828854100), 0.0);
+    lib3FB28C60_gf_CreatureCreateOnPath("Predator", "L11-8", "L11-15", SF_CTRL_ROUTE_LOOP_FORWARD);
+    lib3FB28C60_gf_CreatureCreateOnPath("Predator", "L11-16", "L11-25", SF_CTRL_ROUTE_LOOP_FORWARD);
+    lib3FB28C60_gf_CreatureCreateOnPath("Predator", "L11-28", "L11-35", SF_CTRL_ROUTE_LOOP_FORWARD);
+    lib3FB28C60_gf_PowerupEssenceCreate(PointFromId(203946604));
+    lib3FB28C60_gf_PowerupEssenceCreate(PointFromId(268228505));
+    lib3FB28C60_gf_PowerupEssenceCreate(PointFromId(1471009468));
+    lib3FB28C60_gf_StoneSwitchCreate(PointFromId(33551281), null);
+    sf_envi_object_assign_reference(sf_envi_object_last_created(), ge_ch11ObjectReferences_L11Button1);
+    lib3FB28C60_gf_StoneSwitchCreate(PointFromId(31644880), null);
+    sf_envi_object_assign_reference(sf_envi_object_last_created(), ge_ch11ObjectReferences_L11Button2);
+    lib3FB28C60_gf_ButtonCreate(lib3FB28C60_ge_ButtonType_LightSwitchCircle, PointFromId(941162503), false, true, 0.0);
+    sf_envi_object_assign_reference(sf_envi_object_last_created(), ge_ch11ObjectReferences_L11Button3);
+    sf_envi_gate_create_from_unit(UnitRefFromUnit(UnitFromId(932396532)));
+    sf_envi_object_assign_reference(sf_envi_object_last_created(), ge_ch11ObjectReferences_L11Gate1);
+    sf_envi_gate_create_from_unit(UnitRefFromUnit(UnitFromId(819433408)));
+    sf_envi_object_assign_reference(sf_envi_object_last_created(), ge_ch11ObjectReferences_L11Gate2);
+    lib3FB28C60_gf_PortalCreateSimple(PointFromId(1379492354), PointFromId(675949219));
+    sf_envi_creature_create("HammerSecurity", PointFromId(522344955));
+    sf_envi_object_assign_reference(sf_envi_object_last_created(), ge_ch11ObjectReferences_L11Marauder1);
+    sf_envi_creature_create("HammerSecurity", PointFromId(993090195));
+    sf_envi_object_assign_reference(sf_envi_object_last_created(), ge_ch11ObjectReferences_L11Marauder2);
+    lib3FB28C60_gf_CrystalWheelCreateSingleEntry(PointFromId(993164804), 3.0, 0, 0.0, 2, 40.0);
+    sf_envi_object_assign_reference(sf_envi_object_last_created(), ge_ch11ObjectReferences_L11Crystal1);
+    lib3FB28C60_gf_CrystalWheelCreateSingleEntry(PointFromId(1029226963), 3.5, -1, 40.0, 3, 0.0);
+    lib3FB28C60_gf_CreateCreatureWalkSideBySide("YetiMomma", 2, 1, PointFromId(1984930429), null, "L11-Bearline 2", "L11-Bearline 4", 270.0, 2.1, 5.0, 0.0, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch11Init_Init () {
+    gt_ch11Init = TriggerCreate("gt_ch11Init_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch11Init, 11, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch11 electric fence
+//--------------------------------------------------------------------------------------------------
+bool gt_ch11electricfence_Func (bool testConds, bool runActions) {
+    int auto1B07F22D_ae;
+    int auto1B07F22D_ai;
+
+    // Variable Declarations
+    int lv_i;
+    string lv_tmp;
+
+    // Variable Initialization
+    lv_i = 1;
+    lv_tmp = "";
+
+    // Conditions
+    if (testConds) {
+        if (!((lib3FB28C60_gf_DifficultyIsExtreme() == false))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto1B07F22D_ae = 20;
+    auto1B07F22D_ai = 1;
+    lv_i = 1;
+    for ( ; ( (auto1B07F22D_ai >= 0 && lv_i <= auto1B07F22D_ae) || (auto1B07F22D_ai <= 0 && lv_i >= auto1B07F22D_ae) ) ; lv_i += auto1B07F22D_ai ) {
+        lv_tmp = ("L11-Fence " + IntToString(lv_i));
+        if ((PointFromName(lv_tmp) != null)) {
+            sf_envi_efence_create(PointFromName(lv_tmp));
+        }
+
+    }
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(1613192834)), sf_envi_object_get_by_origin_position(PointFromId(1911941346)), SF_ENVI_EFENCE_LTYPE_SWITCHER, true);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(1613192834)), sf_envi_object_get_by_origin_position(PointFromId(512606541)), SF_ENVI_EFENCE_LTYPE_SWITCHER, true);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(1585572296)), sf_envi_object_get_by_origin_position(PointFromId(2032230454)), SF_ENVI_EFENCE_LTYPE_SWITCHER, true);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(362682933)), sf_envi_object_get_by_origin_position(PointFromId(1792596548)), SF_ENVI_EFENCE_LTYPE_SWITCHER, true);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(2032230454)), sf_envi_object_get_by_origin_position(PointFromId(939134381)), SF_ENVI_EFENCE_LTYPE_SWITCHER, true);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(2032230454)), sf_envi_object_get_by_origin_position(PointFromId(366533351)), SF_ENVI_EFENCE_LTYPE_SWITCHER, true);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(1613192834)), sf_envi_object_get_by_origin_position(PointFromId(512606541)), SF_ENVI_EFENCE_LTYPE_ELECTRICITY, true);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(1911941346)), sf_envi_object_get_by_origin_position(PointFromId(512606541)), SF_ENVI_EFENCE_LTYPE_ELECTRICITY, true);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(512606541)), sf_envi_object_get_by_origin_position(PointFromId(1585572296)), SF_ENVI_EFENCE_LTYPE_ELECTRICITY, true);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(512606541)), sf_envi_object_get_by_origin_position(PointFromId(362682933)), SF_ENVI_EFENCE_LTYPE_ELECTRICITY, false);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(512606541)), sf_envi_object_get_by_origin_position(PointFromId(1792596548)), SF_ENVI_EFENCE_LTYPE_ELECTRICITY, true);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(939134381)), sf_envi_object_get_by_origin_position(PointFromId(366533351)), SF_ENVI_EFENCE_LTYPE_ELECTRICITY, false);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(939134381)), sf_envi_object_get_by_origin_position(PointFromId(2032230454)), SF_ENVI_EFENCE_LTYPE_ELECTRICITY, true);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(2043464263)), sf_envi_object_get_by_origin_position(PointFromId(2032230454)), SF_ENVI_EFENCE_LTYPE_ELECTRICITY, false);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(838500962)), sf_envi_object_get_by_origin_position(PointFromId(2032230454)), SF_ENVI_EFENCE_LTYPE_ELECTRICITY, true);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(1585572296)), sf_envi_object_get_by_origin_position(PointFromId(362682933)), SF_ENVI_EFENCE_LTYPE_ELECTRICITY, true);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(838500962)), sf_envi_object_get_by_origin_position(PointFromId(362682933)), SF_ENVI_EFENCE_LTYPE_ELECTRICITY, true);
+    sf_envi_efence_link(sf_envi_object_get_by_origin_position(PointFromId(838500962)), sf_envi_object_get_by_origin_position(PointFromId(939134381)), SF_ENVI_EFENCE_LTYPE_ELECTRICITY, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch11electricfence_Init () {
+    gt_ch11electricfence = TriggerCreate("gt_ch11electricfence_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch11electricfence, 11, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch11 gate btn
+//--------------------------------------------------------------------------------------------------
+bool gt_ch11gatebtn_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((sf_envi_event_param_object() == sf_envi_object_from_reference(ge_ch11ObjectReferences_L11Button1)) && (sf_envi_event_param_button_state() == 1)) {
+        sf_envi_gate_open(sf_envi_object_from_reference(ge_ch11ObjectReferences_L11Gate1), true);
+    }
+    else if ((sf_envi_event_param_object() == sf_envi_object_from_reference(ge_ch11ObjectReferences_L11Button2)) && (sf_envi_event_param_button_state() == 1)) {
+        sf_envi_gate_open(sf_envi_object_from_reference(ge_ch11ObjectReferences_L11Gate2), true);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch11gatebtn_Init () {
+    gt_ch11gatebtn = TriggerCreate("gt_ch11gatebtn_Func");
+    sf_envi_add_event_button_state_changed(gt_ch11gatebtn);
+    sf_chal_add_event_challenge_exclusive(gt_ch11gatebtn, 11);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch11 marauder periodic
+//--------------------------------------------------------------------------------------------------
+bool gt_ch11marauderperiodic_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib3FB28C60_gf_UnitShotMissileAtPoint(sf_envi_object_get_base_unit(sf_envi_object_from_reference(ge_ch11ObjectReferences_L11Marauder1)), PointFromId(460459528));
+    Wait(1.0, c_timeGame);
+    lib3FB28C60_gf_UnitShotMissileAtPoint(sf_envi_object_get_base_unit(sf_envi_object_from_reference(ge_ch11ObjectReferences_L11Marauder2)), PointFromId(1687432293));
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch11marauderperiodic_Init () {
+    gt_ch11marauderperiodic = TriggerCreate("gt_ch11marauderperiodic_Func");
+    TriggerAddEventTimePeriodic(gt_ch11marauderperiodic, 2.0, c_timeGame);
+    sf_chal_add_event_challenge_exclusive(gt_ch11marauderperiodic, 11);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch11 crystal btn
+//--------------------------------------------------------------------------------------------------
+bool gt_ch11crystalbtn_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((sf_envi_event_param_object() == sf_envi_object_from_reference(ge_ch11ObjectReferences_L11Button3)) && (sf_envi_event_param_button_state() == 1)) {
+        sf_envi_imitator_set_auto_rotate(sf_envi_object_from_reference(ge_ch11ObjectReferences_L11Crystal1), 1);
+    }
+    else if ((sf_envi_event_param_object() == sf_envi_object_from_reference(ge_ch11ObjectReferences_L11Button3)) && (sf_envi_event_param_button_state() == 0)) {
+        sf_envi_imitator_set_auto_rotate(sf_envi_object_from_reference(ge_ch11ObjectReferences_L11Crystal1), 0);
+        TriggerEnable(gt_ch11crystalreset, true);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch11crystalbtn_Init () {
+    gt_ch11crystalbtn = TriggerCreate("gt_ch11crystalbtn_Func");
+    sf_envi_add_event_button_state_changed(gt_ch11crystalbtn);
+    sf_chal_add_event_challenge_exclusive(gt_ch11crystalbtn, 11);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch11 crystal reset
+//--------------------------------------------------------------------------------------------------
+bool gt_ch11crystalreset_Func (bool testConds, bool runActions) {
+    // Variable Declarations
+    region lv_crystalregion;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib3FB28C60_gf_RegisterTriggerAsTemporaryForCurrentChallenge(TriggerGetCurrent());
+    lv_crystalregion = RegionCircle(UnitGetPosition(sf_envi_object_get_base_unit(sf_envi_object_from_reference(ge_ch11ObjectReferences_L11Crystal1))), 4.0);
+    if ((UnitGroupCount(UnitGroupFilterRegion(sf_game_hero_get_unitgroup(), lv_crystalregion, 1), c_unitCountAlive) == 0)) {
+        TriggerEnable(TriggerGetCurrent(), false);
+        sf_envi_imitator_rotate(sf_envi_object_from_reference(ge_ch11ObjectReferences_L11Crystal1), PointGetFacing(PointFromId(993164804)), false, false);
+    }
+
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch11crystalreset_Init () {
+    gt_ch11crystalreset = TriggerCreate("gt_ch11crystalreset_Func");
+    TriggerEnable(gt_ch11crystalreset, false);
+    TriggerAddEventTimePeriodic(gt_ch11crystalreset, 1.0, c_timeGame);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch11 ursadon despawn
+//--------------------------------------------------------------------------------------------------
+bool gt_ch11ursadondespawn_Func (bool testConds, bool runActions) {
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(EventUnit()) == "YetiMomma"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitRemove(EventUnit());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch11ursadondespawn_Init () {
+    gt_ch11ursadondespawn = TriggerCreate("gt_ch11ursadondespawn_Func");
+    TriggerAddEventUnitRegion(gt_ch11ursadondespawn, null, RegionFromId(105), true);
+    sf_chal_add_event_challenge_exclusive(gt_ch11ursadondespawn, 11);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch13 Init
+//--------------------------------------------------------------------------------------------------
+bool gt_ch13Init_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib3FB28C60_gf_CreatureCreatePatroller("Lyote", PointFromId(1210177583), PointFromId(598584560), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Lyote", PointFromId(724712502), PointFromId(875271351), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Lyote", PointFromId(1540391491), PointFromId(1321241768), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Lyote", PointFromId(866060731), PointFromId(696328490), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("UrsadakMaleExotic", PointFromId(1328575165), PointFromId(2073077460), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("UrsadakCalf", PointFromId(699321449), PointFromId(708512215), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("UrsadakMaleExotic", PointFromId(1870244895), PointFromId(1704890239), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("UrsadakMaleExotic", PointFromId(1362660562), PointFromId(242714644), 0.0);
+    lib3FB28C60_gf_PowerupEssenceCreate(PointFromId(1851247305));
+    lib3FB28C60_gf_PortalCreateSimple(PointFromId(1491159901), PointFromId(2098111172));
+    sf_envi_catapult_create_from_unit(UnitFromId(1007926481), RegionFromId(72), PointFromId(136298064));
+    lib3FB28C60_gf_StalkerZoneCreate(RegionFromId(123), "Feederling", 35, 3.0);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch13Init_Init () {
+    gt_ch13Init = TriggerCreate("gt_ch13Init_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch13Init, 13, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch13 lyotes
+//--------------------------------------------------------------------------------------------------
+bool gt_ch13lyotes_Func (bool testConds, bool runActions) {
+    int auto76F97E45_ae;
+    int auto76F97E45_ai;
+
+    // Variable Declarations
+    int lv_i;
+    bool lv_forward;
+    fixed lv_currradius;
+    const int lv_amountoforbits = 5;
+    const fixed lv_initialdistancefromcenter = 0.3;
+    const fixed lv_distanceperorbit = 1.4;
+    const fixed lv_unitsdensity = 3.0;
+
+    // Variable Initialization
+    lv_i = 1;
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    auto76F97E45_ae = lv_amountoforbits;
+    auto76F97E45_ai = 1;
+    lv_i = 1;
+    for ( ; ( (auto76F97E45_ai >= 0 && lv_i <= auto76F97E45_ae) || (auto76F97E45_ai <= 0 && lv_i >= auto76F97E45_ae) ) ; lv_i += auto76F97E45_ai ) {
+        if ((ModI(lv_i, 2) == 1)) {
+            lv_forward = true;
+        }
+        else {
+            lv_forward = false;
+        }
+        lv_currradius = (lv_initialdistancefromcenter + (lv_distanceperorbit * IntToFixed(lv_i)));
+        lib3FB28C60_gf_RouteAroundCircleCreate(RegionGetCenter(RegionFromId(156)), lv_currradius, lv_forward);
+        lib3FB28C60_gf_DistributeCreaturesOnRoute("Lyote", FixedToInt((lib3FB28C60_gf_CircumferenceOfCircle(lv_currradius) / lv_unitsdensity)), sf_ctrl_controller_last_created(), 0.0, 1.0);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch13lyotes_Init () {
+    gt_ch13lyotes = TriggerCreate("gt_ch13lyotes_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch13lyotes, 13, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch18 Init
+//--------------------------------------------------------------------------------------------------
+bool gt_ch18Init_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib3FB28C60_gf_CreatureCreateOnPath("Lyote", "L18-6", "L18-13", SF_CTRL_ROUTE_LOOP_BACKWARD);
+    lib3FB28C60_gf_CreatureCreateOnPath("Lyote", "L18-14", "L18-20", SF_CTRL_ROUTE_LOOP_BACKWARD);
+    lib3FB28C60_gf_CreatureCreatePatroller("UrsadakFemale", PointFromId(387946577), PointFromId(2026965494), 1.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Scantipede", PointFromId(407542127), PointFromId(2114647879), 1.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Scantipede", PointFromId(9032555), PointFromId(18726726), 1.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Scantipede", PointFromId(933020490), PointFromId(554110494), 1.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Lyote", PointFromId(1299206221), PointFromId(1132588181), 1.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Lyote", PointFromId(1799466292), PointFromId(1472419079), 1.0);
+    sf_envi_creature_create("HammerSecurity", PointFromId(1251012089));
+    sf_envi_creature_create("HammerSecurity", PointFromId(1260557350));
+    lib3FB28C60_gf_RandomMoveZoneCreate(RegionFromId(106), "Predator", 3, 3.0, 6.0, 1.0, 2.0, -1.0, -1.0, 100.0, 1000.0, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch18Init_Init () {
+    gt_ch18Init = TriggerCreate("gt_ch18Init_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch18Init, 18, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch18 chaser
+//--------------------------------------------------------------------------------------------------
+bool gt_ch18chaser_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    if ((EventUnitRegion() == RegionFromId(117)) && (UnitGroupHasUnit(sf_game_hero_get_unitgroup(), EventUnit()) == true)) {
+        lib3FB28C60_gf_CreatureCreateOnPath("Predator", "L18-Path 1", "L18-Path 23", SF_CTRL_ROUTE_LOOP_NO);
+        UnitSetPropertyFixed(UnitLastCreated(), c_unitPropBaseMovementSpeed, 3.0);
+    }
+    else if ((EventUnitRegion() == RegionFromId(116)) && (UnitGetType(EventUnit()) == "Predator")) {
+        sf_ctrl_controller_destroy(sf_ctrl_controller_get_from_unit(EventUnit()));
+        UnitRemove(EventUnit());
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch18chaser_Init () {
+    gt_ch18chaser = TriggerCreate("gt_ch18chaser_Func");
+    sf_chal_add_event_challenge_exclusive(gt_ch18chaser, 18);
+    TriggerAddEventUnitRegion(gt_ch18chaser, null, RegionFromId(117), true);
+    TriggerAddEventUnitRegion(gt_ch18chaser, null, RegionFromId(116), true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch18 marauders
+//--------------------------------------------------------------------------------------------------
+bool gt_ch18marauders_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib3FB28C60_gf_UnitShotMissileAtPoint(sf_envi_object_get_base_unit(sf_envi_object_get_by_origin_position(PointFromId(1251012089))), PointFromId(169750314));
+    Wait(0.5, c_timeGame);
+    lib3FB28C60_gf_UnitShotMissileAtPoint(sf_envi_object_get_base_unit(sf_envi_object_get_by_origin_position(PointFromId(1260557350))), PointFromId(1970826327));
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch18marauders_Init () {
+    gt_ch18marauders = TriggerCreate("gt_ch18marauders_Func");
+    TriggerAddEventTimePeriodic(gt_ch18marauders, 2.0, c_timeGame);
+    sf_chal_add_event_challenge_exclusive(gt_ch18marauders, 18);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch23 Init
+//--------------------------------------------------------------------------------------------------
+bool gt_ch23Init_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib3FB28C60_gf_CreatureCreatePatroller("Yeti", PointFromId(871408626), PointFromId(1650044358), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Yeti", PointFromId(920442635), PointFromId(855607591), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Yeti", PointFromId(564802338), PointFromId(1688403888), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Yeti", PointFromId(800402229), PointFromId(1985468323), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Lyote", PointFromId(698358312), PointFromId(674675922), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Lyote", PointFromId(471482079), PointFromId(1920142906), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Predator", PointFromId(846448731), PointFromId(1016084777), 0.0);
+    lib3FB28C60_gf_CreatureCreatePatroller("Predator", PointFromId(1029205568), PointFromId(2111636860), 0.0);
+    lib3FB28C60_gf_CreatureCreateOnPath("Yeti", "L23-1", "L23-4", SF_CTRL_ROUTE_LOOP_FORWARD);
+    lib3FB28C60_gf_PowerupEssenceCreate(PointFromId(780574863));
+    lib3FB28C60_gf_PortalCreateSimple(PointFromId(1961775231), PointFromId(96620936));
+    lib3FB28C60_gf_PortalCreateSimple(PointFromId(807719999), PointFromId(2015997253));
+    lib3FB28C60_gf_CreatureTrainRouteCreate("KarakFemale", 20, "L23-Bird 1", "L23-Bird 70", 0.0, 1.0);
+    lib3FB28C60_gf_CreateCreatureWalkSideBySide("UrsadakCalfSmall", 5, 2, PointFromId(1547387724), null, "L23-Herd 1", "L23-Herd 2", 270.0, 3.0, 3.0, 0.0, true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch23Init_Init () {
+    gt_ch23Init = TriggerCreate("gt_ch23Init_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch23Init, 23, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch23 flame
+//--------------------------------------------------------------------------------------------------
+bool gt_ch23flame_Func (bool testConds, bool runActions) {
+    int init_i;
+
+    // Variable Declarations
+    int[4] lv_flamethrowers;
+
+    // Variable Initialization
+    for (init_i = 0; init_i <= 3; init_i += 1) {
+        lv_flamethrowers[init_i] = -1;
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib3FB28C60_gf_FlamethrowerCreate(PointFromId(986584714), 7.0);
+    lv_flamethrowers[0] = sf_envi_object_last_created();
+    lib3FB28C60_gf_FlamethrowerCreate(PointFromId(1301300875), 5.0);
+    lv_flamethrowers[1] = sf_envi_object_last_created();
+    lib3FB28C60_gf_FlamethrowerCreate(PointFromId(1250914726), 5.0);
+    lv_flamethrowers[2] = sf_envi_object_last_created();
+    while (true) {
+        sf_envi_flamer_ignite(lv_flamethrowers[1], 1.5);
+        sf_envi_flamer_ignite(lv_flamethrowers[2], 1.0);
+        Wait(1.0, c_timeGame);
+        sf_envi_flamer_ignite(lv_flamethrowers[0], 1.0);
+        sf_envi_flamer_ignite(lv_flamethrowers[1], 0.5);
+        Wait(1.0, c_timeGame);
+        sf_envi_flamer_ignite(lv_flamethrowers[2], 1.0);
+        Wait(1.0, c_timeGame);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch23flame_Init () {
+    gt_ch23flame = TriggerCreate("gt_ch23flame_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch23flame, 23, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch23 blender
+//--------------------------------------------------------------------------------------------------
+bool gt_ch23blender_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib3FB28C60_gf_CrystalBlenderCreate(PointFromId(1996479197), 0, 0.0, 0.0, 0.0, 8.0, 90.0, 0.0, 180.0, 0.0, 270.0);
+    sf_envi_imitator_remove_segment_from_center(sf_envi_object_last_created(), 5.0, 90.0);
+    sf_envi_imitator_remove_segment_from_center(sf_envi_object_last_created(), 4.0, 90.0);
+    sf_ctrl_executor_create(SF_CTRL_ROUTE_LOOP_FORWARD);
+    sf_ctrl_executor_insert_sequence_at(sf_ctrl_controller_last_created(), 2, 1.2, 4.5, "", SF_CTRL_EXECUTOR_PROP_ROTATION, 135.0, 0.0);
+    sf_ctrl_executor_insert_sequence_at(sf_ctrl_controller_last_created(), 1, -1.0, 1.5, "", SF_CTRL_EXECUTOR_PROP_ROTATION, -45.0, 0.0);
+    sf_ctrl_executor_insert_sequence_at(sf_ctrl_controller_last_created(), 2, -1.0, 3.0, "", SF_CTRL_EXECUTOR_PROP_ROTATION, 90.0, 0.0);
+    sf_ctrl_executor_insert_sequence_at(sf_ctrl_controller_last_created(), 2, -1.0, 6.0, "", SF_CTRL_EXECUTOR_PROP_ROTATION, -180.0, 0.0);
+    sf_ctrl_executor_attach_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(sf_envi_object_last_created()));
+    sf_ctrl_executor_play(sf_ctrl_controller_last_created(), true);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch23blender_Init () {
+    gt_ch23blender = TriggerCreate("gt_ch23blender_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch23blender, 23, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch23 rnd
+//--------------------------------------------------------------------------------------------------
+bool gt_ch23rnd_Func (bool testConds, bool runActions) {
+    int auto0CAA63CC_ae;
+    int auto0CAA63CC_ai;
+
+    // Variable Declarations
+    int lv_i;
+
+    // Variable Initialization
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib3FB28C60_gf_RandomMoveZoneCreate(RegionFromId(170), null, 0, 3.0, 3.0, 1.0, 2.0, -1.0, -1.0, -1.0, -1.0, true);
+    auto0CAA63CC_ae = 15;
+    auto0CAA63CC_ai = 1;
+    lv_i = 1;
+    for ( ; ( (auto0CAA63CC_ai >= 0 && lv_i <= auto0CAA63CC_ae) || (auto0CAA63CC_ai <= 0 && lv_i >= auto0CAA63CC_ae) ) ; lv_i += auto0CAA63CC_ai ) {
+        lib3FB28C60_gf_CreateColoredZealot(lib3FB28C60_ge_Coloredzealots_Bluezealot, RegionGetCenter(RegionFromId(170)));
+        sf_ctrl_zone_random_append_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(sf_envi_object_last_created()), false);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch23rnd_Init () {
+    gt_ch23rnd = TriggerCreate("gt_ch23rnd_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch23rnd, 23, true);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch23 ufo
+//--------------------------------------------------------------------------------------------------
+bool gt_ch23ufo_Func (bool testConds, bool runActions) {
+    int init_i;
+
+    int auto0351087C_ae;
+    int auto0351087C_ai;
+    int auto49CD4212_ae;
+    int auto49CD4212_ai;
+
+    // Variable Declarations
+    int lv_i;
+    int[11] lv_ufos;
+
+    // Variable Initialization
+    for (init_i = 0; init_i <= 10; init_i += 1) {
+        lv_ufos[init_i] = -1;
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib3FB28C60_gf_UfoLineCreate(PointFromId(383123898), 10.0, 0.0);
+    lib3FB28C60_gf_UfoSingleFloatUpAndDown(sf_envi_object_last_created(), 3.0, 1.0);
+    auto0351087C_ae = 9;
+    auto0351087C_ai = 1;
+    lv_i = 0;
+    for ( ; ( (auto0351087C_ai >= 0 && lv_i <= auto0351087C_ae) || (auto0351087C_ai <= 0 && lv_i >= auto0351087C_ae) ) ; lv_i += auto0351087C_ai ) {
+        lib3FB28C60_gf_UfoLineCreate(PointWithOffset(PointFromId(2051481988), (1.0 * lv_i), 0.0), 1.0, 0.0);
+        lv_ufos[lv_i] = sf_envi_object_last_created();
+    }
+    lib3FB28C60_gf_UfoCreateExecutor(1.0, 1.0);
+    sf_ctrl_executor_play(sf_ctrl_controller_last_created(), true);
+    auto49CD4212_ae = 9;
+    auto49CD4212_ai = 1;
+    lv_i = 0;
+    for ( ; ( (auto49CD4212_ai >= 0 && lv_i <= auto49CD4212_ae) || (auto49CD4212_ai <= 0 && lv_i >= auto49CD4212_ae) ) ; lv_i += auto49CD4212_ai ) {
+        sf_ctrl_executor_attach_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(lv_ufos[lv_i]));
+        Wait(0.5, c_timeGame);
+    }
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch23ufo_Init () {
+    gt_ch23ufo = TriggerCreate("gt_ch23ufo_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch23ufo, 23, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch23 ufos
+//--------------------------------------------------------------------------------------------------
+bool gt_ch23ufos_Func (bool testConds, bool runActions) {
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    lib3FB28C60_gf_UfoLineCreate(PointFromId(2069883978), 1.0, 0.0);
+    lib3FB28C60_gf_UfoSingleFloatUpAndDown(sf_envi_object_last_created(), 1.0, 2.0);
+    Wait(2.0, c_timeGame);
+    lib3FB28C60_gf_UfoLineCreate(PointFromId(1880934468), 1.0, 0.0);
+    lib3FB28C60_gf_UfoSingleFloatUpAndDown(sf_envi_object_last_created(), 1.0, 2.0);
+    lib3FB28C60_gf_UfoLineCreate(PointFromId(725079181), 2.0, 90.0);
+    lib3FB28C60_gf_UfoSingleFloatUpAndDown(sf_envi_object_last_created(), 1.0, 2.0);
+    Wait(0.5, c_timeGame);
+    lib3FB28C60_gf_UfoLineCreate(PointFromId(613013345), 2.0, 90.0);
+    lib3FB28C60_gf_UfoSingleFloatUpAndDown(sf_envi_object_last_created(), 1.0, 2.0);
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch23ufos_Init () {
+    gt_ch23ufos = TriggerCreate("gt_ch23ufos_Func");
+    sf_chal_add_event_challenge_initialize(gt_ch23ufos, 23, false);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger: ch23 bear despawn
+//--------------------------------------------------------------------------------------------------
+bool gt_ch23beardespawn_Func (bool testConds, bool runActions) {
+    // Conditions
+    if (testConds) {
+        if (!((UnitGetType(EventUnit()) == "UrsadakCalfSmall"))) {
+            return false;
+        }
+    }
+
+    // Actions
+    if (!runActions) {
+        return true;
+    }
+
+    UnitRemove(EventUnit());
+    return true;
+}
+
+//--------------------------------------------------------------------------------------------------
+void gt_ch23beardespawn_Init () {
+    gt_ch23beardespawn = TriggerCreate("gt_ch23beardespawn_Func");
+    TriggerAddEventUnitRegion(gt_ch23beardespawn, null, RegionFromId(169), true);
+    sf_chal_add_event_challenge_exclusive(gt_ch23beardespawn, 23);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Trigger Initialization
+//--------------------------------------------------------------------------------------------------
+void InitTriggers () {
+    gt_GameSetup_Init();
+    gt_MenuInit_Init();
+    gt_ch07Init_Init();
+    gt_ch07zealots_Init();
+    gt_ch07ravager_Init();
+    gt_ch07lyotes_Init();
+    gt_ch07walkend_Init();
+    gt_ch10Init_Init();
+    gt_ch10movingice_Init();
+    gt_ch11Init_Init();
+    gt_ch11electricfence_Init();
+    gt_ch11gatebtn_Init();
+    gt_ch11marauderperiodic_Init();
+    gt_ch11crystalbtn_Init();
+    gt_ch11crystalreset_Init();
+    gt_ch11ursadondespawn_Init();
+    gt_ch13Init_Init();
+    gt_ch13lyotes_Init();
+    gt_ch18Init_Init();
+    gt_ch18chaser_Init();
+    gt_ch18marauders_Init();
+    gt_ch23Init_Init();
+    gt_ch23flame_Init();
+    gt_ch23blender_Init();
+    gt_ch23rnd_Init();
+    gt_ch23ufo_Init();
+    gt_ch23ufos_Init();
+    gt_ch23beardespawn_Init();
+}
+
+//--------------------------------------------------------------------------------------------------
+// Map Initialization
+//--------------------------------------------------------------------------------------------------
+void InitMap () {
+    InitLibs();
+    InitTriggers();
+}

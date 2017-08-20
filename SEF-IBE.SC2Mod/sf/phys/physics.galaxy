@@ -1,0 +1,5 @@
+void sf_phys_init()
+{
+    sd_init();
+    sf_phys_jump_init();
+}

@@ -1,0 +1,45 @@
+
+//
+// GAME
+//
+
+PLAYER[MAX_PLAYERS + 1] gm_players;
+// playergroup gm_playergroup = PlayerGroupEmpty();
+unitgroup gm_herogroup = UnitGroupEmpty();
+timer gm_timer;
+bool sf_game_dbg_fast_ui = false;
+
+void gm_setHeroPosition(structref<HERO> hero, point position, fixed facing, int reason);
+// int gm_getHeroIdByUnit(unit fromUnit, structref<HERO> hero);
+int gm_getPlayerByUnit(unit fromUnit);
+void gm_kill_hero(structref<HERO> hero);
+
+void sf_game_init();
+void sf_game_load_up();
+void sf_game_reset();
+void sf_game_prepare(playergroup pgroup);
+void sf_game_begin(int chal_id);
+void sf_game_reset();
+void sf_game_finalize(int player);
+void gm_spawnHero(structref<HERO> hero, int reason);
+void gm_spawnPlayers();
+
+//
+// HERO
+//
+
+void hr_registerTrigger(structref<HERO> hero, trigger trig);
+trigger hr_allocateTrigger(structref<HERO> hero, string func, bool levelScoped);
+int hr_getPlayerConnectedToTrigger(trigger trig);
+void hr_cleanTriggersAll();
+void hr_heroLevelUp(structref<HERO> hero);
+void hr_revive(int revivingPlayer, structref<HERO> hero, bool spawnHero);
+void hr_clearSlot(structref<HERO> hero);
+
+
+//
+// ABILITIES
+//
+
+void sf_game_abil_init();
+void sf_game_abil_shade_remove(unit shadeUnit);

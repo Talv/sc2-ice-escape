@@ -1,0 +1,71 @@
+include "TriggerLibs/NativeLib"
+
+include "LibEBBC9C87_h"
+
+//--------------------------------------------------------------------------------------------------
+// Library: SEF - Core
+//--------------------------------------------------------------------------------------------------
+// External Library Initialization
+void libEBBC9C87_InitLibraries () {
+    libNtve_InitVariables();
+}
+
+// Variable Initialization
+bool libEBBC9C87_InitVariables_completed = false;
+
+void libEBBC9C87_InitVariables () {
+    if (libEBBC9C87_InitVariables_completed) {
+        return;
+    }
+
+    libEBBC9C87_InitVariables_completed = true;
+
+}
+
+// Custom Script
+//--------------------------------------------------------------------------------------------------
+// Custom Script: Preload Core
+//--------------------------------------------------------------------------------------------------
+include "sf/entry.galaxy"
+
+void libEBBC9C87_InitCustomScript () {
+    sf_core_bootstrap();
+}
+
+// Presets
+string libEBBC9C87_ge_sfPhysicsSurfaceKind_Ident (int lp_val) {
+         if (lp_val == SURFACE_SNOW) { return "Snow"; }
+    else if (lp_val == SURFACE_LAND) { return "Land"; }
+    else if (lp_val == SURFACE_NORMAL_ICE) { return "NormalIce"; }
+    else if (lp_val == SURFACE_REVERSE_ICE) { return "ReverseIce"; }
+    else if (lp_val == SURFACE_STRAIGHT_ICE) { return "StraightIce"; }
+    else if (lp_val == SURFACE_FAST_ICE) { return "FastIce"; }
+    else if (lp_val == SURFACE_REVERSE_FAST_ICE) { return "ReverseFastIce"; }
+    else if (lp_val == SURFACE_90DEG_ICE) { return "Retarded90Ice"; }
+    else if (lp_val == SURFACE_REVERSE_GROUND) { return "ReverseGround"; }
+    return null;
+}
+
+// Functions
+void libEBBC9C87_gf_sfHeroChangePosition (unit lp_herounit, point lp_position, fixed lp_facing) {
+    // Implementation
+    gm_setHeroPosition(gm_players[UnitGetOwner(lp_herounit)].hero, lp_position, lp_facing, 0);
+}
+
+//--------------------------------------------------------------------------------------------------
+// Library Initialization
+//--------------------------------------------------------------------------------------------------
+bool libEBBC9C87_InitLib_completed = false;
+
+void libEBBC9C87_InitLib () {
+    if (libEBBC9C87_InitLib_completed) {
+        return;
+    }
+
+    libEBBC9C87_InitLib_completed = true;
+
+    libEBBC9C87_InitLibraries();
+    libEBBC9C87_InitVariables();
+    libEBBC9C87_InitCustomScript();
+}
+

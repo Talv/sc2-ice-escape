@@ -1,0 +1,5 @@
+// stub file
+
+string[2048] tm;
+void initTextureMap() {
+}

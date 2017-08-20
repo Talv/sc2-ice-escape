@@ -1,0 +1,21 @@
+static void sf_envi_generic_on_destroy(int obj_id)
+{
+}
+
+void sf_envi_generic_init()
+{
+    sf_envi_object_type_t obj_type;
+
+    obj_type.name = "generic";
+    obj_type.fn_destroy = sf_envi_generic_on_destroy;
+    sf_envi_object_register_type_at(obj_type, SF_ENVI_OBJECT_TYPE_GENERIC);
+}
+
+int sf_envi_generic_create(string unit_name, point pos)
+{
+    int obj_id;
+
+    obj_id = sf_envi_object_create_main_at(SF_ENVI_OBJECT_TYPE_GENERIC, unit_name, pos);
+
+    return obj_id;
+}

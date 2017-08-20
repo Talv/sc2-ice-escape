@@ -1,0 +1,45 @@
+void sf_phys_init();
+
+//
+// SLIDING
+//
+
+int [8]sf_phys_text_surface;
+
+void sd_init();
+bool sf_phys_is_point_on_land(point pt);
+bool sf_phys_is_point_on_ice(point pt);
+bool sf_phys_is_ice(int surface, int excludeSurface);
+bool sf_phys_is_land(int surface, int excludeSurface);
+int sd_getSurfaceAt(point pt);
+
+//
+// JUMPING
+//
+
+void sf_phys_jump_init();
+bool sf_phys_is_unit_during_jump(unit munit);
+bool sf_phys_get_unit_jump_info(unit munit, structref<sf_phys_jump_info_t> jump_info);
+void sf_phys_restore_unit_jump_info(unit munit, structref<sf_phys_jump_info_t> jump_info);
+void sf_phys_abort_unit_jump(unit munit);
+bool sf_phys_jump_launch(unit munit, point landing_point, fixed flight_height, fixed height_boost);
+
+//
+// COLLISIONS
+//
+
+unitgroup cl_group = UnitGroupEmpty();
+
+COLLISION_INFO[COLLISIONS_INFO_SIZE] cl_info;
+
+void cl_registerUnit(unit rUnit, int type);
+void cl_unregisterUnit(unit rUnit);
+void cl_clear();
+void cl_periodicTest(structref<HERO> hero);
+unitgroup cl_getCollidingUnits(unit mainUnit, fixed collisionRadius);
+fixed cl_getUnitRadius(unit munit, fixed collider_radius);
+
+void sf_phys_collision_info_override(string unit_type, fixed radius, bool exclude_collider_radius);
+void sf_phys_collision_info_clear(string unit_type);
+void sf_phys_local_collision_info_override(unit munit, fixed radius, bool exclude_collider_radius);
+void sf_phys_local_collision_info_clear(unit munit);

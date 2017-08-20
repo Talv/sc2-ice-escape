@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Desc>
+    <Frame type="Frame" name="Overview">
+
+        <Frame type="Frame" name="HeaderFrame">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="50"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+            <Height val="180"/>
+
+            <Frame type="Label" name="IntroLabel">
+                <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+                <Anchor side="Left" relative="$parent" pos="Mid" offset="0"/>
+                <Anchor side="Right" relative="$parent" pos="Mid" offset="0"/>
+                <Text val="(Current challenge)"/>
+                <Style val="Void_VictoryTimerTitle"/>
+                <Height val="30"/>
+            </Frame>
+
+            <Frame type="Label" name="CurrentChallengeTitle">
+                <Anchor side="Top" relative="$parent/IntroLabel" pos="Min" offset="20"/>
+                <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+                <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+                <Style val="Void_VictoryTitleLabel"/>
+                <Text val="1. Lorem ipsum"/>
+                <Height val="70"/>
+            </Frame>
+
+            <Frame type="Label" name="CurrentChallengeDesc">
+                <Anchor side="Top" relative="$parent/CurrentChallengeTitle" pos="Max" offset="0"/>
+                <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+                <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+                <Style val="IBE_OverviewDescription"/>
+                <Text val="subtitle"/>
+                <Height val="70"/>
+            </Frame>
+        </Frame>
+
+        <Frame type="Frame" name="Players">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+            <!-- <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/> -->
+            <Height val="150" />
+        </Frame>
+    </Frame>
+</Desc>

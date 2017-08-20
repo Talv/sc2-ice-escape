@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CBehaviorBuff id="250mmStrikeCannons">
+        <Duration value="2"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="ButtonActive">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorVeterancy id="IceBaneLeveling">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <VeterancyLevelArray>
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="1">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="2">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="3">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="4">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="5">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="6">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="7">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="8">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="9">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="10">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="11">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="12">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="13">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="14">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="15">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="16">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="17">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="18">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="19">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="20">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="21">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="22">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="23">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="24">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="25">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="26">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="27">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="28">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="29">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <XPFraction index="Kills" value="0"/>
+    </CBehaviorVeterancy>
+    <CBehaviorBuff id="InFlight">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="Invisible">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="10"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="PowerBoostLevel1">
+        <Alignment value="Positive"/>
+        <Cost>
+            <Charge Link="Behavior/Stimpack"/>
+            <Cooldown>
+                <Link value="Behavior/PowerBoost"/>
+                <Location value="Global"/>
+                <TimeStart value="10"/>
+                <TimeUse value="10"/>
+            </Cooldown>
+        </Cost>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-rapidregeneration.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="10"/>
+        <Modification MoveSpeedMultiplier="1.2" AttackSpeedMultiplier="1.5">
+            <DeathResponse>
+                <Cost>
+                    <Charge Link="Behavior/Stimpack"/>
+                    <Cooldown Link="Behavior/PowerBoost"/>
+                </Cost>
+            </DeathResponse>
+        </Modification>
+        <DamageResponse>
+            <Cost>
+                <Charge Link="Behavior/Stimpack"/>
+                <Cooldown Link="Behavior/PowerBoost"/>
+            </Cost>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="PowerBoostLevel2">
+        <Alignment value="Positive"/>
+        <Cost>
+            <Charge Link="Behavior/Stimpack"/>
+            <Cooldown>
+                <Link value="Behavior/PowerBoost"/>
+                <Location value="Global"/>
+                <TimeStart value="10"/>
+                <TimeUse value="10"/>
+            </Cooldown>
+        </Cost>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-rapidregeneration.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="10"/>
+        <Modification MoveSpeedMultiplier="1.4" AttackSpeedMultiplier="1.5">
+            <DeathResponse>
+                <Cost>
+                    <Charge Link="Behavior/Stimpack"/>
+                    <Cooldown Link="Behavior/PowerBoost"/>
+                </Cost>
+            </DeathResponse>
+        </Modification>
+        <DamageResponse>
+            <Cost>
+                <Charge Link="Behavior/Stimpack"/>
+                <Cooldown Link="Behavior/PowerBoost"/>
+            </Cost>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="PowerBoostLevel03">
+        <Alignment value="Positive"/>
+        <Cost>
+            <Charge Link="Behavior/Stimpack"/>
+            <Cooldown>
+                <Link value="Behavior/PowerBoost"/>
+                <Location value="Global"/>
+                <TimeStart value="10"/>
+                <TimeUse value="10"/>
+            </Cooldown>
+        </Cost>
+        <InfoIcon value="Assets\Textures\btn-ability-zerg-rapidregeneration.dds"/>
+        <EditorCategories value="Race:Terran,AbilityorEffectType:Units"/>
+        <Duration value="10"/>
+        <Modification MoveSpeedMultiplier="1.8" AttackSpeedMultiplier="1.5">
+            <DeathResponse>
+                <Cost>
+                    <Charge Link="Behavior/Stimpack"/>
+                    <Cooldown Link="Behavior/PowerBoost"/>
+                </Cost>
+            </DeathResponse>
+        </Modification>
+        <DamageResponse>
+            <Cost>
+                <Charge Link="Behavior/Stimpack"/>
+                <Cooldown Link="Behavior/PowerBoost"/>
+            </Cost>
+        </DamageResponse>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="ShadeTimeout">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <DisplayDuration index="Self" value="1"/>
+        <DisplayDuration index="Ally" value="1"/>
+        <DisplayDuration index="Neutral" value="1"/>
+        <DisplayDuration index="Enemy" value="1"/>
+        <BuffFlags index="RefreshStack" value="1"/>
+        <Duration value="6"/>
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="playerNotCollidewithUnits">
+        <Cost>
+            <Charge Link="Behavior/switchSlabPutUpInit"/>
+            <Cooldown Link="Behavior/switchSlabPutUpInit"/>
+        </Cost>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Modification>
+            <StateFlags index="SuppressCollision" value="1"/>
+            <DeathResponse>
+                <Cost>
+                    <Charge Link="Behavior/switchSlabPutUpInit"/>
+                    <Cooldown Link="Behavior/switchSlabPutUpInit"/>
+                </Cost>
+            </DeathResponse>
+        </Modification>
+        <DamageResponse>
+            <Cost>
+                <Charge Link="Behavior/switchSlabPutUpInit"/>
+                <Cooldown Link="Behavior/switchSlabPutUpInit"/>
+            </Cost>
+        </DamageResponse>
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="switchSlabPutUpInit">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <InitialEffect value="slabSwitchPutUpInstantly"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="ART">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="6"/>
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="DisableSelfCollision">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Modification>
+            <StateFlags index="SuppressCollision" value="1"/>
+        </Modification>
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorVeterancy id="HeroVeterancy">
+        <VeterancyLevelArray>
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="1">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="2">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="3">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="4">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="5">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="6">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="7">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="8">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="9">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="10">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="11">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="12">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="13">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="14">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="15">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="16">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="17">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="18">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="19">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="20">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="21">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="22">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="23">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="24">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="25">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="26">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="27">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="28">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <VeterancyLevelArray MinVeterancyXP="29">
+            <Modification>
+                <DeathResponse>
+                    <Type index="Remove" value="1"/>
+                </DeathResponse>
+            </Modification>
+        </VeterancyLevelArray>
+        <XPFraction index="Kills" value="0"/>
+    </CBehaviorVeterancy>
+    <CBehaviorBuff id="IceBoost">
+        <Alignment value="Positive"/>
+        <Duration value="2.5"/>
+        <InfoFlags index="Hidden" value="1"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="LandBoost1">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="10.2"/>
+        <Modification MoveSpeedMultiplier="1.2"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="LandBoost2">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="10.2"/>
+        <Modification MoveSpeedMultiplier="1.4"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="LandBoost3">
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="10.2"/>
+        <Modification MoveSpeedMultiplier="1.8"/>
+    </CBehaviorBuff>
+    <CBehaviorBuff id="LevelUpDummyBehavior">
+        <InfoFlags index="Hidden" value="1"/>
+        <EditorCategories value="AbilityorEffectType:Units"/>
+        <Duration value="3"/>
+    </CBehaviorBuff>
+</Catalog>

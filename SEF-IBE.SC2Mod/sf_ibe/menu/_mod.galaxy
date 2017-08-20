@@ -1,0 +1,85 @@
+const int IBE_MENU_PANEL_WIDTH = 1350;
+const int IBE_MENU_PANEL_HEIGHT = 950;
+
+const int IBE_MENU_TAB_OVERVIEW = 1;
+const int IBE_MENU_TAB_RANKING = 2;
+const int IBE_MENU_TAB_PROFILES = 3;
+const int IBE_MENU_TAB_OPTIONS = 4;
+
+//
+// PROFILE
+//
+
+const int IBE_PROFILE_SECTION_MAX = 32;
+
+const int IBE_PROFILE_SECTION_RATING = 1;
+const int IBE_PROFILE_SECTION_GENERAL = 2;
+const int IBE_PROFILE_SECTION_ABIL = 3;
+
+const int IBE_PROFILE_SECTION_INFO_REVIVES = 1;
+const int IBE_PROFILE_SECTION_INFO_DEATHS = 2;
+const int IBE_PROFILE_SECTION_INFO_CHALLENGES_COMPLETED_TOTAL = 3;
+const int IBE_PROFILE_SECTION_INFO_POWERUPS_ACQUIRED_TOTAL = 4;
+const int IBE_PROFILE_SECTION_INFO_BUTTONS_PUSHED_TOTAL = 5;
+
+const int IBE_PROFILE_SECTION_INFO_GAMES_PLAYED = 10;
+const int IBE_PROFILE_SECTION_INFO_TIME_PLAYED = 11;
+const int IBE_PROFILE_SECTION_INFO_ESCAPES = 12;
+const int IBE_PROFILE_SECTION_INFO_ESCAPE_BEST_TIME = 13;
+
+const int IBE_PROFILE_SECTION_INFO_ABIL_S1 = 21;
+const int IBE_PROFILE_SECTION_INFO_ABIL_S2 = 22;
+const int IBE_PROFILE_SECTION_INFO_ABIL_S3 = 23;
+const int IBE_PROFILE_SECTION_INFO_ABIL_S4 = 24;
+const int IBE_PROFILE_SECTION_INFO_ABIL_S5 = 25;
+const int IBE_PROFILE_SECTION_INFO_ABIL_S6 = 26;
+const int IBE_PROFILE_SECTION_INFO_ABIL_S7 = 27;
+const int IBE_PROFILE_SECTION_INFO_ABIL_S8 = 28;
+
+struct ibe_profile_section_info_t {
+    int panel;
+    int lbl_title;
+    int lbl_value;
+};
+
+struct ibe_profile_section_t {
+    int panel;
+    int lbl_heading;
+    int info_count;
+};
+
+//
+// OPTION
+//
+
+const string IBE_MENU_OPTION_AS_NEW_CHAL = "as_new_chal";
+const string IBE_MENU_OPTION_AS_REVIVE_GENERIC = "as_revive_generic";
+const string IBE_MENU_OPTION_AS_REVIVE_ART = "as_revive_art";
+const string IBE_MENU_OPTION_CAMERA_PAN = "camera_pan";
+const string IBE_MENU_OPTION_DISABLE_MINIMAP_COMMANDS = "disable_minimap_commands";
+const string IBE_MENU_OPTION_UI_HIDE_MINIMAP = "ui_hide_minimap";
+const string IBE_MENU_OPTION_UI_HIDE_SCOREBOARD = "ui_hide_scoreboard";
+const string IBE_MENU_OPTION_UI_HIDE_TIMER = "ui_hide_timer";
+const string IBE_MENU_OPTION_UI_HIDE_CHALLENGE = "ui_hide_challenge";
+const string IBE_MENU_OPTION_UI_HIDE_COMMAND_CARD = "ui_hide_command_card";
+
+const int IBE_MENU_OPT_AS_VAL_NEVER = 0;
+const int IBE_MENU_OPT_AS_VAL_ALWAYS = 1;
+const int IBE_MENU_OPT_AS_VAL_WHEN_EMPTY_SELECTION = 2;
+const int IBE_MENU_OPT_AS_VAL_WHEN_NOT_IN_CTRL = 3;
+
+//
+// RANKING
+//
+
+const int IBE_MENU_RANK_SECT_MAX = 3;
+
+const int IBE_MENU_RANK_SECTION_PLAYERS = 0;
+const int IBE_MENU_RANK_SECTION_ESCAPES = 1;
+const int IBE_MENU_RANK_SECTION_CHALLENGES = 2;
+
+struct ibe_menu_rank_sect_t {
+    int panel;
+    int table;
+    ibe_ui_dg_t dg;
+};

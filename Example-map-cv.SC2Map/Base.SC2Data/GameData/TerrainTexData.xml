@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrainTex id="sfSuperIce">
+        <Texture value="Assets\Textures\super_ice.tga"/>
+        <Normalmap value="Assets\Textures\niflheim_ice_smoothnormal.dds"/>
+    </CTerrainTex>
+    <CTerrainTex id="sfSuperReverseIce">
+        <Texture value="Assets\Textures\super_reverse_ice.tga"/>
+    </CTerrainTex>
+</Catalog>

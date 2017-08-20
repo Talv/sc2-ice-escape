@@ -1,0 +1,94 @@
+trigger sf_envi_powerup_trig_acquire = null;
+
+static void sf_envi_powerup_on_destroy(int obj_id)
+{
+}
+
+void sf_envi_powerup_cleanup()
+{
+    if (sf_envi_powerup_trig_acquire != null) {
+        TriggerStop(sf_envi_powerup_trig_acquire);
+        TriggerDestroy(sf_envi_powerup_trig_acquire);
+        sf_envi_powerup_trig_acquire = null;
+    }
+}
+
+void sf_envi_powerup_init()
+{
+    sf_envi_object_type_t obj_type;
+
+    obj_type.name = "powerup";
+    obj_type.fn_destroy = sf_envi_powerup_on_destroy;
+    sf_envi_object_register_type_at(obj_type, SF_ENVI_OBJECT_TYPE_POWERUP);
+}
+
+int sf_envi_powerup_create(string unit_name, point pos)
+{
+    int obj_id;
+    int i;
+    structref<HERO> hero;
+
+    obj_id = sf_envi_object_create_main_at(SF_ENVI_OBJECT_TYPE_POWERUP, unit_name, pos);
+
+    if (sf_envi_powerup_trig_acquire == null) {
+        sf_envi_powerup_trig_acquire = TriggerCreate("sf_envi_powerup_on_acquire");
+    }
+
+    for (i = 1; i <= UnitGroupCount(gm_herogroup, c_unitCountAll); i+= 1) {
+        hero = gm_players[gm_getPlayerByUnit(UnitGroupUnit(gm_herogroup, i))].hero;
+        if (!UnitIsValid(hero.mainUnit)) { continue; }
+        TriggerAddEventUnitRange(
+            sf_envi_powerup_trig_acquire,
+            UnitRefFromUnit(hero.mainUnit),
+            sf_envi_object_instances[obj_id].main_unit,
+            UnitGetPropertyFixed(sf_envi_object_instances[obj_id].main_unit, c_unitPropRadius, true),
+            true
+        );
+    }
+
+    return obj_id;
+}
+
+bool sf_envi_powerup_on_acquire(bool test_conds, bool run_actions)
+{
+    structref<HERO> hero;
+    int player_id;
+    unit hero_unit;
+    unit powerup_unit;
+
+    hero_unit = EventUnit();
+    powerup_unit = EventUnitRangeUnit();
+
+    // if already taken (trigger still fires, even after unit was removed..)
+    if (!UnitIsValid(powerup_unit)) {
+        return false;
+    }
+
+    if (!UnitGroupHasUnit(gm_herogroup, hero_unit)) {
+        return false;
+    }
+
+    player_id = UnitGetOwner(hero_unit);
+    hero = gm_players[player_id].hero;
+
+    if (sf_phys_is_unit_during_jump(hero.mainUnit) || hero.paused) {
+        return false;
+    }
+
+    hr_heroLevelUp(hero);
+
+    sf_stat_session_stats[player_id].powerups += 1;
+    sf_stat_session_expire(player_id);
+
+    sf_core_event_prepare("powerup_acquired");
+    sf_core_event_set_int("powerup", sf_envi_object_get_by_unit(powerup_unit));
+    sf_core_event_set_int("challenge_id", lv_current);
+    sf_core_event_set_int("player", hero.player);
+    sf_core_event_send();
+
+    SoundPlay(SoundLink("UI_EvolutionPit_Mutate", 1), PlayerGroupAll(), 70.0, 0);
+
+    UnitRemove(powerup_unit);
+
+    return true;
+}

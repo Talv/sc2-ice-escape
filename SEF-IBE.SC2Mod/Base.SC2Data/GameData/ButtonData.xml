@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CButton id="ART">
+        <Icon value="Assets\Textures\btn-research-terran-orbitalstrikerally.dds"/>
+        <AlertIcon value="Assets\Textures\btn-research-terran-orbitalstrikerally.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Universal value="1"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="TimeShift">
+        <Icon value="Assets\Textures\btn-ability-protoss-phaseshift2.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-protoss-phaseshift2.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <HotkeyAlias value=""/>
+        <Universal value="1"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="ARTswitch">
+        <Icon value="switchIcon2.tga"/>
+        <AlertIcon value="switchIcon2.tga"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Universal value="1"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="HealRedirect2" parent="Heal"/>
+    <CButton id="PowerBoost">
+        <Icon value="Assets\Textures\btn-ability-zerg-rapidregeneration-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-terran-stimpack-color.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Universal value="1"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="Propel">
+        <Icon value="Assets\Textures\btn-ability-zerg-generatecreep-color.dds"/>
+        <AlertIcon value="Assets\Textures\btn-ability-zerg-generatecreep-color.dds"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Universal value="1"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="ThrowEssence">
+        <Icon value="essenceTorus2.tga"/>
+        <AlertIcon value="essenceTorus2.tga"/>
+        <EditorCategories value="Race:Zerg"/>
+        <Universal value="1"/>
+        <HidesForSimpleText value="0"/>
+    </CButton>
+    <CButton id="ARTSwitch">
+        <Icon value="switchIcon2.tga"/>
+    </CButton>
+    <CButton id="IceBoost">
+        <Icon value="Assets\Textures\abilityicon_spawnbroodlings_square.dds"/>
+    </CButton>
+    <CButton id="HeroLearn">
+        <Icon value="Assets\Textures\btn-ability-terran-heal-color.dds"/>
+    </CButton>
+    <CButton id="LandBoost">
+        <Icon value="Assets\Textures\btn-ability-kerrigan-twindrones.dds"/>
+    </CButton>
+    <CButton id="ReviveCoin">
+        <Icon value="Assets\Textures\btn-ability-kerrigan-droppods.dds"/>
+    </CButton>
+    <CButton id="Shade">
+        <Icon value="Assets\Textures\btn-ability-kerrigan-vespeneefficiency.dds"/>
+    </CButton>
+    <CButton id="ShadeUse">
+        <Icon value="Assets\Textures\btn-ability-zerg-siphon.dds"/>
+    </CButton>
+    <CButton id="Stone"/>
+</Catalog>

@@ -1,0 +1,54 @@
+static void sf_envi_creature_on_destroy(int obj_id)
+{
+}
+
+static void sf_envi_creature_prepare(int obj_id)
+{
+    cl_registerUnit(sf_envi_object_instances[obj_id].main_unit, CL_TYPE_KILLER);
+    sf_make_unit_selectable(sf_envi_object_instances[obj_id].main_unit, false);
+}
+
+void sf_envi_creature_init()
+{
+    sf_envi_object_type_t obj_type;
+
+    obj_type.name = "creature";
+    obj_type.fn_destroy = sf_envi_creature_on_destroy;
+    sf_envi_object_register_type_at(obj_type, SF_ENVI_OBJECT_TYPE_CREATURE);
+}
+
+int sf_envi_creature_create(string unit_name, point pos)
+{
+    int obj_id;
+
+    if (pos == null) {
+        pos = Point(0.0, 0.0);
+        PointSetFacing(pos, 90.0);
+    }
+
+    obj_id = sf_envi_object_create_main_at(SF_ENVI_OBJECT_TYPE_CREATURE, unit_name, pos);
+    sf_envi_creature_prepare(obj_id);
+
+    return obj_id;
+}
+
+
+int sf_envi_creature_create_preplaced(unit munit)
+{
+    int obj_id;
+
+    obj_id = sf_envi_object_create_from_unit(SF_ENVI_OBJECT_TYPE_CREATURE, munit);
+    sf_envi_creature_prepare(obj_id);
+
+    return obj_id;
+}
+
+void sf_envi_creature_set_enabled(int obj_id, bool enabled)
+{
+    if (enabled) {
+        cl_registerUnit(sf_envi_object_instances[obj_id].main_unit, CL_TYPE_KILLER);
+    }
+    else {
+        cl_unregisterUnit(sf_envi_object_instances[obj_id].main_unit);
+    }
+}

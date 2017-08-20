@@ -1,0 +1,86 @@
+// -------------------------------
+// ----------- GAME --------------
+// -------------------------------
+
+
+//
+// COMMON CONSTANTS
+//
+
+const fixed M_PI = 3.14159265358979323846;
+const int EMPTY = -1;
+const fixed TICK_PERIOD = 0.0625;
+
+//
+// GLOBAL
+//
+
+const int UNIT_CUSTOM_OBJECT_ID = 2;
+const int UNIT_CUSTOM_CONTROLLER_ID = 3;
+const int UNIT_CUSTOM_CONTROLLER_ACTION = 4;
+const int UNIT_CUSTOM_CONTROLLER_BACKWARD = 5;
+const int UNIT_CUSTOM_SHADE_ANGLE = 6;
+const int UNIT_CUSTOM_IS_FLYER = 7;
+const int UNIT_CUSTOM_ZONE_WARMUP = 8;
+const int UNIT_CUSTOM_ZONE_ID = 9;
+const int SF_GAME_UNIT_CUSTOM_IN_JUMP = 10;
+const int SF_GAME_UNIT_CUSTOM_IMITATOR_COMP_DISTANCE = 11;
+const int SF_GAME_UNIT_CUSTOM_IMITATOR_COMP_ANGLE = 12;
+const int SF_GAME_UVAL_EXECUTOR_TIME_FRAME = 13;
+// const int SF_GAME_UVAL_SKID_VALUE = 14;
+// const int SF_GAME_UVAL_SKID_DIRECTION = 15;
+const int SF_GAME_UVAL_PREPARE_CHAIN_JUMP = 16;
+
+const int UNIT_CUSTOM_COLLIDER_TYPE = 21;
+const int SF_GAME_UNIT_CUSTOM_COLLIDER_SHAPE = 22;
+const int SF_GAME_UNIT_CUSTOM_COLLIDER_SIZE_X = 23;
+const int SF_GAME_UNIT_CUSTOM_COLLIDER_SIZE_Y = 24;
+const int SF_GAME_UVAL_COLLIDER_RADIUS = 25;
+const int SF_GAME_UVAL_CUSTOM = 40;
+
+//
+// DECLARATIONS
+//
+
+const int MAX_PLAYERS = 10;
+const int MAX_LEVELS = 30;
+
+const int HERO_MAX_TRIGGERS = 128;
+
+struct HERO {
+    int player;
+    int ctrl_player;
+    unit mainUnit;
+    unit guideUnit;
+    unit corpseUnit;
+    unit shadeUnit;
+
+    int surfaceType;
+    fixed noTurnFacing;
+    bool noTurnProcess;
+    bool supress_turn;
+    fixed super_factor;
+
+    bool paused;
+
+    bool artActive;
+    bool artSwitch;
+    bool propeling;
+
+    trigger[HERO_MAX_TRIGGERS] attachedTriggers;
+
+    fixed desiredAngle;
+    fixed turnFactor;
+};
+
+struct PLAYER {
+    bool active;
+    bool ingame;
+    bool human;
+
+    HERO hero;
+};
+
+const int HERO_POSITION_CHANGE_REASON_NEW_MAP = 1;
+const int HERO_POSITION_CHANGE_REASON_ART = 2;
+const int HERO_POSITION_CHANGE_REASON_REVIVE = 3;

@@ -1,0 +1,148 @@
+void db_table_create(structref<db_table_t> table, string name, int version)
+{
+    table.name = name;
+    table.version = version;
+}
+
+void db_table_column_add(structref<db_table_t> table, string name, int type)
+{
+    if (table.column_count - 1 >= DB_TABLE_COLUMN_MAX) {
+        Dbg("[table/column_add] column max");
+        return;
+    }
+    table.columns[table.column_count].name = name;
+    table.columns[table.column_count].type = type;
+    table.column_count += 1;
+}
+
+void db_storage_init(structref<db_storage_t> storage)
+{
+    int i;
+
+    for (i = 0; i < DB_TABLE_RECORD_MAX; i += 1) {
+        storage.records[i] = -1;
+    }
+
+    return 0;
+}
+
+void db_storage_free(structref<db_storage_t> storage)
+{
+    // TODO:
+}
+
+int db_load_stream(structref<db_table_t> table, structref<db_storage_t> storage)
+{
+    int i;
+
+    Dbg("[db/load_stream] table = " + table.name + " version = " + IntToString(table.version));
+
+    for (i = 0; i < table.column_count; i += 1) {
+        Dbg("[db/load_stream] key = " + table.columns[i].name + " type = " + IntToString(table.columns[i].type));
+
+        if (table.columns[i].type == DB_SCHEMA_ET_INTEGER) {
+            storage.columns[i].val_integer = db_crypt_pop_int();
+            Dbg("[db/load_stream] value = " + IntToString(storage.columns[i].val_integer));
+        }
+        else if (table.columns[i].type == DB_SCHEMA_ET_FIXED) {
+            storage.columns[i].val_fixed = db_crypt_pop_fixed();
+            Dbg("[db/load_stream] value = " + FixedToString(storage.columns[i].val_fixed, -1));
+        }
+        else if (table.columns[i].type == DB_SCHEMA_ET_STRING) {
+            storage.columns[i].val_string = db_crypt_pop_string();
+            Dbg("[db/load_stream] value = " + storage.columns[i].val_string);
+        }
+        else {
+            Dbg("[db/load_stream] value unkown");
+        }
+    }
+
+    return 0;
+}
+
+int db_encrypt_from_table(structref<db_table_t> table, structref<db_storage_t> storage)
+{
+    int i;
+
+    Dbg("[table/encrypt] table = " + table.name + " version = " + IntToString(table.version));
+
+    for (i = 0; i < table.column_count; i += 1) {
+        Dbg("[table/encrypt] key = " + table.columns[i].name + " type = " + IntToString(table.columns[i].type));
+
+        if (table.columns[i].type == DB_SCHEMA_ET_INTEGER) {
+            db_crypt_push_int(storage.columns[i].val_integer);
+            Dbg("[table/encrypt] value = " + IntToString(storage.columns[i].val_integer));
+        }
+        else if (table.columns[i].type == DB_SCHEMA_ET_FIXED) {
+            db_crypt_push_fixed(storage.columns[i].val_fixed);
+            Dbg("[table/encrypt] value = " + FixedToString(storage.columns[i].val_fixed, -1));
+        }
+        else if (table.columns[i].type == DB_SCHEMA_ET_STRING) {
+            db_crypt_push_string(storage.columns[i].val_string);
+            Dbg("[table/encrypt] value = " + storage.columns[i].val_string);
+        }
+        else {
+            Dbg("[table/encrypt] value unkown");
+        }
+    }
+
+    return 0;
+}
+
+int db_storage_key_index(structref<db_storage_t> storage, string name)
+{
+    int i;
+
+    for (i = 0; i < DB_SCHEMA_ENTRY_MAX; i += 1) {
+        if (storage.columns[i].name != name) { continue; }
+
+        return i;
+    }
+
+    return -1;
+}
+
+int db_storage_set_int(structref<db_storage_t> storage, string name, int value)
+{
+    int idx;
+
+    idx = db_storage_key_index(storage, name);
+
+    if (idx == -1) {
+        return -1;
+    }
+
+    storage.columns[idx].val_integer = value;
+
+    return 0;
+}
+
+int db_storage_set_fixed(structref<db_storage_t> storage, string name, fixed value)
+{
+    int idx;
+
+    idx = db_storage_key_index(storage, name);
+
+    if (idx == -1) {
+        return -1;
+    }
+
+    storage.columns[idx].val_fixed = value;
+
+    return 0;
+}
+
+int db_storage_set_str(structref<db_storage_t> storage, string name, string value)
+{
+    int idx;
+
+    idx = db_storage_key_index(storage, name);
+
+    if (idx == -1) {
+        return -1;
+    }
+
+    storage.columns[idx].val_string = value;
+
+    return 0;
+}

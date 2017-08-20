@@ -1,0 +1,120 @@
+static int ibe_stat_grl_sort_key(structref<ibe_stat_gresult_t> gres)
+{
+    if (gres.escape_time == 0) {
+        return 3600 * 10;
+    }
+    else {
+        return FixedToInt(gres.escape_time);
+    }
+}
+
+static void ibe_stat_grl_cleanup(int player)
+{
+    int i;
+    int[IBE_STAT_GLR_PLAYER_MAX] table_index;
+    string[IBE_STAT_GLR_PLAYER_MAX] table_section;
+    int tmp_index;
+    string tmp_section;
+    int changes = 1;
+    int count;
+    bool valid;
+    string section;
+    ibe_stat_gresult_t gres;
+
+    // load
+    for (i = 0; i < IBE_STAT_GLR_PLAYER_MAX; i += 1) {
+        section = "gr" + IntToString(i);
+        if (!BankSectionExists(ibe_stat_profiles[player].storage, section)) { continue; }
+        valid = ibe_stat_gresult_load(
+            ibe_stat_profiles[player].storage,
+            section,
+            gres
+        );
+        if (!valid) { continue; }
+        table_index[count] = ibe_stat_grl_sort_key(gres);
+        table_section[count] = section;
+        count += 1;
+    }
+
+    if (count < IBE_STAT_GRL_PLIMIT) {
+        return;
+    }
+
+    // sort
+    while (changes > 0) {
+        changes = 0;
+        for (i = 1; i < count; i += 1) {
+            if (table_index[i - 1] > table_index[i]) {
+                tmp_index = table_index[i - 1];
+                tmp_section = table_section[i - 1];
+                table_index[i - 1] = table_index[i];
+                table_section[i - 1] = table_section[i];
+                table_index[i] = tmp_index;
+                table_section[i] = tmp_section;
+                changes += 1;
+            }
+        }
+    }
+
+    // erase
+    for (i = IBE_STAT_GRL_PLIMIT; i < count; i += 1) {
+        Dbg("[grl/erase] idx = " + IntToString(i) + " sort = " + IntToString(table_index[i]) + " sect = " + table_section[i]);
+        BankSectionRemove(ibe_stat_profiles[player].storage, table_section[i]);
+    }
+}
+
+void ibe_stat_grl_load_section(int player, string section)
+{
+    bool valid;
+    string hash;
+
+    if (ibe_stat_grl_list_counter >= IBE_STAT_GLR_MAX) {
+        Dbg("IBE_STAT_GLR_MAX overflow");
+        return;
+    }
+
+    valid = ibe_stat_gresult_load(
+        ibe_stat_profiles[player].storage,
+        section,
+        ibe_stat_grl_list[ibe_stat_grl_list_counter]
+    );
+    if (!valid) {
+        return;
+    }
+    hash = ibe_stat_gresult_hash(ibe_stat_grl_list[ibe_stat_grl_list_counter]);
+    // Dbg("[grl/load_sec] hash = " + hash);
+    if (DataTableValueExists(true, "ibe_gr_" + hash)) {
+        // Dbg("[grl/load_sec] already exists");
+        return;
+    }
+    DataTableSetInt(true, "ibe_gr_" + hash, ibe_stat_grl_list_counter);
+    ibe_stat_grl_list_counter += 1;
+    // Dbg("[grl/load_sec] loaded; count = " + IntToString(ibe_stat_grl_list_counter));
+}
+
+void ibe_stat_grl_load_player(int player)
+{
+    int i;
+    string section;
+
+    for (i = 0; i < IBE_STAT_GLR_PLAYER_MAX; i += 1) {
+        section = "gr" + IntToString(i);
+        if (!BankSectionExists(ibe_stat_profiles[player].storage, section)) { continue; }
+        ibe_stat_grl_load_section(player, section);
+    }
+}
+
+void ibe_stat_grl_init()
+{
+    int player;
+
+    for (player = 1; player <= MAX_PLAYERS; player += 1) {
+        if (PlayerType(player) != c_playerTypeUser) { continue; }
+        if (PlayerStatus(player) != c_playerStatusActive) { continue; }
+        // Dbg("[grl/init] processing player = " + IntToString(player));
+        ibe_stat_grl_cleanup(player);
+        ibe_stat_grl_load_player(player);
+    }
+
+    // Dbg("[grl/init] loaded escapes = " + IntToString(ibe_stat_grl_list_counter));
+}

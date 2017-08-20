@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Desc>
+    <Include path="UI/Layout/Custom/VoidShared_GenericTemplates.SC2Layout"/>
+    <Include path="UI/Layout/IBE_GenericTemplates.SC2Layout"/>
+    <Include path="UI/Layout/IBE_Console.SC2Layout"/>
+    <Include path="UI/Layout/IBE_Stats.SC2Layout"/>
+    <Include path="UI/Layout/IBE_ModeSelection.SC2Layout"/>
+    <Include path="UI/Layout/IBE_Overview.SC2Layout"/>
+    <Include path="UI/Layout/IBE_Profile.SC2Layout"/>
+    <Include path="UI/Layout/IBE_Ranking.SC2Layout"/>
+    <Include path="UI/Layout/IBE_Options.SC2Layout"/>
+    <Include path="UI/Layout/IBE_Menu.SC2Layout"/>
+</Desc>

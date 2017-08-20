@@ -1,0 +1,102 @@
+sf_envi_object_type_t [SF_ENVI_OBJECT_TYPE_LIMIT]sf_envi_object_types;
+sf_envi_object_instance_t [SF_ENVI_OBJECT_INSTANCE_LIMIT]sf_envi_object_instances;
+
+void sf_envi_init();
+void sf_envi_mod_cleanup();
+
+// objects
+void sf_envi_object_destroy_instance(int obj_id);
+void sf_envi_object_clear_all();
+int sf_envi_object_register_type(structref<sf_envi_object_type_t> obj_type);
+void sf_envi_object_register_type_at(structref<sf_envi_object_type_t> obj_type, int id);
+int sf_envi_object_create(int id);
+int sf_envi_object_create_main_at(int type_id, string unit_name, point pos);
+int sf_envi_object_create_from_unit(int type_id, unit munit);
+int sf_envi_object_last_created();
+int sf_envi_object_get_by_unit(unit munit);
+int sf_envi_object_get_by_origin_position(point pos);
+int sf_envi_object_from_reference(int ref);
+void sf_envi_object_assign_reference(int obj_id, int ref);
+unitgroup sf_envi_object_get_unit_group(int obj_id);
+unit sf_envi_object_get_base_unit(int obj_id);
+int sf_envi_event_object();
+
+// creatures
+void sf_envi_creature_init();
+int sf_envi_creature_create(string unit_name, point pt);
+int sf_envi_creature_create_preplaced(unit munit);
+void sf_envi_creature_set_enabled(int obj_id, bool enabled);
+
+// catapults
+void sf_envi_catapult_init();
+int sf_envi_catapult_create_from_unit(unit cata_unit, region rg_act, point destination);
+void sf_envi_catapult_set_auto_launch(int obj_id, bool auto_launch);
+void sf_envi_catapult_set_height_boost(int obj_id, fixed height_boost);
+void sf_envi_catapult_set_lateral_offset(int obj_id, fixed lateral_offset);
+void sf_envi_catapult_launch(int obj_id);
+
+// jump zones
+void sf_envi_jump_zone_init();
+int sf_envi_jump_zone_create(region rg_act, fixed distance);
+
+// buttons
+void sf_envi_button_init();
+int sf_envi_button_create(string unit_name, point pos, region btn_region);
+void sf_envi_button_set_state(int obj_id, int state);
+int sf_envi_button_get_state(int obj_id);
+void sf_envi_button_set_enabled(int obj_id, bool enabled);
+void sf_envi_button_set_release_on_leave(int obj_id, bool release);
+void sf_envi_button_set_pushable(int obj_id, bool pushable);
+void sf_envi_button_set_release_timeout(int obj_id, fixed timeout);
+
+// gates
+void sf_envi_gate_init();
+void sf_envi_gate_create_from_unit(unitref gate_ref);
+void sf_envi_gate_open(int obj_id, bool open);
+
+// portals
+void sf_envi_portal_init();
+int sf_envi_portal_create(string unit_name, point pos);
+void sf_envi_portal_set_target(int obj_id, int target_object_id);
+
+// generics
+void sf_envi_generic_init();
+int sf_envi_generic_create(string unit_name, point pos);
+
+// turn forcers
+void sf_envi_turn_forcer_cleanup();
+void sf_envi_turn_forcer_init();
+int sf_envi_turn_forcer_create(string unit_name, point pos);
+void sf_envi_turn_forcer_set_rotation_factor(int obj_id, fixed degrees_per_second);
+void sf_envi_turn_forcer_set_auto_rotate(int obj_id, int auto_rotate);
+void sf_envi_turn_forcer_rotate(int obj_id, fixed angle, bool relative, bool wait_until_done);
+
+// imitators
+void sf_envi_imitator_init();
+
+// spikes
+void sf_envi_spike_init();
+int sf_envi_spike_create(string unit_name, point pos, fixed size);
+void sf_envi_spike_raise(int obj_id, bool raise);
+bool sf_envi_spike_is_raised(int obj_id);
+
+// powerups
+void sf_envi_powerup_cleanup();
+void sf_envi_powerup_init();
+int sf_envi_powerup_create(string unit_name, point pos);
+
+// surface
+void sf_envi_surface_init();
+int sf_envi_surface_create(string unit_name, point pos, int surface_type, region rg, bool attach_rg);
+
+// flame thower
+void sf_envi_flamer_init();
+int sf_envi_flamer_create(point pos);
+void sf_envi_flamer_ignite(int obj_id, fixed duration);
+
+// electric fence
+void sf_envi_efence_init();
+int sf_envi_efence_create(point pos);
+void sf_envi_efence_link(int obj_id, int foreign_obj_id, int link_type, bool active);
+void sf_envi_efence_unlink(int obj_id, int foreign_obj_id);
+void sf_envi_efence_unlink_all(int obj_id);

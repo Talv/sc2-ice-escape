@@ -1,0 +1,176 @@
+﻿Abil/Name/ART=ART
+Abil/Name/ARTSwitch=ARTSwitch
+Abil/Name/HeroLearn=Hero Learn
+Abil/Name/IceBoost=Ice Boost
+Abil/Name/LandBoost=Land Boost
+Abil/Name/PowerBoost=Power Boost
+Abil/Name/Propel=Propel
+Abil/Name/ReviveCoin=Revive Coin
+Abil/Name/Shade=Shade
+Abil/Name/ShadeSelfKill=Shade - Self Kill
+Abil/Name/ShadeUse=Shade - Use
+Abil/Name/Stone=Stone
+Abil/Name/Switch=Switch
+Abil/Name/ThrowEssence=Throw Essence
+Abil/Name/TimeShift=Time Shift
+Abil/Name/move2=Move Copy
+Abil/Name/move3=Move Copy 2
+Abil/Name/stop2=Stop Copy
+Abil/Name/stop3=Stop Copy 2
+Behavior/Name/ART=ART
+Behavior/Name/ButtonActive=Button Active
+Behavior/Name/DisableSelfCollision=Disable Self Collision
+Behavior/Name/HeroVeterancy=Hero Veterancy
+Behavior/Name/IceBoost=Ice Boost
+Behavior/Name/Invisible=Invisible
+Behavior/Name/LandBoost1=Land Boost 1
+Behavior/Name/LandBoost12=Land Boost 2
+Behavior/Name/LandBoost2=Land Boost 2
+Behavior/Name/LandBoost3=Land Boost 3
+Button/Name/ART=ART
+Button/Name/ARTSwitch=ART - Switch
+Button/Name/ARTswitch=Switch
+Button/Name/Heal=Level Up
+Button/Name/HeroLearn=Hero Learn
+Button/Name/IceBoost=Ice Boost
+Button/Name/LandBoost=Land Boost
+Button/Name/Move2=Move Copy
+Button/Name/Move3=Move Copy 2
+Button/Name/PowerBoost=Power Boost
+Button/Name/Propel=Propel
+Button/Name/ReviveCoin=Throw Essence
+Button/Name/Shade=Shade
+Button/Name/ShadeUse=Shade Use
+Button/Name/Stone=Stone
+Button/Name/Stop2=Stop Copy
+Button/Name/Stop3=Stop Copy 2
+Button/Name/ThrowEssence=Throw Essence
+Button/Name/TimeShift=Time Shift
+Button/Tooltip/ART=Advanced Reviving Technique.<n/>With this soul magnet technique you can revive a baneling at your current position.
+Button/Tooltip/ARTSwitch=The ice baneling twists its soul magnetic energy in order to switch the direction the saved baneling is revived at.
+Button/Tooltip/ARTswitch=The ice baneling twists its soul magnetic energy in order to switch the direction the saved baneling is revived at.
+Button/Tooltip/CritterFemaleUrsadakLarge=Females of this species differ markedly from the more aggressive males.
+Button/Tooltip/CritterKarakFemale2=Females of this species are far less impressive than the males that compete for their attention.
+Button/Tooltip/CritterPillarHostile=Sheep
+Button/Tooltip/CritterUrsadakCalfSmall=Benign creature that sautees well with butter.
+Button/Tooltip/CritterUrsadakCalfSmallMinimapVis=Benign creature that sautees well with butter.
+Button/Tooltip/CrittersmallMotherShip=Benign creature that sautees well with butter.
+Button/Tooltip/DarkTemplarNoAttack=Deadly warrior-assassin. Cloak renders the unit invisible to enemies without detection. Can transform into an Archon.<n/><n/><c val="ffff8a">Can attack ground units.</c>
+Button/Tooltip/Heal=Levels up your character.
+Button/Tooltip/HeroLearn=Level up! High fives all around.
+Button/Tooltip/HugeSwarmQueen=Broodmother Chioy.
+Button/Tooltip/IceBaneling=Loves sliding around on ice.
+Button/Tooltip/IceBanelingTimeShadow=Loves sliding around on ice.
+Button/Tooltip/IceBoost=The drone accumulates charges of essence which allows a faster movement speed on ice.<n/>50% speed boost. 20 sec charge regeneration time.<n/><n/><c val="33CBE6">Level 1:</c> 1 charge total<n/><c val="33CBE6">Level 2:</c> 2 charges total<n/><c val="33CBE6">Level 3:</c> 3 charges total
+Button/Tooltip/ImmortalGuard=Assault strider. Has shields that deflect high-damage attacks.<n/><n/><c val="FFFF8A">Can attack ground units.</c>
+Button/Tooltip/InvisibleIceMover=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/LandBoost=The drone modifies its inner chemicals to give a temporary land speed boost at the cost of its health.<n/><n/><c val="33CBE6">Level 1:</c> 20% boost, 50 health lost<n/><c val="33CBE6">Level 2:</c> 40% boost, 40 health lost<n/><c val="33CBE6">Level 3:</c> 80% boost, 30 health lost
+Button/Tooltip/LavaPlatform=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/Marine2=General-purpose infantry.<n/><n/><c val="#ColorAttackInfo">Can attack ground and air units.</c>
+Button/Tooltip/Move2=Orders selected units to move to the target area or follow the target unit. Moving units will not engage enemies.
+Button/Tooltip/Move3=Orders selected units to move to the target area or follow the target unit. Moving units will not engage enemies.
+Button/Tooltip/PhoenixLow=Air-superiority fighter.<n/><n/><c val="ffff8a">Can attack air units.</c>
+Button/Tooltip/PowerBoost=The baneling modifies its inner chemicals to give a temporary land speed boost at the cost of its health.<n/><c val="33CBE6">Level 1:</c> 20% boost, 50 health lost<n/><c val="33CBE6">Level 2:</c> 40% boost, 40 health lost<n/><c val="33CBE6">Level 3:</c> 80% boost, 30 health lost
+Button/Tooltip/Propel=The baneling generates creep below its feet to allow a faster movement speed on ice.<n/>
+Button/Tooltip/ReviveCoin=The drone embeds a small portion of its essence into a ring which can be used to save dead drones. Can only be thrown while sliding.<n/><n/><c val="33CBE6">Level 1:</c> 20s cooldown, 8 range.<n/><c val="33CBE6">Level 2:</c> 10s cooldown, 12 range.<n/><c val="33CBE6">Level 3:</c> 1s cooldown, 14 range.
+Button/Tooltip/Shade=The baneling forms shade at the current position and gains capability to transfer its life essence back into the shade at chosen time.<n/>Abandoned shade disappears after 6 seconds.<n/><n/><c val="33CBE6">Level 1:</c> 30 seconds cooldown<n/><c val="33CBE6">Level 2:</c> 15 seconds cooldown
+Button/Tooltip/ShadeUse=The baneling transfers its life essence into the shade.
+Button/Tooltip/Stop2=Orders selected units to cancel all orders and stop moving.
+Button/Tooltip/Stop3=Orders selected units to cancel all orders and stop moving.
+Button/Tooltip/ThrowEssence=The baneling embeds a small portion of its essence in a multi-dimensional ring which can be used to save dead banelings. The essence can only be thrown while sliding. <n/><c val="33CBE6">Level 1:</c> 30s cooldown, 5 range. <n/><c val="33CBE6">Level 2:</c> 20s cooldown, 8 range.<n/><c val="33CBE6">Level 3:</c> 10s cooldown, 12 range.<n/><c val="33CBE6">Level 4:</c> 1s cooldown, 14 range.<n/><n/>
+Button/Tooltip/TimeShift=The Ice Baneling is able to move into its past while remaining in the present. <n/><c val="33CBE6">Level 1:</c> 30s cooldown, 40 energy. <n/><c val="33CBE6">Level 2:</c> 10s cooldown, 10 energy.
+Button/Tooltip/Ufo=Ultimate Protoss vessel. Can use Vortex and Mass Recall. Cloaks nearby units and structures.  <n/><n/><c val="ffff8a">Can attack ground and air units.</c>
+Button/Tooltip/XelNagaTower=Activate to open gates
+Button/Tooltip/largerpredator=Anti-infantry specialist that deals area damage with each attack.<n/><n/><c val="#ColorAttackInfo">Can attack ground units.</c>
+DocInfo/DescLong=Sliding Escape Framework - Ice Baneling Escape
+DocInfo/Name=SEF-IBE
+Param/Value/lib_3FB28C60_3C6EDD4F=<s val="MercenaryPanelHireButton"><c val="ffFF00">Received an extra level-up for finishing the
+Param/Value/lib_3FB28C60_DEE63ECE=th challenge!</c></s>
+Terrain/Name/IBETerrain=IBE - Terrain
+Terrain/Name/IceWorld2=(HotS) Kaldir (Ice) Copy
+Unit/Category/IBE=IBE
+Unit/Name/Baneling=Ice Baneling Burr
+Unit/Name/Baneling2=Baneling
+Unit/Name/BanelingNest=Ice Baneling Escapes
+Unit/Name/Beacon_ZergSmall2=Revive Circle
+Unit/Name/Catapult=Catapult
+Unit/Name/Catapult15=Catapult 1.5
+Unit/Name/DarkTemplarNoAttack=Dark Templar NoAttack
+Unit/Name/DirectionArrow=Direction Arrow
+Unit/Name/DynamicSurface=Dynamic Surface
+Unit/Name/ElectricFencePillar=Electric Fence Pillar
+Unit/Name/ForceFieldWall=ForceFieldWallHorizontal
+Unit/Name/ForceFieldWallHorizLONG=ForceFieldWallHorizLONG
+Unit/Name/GravityDisruptor=Gravity Disruptor
+Unit/Name/GreaterNydusWorm=Back to Brood Ice Escape 2
+Unit/Name/HeroCorpse=Hero Corpse
+Unit/Name/HugeSwarmQueen=Chioy
+Unit/Name/IceBaneling=Ice Baneling
+Unit/Name/IceBaneling2=Ice Baneling Facing
+Unit/Name/IceBanelingTimeShadow=Ice Baneling Time Shadow
+Unit/Name/IceDrone=Ice Drone
+Unit/Name/IceDroneGuide=Ice Drone Guide
+Unit/Name/IceDroneShadow=Ice Drone Shadow
+Unit/Name/IceTerrainFlatMoving=Ice Terrain Flat Moving
+Unit/Name/ImmortalGuard=Immortal Guard
+Unit/Name/InfestationPit=BBIE Hall of Fame
+Unit/Name/InvisibleIceMover=Invisible Ice Mover
+Unit/Name/KarakFemale2=Female Karak Small
+Unit/Name/LavaPlatform=LavaPlatform
+Unit/Name/LightSwitch=Light Switch
+Unit/Name/LightSwitchRect=Light Switch Rect
+Unit/Name/Marine2=Force Turn Arrow
+Unit/Name/MonlythForceFieldStatue2=Monlyth Statue NOFOOTPRINT
+Unit/Name/Overseer=Talv's eye
+Unit/Name/PhoenixLow=PhoenixLow
+Unit/Name/PillarHostile=PillarHostile
+Unit/Name/Portal=Portal
+Unit/Name/PortalDestination=Portal Destination
+Unit/Name/PortalTargetInvisible=Portal Target Invisible
+Unit/Name/PortalTargetStandard=Portal Target Standard
+Unit/Name/ReviveCoin=Revive Coin
+Unit/Name/ReviveCoinEgg=Revive Coin - Egg
+Unit/Name/RingCenter=Ring Center
+Unit/Name/RingComponent=Ring Component
+Unit/Name/SecurityGateDiagonalULBR2=Security Gate 200pc
+Unit/Name/SecurityGateDiagonalULBR2Lowered=Security Gate 200pc
+Unit/Name/SecurityGateStraightHorizontalBF2=Security Gate 150pc
+Unit/Name/SecurityGateStraightHorizontalBF22=Security Gate 250pc
+Unit/Name/SecurityGateStraightHorizontalBF22Lowered=Security Gate 250pc
+Unit/Name/SecurityGateStraightHorizontalBF2Lowered=Security Gate 150pc
+Unit/Name/SecurityGateStraightVerticalLF2=Security Gate Vertical 150pc
+Unit/Name/SecurityGateStraightVerticalLFLowered2=Security Gate Vertical 150pc lowered
+Unit/Name/ShapeBowl2=Bowl
+Unit/Name/ShapeTorus2=Torus2
+Unit/Name/ShapeTorus22=Torus22
+Unit/Name/ShapeTorus222=Torus222
+Unit/Name/ShapeTorus23=Torus
+Unit/Name/ShapeTorus232=Torus
+Unit/Name/ShapeTorus24=Torus
+Unit/Name/ShapeTorus3=Torus3
+Unit/Name/ShapeTorus4=Torus4
+Unit/Name/StoneButton=Stone Button
+Unit/Name/StoneInlay=Stone Inlay
+Unit/Name/TerrainDeformerU1=Terrain Deformer U1
+Unit/Name/Ufo=Ufo
+Unit/Name/UrsadakCalfSmall=Ursadak Calf Small
+Unit/Name/UrsadakCalfSmallMinimapVis=Ursadak Calf Small MinimapVis
+Unit/Name/UrsadakFemale=Female Ursadak
+Unit/Name/UrsadakFemaleLarge=Female Ursadak Large
+Unit/Name/UrsadakFemaleSmall=Female Ursadak Small Exotic
+Unit/Name/UrsadakMale=Male Ursadak Exotic
+Unit/Name/WarpGate=portalWarp
+Unit/Name/XelNagaTowerHighlightTooltip=
+Unit/Name/Zealot=ZealotN
+Unit/Name/iceRingComponent=iceRingComponent
+Unit/Name/jumper=jumper
+Unit/Name/largerpredator=larger predator
+Unit/Name/sfBushLarge=Bush Large
+Unit/Name/sfBushMedium=Bush Medium
+Unit/Name/sfBushSmall=Bush Small
+Unit/Name/sfFlamethrower=Flamethrower
+Unit/Name/slabSwitch=slabSwitch
+Unit/Name/smallMotherShip=smallMotherShip
+Unit/Name/spikes=spikes
+Unit/Name/vortexART=vortexART
+Unit/Name/vortexSmallART=Torus Copy

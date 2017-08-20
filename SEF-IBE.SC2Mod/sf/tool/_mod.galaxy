@@ -1,0 +1,22 @@
+// -------------------------------
+// -------- DEV TOOLS ------------
+// -------------------------------
+
+const int SF_TOOL_COMMAND_MAX = 32;
+
+struct sf_tool_command_payload_t {
+    string name;
+    int player;
+    string[8] flags;
+    string[8] parametersNames;
+    string[8] parametersArgs;
+    string[8] arguments;
+};
+
+void sf_tool_command_handler_prototype(structref<sf_tool_command_payload_t> payload);
+typedef funcref<sf_tool_command_handler_prototype> sf_tool_command_handler_t;
+
+struct sf_tool_command_t {
+    string name;
+    sf_tool_command_handler_t handler;
+};

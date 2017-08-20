@@ -1,0 +1,379 @@
+static void ibe_ui_dg_reindex_state(structref<ibe_ui_dg_t> dg, int player)
+{
+    int i;
+    int[IBE_UI_DG_KEY_MAX] values;
+    int changes = 1;
+    int tmp;
+    int val_a;
+    int val_b;
+    int tmp_count;
+
+    tmp_count = dg.fn_row_count();
+    dg.states[player].key_count = 0;
+
+    for (i = 0; i < tmp_count; i += 1) {
+        if (dg.fne_filter_item && !dg.fn_filter_item(i)) { continue; }
+        dg.states[player].keys[dg.states[player].key_count] = i;
+        dg.states[player].key_count += 1;
+    }
+
+    if (dg.states[player].sort_key != -1) {
+        for (i = 0; i < dg.states[player].key_count; i += 1) {
+            values[dg.states[player].keys[i]] = dg.fn_get_sort_value(dg.states[player].keys[i], dg.states[player].sort_key);
+        }
+
+        while (changes > 0) {
+            changes = 0;
+            for (i = 1; i < dg.states[player].key_count; i += 1) {
+                val_a = values[dg.states[player].keys[i - 1]];
+                val_b = values[dg.states[player].keys[i]];
+                if (
+                    (dg.states[player].sort_asc && val_a > val_b) ||
+                    (!dg.states[player].sort_asc && val_a < val_b)
+                ) {
+                    changes += 1;
+                    tmp = dg.states[player].keys[i - 1];
+                    dg.states[player].keys[i - 1] = dg.states[player].keys[i];
+                    dg.states[player].keys[i] = tmp;
+                }
+            }
+        }
+    }
+
+    Wait(0.0, c_timeGame);
+}
+
+static void ibe_ui_dg_update_sort(structref<ibe_ui_dg_t> dg, int player, int sort_key, bool sort_asc)
+{
+    if (dg.states[player].sort_key != -1 && dg.states[player].sort_key != sort_key) {
+        DialogControlSetPropertyAsBool(dg.view.headers[dg.states[player].sort_key].control, c_triggerControlPropertyToggled, PlayerGroupSingle(player), false);
+        DialogControlSetVisible(dg.view.headers[dg.states[player].sort_key].arrow_up, PlayerGroupSingle(player), false);
+        DialogControlSetVisible(dg.view.headers[dg.states[player].sort_key].arrow_down, PlayerGroupSingle(player), false);
+    }
+    dg.states[player].sort_asc = sort_asc;
+    dg.states[player].sort_key = sort_key;
+    DialogControlSetPropertyAsBool(dg.view.headers[dg.states[player].sort_key].control, c_triggerControlPropertyToggled, PlayerGroupSingle(player), true);
+    DialogControlSetVisible(dg.view.headers[dg.states[player].sort_key].arrow_up, PlayerGroupSingle(player), sort_asc == true);
+    DialogControlSetVisible(dg.view.headers[dg.states[player].sort_key].arrow_down, PlayerGroupSingle(player), sort_asc != true);
+    ibe_ui_dg_view_redraw(dg, player);
+}
+
+//
+
+void ibe_ui_dg_create(structref<ibe_ui_dg_t> dg)
+{
+    int i;
+
+    for (i = 0; i <= MAX_PLAYERS; i += 1) {
+        dg.states[i].sort_key = -1;
+    }
+}
+
+void ibe_ui_dg_cleanup(structref<ibe_ui_dg_t> dg)
+{
+    int i;
+
+    for (i = 0; i < IBE_UI_DG_COLUMN_MAX; i += 1) {
+        if (!dg.columns[i].exists) { continue; }
+
+        dg.columns[i].exists = false;
+    }
+
+    for (i = 0; i <= MAX_PLAYERS; i += 1) {
+        dg.states[i].sort_key = -1;
+        dg.states[i].sort_asc = false;
+    }
+
+    dg.column_count = 0;
+}
+
+void ibe_ui_dg_set_handlers(structref<ibe_ui_dg_t> dg, ibe_ui_dg_prototype_row_count_t fn_row_count, ibe_ui_dg_prototype_get_text_t fn_get_text, ibe_ui_dg_prototype_get_tooltip_t fn_get_tooltip, ibe_ui_dg_prototype_get_sort_value_t fn_get_sort_value, trigger trig_ui_event_proxy)
+{
+    dg.fn_row_count = fn_row_count;
+    dg.fn_get_text = fn_get_text;
+    dg.fn_get_tooltip = fn_get_tooltip;
+    dg.fn_get_sort_value = fn_get_sort_value;
+    dg.trig_ui_event_proxy = trig_ui_event_proxy;
+}
+
+void ibe_ui_dg_register_filter(structref<ibe_ui_dg_t> dg, ibe_ui_dg_prototype_filter_item_t fn_filter_item)
+{
+    dg.fne_filter_item = true;
+    dg.fn_filter_item = fn_filter_item;
+}
+
+int ibe_ui_dg_column_add(structref<ibe_ui_dg_t> dg, text label, bool sortable)
+{
+    int i;
+
+    for (i = 0; i < IBE_UI_DG_COLUMN_MAX; i += 1) {
+        if (dg.columns[i].exists) { continue; }
+        dg.columns[i].exists = true;
+        dg.columns[i].label = label;
+        dg.columns[i].sortable = sortable;
+        dg.columns[i].size_hint = 1.0;
+        dg.columns[i].min_width = -1;
+        dg.columns[i].max_width = -1;
+
+        dg.column_count += 1;
+        return i;
+    }
+
+    return -1;
+}
+
+void ibe_ui_dg_column_set_size(structref<ibe_ui_dg_t> dg, int col, fixed size_hint, int min_width, int max_width)
+{
+    if (col == IBE_UI_DG_COL_LAST_CREATED) {
+        col = dg.column_count - 1;
+    }
+
+    dg.columns[col].size_hint = size_hint;
+    dg.columns[col].min_width = min_width;
+    dg.columns[col].max_width = max_width;
+}
+
+void ibe_ui_dg_column_set_default_sort(structref<ibe_ui_dg_t> dg, int col, bool asc)
+{
+    int i;
+
+    if (col == IBE_UI_DG_COL_LAST_CREATED) {
+        col = dg.column_count - 1;
+    }
+
+    for (i = 0; i <= MAX_PLAYERS; i += 1) {
+        dg.states[i].sort_key = col;
+        dg.states[i].sort_asc = asc;
+    }
+}
+
+// void ibe_ui_dg_sort(structref<ibe_ui_dg_t> dg, int player, bool asc, int column)
+// {
+//     int i;
+
+//     ibe_ui_dg_reindex_state(dg);
+
+//     for (i = 0; i < dg.key_count; i += 1) {
+//     }
+// }
+
+void ibe_ui_dg_view_generate(structref<ibe_ui_dg_t> dg, int panel, int table_width, int table_height)
+{
+    int x;
+    int y;
+    int i;
+    int header_height;
+    int cell_width;
+    int cell_height;
+    int cell_padding_x;
+    int cell_padding_y;
+    int offset_x;
+    int offset_y;
+
+    dg.view.panel = panel;
+    dg.view.table_width = table_width;
+    dg.view.table_height = table_height - 40;
+    dg.view.row_visible_count = 10;
+
+    header_height = 75;
+    cell_padding_x = 4;
+    cell_padding_y = 4;
+    cell_width = dg.view.table_width / dg.column_count -  cell_padding_x;
+    cell_height = (dg.view.table_height - header_height) / dg.view.row_visible_count - cell_padding_y;
+
+    // if (cell_height > 50) {
+    //     cell_height = 50;
+    // }
+
+    //
+    for (x = 0; x < dg.column_count; x += 1) {
+        dg.columns[x].final_width = FixedToInt(IntToFixed(cell_width) * dg.columns[x].size_hint);
+    }
+
+    // render header
+    offset_x = 0;
+    for (x = 0; x < dg.column_count; x += 1) {
+        dg.view.headers[x].control = DialogControlCreateInPanelFromTemplate(
+            dg.view.panel,
+            c_triggerControlTypeButton,
+            "IBE_Ranking/TableTh"
+        );
+        DialogControlSetSize(dg.view.headers[x].control, PlayerGroupAll(), dg.columns[x].final_width, header_height);
+        DialogControlSetPosition(dg.view.headers[x].control, PlayerGroupAll(), c_anchorTopLeft, offset_x, offset_y);
+        DialogControlSetPropertyAsText(dg.view.headers[x].control, c_triggerControlPropertyText, PlayerGroupAll(), dg.columns[x].label);
+        DialogControlSetPropertyAsBool(dg.view.headers[x].control, c_triggerControlPropertyEnabled, PlayerGroupAll(), dg.columns[x].sortable);
+        DialogControlSetPropertyAsText(
+            dg.view.headers[x].control,
+            c_triggerControlPropertyTooltip,
+            PlayerGroupAll(),
+            dg.columns[x].label
+        );
+        if (dg.trig_ui_event_proxy != null) {
+            TriggerAddEventDialogControl(dg.trig_ui_event_proxy, c_playerAny, dg.view.headers[x].control, c_triggerControlEventTypeClick);
+        }
+
+        dg.view.headers[x].arrow_up = DialogControlHookup(dg.view.headers[x].control, c_triggerControlTypeImage, "ArrowUp");
+        dg.view.headers[x].arrow_down = DialogControlHookup(dg.view.headers[x].control, c_triggerControlTypeImage, "ArrowDown");
+
+        offset_x += dg.columns[x].final_width + cell_padding_x;
+    }
+
+    // render cells
+    offset_y = header_height;
+    for (y = 0; y < dg.view.row_visible_count; y += 1) {
+        offset_x = 0;
+        for (x = 0; x < dg.column_count; x += 1) {
+            dg.view.cells[y][x].control = DialogControlCreateInPanel(dg.view.panel, c_triggerControlTypeLabel);
+            DialogControlSetSize(dg.view.cells[y][x].control, PlayerGroupAll(), dg.columns[x].final_width, cell_height);
+            DialogControlSetPosition(dg.view.cells[y][x].control, PlayerGroupAll(), c_anchorTopLeft, offset_x, offset_y);
+            DialogControlSetPropertyAsString(
+                dg.view.cells[y][x].control,
+                c_triggerControlPropertyStyle,
+                PlayerGroupAll(),
+                "IBE_RankingTableTd"
+            );
+            DialogControlSetPropertyAsText(
+                dg.view.cells[y][x].control,
+                c_triggerControlPropertyText,
+                PlayerGroupAll(),
+                StringToText("")
+            );
+            offset_x += dg.columns[x].final_width + cell_padding_x;
+        }
+        offset_y += cell_height + cell_padding_y;
+
+        // separator
+        DialogControlCreateInPanelFromTemplate(
+            dg.view.panel,
+            c_triggerControlTypeImage,
+            "IBE_Ranking/TableSeparatorTemplate"
+        );
+        DialogControlSetPosition(
+            DialogControlLastCreated(),
+            PlayerGroupAll(),
+            c_anchorTopLeft,
+            0,
+            offset_y - cell_padding_y - 2
+        );
+    }
+
+    // pagination
+    dg.view.pagination_panel = DialogControlCreateInPanelFromTemplate(
+        dg.view.panel,
+        c_triggerControlTypePanel,
+        "IBE_Ranking/PaginationTemplate"
+    );
+    DialogControlSetPosition(
+        dg.view.pagination_panel,
+        PlayerGroupAll(),
+        c_anchorTopLeft,
+        0,
+        offset_y
+    );
+    dg.view.pagination_info = DialogControlHookup(dg.view.pagination_panel, c_triggerControlTypeLabel, "Info");
+    dg.view.pagination_prev = DialogControlHookup(dg.view.pagination_panel, c_triggerControlTypeButton, "Prev");
+    dg.view.pagination_next = DialogControlHookup(dg.view.pagination_panel, c_triggerControlTypeButton, "Next");
+    if (dg.trig_ui_event_proxy != null) {
+        TriggerAddEventDialogControl(dg.trig_ui_event_proxy, c_playerAny, dg.view.pagination_prev, c_triggerControlEventTypeClick);
+        TriggerAddEventDialogControl(dg.trig_ui_event_proxy, c_playerAny, dg.view.pagination_next, c_triggerControlEventTypeClick);
+    }
+
+    //
+    for (x = 0; x < dg.column_count; x += 1) {
+        for (i = 1; i <= MAX_PLAYERS; i += 1) {
+            if (PlayerType(i) == c_playerTypeNone) { continue; }
+            if (dg.states[i].sort_key != x) { continue; }
+            ibe_ui_dg_update_sort(dg, i, dg.states[i].sort_key, dg.states[i].sort_asc);
+            Wait(0.0, c_timeGame);
+        }
+    }
+}
+
+int ibe_ui_dg_view_redraw(structref<ibe_ui_dg_t> dg, int player)
+{
+    int x;
+    int y;
+    int offset_curr;
+    // int row_count;
+    int key;
+    text content;
+    text tooltip;
+
+    if (player == c_playerAny) {
+        for (x = 1; x <= MAX_PLAYERS; x += 1) {
+            if (PlayerType(x) == c_playerTypeNone) { continue; }
+            if (ibe_ui_dg_view_redraw(dg, x) > 50) {
+                Wait(0.0, c_timeGame);
+            }
+        }
+        return -1;
+    }
+
+    ibe_ui_dg_reindex_state(dg, player);
+    // row_count = dg.states[player].key_count;
+    DialogControlSetVisible(dg.view.pagination_panel, PlayerGroupSingle(player), dg.states[player].key_count > dg.view.row_visible_count);
+    DialogControlSetEnabled(dg.view.pagination_prev, PlayerGroupSingle(player), dg.states[player].view_offset > 0);
+    DialogControlSetEnabled(dg.view.pagination_next, PlayerGroupSingle(player), dg.states[player].view_offset + dg.view.row_visible_count < dg.states[player].key_count);
+    DialogControlSetPropertyAsText(
+        dg.view.pagination_info,
+        c_triggerControlPropertyText,
+        PlayerGroupSingle(player),
+        StringToText("Showing " + IntToString(dg.states[player].view_offset + 1) + " - " + IntToString(dg.states[player].view_offset + dg.view.row_visible_count) + " from " + IntToString(dg.states[player].key_count))
+    );
+
+    // if (row_count > dg.view.row_visible_count) {
+    //     row_count = dg.view.row_visible_count;
+    // }
+
+    for (y = 0; y < dg.view.row_visible_count; y += 1) {
+        for (x = 0; x < dg.column_count; x += 1) {
+            offset_curr = dg.states[player].view_offset + y;
+            if (offset_curr < dg.states[player].key_count) {
+                key = dg.states[player].keys[offset_curr];
+                content = dg.fn_get_text(key, x, offset_curr);
+                tooltip = dg.fn_get_tooltip(key, x, offset_curr);
+            }
+            else {
+                content = StringToText("");
+                tooltip = StringToText("");
+            }
+            DialogControlSetPropertyAsText(dg.view.cells[y][x].control, c_triggerControlPropertyText, PlayerGroupSingle(player), content);
+            DialogControlSetPropertyAsText(dg.view.cells[y][x].control, c_triggerControlPropertyTooltip, PlayerGroupSingle(player), tooltip);
+        }
+    }
+
+    return dg.states[player].key_count;
+}
+
+void ibe_ui_dg_handle_ui_event(structref<ibe_ui_dg_t> dg)
+{
+    int control;
+    int player;
+    int x;
+    bool sort_asc;
+    int sort_key;
+
+    control = EventDialogControl();
+    player = EventPlayer();
+
+    if (control == dg.view.pagination_prev) {
+        dg.states[player].view_offset -= dg.view.row_visible_count;
+    }
+    else if (control == dg.view.pagination_next) {
+        dg.states[player].view_offset += dg.view.row_visible_count;
+    }
+    else {
+        for (x = 0; x < dg.column_count; x += 1) {
+            if (control != dg.view.headers[x].control) { continue; }
+
+            sort_key = x;
+            if (x == dg.states[player].sort_key) {
+                sort_asc = !dg.states[player].sort_asc;
+            }
+        }
+        ibe_ui_dg_update_sort(dg, player, sort_key, sort_asc);
+        return;
+    }
+
+    ibe_ui_dg_view_redraw(dg, player);
+}

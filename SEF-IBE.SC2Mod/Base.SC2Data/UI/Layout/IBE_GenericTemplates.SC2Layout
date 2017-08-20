@@ -1,0 +1,1059 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Desc>
+    <Frame type="StandardTooltip" name="ScoreScreenTooltipTemplate" template="StandardTooltip/StandardTooltip">
+        <Frame type="Image" name="BackgroundImage" template="StandardTemplates/StandardBorderTooltipGame">
+            <Texture val="@UI/StandardGameTooltip_Prot"/>
+        </Frame>
+
+        <Frame type="Label" name="Label">
+            <Style val="@StandardTooltip_Prot"/>
+        </Frame>
+    </Frame>
+
+    <Frame type="Button" name="ButtonSmallTemplate">
+        <DisplayType val="ImageLayer"/>
+        <ClickSound val="@UI_ActionButtonSelect"/>
+        <Width val="208"/>
+        <Height val="55"/>
+
+        <Frame type="Image" name="NormalImage">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+            <StateCount val="1"/>
+            <LayerCount val="4"/>
+            <Texture val="@UI/LoTV_Shared_StoryButtonSmallNormal" layer="0"/>
+            <Texture val="@UI/LoTV_Shared_StoryButtonSmallDown" layer="1"/>
+            <Texture val="@UI/LoTV_Shared_StoryButtonSmallDown" layer="2"/>
+            <Texture val="@UI/LoTV_Shared_StoryButtonSmallDisabled" layer="3"/>
+            <TextureType val="EndCap" layer="0"/>
+            <TextureType val="EndCap" layer="1"/>
+            <TextureType val="EndCap" layer="2"/>
+            <TextureType val="EndCap" layer="3"/>
+            <Tiled val="true"/>
+            <DesaturateOnDisable val="false"/>
+        </Frame>
+
+        <Frame type="Image" name="HoverImage">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+            <StateCount val="1"/>
+            <LayerCount val="4"/>
+            <Texture val="@UI/LoTV_Shared_StoryButtonSmallHover" layer="0"/>
+            <Texture val="@UI/LoTV_Shared_StoryButtonSmallDown" layer="1"/>
+            <Texture val="@UI/LoTV_Shared_StoryButtonSmallDown" layer="2"/>
+            <Texture val="@UI/LoTV_Shared_StoryButtonSmallDisabled" layer="3"/>
+            <TextureType val="EndCap" layer="0"/>
+            <TextureType val="EndCap" layer="1"/>
+            <TextureType val="EndCap" layer="2"/>
+            <TextureType val="EndCap" layer="3"/>
+            <Tiled val="true"/>
+            <DesaturateOnDisable val="false"/>
+        </Frame>
+
+        <Frame type="Label" name="Label">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="4"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="20"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-20"/>
+            <Style val="Void_StoryButtonSmallLabel"/>
+        </Frame>
+
+        <Frame type="Frame" name="HitTestFrame">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+        </Frame>
+    </Frame>
+
+    <Frame type="Pulldown" name="PulldownTemplate">
+        <!-- <Anchor side="Top" relative="$parent" pos="Min" offset="50"/> -->
+        <Anchor side="Left" relative="$parent" pos="Mid" offset="0"/>
+        <Anchor side="Right" relative="$parent" pos="Mid" offset="0"/>
+        <NormalImage val="NormalImage"/>
+        <HoverImage val="HoverImage"/>
+        <ArrowImage val="PulldownArrow"/>
+        <ArrowHoverImage val="PulldownArrowHover"/>
+        <ItemContainer val="ItemContainer"/>
+        <Menu val="MenuListBox"/>
+        <HighlightOnHover val="true"/>
+        <Height val="80"/>
+        <Width val="280"/>
+        <MenuShownSound val="@UI_DropdownSelect"/>
+        <MenuHiddenSound val="@UI_DropdownClose"/>
+        <Style val="@DifficultyPulldown_Prot"/>
+
+        <Frame type="Image" name="NormalImage">
+            <Texture val="@@UI/DifficultyPulldownNormal"/>
+            <TextureType val="Border"/>
+            <StateCount val="2"/>
+            <Tiled val="true"/>
+            <LayerColor val="#StandardBorder_Prot"/>
+            <DescFlags val="Internal"/>
+        </Frame>
+
+        <Frame type="Image" name="HoverImage">
+            <Texture val="@@UI/DifficultyPulldownHover"/>
+            <TextureType val="Border"/>
+            <StateCount val="2"/>
+            <Tiled val="true"/>
+            <LayerColor val="#StandardBorder_Prot"/>
+            <DescFlags val="Internal"/>
+        </Frame>
+
+        <Frame type="Image" name="PulldownArrow">
+            <Anchor side="Top" relative="$parent" pos="Mid" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Mid" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-15"/>
+            <Texture val="@@UI/DifficultyPulldownArrow"/>
+            <TextureType val="Normal"/>
+            <StateCount val="2"/>
+            <Tiled val="false"/>
+            <LayerColor val="#StandardBorder_Prot"/>
+            <DescFlags val="Internal"/>
+        </Frame>
+
+        <Frame type="Image" name="PulldownArrowHover">
+            <Anchor side="Top" relative="$parent" pos="Mid" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Mid" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-15"/>
+            <Texture val="@@UI/DifficultyPulldownArrowHover"/>
+            <TextureType val="Normal"/>
+            <StateCount val="2"/>
+            <Tiled val="false"/>
+            <LayerColor val="#StandardBorder_Prot"/>
+            <DescFlags val="Internal"/>
+        </Frame>
+
+        <Frame type="ListBox" name="MenuListBox">
+            <ItemHeight val="34"/>
+            <Insets top="16" left="16" bottom="16" right="16"/>
+            <HighlightInsets top="-4" left="-10" bottom="-4" right="-10"/>
+            <BackgroundImage val="BackgroundImage"/>
+            <SelectedImage val="SelectedImage"/>
+            <HoverImage val="HoverImage"/>
+            <HighlightOnHover val="true"/>
+            <ItemClickSound val="@UI_DropdownListSelect"/>
+            <DescFlags val="Internal"/>
+            <Style val="@DifficultyPulldown_Prot"/>
+
+            <Frame type="Image" name="BackgroundImage">
+                <Texture val="@@UI/DifficultyPulldownMenuBackground"/>
+                <TextureType val="HorizontalBorder"/>
+                <Tiled val="true"/>
+                <LayerColor val="#StandardBorder_Prot"/>
+                <DescFlags val="Internal"/>
+            </Frame>
+
+            <Frame type="Image" name="SelectedImage">
+                <Texture val="@@UI/DifficultyPulldownMenuSelected"/>
+                <TextureType val="Border"/>
+                <Tiled val="true"/>
+                <LayerColor val="#StandardBorder_Prot"/>
+                <DescFlags val="Internal"/>
+            </Frame>
+
+            <Frame type="Image" name="HoverImage">
+                <Texture val="@@UI/DifficultyPulldownMenuHover"/>
+                <TextureType val="Border"/>
+                <Tiled val="true"/>
+                <LayerColor val="#StandardBorder_Prot"/>
+                <DescFlags val="Internal"/>
+            </Frame>
+        </Frame>
+
+        <Frame type="Frame" name="ItemContainer">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="8"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="8"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="-8"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-30"/>
+            <DescFlags val="Internal"/>
+        </Frame>
+    </Frame>
+
+    <Frame type="Frame" name="ScreenTitleFrameTemplate">
+        <Height val="220"/>
+        <Width val="750"/>
+
+        <Frame type="Label" name="ScreenTitleLabel">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="85"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+            <Height val="60"/>
+            <Style val="Swarm_ScreenTitle"/>
+        </Frame>
+
+        <Frame type="Label" name="PromptLabel">
+            <Anchor side="Top" relative="$parent/ScreenTitleLabel" pos="Min" offset="60"/>
+            <Anchor side="Left" relative="$parent/ScreenTitleLabel" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent/ScreenTitleLabel" pos="Max" offset="0"/>
+            <Style val="Swarm_ScreenPlayerPrompt"/>
+        </Frame>
+    </Frame>
+
+    <!---->
+    <Frame type="Frame" name="DefaultWindow">
+        <Frame type="Image" name="CornerFrameHexGlow_Left">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Min" offset="-100"/>
+            <Anchor side="Left" relative="$parent/BackgroundFrame" pos="Min" offset="-108"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_HexGlow"/>
+            <Height val="304"/>
+            <Width val="552"/>
+
+            <Frame type="Image" name="HexShimmer">
+                <Anchor relative="$parent"/>
+                <LayerCount val="2"/>
+
+                <Texture val="@UI/LoTV_Shared_ScreenFrame_HexGlow" layer="0"/>
+                <AlphaLayer val="true" layer="0"/>
+                <WrapUV val="true" layer="0"/>
+
+                <Texture val="@UI/LoTV_Shared_ScreenFrame_HexGlowShimmer" layer="1"/>
+                <WrapUV val="true" layer="1"/>
+
+                <Animation name="Shimmer">
+                    <Event event="OnShown" action="Play"/>
+                    <Event event="OnShown" action="Reset"/>
+                    <Controller type="LayerUV" layer="1" side="Left" relative="false" sidelock="True" end="loop">
+                        <Key type="Curve" time="0" value="-1" out="Linear"/>
+                        <Key type="Curve" time="4" value="1" in="Linear"/>
+                    </Controller>
+                </Animation>
+            </Frame>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.25" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.35" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrameHexGlow_LeftBottom">
+            <Anchor side="Bottom" relative="$parent/BackgroundFrame" pos="Max" offset="80"/>
+            <Anchor side="Left" relative="$parent/BackgroundFrame" pos="Min" offset="-85"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_HexGlow"/>
+            <Height val="304"/>
+            <Width val="552"/>
+            <TextureCoords top="1.0" left="0.0" bottom="0.0" right="1.0"/>
+
+            <Frame type="Image" name="HexShimmer">
+                <Anchor relative="$parent"/>
+                <LayerCount val="2"/>
+
+                <Texture val="@UI/LoTV_Shared_ScreenFrame_HexGlow" layer="0"/>
+                <AlphaLayer val="true" layer="0"/>
+                <WrapUV val="true" layer="0"/>
+                <TextureCoords top="1.0" left="0.0" bottom="0.0" right="1.0"/>
+
+                <Texture val="@UI/LoTV_Shared_ScreenFrame_HexGlowShimmer" layer="1"/>
+                <WrapUV val="true" layer="1"/>
+
+                <Animation name="Shimmer">
+                    <Event event="OnShown" action="Play"/>
+                    <Event event="OnShown" action="Reset"/>
+                    <Controller type="LayerUV" layer="1" side="Left" relative="false" sidelock="True" end="loop">
+                        <Key type="Curve" time="0" value="-1" out="Linear"/>
+                        <Key type="Curve" time="4" value="1" in="Linear"/>
+                    </Controller>
+                </Animation>
+            </Frame>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.25" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.35" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrameHexGlow_Right">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Min" offset="-80"/>
+            <Anchor side="Right" relative="$parent/BackgroundFrame" pos="Max" offset="110"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_HexGlow"/>
+            <Height val="304"/>
+            <Width val="552"/>
+            <TextureCoords top="0.0" left="1.0" bottom="1.0" right="0.0"/>
+
+            <Frame type="Image" name="HexShimmer">
+                <Anchor relative="$parent"/>
+                <LayerCount val="2"/>
+
+                <Texture val="@UI/LoTV_Shared_ScreenFrame_HexGlow" layer="0"/>
+                <AlphaLayer val="true" layer="0"/>
+                <WrapUV val="true" layer="0"/>
+                <TextureCoords top="0.0" left="1.0" bottom="1.0" right="0.0"/>
+
+                <Texture val="@UI/LoTV_Shared_ScreenFrame_HexGlowShimmer" layer="1"/>
+                <WrapUV val="true" layer="1"/>
+
+                <Animation name="Shimmer">
+                    <Event event="OnShown" action="Play"/>
+                    <Event event="OnShown" action="Reset"/>
+                    <Controller type="LayerUV" layer="1" side="Right" relative="false" sidelock="True" end="loop">
+                        <Key type="Curve" time="0" value="1" out="Linear"/>
+                        <Key type="Curve" time="4" value="-1" in="Linear"/>
+                    </Controller>
+                </Animation>
+            </Frame>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.25" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.35" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrameHexGlow_RightBottom">
+            <Anchor side="Bottom" relative="$parent/BackgroundFrame" pos="Max" offset="70"/>
+            <Anchor side="Right" relative="$parent/BackgroundFrame" pos="Max" offset="70"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_HexGlow"/>
+            <Height val="304"/>
+            <Width val="552"/>
+            <TextureCoords top="1.0" left="1.0" bottom="0.0" right="0.0"/>
+
+            <Frame type="Image" name="HexShimmer">
+                <Anchor relative="$parent"/>
+                <LayerCount val="2"/>
+
+                <Texture val="@UI/LoTV_Shared_ScreenFrame_HexGlow" layer="0"/>
+                <AlphaLayer val="true" layer="0"/>
+                <WrapUV val="true" layer="0"/>
+                <TextureCoords top="1.0" left="1.0" bottom="0.0" right="0.0"/>
+
+                <Texture val="@UI/LoTV_Shared_ScreenFrame_HexGlowShimmer" layer="1"/>
+                <WrapUV val="true" layer="1"/>
+
+                <Animation name="Shimmer">
+                    <Event event="OnShown" action="Play"/>
+                    <Event event="OnShown" action="Reset"/>
+                    <Controller type="LayerUV" layer="1" side="Right" relative="false" sidelock="True" end="loop">
+                        <Key type="Curve" time="0" value="1" out="Linear"/>
+                        <Key type="Curve" time="4" value="-1" in="Linear"/>
+                    </Controller>
+                </Animation>
+            </Frame>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.25" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.35" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="BackgroundFrame">
+            <Anchor side="Top" relative="$parent" pos="Mid" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Mid" offset="-40"/>
+            <Anchor side="Left" relative="$parent" pos="Mid" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Mid" offset="0"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_BG_Small"/>
+            <Height val="1014"/>
+            <Width val="1428"/>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="1.35" value="0" out="Linear"/>
+                    <Key type="Curve" time="1.4" value="140" in="Linear"/>
+                    <Key type="Curve" time="1.45" value="50" in="Linear"/>
+                    <Key type="Curve" time="1.5" value="160" in="Linear"/>
+                    <Key type="Curve" time="1.55" value="70" in="Linear"/>
+                    <Key type="Curve" time="1.6" value="190" in="Linear"/>
+                    <Key type="Curve" time="1.65" value="90" in="Linear"/>
+                    <Key type="Curve" time="2.25" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Frame" name="TopLinePowerUp">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Min" offset="-6"/>
+            <Anchor side="Left" relative="$parent/BackgroundFrame" pos="Min" offset="-4"/>
+            <Anchor side="Right" relative="$parent/BackgroundFrame" pos="Max" offset="4"/>
+            <Height val="52"/>
+
+            <Frame type="Image" name="LineImage">
+                <Anchor side="Top" relative="$parent/$parent/BackgroundFrame" pos="Min" offset="-6"/>
+                <Anchor side="Left" relative="$parent/$parent/BackgroundFrame" pos="Mid" offset="0"/>
+                <Anchor side="Right" relative="$parent/$parent/BackgroundFrame" pos="Mid" offset="0"/>
+                <Width val="1136"/>
+                <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_TopHighlightMask"/>
+            </Frame>
+
+            <Animation name="ExpandLeft">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="Anchor" side="Left" end="Pause">
+                    <Key type="Curve" time="0" value="1136" out="Auto"/>
+                    <Key type="Curve" time="1.5" value="0" in="Auto"/>
+                </Controller>
+
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="255" out="Linear"/>
+                    <Key type="Curve" time="2.55" value="255" out="Linear"/>
+                    <Key type="Curve" time="3.0" value="0" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="TopLineEndCap">
+            <Anchor side="Top" relative="$parent/TopLinePowerUp/LineImage" pos="Min" offset="20"/>
+            <Anchor side="Left" relative="$parent/TopLinePowerUp" pos="Min" offset="-25"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_HighlightEndCap"/>
+
+            <Animation name="FadeOut">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+
+                <Controller type="Anchor" side="Top" relative="true" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Auto"/>
+                    <Key type="Curve" time="0.15" value="-3" in="Auto"/>
+                    <Key type="Curve" time="0.25" value="-4" in="Auto"/>
+                    <Key type="Curve" time="0.35" value="-7" in="Auto"/>
+                    <Key type="Curve" time="0.45" value="-14" in="Auto"/>
+                    <Key type="Curve" time="0.8" value="-24" in="Auto"/>
+                    <Key type="Curve" time="0.9" value="-21" in="Auto"/>
+                    <Key type="Curve" time="1.0" value="-19" in="Auto"/>
+                    <Key type="Curve" time="1.25" value="-5" in="Auto"/>
+                    <Key type="Curve" time="1.35" value="-2" in="Auto"/>
+                    <Key type="Curve" time="1.5" value="0" in="Auto"/>
+                </Controller>
+
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.15" value="0" in="Linear"/>
+                    <Key type="Curve" time="0.2" value="0" in="Linear"/>
+                    <Key type="Curve" time="0.25" value="255" in="Linear"/>
+                    <Key type="Curve" time="1.3" value="255" in="Linear"/>
+                    <Key type="Curve" time="1.35" value="0" in="Linear"/>
+                    <Key type="Curve" time="1.5" value="0" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Frame" name="BottomLinePowerUp">
+            <Anchor side="Bottom" relative="$parent/BackgroundFrame" pos="Max" offset="5"/>
+            <Anchor side="Left" relative="$parent/BackgroundFrame" pos="Min" offset="26"/>
+            <Anchor side="Right" relative="$parent/BackgroundFrame" pos="Max" offset="-26"/>
+            <Height val="36"/>
+
+            <Frame type="Image" name="LineImage">
+                <Anchor side="Bottom" relative="$parent/$parent/BackgroundFrame" pos="Max" offset="5"/>
+                <Anchor side="Left" relative="$parent/$parent/BackgroundFrame" pos="Mid" offset="0"/>
+                <Anchor side="Right" relative="$parent/$parent/BackgroundFrame" pos="Mid" offset="0"/>
+                <Width val="1076"/>
+                <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_BottomHighlightMask"/>
+            </Frame>
+
+            <Animation name="ExpandRight">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="Anchor" side="Right" end="Pause">
+                    <Key type="Curve" time="0" value="-1076" out="Auto"/>
+                    <Key type="Curve" time="1.5" value="0" in="Auto"/>
+                </Controller>
+
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="255" out="Linear"/>
+                    <Key type="Curve" time="2.55" value="255" out="Linear"/>
+                    <Key type="Curve" time="3.0" value="0" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="BottomLineEndCap">
+            <Anchor side="Top" relative="$parent/BottomLinePowerUp/LineImage" pos="Min" offset="-2"/>
+            <Anchor side="Right" relative="$parent/BottomLinePowerUp" pos="Max" offset="20"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_HighlightEndCap"/>
+            <Rotation val="180"/>
+
+            <Animation name="FadeOut">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+
+                <Controller type="Anchor" side="Top" relative="true" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Auto"/>
+                    <Key type="Curve" time="0.15" value="0" in="Auto"/>
+                    <Key type="Curve" time="0.25" value="1" in="Auto"/>
+                    <Key type="Curve" time="0.35" value="1" in="Auto"/>
+                    <Key type="Curve" time="0.45" value="4" in="Auto"/>
+                    <Key type="Curve" time="0.8" value="8" in="Auto"/>
+                    <Key type="Curve" time="0.9" value="8" in="Auto"/>
+                    <Key type="Curve" time="1.0" value="5" in="Auto"/>
+                    <Key type="Curve" time="1.25" value="4" in="Auto"/>
+                    <Key type="Curve" time="1.35" value="1" in="Auto"/>
+                    <Key type="Curve" time="1.45" value="0" in="Auto"/>
+                    <Key type="Curve" time="1.5" value="-2" in="Auto"/>
+                </Controller>
+
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.15" value="0" in="Linear"/>
+                    <Key type="Curve" time="0.2" value="0" in="Linear"/>
+                    <Key type="Curve" time="0.25" value="255" in="Linear"/>
+                    <Key type="Curve" time="1.3" value="255" in="Linear"/>
+                    <Key type="Curve" time="1.35" value="0" in="Linear"/>
+                    <Key type="Curve" time="1.5" value="0" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Frame" name="LeftLinePowerUp">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Min" offset="5"/>
+            <Anchor side="Bottom" relative="$parent/BackgroundFrame" pos="Max" offset="-19"/>
+            <Anchor side="Left" relative="$parent/BackgroundFrame" pos="Min" offset="-5"/>
+            <Width val="56"/>
+
+            <Frame type="Image" name="LineImage">
+                <Anchor side="Top" relative="$parent/$parent/BackgroundFrame" pos="Min" offset="5"/>
+                <Anchor side="Left" relative="$parent/$parent/BackgroundFrame" pos="Min" offset="-5"/>
+                <Width val="56"/>
+                <Height val="880"/>
+                <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_SideHighlightMask"/>
+            </Frame>
+
+            <Animation name="ExpandBottom">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="Anchor" side="Bottom" end="Pause">
+                    <Key type="Curve" time="0" value="-880" out="Auto"/>
+                    <Key type="Curve" time="1.5" value="0" in="Auto"/>
+                </Controller>
+
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="255" out="Linear"/>
+                    <Key type="Curve" time="2.55" value="255" out="Linear"/>
+                    <Key type="Curve" time="3.0" value="0" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="LeftLineEndCap">
+            <Anchor side="Bottom" relative="$parent/LeftLinePowerUp" pos="Max" offset="20"/>
+            <Anchor side="Left" relative="$parent/LeftLinePowerUp/LineImage" pos="Min" offset="-33"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_HighlightEndCap"/>
+            <Rotation val="270"/>
+
+            <Animation name="FadeOut">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+
+                <Controller type="Anchor" side="Left" relative="true" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.75" value="26" in="Linear"/>
+                    <Key type="Curve" time="1.5" value="50" in="Linear"/>
+                </Controller>
+
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.15" value="0" in="Linear"/>
+                    <Key type="Curve" time="0.2" value="0" in="Linear"/>
+                    <Key type="Curve" time="0.25" value="255" in="Linear"/>
+                    <Key type="Curve" time="1.3" value="255" in="Linear"/>
+                    <Key type="Curve" time="1.35" value="0" in="Linear"/>
+                    <Key type="Curve" time="1.5" value="0" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Frame" name="RightLinePowerUp">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Min" offset="5"/>
+            <Anchor side="Bottom" relative="$parent/BackgroundFrame" pos="Max" offset="-19"/>
+            <Anchor side="Right" relative="$parent/BackgroundFrame" pos="Max" offset="5"/>
+            <Width val="56"/>
+
+            <Frame type="Image" name="LineImage">
+                <Anchor side="Top" relative="$parent/$parent/BackgroundFrame" pos="Min" offset="5"/>
+                <Anchor side="Right" relative="$parent/$parent/BackgroundFrame" pos="Max" offset="5"/>
+                <Width val="56"/>
+                <Height val="880"/>
+                <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_SideHighlightMask"/>
+                <TextureCoords top="0.0" left="1.0" bottom="1.0" right="0.0"/>
+            </Frame>
+
+            <Animation name="ExpandTop">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="Anchor" side="Top" end="Pause">
+                    <Key type="Curve" time="0" value="880" out="Auto"/>
+                    <Key type="Curve" time="1.5" value="0" in="Auto"/>
+                </Controller>
+
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="255" out="Linear"/>
+                    <Key type="Curve" time="2.55" value="255" out="Linear"/>
+                    <Key type="Curve" time="3.0" value="0" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="RightLineEndCap">
+            <Anchor side="Top" relative="$parent/RightLinePowerUp" pos="Min" offset="-20"/>
+            <Anchor side="Right" relative="$parent/RightLinePowerUp/LineImage" pos="Max" offset="-16"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_HighlightEndCap"/>
+            <Rotation val="90"/>
+
+            <Animation name="FadeOut">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+
+                <Controller type="Anchor" side="Right" relative="true" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.75" value="21" in="Linear"/>
+                    <Key type="Curve" time="1.5" value="45" in="Linear"/>
+                </Controller>
+
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.15" value="0" in="Linear"/>
+                    <Key type="Curve" time="0.2" value="0" in="Linear"/>
+                    <Key type="Curve" time="0.25" value="255" in="Linear"/>
+                    <Key type="Curve" time="1.3" value="255" in="Linear"/>
+                    <Key type="Curve" time="1.35" value="0" in="Linear"/>
+                    <Key type="Curve" time="1.5" value="0" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="TopShimmer">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Min" offset="-6"/>
+            <Anchor side="Left" relative="$parent/BackgroundFrame" pos="Mid" offset="0"/>
+            <Anchor side="Right" relative="$parent/BackgroundFrame" pos="Mid" offset="0"/>
+            <Width val="1136"/>
+            <Height val="52"/>
+            <LayerCount val="2"/>
+
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_TopHighlightMask" layer="0"/>
+            <AlphaLayer val="true" layer="0"/>
+            <WrapUV val="true" layer="0"/>
+
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_Highlight" layer="1"/>
+            <WrapUV val="true" layer="1"/>
+
+            <Animation name="Shimmer">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="LayerUV" layer="1" side="Left" relative="false" sidelock="True" end="loop">
+                    <Key type="Curve" time="0" value="-1" out="Linear"/>
+                    <Key type="Curve" time="11" value="1" in="Linear"/>
+                </Controller>
+
+                <Controller type="Fade" layer="1" end="loop">
+                    <Key type="Curve" time="0" value="150" out="Linear"/>
+                    <Key type="Curve" time="2" value="150" out="Linear"/>
+                    <Key type="Curve" time="5" value="255" out="Linear"/>
+                    <Key type="Curve" time="7" value="150" out="Linear"/>
+                    <Key type="Curve" time="8" value="150" out="Linear"/>
+                </Controller>
+            </Animation>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.6" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.75" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="BottomShimmer">
+            <Anchor side="Bottom" relative="$parent/BackgroundFrame" pos="Max" offset="5"/>
+            <Anchor side="Left" relative="$parent/BackgroundFrame" pos="Mid" offset="0"/>
+            <Anchor side="Right" relative="$parent/BackgroundFrame" pos="Mid" offset="0"/>
+            <Width val="1076"/>
+            <Height val="36"/>
+            <LayerCount val="2"/>
+
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_BottomHighlightMask" layer="0"/>
+            <AlphaLayer val="true" layer="0"/>
+            <WrapUV val="true" layer="0"/>
+
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_Highlight" layer="1"/>
+            <WrapUV val="true" layer="1"/>
+
+            <Animation name="Shimmer">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="LayerUV" layer="1" side="Right" relative="false" sidelock="True" end="loop">
+                    <Key type="Curve" time="0" value="1" out="Linear"/>
+                    <Key type="Curve" time="8" value="-1" in="Linear"/>
+                </Controller>
+
+                <Controller type="Fade" layer="1" end="loop">
+                    <Key type="Curve" time="0" value="150" out="Linear"/>
+                    <Key type="Curve" time="2" value="150" out="Linear"/>
+                    <Key type="Curve" time="5" value="255" out="Linear"/>
+                    <Key type="Curve" time="7" value="150" out="Linear"/>
+                    <Key type="Curve" time="8" value="150" out="Linear"/>
+                </Controller>
+            </Animation>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.6" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.75" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="LeftShimmer">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Min" offset="5"/>
+            <Anchor side="Left" relative="$parent/BackgroundFrame" pos="Min" offset="-5"/>
+            <Width val="56"/>
+            <Height val="880"/>
+            <LayerCount val="2"/>
+
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_SideHighlightMask" layer="0"/>
+            <AlphaLayer val="true" layer="0"/>
+            <WrapUV val="true" layer="0"/>
+
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_HighlightSide" layer="1"/>
+            <WrapUV val="true" layer="1"/>
+
+            <Animation name="Shimmer">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="LayerUV" layer="1" side="Top" relative="false" sidelock="True" end="loop">
+                    <Key type="Curve" time="0" value="1" out="Linear"/>
+                    <Key type="Curve" time="10" value="-2" in="Linear"/>
+                </Controller>
+            </Animation>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.6" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.75" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="RightShimmer">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Min" offset="5"/>
+            <Anchor side="Right" relative="$parent/BackgroundFrame" pos="Max" offset="5"/>
+            <Width val="56"/>
+            <Height val="880"/>
+            <LayerCount val="2"/>
+
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_SideHighlightMask" layer="0"/>
+            <AlphaLayer val="true" layer="0"/>
+            <WrapUV val="true" layer="0"/>
+            <TextureCoords top="0.0" left="1.0" bottom="1.0" right="0.0" layer="0"/>
+
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Small_HighlightSide" layer="1"/>
+            <WrapUV val="true" layer="1"/>
+
+            <Animation name="Shimmer">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="LayerUV" layer="1" side="Bottom" relative="false" sidelock="True" end="loop">
+                    <Key type="Curve" time="0" value="-1" out="Linear"/>
+                    <Key type="Curve" time="8" value="1" in="Linear"/>
+                </Controller>
+            </Animation>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.6" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.75" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrame_Left">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Min" offset="-42"/>
+            <Anchor side="Left" relative="$parent/BackgroundFrame" pos="Min" offset="-48"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Corner_Top"/>
+            <Height val="220"/>
+            <Width val="224"/>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrameGlow_Left">
+            <Anchor side="Top" relative="$parent/CornerFrame_Left" pos="Min" offset="32"/>
+            <Anchor side="Right" relative="$parent/CornerFrame_Left" pos="Max" offset="-6"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_CircleGlow"/>
+            <Height val="56"/>
+            <Width val="56"/>
+
+            <Animation name="LaserGlow">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="Fade" end="loop">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.3" value="100" out="Linear"/>
+                    <Key type="Curve" time="0.5" value="175" out="Linear"/>
+                    <Key type="Curve" time="0.6" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.8" value="200" out="Linear"/>
+                    <Key type="Curve" time="0.9" value="150" out="Linear"/>
+                    <Key type="Curve" time="1.0" value="200" out="Linear"/>
+                    <Key type="Curve" time="1.2" value="140" out="Linear"/>
+                    <Key type="Curve" time="1.3" value="180" out="Linear"/>
+                    <Key type="Curve" time="1.4" value="130" out="Linear"/>
+                    <Key type="Curve" time="1.5" value="80" out="Linear"/>
+                    <Key type="Curve" time="1.6" value="40" out="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrameGlow_LeftSide">
+            <Anchor side="Bottom" relative="$parent/CornerFrame_Left" pos="Max" offset="-20"/>
+            <Anchor side="Left" relative="$parent/CornerFrame_Left" pos="Min" offset="32"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_CircleGlow"/>
+            <Height val="66"/>
+            <Width val="46"/>
+
+            <Animation name="LaserGlow">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="Fade" end="loop">
+                    <Key type="Curve" time="0" value="100" out="Linear"/>
+                    <Key type="Curve" time="0.3" value="150" out="Linear"/>
+                    <Key type="Curve" time="0.5" value="125" out="Linear"/>
+                    <Key type="Curve" time="0.6" value="80" out="Linear"/>
+                    <Key type="Curve" time="0.8" value="130" out="Linear"/>
+                    <Key type="Curve" time="0.9" value="180" out="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrame_Right">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Min" offset="-42"/>
+            <Anchor side="Right" relative="$parent/BackgroundFrame" pos="Max" offset="48"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Corner_Top"/>
+            <Height val="220"/>
+            <Width val="224"/>
+            <TextureCoords top="0.0" left="1.0" bottom="1.0" right="0.0"/>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrameGlow_Right">
+            <Anchor side="Top" relative="$parent/CornerFrame_Right" pos="Min" offset="32"/>
+            <Anchor side="Left" relative="$parent/CornerFrame_Right" pos="Min" offset="6"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_CircleGlow"/>
+            <Height val="56"/>
+            <Width val="56"/>
+
+            <Animation name="LaserGlow">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="Fade" end="loop">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.3" value="100" out="Linear"/>
+                    <Key type="Curve" time="0.5" value="175" out="Linear"/>
+                    <Key type="Curve" time="0.6" value="0" out="Linear"/>
+                    <Key type="Curve" time="0.8" value="200" out="Linear"/>
+                    <Key type="Curve" time="0.9" value="150" out="Linear"/>
+                    <Key type="Curve" time="1.0" value="200" out="Linear"/>
+                    <Key type="Curve" time="1.2" value="140" out="Linear"/>
+                    <Key type="Curve" time="1.3" value="180" out="Linear"/>
+                    <Key type="Curve" time="1.4" value="130" out="Linear"/>
+                    <Key type="Curve" time="1.5" value="80" out="Linear"/>
+                    <Key type="Curve" time="1.6" value="40" out="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrameGlow_RightSide">
+            <Anchor side="Bottom" relative="$parent/CornerFrame_Right" pos="Max" offset="-20"/>
+            <Anchor side="Right" relative="$parent/CornerFrame_Right" pos="Max" offset="-32"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_CircleGlow"/>
+            <Height val="66"/>
+            <Width val="46"/>
+
+            <Animation name="LaserGlow">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="Fade" end="loop">
+                    <Key type="Curve" time="0" value="100" out="Linear"/>
+                    <Key type="Curve" time="0.3" value="150" out="Linear"/>
+                    <Key type="Curve" time="0.5" value="125" out="Linear"/>
+                    <Key type="Curve" time="0.6" value="80" out="Linear"/>
+                    <Key type="Curve" time="0.8" value="130" out="Linear"/>
+                    <Key type="Curve" time="0.9" value="180" out="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrame_BottomLeft">
+            <Anchor side="Bottom" relative="$parent/BackgroundFrame" pos="Max" offset="34"/>
+            <Anchor side="Left" relative="$parent/BackgroundFrame" pos="Min" offset="4"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Corner_Bottom"/>
+            <Height val="148"/>
+            <Width val="196"/>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrameGlow_BottomLeft">
+            <Anchor side="Bottom" relative="$parent/CornerFrame_BottomLeft" pos="Max" offset="-25"/>
+            <Anchor side="Left" relative="$parent/CornerFrame_BottomLeft" pos="Min" offset="50"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_CircleGlow"/>
+            <Height val="46"/>
+            <Width val="56"/>
+
+            <Animation name="LaserGlow">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="Fade" end="loop">
+                    <Key type="Curve" time="0" value="50" out="Linear"/>
+                    <Key type="Curve" time="0.3" value="190" out="Linear"/>
+                    <Key type="Curve" time="0.5" value="125" out="Linear"/>
+                    <Key type="Curve" time="0.6" value="80" out="Linear"/>
+                    <Key type="Curve" time="0.7" value="130" out="Linear"/>
+                    <Key type="Curve" time="0.8" value="180" out="Linear"/>
+                    <Key type="Curve" time="0.9" value="140" out="Linear"/>
+                    <Key type="Curve" time="1.0" value="60" out="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrameGlow_BottomLeftSide">
+            <Anchor side="Top" relative="$parent/CornerFrame_BottomLeft" pos="Min" offset="2"/>
+            <Anchor side="Left" relative="$parent/CornerFrame_BottomLeft" pos="Min" offset="17"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_CircleGlow"/>
+            <Height val="46"/>
+            <Width val="26"/>
+
+            <Animation name="LaserGlow">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="Fade" end="loop">
+                    <Key type="Curve" time="0" value="100" out="Linear"/>
+                    <Key type="Curve" time="0.2" value="150" out="Linear"/>
+                    <Key type="Curve" time="0.3" value="125" out="Linear"/>
+                    <Key type="Curve" time="0.5" value="160" out="Linear"/>
+                    <Key type="Curve" time="0.6" value="110" out="Linear"/>
+                    <Key type="Curve" time="0.8" value="180" out="Linear"/>
+                    <Key type="Curve" time="0.9" value="140" out="Linear"/>
+                    <Key type="Curve" time="1.0" value="120" out="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrame_BottomRight">
+            <Anchor side="Bottom" relative="$parent/BackgroundFrame" pos="Max" offset="34"/>
+            <Anchor side="Right" relative="$parent/BackgroundFrame" pos="Max" offset="-4"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_Corner_Bottom"/>
+            <Height val="148"/>
+            <Width val="196"/>
+            <TextureCoords top="0.0" left="1.0" bottom="1.0" right="0.0"/>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrameGlow_BottomRight">
+            <Anchor side="Bottom" relative="$parent/CornerFrame_BottomRight" pos="Max" offset="-25"/>
+            <Anchor side="Right" relative="$parent/CornerFrame_BottomRight" pos="Max" offset="-50"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_CircleGlow"/>
+            <Height val="46"/>
+            <Width val="56"/>
+
+            <Animation name="LaserGlow">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="Fade" end="loop">
+                    <Key type="Curve" time="0" value="50" out="Linear"/>
+                    <Key type="Curve" time="0.3" value="190" out="Linear"/>
+                    <Key type="Curve" time="0.5" value="125" out="Linear"/>
+                    <Key type="Curve" time="0.6" value="80" out="Linear"/>
+                    <Key type="Curve" time="0.7" value="130" out="Linear"/>
+                    <Key type="Curve" time="0.8" value="180" out="Linear"/>
+                    <Key type="Curve" time="0.9" value="140" out="Linear"/>
+                    <Key type="Curve" time="1.0" value="60" out="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="CornerFrameGlow_BottomRightSide">
+            <Anchor side="Top" relative="$parent/CornerFrame_BottomRight" pos="Min" offset="2"/>
+            <Anchor side="Right" relative="$parent/CornerFrame_BottomRight" pos="Max" offset="-17"/>
+            <Texture val="@UI/LoTV_Shared_ScreenFrame_CircleGlow"/>
+            <Height val="46"/>
+            <Width val="26"/>
+
+            <Animation name="LaserGlow">
+                <Event event="OnShown" action="Play"/>
+                <Event event="OnShown" action="Reset"/>
+                <Controller type="Fade" end="loop">
+                    <Key type="Curve" time="0" value="100" out="Linear"/>
+                    <Key type="Curve" time="0.2" value="150" out="Linear"/>
+                    <Key type="Curve" time="0.3" value="125" out="Linear"/>
+                    <Key type="Curve" time="0.5" value="160" out="Linear"/>
+                    <Key type="Curve" time="0.6" value="110" out="Linear"/>
+                    <Key type="Curve" time="0.8" value="180" out="Linear"/>
+                    <Key type="Curve" time="0.9" value="140" out="Linear"/>
+                    <Key type="Curve" time="1.0" value="120" out="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Label" name="StatFrame">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Mid" offset="0"/>
+            <Anchor side="Bottom" relative="$parent/BackgroundFrame" pos="Mid" offset="0"/>
+            <Anchor side="Left" relative="$parent/BackgroundFrame" pos="Mid" offset="0"/>
+            <Anchor side="Right" relative="$parent/BackgroundFrame" pos="Mid" offset="0"/>
+            <Width val="1350"/>
+            <Height val="950"/>
+        </Frame>
+
+        <Frame type="Label" name="SubtitleLabel">
+            <Anchor side="Top" relative="$parent/StatFrame" pos="Min" offset="30"/>
+            <Anchor side="Left" relative="$parent/StatFrame" pos="Mid" offset="0"/>
+            <Anchor side="Right" relative="$parent/StatFrame" pos="Mid" offset="0"/>
+            <Text val=""/>
+            <Style val="Void_VictoryTimerTitle"/>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.55" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.65" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Label" name="TitleLabel">
+            <Anchor side="Top" relative="$parent/SubtitleLabel" pos="Min" offset="20"/>
+            <Anchor side="Left" relative="$parent/SubtitleLabel" pos="Mid" offset="0"/>
+            <Anchor side="Right" relative="$parent/SubtitleLabel" pos="Mid" offset="0"/>
+            <Style val="Void_VictoryTimerText"/>
+            <Text val=""/>
+
+            <Animation name="FadeIn">
+                <Event event="Birth" action="Play" frame="$parent"/>
+                <Event event="Birth" action="Reset" frame="$parent"/>
+                <Controller type="Fade" end="Pause">
+                    <Key type="Curve" time="0" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.55" value="0" out="Linear"/>
+                    <Key type="Curve" time="2.65" value="255" in="Linear"/>
+                </Controller>
+            </Animation>
+        </Frame>
+    </Frame>
+</Desc>

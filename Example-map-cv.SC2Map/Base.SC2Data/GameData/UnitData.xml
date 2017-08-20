@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CUnit id="Baneling4">
+        <Sight value="0"/>
+    </CUnit>
+    <CUnit id="IceBaneling">
+        <Sight value="0"/>
+    </CUnit>
+    <CUnit id="IceBaneling2">
+        <Sight value="0"/>
+    </CUnit>
+    <CUnit id="IceBanelingShadow">
+        <Sight value="0"/>
+    </CUnit>
+</Catalog>

@@ -1,0 +1,59 @@
+sf_ctrl_controller_t [SF_CTRL_CONTROLLER_MAX]sf_ctrl_controllers;
+
+// mod
+void sf_ctrl_mod_init();
+void sf_ctrl_mod_cleanup();
+
+// controller
+int sf_ctrl_controller_create(int cl_type);
+void sf_ctrl_controller_destroy(int cl_id);
+int sf_ctrl_controller_last_created();
+int sf_ctrl_controller_clone(int origin_cl_id);
+void sf_ctrl_controller_set_enabled(int cl_id, bool enabled);
+bool sf_ctrl_controller_get_enabled(int cl_id);
+void sf_ctrl_controller_attach_unit(int cl_id, unit munit);
+void sf_ctrl_controller_dettach_unit(int cl_id, unit munit);
+void sf_ctrl_controller_attach_unit_group(int cl_id, unitgroup ugroup);
+int sf_ctrl_controller_get_from_unit(unit munit);
+
+// route
+int sf_ctrl_route_create();
+void sf_ctrl_route_set_loop(int cl_id, int loop);
+int sf_ctrl_route_get_loop(int cl_id);
+int sf_ctrl_route_get_action_count(int cl_id);
+unitgroup sf_ctrl_route_get_unit_group(int cl_id);
+point sf_ctrl_route_get_action_position(int cl_id, int index);
+void sf_ctrl_route_remove_action(int cl_id, int index);
+void sf_ctrl_route_set_reset_on_idle(int cl_id, bool reset_on_idle);
+void sf_ctrl_route_append_order(int cl_id, order ord);
+void sf_ctrl_route_append_waypoint(int cl_id, point pos);
+void sf_ctrl_route_append_waypoints_range(int cl_id, string pn_start, string pn_end);
+void sf_ctrl_route_append_waypoints_range_with_offset(int cl_id, string pn_start, string pn_end, fixed offset, fixed angle);
+void sf_ctrl_route_commit_unit(int cl_id, unit munit, int action_index);
+void sf_ctrl_route_attach_unit(int cl_id, unit munit);
+void sf_ctrl_route_engage(int cl_id);
+void sf_ctrl_route_shift_unit_position(int cl_id, unit munit, fixed route_offset);
+
+// executor
+void sf_ctrl_executor_cleanup();
+void sf_ctrl_executor_destroy(int cl_id);
+int sf_ctrl_executor_create(int loop);
+void sf_ctrl_executor_insert_sequence_at(int cl_id, int easing_func, fixed time_start, fixed duration, string identifier, int prop_type, fixed prop_val_a, fixed prop_val_b);
+void sf_ctrl_executor_append_sequence(int cl_id, int easing_func, fixed duration, string identifier, int prop_type, fixed prop_val_a, fixed prop_val_b);
+void sf_ctrl_executor_append_delay(int cl_id, fixed duration, string identifier);
+// void sf_ctrl_executor_set_play_mode(int cl_id, bool forward);
+// void sf_ctrl_executor_set_play_time_scale(int cl_id, fixed scale);
+void sf_ctrl_executor_attach_unit(int cl_id, unit munit);
+void sf_ctrl_executor_play(int cl_id, bool play);
+
+// random move zone
+void sf_ctrl_zone_random_cleanup(int cl_id);
+int sf_ctrl_zone_random_create(region area, fixed delay_min, fixed delay_max, fixed count_min, fixed count_max, fixed distance_min, fixed distance_max, fixed spread_min, fixed spread_max, fixed notify_delay, bool allow_interruption, bool must_look_target);
+void sf_ctrl_zone_random_append_unit(int cl_id, unit munit, bool preserve_position);
+
+// stalker zone
+void sf_ctrl_zone_stalker_cleanup();
+void sf_ctrl_zone_stalker_destroy(int cl_id);
+int sf_ctrl_zone_stalker_create(region area, fixed activation_range);
+void sf_ctrl_zone_stalker_append_unit(int cl_id, unit munit, bool preserve_position);
+void sf_ctrl_zone_stalker_fill(int cl_id, string unit_type, int count);

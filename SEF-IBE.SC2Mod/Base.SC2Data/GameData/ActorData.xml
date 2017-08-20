@@ -1,0 +1,2948 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CActorModel id="LibWH_Actor_CommonBeamAttachedActor" parent="ModelAddition">
+        <Model value="LibWH_Actor_CommonBeamAttachedInvisibleModel"/>
+        <On index="1" Terms="AnimBracketState.*.AfterClosing; !AnimBracketExitReason ModelSwap; AnimName BSD" Send="Destroy"/>
+        <On index="2" removed="1"/>
+    </CActorModel>
+    <CActorSimple id="LibWH_Actor_CommonBeamEmptyScope"/>
+    <CActorSiteMover id="LibWH_Actor_CommonBeamPointMover">
+        <On Terms="MoverArrived" Send="Destroy"/>
+        <Deceleration value="1.000000"/>
+    </CActorSiteMover>
+    <CActorDoodad id="CollBushMedium">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,0,0"/>
+        <Model value="CollShapeCircle"/>
+        <Scale value="1.290000,1.290000,0.010000"/>
+    </CActorDoodad>
+    <CActorDoodad id="CollBushSmall">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,0,0"/>
+        <Model value="CollShapeCircle"/>
+        <Scale value="1.100000,1.100000,0.010000"/>
+    </CActorDoodad>
+    <CActorDoodad id="CollBushLarge">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,0,0"/>
+        <Model value="CollShapeCircle"/>
+        <Scale value="1.500000,1.500000,0.010000"/>
+    </CActorDoodad>
+    <CActorDoodad id="CollDarkTemplar">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,0,0"/>
+        <Model value="CollShapeCircle"/>
+        <Scale value="0.680000,0.680000,0.010000"/>
+    </CActorDoodad>
+    <CActorUnit id="ElectricFencePillar" parent="GenericUnitMinimal" unitName="ElectricFencePillar">
+        <EditorCategories value=""/>
+        <Scale value="2.500000,2.500000,1.000000"/>
+    </CActorUnit>
+    <CActorUnit id="LightSwitchRect" parent="PolygonBase" unitName="LightSwitchRect">
+        <EditorCategories value=""/>
+        <Scale value="0.350000"/>
+    </CActorUnit>
+    <CActorModel id="LightSwitchRectP1" parent="ModelAddition">
+        <EditorCategories value=""/>
+        <On index="0" Terms="ActorOrphan" Send="Destroy"/>
+        <On index="1" Terms="UnitBirth.LightSwitchRect" Send="Create"/>
+        <On index="2" Terms="ActorCreation" Send="AnimPlay Work Stand,Work PlayForever"/>
+        <HostSiteOps Ops="LightSwitchRectP1SOp"/>
+    </CActorModel>
+    <CActorSiteOpLocalOffset id="LightSwitchRectP1SOp">
+        <EditorCategories value=""/>
+        <LocalOffset value="-0.600000,0.000000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="LightSwitchRectP2SOp">
+        <EditorCategories value=""/>
+        <LocalOffset value="0.600000,0.000000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorModel id="LightSwitchRectP2" parent="ModelAddition">
+        <EditorCategories value=""/>
+        <On index="0" Terms="ActorOrphan" Send="Destroy"/>
+        <On index="1" Terms="UnitBirth.LightSwitchRect" Send="Create"/>
+        <On index="2" Terms="ActorCreation" Send="AnimPlay Work Stand,Work PlayForever"/>
+        <HostSiteOps Ops="LightSwitchRectP2SOp"/>
+        <Model value="LightSwitchRectP1"/>
+    </CActorModel>
+    <CActorSiteOpLocalOffset id="LightSwitchRectP3SOp">
+        <EditorCategories value=""/>
+        <LocalOffset value="0.000000,-0.600000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorModel id="LightSwitchRectP3" parent="ModelAddition">
+        <EditorCategories value=""/>
+        <On index="0" Terms="ActorOrphan" Send="Destroy"/>
+        <On index="1" Terms="UnitBirth.LightSwitchRect" Send="Create"/>
+        <On index="2" Terms="ActorCreation" Send="AnimPlay Work Stand,Work PlayForever"/>
+        <HostSiteOps Ops="LightSwitchRectP3SOp SOp90"/>
+        <Model value="LightSwitchRectP1"/>
+    </CActorModel>
+    <CActorSiteOpLocalOffset id="LightSwitchRectP4SOp">
+        <EditorCategories value=""/>
+        <LocalOffset value="0.000000,0.600000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorModel id="LightSwitchRectP4" parent="ModelAddition">
+        <EditorCategories value=""/>
+        <On index="0" Terms="ActorOrphan" Send="Destroy"/>
+        <On index="1" Terms="UnitBirth.LightSwitchRect" Send="Create"/>
+        <On index="2" Terms="ActorCreation" Send="AnimPlay Work Stand,Work PlayForever"/>
+        <HostSiteOps Ops="LightSwitchRectP4SOp SOp90"/>
+        <Model value="LightSwitchRectP1"/>
+    </CActorModel>
+    <CActorModel id="PortalDecalP12" parent="ModelAddition">
+        <EditorCategories value=""/>
+        <On Terms="UnitBirth.PortalDestination" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetTintColor {255,255,255 1.500000}"/>
+        <On Terms="ActorCreation" Send="ModelSwap DecalProtoss 5"/>
+        <HostSiteOps Ops="PortalDecalP4SOpOffset SOpIncreasePortalHeight22"/>
+        <Model value="DecalProtoss"/>
+        <ProximityPosition value="CenterActor"/>
+    </CActorModel>
+    <CActorModel id="PortalDecalP2" parent="ModelAddition">
+        <EditorCategories value=""/>
+        <On Terms="UnitBirth.PortalDestination" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetTintColor {255,255,255 1.500000}"/>
+        <On Terms="ActorCreation" Send="ModelSwap DecalProtoss 5"/>
+        <HostSiteOps Ops="SOp270 portalDOffset132 SOpIncreasePortalHeight22"/>
+        <Model value="DecalProtoss"/>
+        <ProximityPosition value="CenterActor"/>
+    </CActorModel>
+    <CActorModel id="PortalDecalP3" parent="ModelAddition">
+        <EditorCategories value=""/>
+        <On Terms="UnitBirth.PortalDestination" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetTintColor {255,255,255 1.500000}"/>
+        <On Terms="ActorCreation" Send="ModelSwap DecalProtoss 5"/>
+        <HostSiteOps Ops="SOp90 portalDOffset1 SOpIncreasePortalHeight22"/>
+        <Model value="DecalProtoss"/>
+        <ProximityPosition value="CenterActor"/>
+    </CActorModel>
+    <CActorDoodad id="ProtossSummoning">
+        <On index="0" Terms="ActorCreation" Send="$Stand PlayForever,RandomStartOffset"/>
+        <On index="1" removed="1"/>
+    </CActorDoodad>
+    <CActorDoodad id="CollShapeCircle">
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="ActorCreation" Send="SetTintColor 255,0,0"/>
+        <Scale value="0.930000,0.930000,0.010000"/>
+    </CActorDoodad>
+    <CActorModel id="RavagerCorrosiveBilePrecursor">
+        <On index="6" Terms="TimerExpired; TimerName Anim" Send="AnimSetTimeScale BSD 1.200000"/>
+        <On Terms="ActorCreation" Send="TimerSet 0.800000 Anim2"/>
+        <On Terms="TimerExpired; TimerName Anim2" Send="SetTintColor {255,0,0 0.800000} 0.300000"/>
+    </CActorModel>
+    <CActorUnit id="ShapeBox">
+        <Scale value="1.000000,1.000000,0.010000"/>
+    </CActorUnit>
+    <CActorSiteOpLocalOffset id="StoneButtonHeight">
+        <EditorCategories value=""/>
+        <LocalOffset value="0.000000,0.000000,-0.350000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorUnit id="StoneButton" parent="GenericUnitStandard" unitName="StoneButton">
+        <EditorCategories value=""/>
+        <HostSiteOps Ops="StoneButtonHeight"/>
+    </CActorUnit>
+    <CActorSiteOpLocalOffset id="PortalHeightFix">
+        <EditorCategories value=""/>
+        <LocalOffset value="0.000000,0.000000,-2.370000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorModel id="LandBoostStartImpact" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Abil.LandBoost" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="DehakaAttackImpact"/>
+    </CActorModel>
+    <CActorSound id="LandBoostStartSound" parent="SoundOneShot">
+        <On Terms="Abil.LandBoost" Send="Create"/>
+        <Sound value="Spell_Drag_Impact"/>
+    </CActorSound>
+    <CActorUnit id="RingCenter" parent="PolygonBase" unitName="RingCenter">
+        <EditorCategories value=""/>
+        <Model value="Invisible"/>
+    </CActorUnit>
+    <CActorUnit id="RingComponent" parent="PolygonBase" unitName="RingComponent">
+        <EditorCategories value=""/>
+        <Scale value="0.750000"/>
+    </CActorUnit>
+    <CActorUnit id="Portal" parent="GenericUnitMinimal" unitName="Portal">
+        <EditorCategories value=""/>
+        <HostSiteOps Ops="PortalHeightFix"/>
+    </CActorUnit>
+    <CActorModel id="ARTBuff" parent="ModelAnimationStyleContinuous">
+        <EditorCategories value=""/>
+        <On index="0" Terms="ActorCreation" Send="AnimBracketStart BSD {} Stand Death"/>
+        <On Terms="Behavior.ART.On" Send="Create"/>
+        <On Terms="Behavior.ART.Off" Send="Destroy"/>
+        <On Terms="Signal.*.ARTSwitch" Send="SetTintColor {197,18,18 2.000000} 0.250000"/>
+        <On Terms="Signal.*.ARTNormal" Send="ClearTintColor 0.250000"/>
+        <On Terms="Signal.*.ARTMarkerHide" Send="SetOpacity 0.000000 0.200000"/>
+        <On Terms="Signal.*.ARTMarkerShow" Send="SetOpacity 1.000000 0.200000"/>
+        <On Terms="Signal.*.ARTMarkerHideImmediately" Send="SetOpacity"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOrigin SOpMoveUpByDot1"/>
+        <Model value="VortexModel"/>
+        <Scale value="0.200000"/>
+    </CActorModel>
+    <CActorUnit id="Catapult15" parent="PolygonBase" unitName="Catapult15">
+        <Model value="Catapult"/>
+        <Scale value="0.750000"/>
+        <BuildModel value="Catapult"/>
+        <DeathArray index="Normal" ModelLink="Catapult"/>
+        <PlacementModel value="Catapult"/>
+    </CActorUnit>
+    <CActorUnit id="DirectionArrow" parent="PolygonBase" unitName="DirectionArrow">
+        <EditorCategories value=""/>
+    </CActorUnit>
+    <CActorUnit id="DynamicSurface" parent="PolygonBase" unitName="DynamicSurface">
+        <Model value="Invisible"/>
+    </CActorUnit>
+    <CActorUnit id="HeroCorpse" parent="PolygonBase" unitName="HeroCorpse">
+        <EditorCategories value=""/>
+        <Scale value="0.415000"/>
+    </CActorUnit>
+    <CActorModel id="LandBoostBuff" parent="ModelAnimationStyleContinuous">
+        <On Terms="Behavior.LandBoost1.On" Send="Create"/>
+        <On Terms="Behavior.LandBoost1.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.LandBoost2.On" Send="Create"/>
+        <On Terms="Behavior.LandBoost2.Off" Send="AnimBracketStop BSD"/>
+        <On Terms="Behavior.LandBoost3.On" Send="Create"/>
+        <On Terms="Behavior.LandBoost3.Off" Send="AnimBracketStop BSD"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Model value="WildMutationBuff"/>
+        <AutoScaleFactor value="1.700000"/>
+    </CActorModel>
+    <CActorModel id="ObstacleWarmupNotify" parent="ModelAnimationStyleOneShot">
+        <EditorCategories value=""/>
+        <Model value="WarpGateWarpCast"/>
+        <Scale value="0.700000"/>
+    </CActorModel>
+    <CActorUnit id="PortalTargetStandard" parent="PolygonBase" unitName="PortalTargetStandard">
+        <EditorCategories value=""/>
+        <Scale value="0.800000,0.800000,0.100000"/>
+    </CActorUnit>
+    <CActorUnit id="ReviveCoinEgg" parent="GenericUnitStandard" unitName="ReviveCoinEgg">
+        <EditorCategories value=""/>
+        <Model value="ZerglingRespawnWeapon"/>
+    </CActorUnit>
+    <CActorModel id="ReviveCoinImpact" parent="ModelAnimationStyleOneShot">
+        <EditorCategories value=""/>
+        <On Terms="Effect.ReviveCoinImpact.Start" Send="Create"/>
+        <Model value="RavasaurAirAttackImpact"/>
+    </CActorModel>
+    <CActorMissile id="ReviveCoinMissile" parent="GenericAttackMissile" unitName="ReviveCoin">
+        <Model value="RavasaurAirWeapon"/>
+        <Scale value="1.500000"/>
+    </CActorMissile>
+    <CActorEventMacro id="IceBoostShadow">
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation" Send="TimerSet 0.050000 Shadow"/>
+        <On Terms="TimerExpired; TimerName Shadow; IsStatus ShadowCreate 1" Send="Create VoidSeekerSpeedShadow"/>
+        <On Terms="TimerExpired; TimerName Shadow" Send="TimerSet 0.050000 Shadow"/>
+        <On Terms="Behavior.IceBoost.On" Send="StatusSet ShadowCreate 1"/>
+        <On Terms="Behavior.IceBoost.Off" Send="StatusSet ShadowCreate 0"/>
+    </CActorEventMacro>
+    <CActorSound id="IceBoostSound" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <On Terms="Abil.IceBoost" Send="Create"/>
+        <Sound value="Obelisk_ArgusLinkLaunch"/>
+    </CActorSound>
+    <CActorModel id="LevelUpBuff" parent="ModelAnimationStyleContinuousUNIT">
+        <EditorCategories value=""/>
+        <On index="0" Terms="ActorCreation" Send="AnimPlay Attach Stand PlayForever"/>
+        <On index="1" Terms="ActorCreation" Send="TimerSet 3.000000 loop"/>
+        <On index="2" Terms="TimerExpired; TimerName loop" Send="TimerSet 3.000000 loop"/>
+        <On Terms="TimerExpired; TimerName loop" Send="AnimPlay Attach Stand PlayForever"/>
+        <On Terms="Behavior.LevelUpDummyBehavior.Create" Send="Create"/>
+        <On Terms="Behavior.LevelUpDummyBehavior.Destroy" Send="Destroy"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+    </CActorModel>
+    <CActorUnit id="LightSwitch" parent="PolygonBase" unitName="LightSwitch">
+        <EditorCategories value=""/>
+    </CActorUnit>
+    <CActorUnit id="Catapult" parent="PolygonBase" unitName="Catapult">
+        <Scale value="0.500000"/>
+    </CActorUnit>
+    <CActorModel id="ShadeImpact" parent="ModelAnimationStyleOneShotNoOrphan">
+        <EditorCategories value=""/>
+        <Model value="MindBoltImpact"/>
+    </CActorModel>
+    <CActorModel id="250mmStrikeCannonsImpact">
+        <Scale value="0.250000"/>
+    </CActorModel>
+    <CActorDoodad id="AiurCurtain">
+        <Footprint value=""/>
+        <VisibleOpacity value="1.000000"/>
+    </CActorDoodad>
+    <CActorUnit id="ArtifactPiece32" parent="GenericUnitBase" unitName="jumper">
+        <On Terms="ActorCreation" Send="Create SoundEmitter ArtifactPiece3_Stand"/>
+        <Model value="ArtifactPiece3"/>
+        <Scale value="1.500000"/>
+        <BuildModel value="ArtifactPiece3"/>
+        <DeathArray index="Normal" ModelLink="ArtifactPiece3"/>
+        <PlacementModel value="ArtifactPiece3"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-general-xelnagaartifactfragment03.dds"/>
+        </GroupIcon>
+        <HighlightTooltip value="Unit/Name/ArtifactPiece32"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <UnitIcon value="Assets\Textures\wireframe-general-xelnagaartifactfragment03.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-general-xelnagaartifactfragment03.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="IceDrone" parent="Drone">
+        <On index="0" Terms="UnitBirth.IceDrone"/>
+        <On index="1" Terms="UnitBirth.IceDrone"/>
+        <On index="2" Terms="UnitRevive.IceDrone"/>
+        <On index="3" Terms="UnitRevive.IceDrone"/>
+        <On index="4" Terms="UnitConstruction.IceDrone"/>
+        <On index="5" Terms="UnitConstruction.IceDrone"/>
+        <On Terms="Behavior.LandBoost1.On" Send="SetTintColor {224,99,5 1.100000} 0.500000"/>
+        <On Terms="Behavior.LandBoost1.Off" Send="ClearTintColor"/>
+        <On Terms="Behavior.LandBoost2.On" Send="SetTintColor {224,99,5 1.100000} 0.500000"/>
+        <On Terms="Behavior.LandBoost2.Off" Send="ClearTintColor"/>
+        <On Terms="Behavior.LandBoost3.On" Send="SetTintColor {224,99,5 1.100000} 0.500000"/>
+        <On Terms="Behavior.LandBoost3.Off" Send="ClearTintColor"/>
+        <On Terms="UnitRevive.IceDrone" Target="UnitDeathModel" Send="Signal ClearDeathModel"/>
+        <HighlightTooltip value="Unit/Name/IceDrone"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <StatusBarFlags index="Magazine" value="0"/>
+        <StatusBarFlags index="Workers" value="0"/>
+        <StatusBarFlags index="Custom" value="0"/>
+        <Macros value="IceBoostShadow"/>
+        <DeathArray index="Normal" ModelLink="DroneDeathRagdoll"/>
+    </CActorUnit>
+    <CActorUnit id="IceDroneGuide" parent="IceDrone" unitName="IceDroneGuide">
+        <EditorCategories value=""/>
+        <On index="0" Terms="UnitBirth.IceDroneGuide"/>
+        <On index="1" Terms="UnitBirth.IceDroneGuide"/>
+        <On index="2" Terms="UnitRevive.IceDroneGuide"/>
+        <On index="3" Terms="UnitRevive.IceDroneGuide"/>
+        <On index="4" Terms="UnitConstruction.IceDroneGuide"/>
+        <On index="5" Terms="UnitConstruction.IceDroneGuide"/>
+        <On index="92" removed="1"/>
+        <On index="93" removed="1"/>
+        <On index="94" removed="1"/>
+        <On index="95" removed="1"/>
+        <On index="96" removed="1"/>
+        <On index="97" removed="1"/>
+        <On index="98" removed="1"/>
+        <On index="99" removed="1"/>
+        <On index="100" removed="1"/>
+        <HighlightTooltip value="Unit/Name/IceDroneGuide"/>
+        <DeathArray index="Normal" ModelLink="DroneDeath"/>
+    </CActorUnit>
+    <CActorUnit id="IceDroneShadow" parent="IceDrone">
+        <On index="0" Terms="UnitBirth.IceDroneShadow"/>
+        <On index="1" Terms="UnitBirth.IceDroneShadow"/>
+        <On index="2" Terms="UnitRevive.IceDroneShadow"/>
+        <On index="3" Terms="UnitRevive.IceDroneShadow"/>
+        <On index="4" Terms="UnitConstruction.IceDroneShadow"/>
+        <On index="5" Terms="UnitConstruction.IceDroneShadow"/>
+        <On index="92" Terms="ActorCreation" Send="SetTintColor {31,87,139 2.000000}"/>
+        <On Terms="ActorCreation" Send="SetOpacity 0.600000"/>
+        <HighlightTooltip value="Unit/Name/IceDroneShadow"/>
+        <StatusBarFlags index="Progress" value="1"/>
+        <DeathArray index="Normal" ModelLink="DroneDeath"/>
+    </CActorUnit>
+    <!--                                                                                         -->
+    <!-- Baneling .............................................................................. -->
+    <!--                                                                                         -->
+    <CActorUnit id="Baneling" unitName="IceBaneling">
+        <AcceptedTransfers index="AnimProps" value="0"/>
+        <AcceptedTransfers index="Position" value="0"/>
+        <AcceptedTransfers index="Rotation" value="0"/>
+        <AcceptedTransfers index="Textures" value="0"/>
+        <AcceptedTransfers index="Status" value="0"/>
+        <AcceptedHostedPropTransfers index="CastShadows" value="0"/>
+        <AcceptedHostedPropTransfers index="CloakEffect" value="0"/>
+        <AcceptedHostedPropTransfers index="CreepEngulfment" value="0"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <AcceptedHostedPropTransfers index="LocalTintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Opacity" value="0"/>
+        <AcceptedHostedPropTransfers index="TeamColor" value="0"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <AcceptedHostedPropTransfers index="TintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Visibility" value="0"/>
+        <AcceptedHostedPropTransfers index="WarpGroup" value="0"/>
+        <On index="0" Terms="UnitBirth.IceBaneling" Send="Create SoundEmitter IceBaneling_Ambience"/>
+        <On index="1" Terms="UnitBirth.IceBaneling"/>
+        <On index="2" Terms="UnitRevive.IceBaneling"/>
+        <On index="3" Terms="UnitConstruction.IceBaneling.Start"/>
+        <On index="4" Terms="UnitConstruction.IceBaneling.Finish"/>
+        <On index="38" Terms="Behavior.PhoenixAntiGrav.On" Send="ModelSuddenMotionStart"/>
+        <On index="39" Terms="Behavior.PhoenixAntiGrav.Off" Send="ModelSuddenMotionStop"/>
+        <On index="40" Terms="Behavior.ForceLowDeath.On" Send="DeathCustomsEnablePhysics 0"/>
+        <On index="41" Terms="UnitBirth.IceBanelingBurrowed" Send="Create"/>
+        <On index="42" Terms="UnitBirth.IceBanelingBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
+        <On index="43" Terms="UnitTaunt.*.Start; Taunt Dance" Send="AnimPlay Dance Stand,Dance"/>
+        <On index="44" Terms="UnitTaunt.*.Stop; Taunt Dance" Send="AnimClear Dance"/>
+        <On index="45" Terms="ActorCreation" Send="StatusSet InAir 0"/>
+        <On index="46" Terms="UnitHeightUpdate.*.Lift" Send="StatusSet InAir 1"/>
+        <On index="47" Terms="UnitHeightUpdate.*.Land" Send="StatusSet InAir 0"/>
+        <On index="48" Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On index="49" Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On index="50" Terms="WeaponStart.*.AttackStart; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On index="51" Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On index="52" Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On index="53" Terms="UnitBirth.BanelingBurrowed" Send="Create"/>
+        <On index="54" Terms="UnitBirth.BanelingBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
+        <On index="55" Terms="AbilMorph.*.Finish; MorphTo Baneling; MorphFrom BanelingCocoon" Send="Create"/>
+        <On index="56" Terms="AbilMorph.*.Finish; MorphTo Baneling; MorphFrom BanelingCocoon" Send="$Birth 0 0.000000"/>
+        <On index="57" Terms="ActorCreation; ValidateUnit CentrificalHooksResearched" Send="AnimGroupApply Superior"/>
+        <On index="58" Terms="ActorCreation; ValidateUnit CentrificalHooksResearched" Send="SetWalkAnimMoveSpeed 3"/>
+        <On index="59" Terms="Upgrade.CentrificalHooks.Add" Send="AnimGroupApply Superior"/>
+        <On index="60" Terms="Upgrade.CentrificalHooks.Add" Send="SetWalkAnimMoveSpeed 3"/>
+        <On index="61" Terms="Upgrade.CentrificalHooks.Remove" Send="AnimGroupRemove Superior"/>
+        <On index="62" Terms="Upgrade.CentrificalHooks.Remove" Send="SetWalkAnimMoveSpeed 2"/>
+        <On index="63" Terms="AbilMorph.*.Cancel; MorphFrom Baneling; MorphTo BanelingBurrowed" Send="AnimClear Burrow"/>
+        <On index="64" Terms="AbilMorph.*.Finish; MorphTo Baneling; MorphFrom BanelingBurrowed" Send="AnimBracketStop Burrow"/>
+        <On index="65" Terms="AbilMorph.*.Finish; MorphTo Baneling; MorphFrom BanelingBurrowed" Send="AnimClear Burrow"/>
+        <On index="66" Terms="WeaponStart.VolatileBurst.AttackStart" Send="StatusSet DeathSuicide 1"/>
+        <On index="67" Terms="Abil.Explode.SourceCastStart" Send="StatusSet DeathSuicide 1"/>
+        <On index="68" Terms="UnitDeathCustomize; IsStatus DeathSuicide 0" Send="Create BanelingDeathNormalSound"/>
+        <On index="69" Terms="UnitDeathCustomize; IsStatus DeathSuicide 1" Send="Create BanelingDeathSuicideSound"/>
+        <On index="70" Terms="UnitMovementUpdate.*.Walk; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On index="71" removed="1"/>
+        <On index="72" removed="1"/>
+        <On index="73" removed="1"/>
+        <On index="74" removed="1"/>
+        <On index="75" removed="1"/>
+        <On index="76" removed="1"/>
+        <On index="77" removed="1"/>
+        <On index="78" removed="1"/>
+        <On index="79" removed="1"/>
+        <On index="80" removed="1"/>
+        <On index="81" removed="1"/>
+        <On index="82" removed="1"/>
+        <On index="83" removed="1"/>
+        <On index="84" removed="1"/>
+        <On index="85" removed="1"/>
+        <On index="86" removed="1"/>
+        <On index="87" removed="1"/>
+        <On index="88" removed="1"/>
+        <On index="89" removed="1"/>
+        <On index="90" removed="1"/>
+        <On index="91" removed="1"/>
+        <On index="92" removed="1"/>
+        <On index="93" removed="1"/>
+        <On index="94" removed="1"/>
+        <On index="95" removed="1"/>
+        <On index="96" removed="1"/>
+        <On index="97" removed="1"/>
+        <On index="98" removed="1"/>
+        <On index="99" removed="1"/>
+        <On index="100" removed="1"/>
+        <On index="101" removed="1"/>
+        <Scale value="1.200000"/>
+        <EventDataFootprint index="0" Model="IceBanelingFootprint"/>
+        <DeathArray index="Normal" VoiceLink="IceBanelingDeathVoice"/>
+        <DeathCustoms index="0" ModelLink="BanelingDeath"/>
+        <DeathCustoms index="1" ModelLink=""/>
+        <DeathCustoms index="2" ModelLink=""/>
+        <DeathCustoms index="3" ModelLink=""/>
+        <DeathCustoms index="4" ModelLink=""/>
+        <PortraitModel value=""/>
+        <GroupSoundArray index="What" value="IceBaneling_GroupWhat"/>
+        <GroupSoundArray index="Yes" value="IceBaneling_GroupYes"/>
+        <GroupSoundArray index="Attack" value="IceBaneling_GroupAttack"/>
+        <GroupSoundArray index="Board" value="IceBaneling_GroupBoard"/>
+        <SoundArray index="Birth" value="IceBaneling_Birth"/>
+        <SoundArray index="Ready" value="IceBaneling_Ready"/>
+        <SoundArray index="Help" value="IceBaneling_Help"/>
+        <SoundArray index="What" value="IceBaneling_What"/>
+        <SoundArray index="Yes" value="IceBaneling_Yes"/>
+        <SoundArray index="Attack" value="IceBaneling_Attack"/>
+        <SoundArray index="Pissed" value="IceBaneling_Pissed"/>
+        <SoundArray index="Movement" value="IceBaneling_Movement"/>
+        <SoundArray index="Turning" value="IceBaneling_Turning"/>
+        <SoundArray index="Board" value="IceBaneling_Board"/>
+        <SoundArray index="Click" value="IceBaneling_Click"/>
+        <SoundArray index="ClickError" value="IceBaneling_ClickError"/>
+        <SoundArray index="Highlight" value="IceBaneling_Highlight"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <InfoText value="Unit/IceBane/Info"/>
+    </CActorUnit>
+    <CActorUnit id="Baneling2" parent="Baneling" unitName="IceBaneling2">
+        <On index="0" Terms="UnitBirth.IceBaneling2" Send="Create"/>
+        <On index="1" Terms="UnitRevive.IceBaneling2"/>
+        <On index="2" Terms="UnitConstruction.IceBaneling2" Send="RefSet ::HostTurretBody _Selectable"/>
+        <On index="3" Terms="UnitConstruction.IceBaneling2" Send="Create"/>
+        <On index="4" Terms="AnimDone.*.Missing; AnimName ConstructionDeath" Send="Destroy"/>
+        <On index="5" Terms="ActorCreation; ValidateUnit IsFlying; Option Shadow Low; $AllowBlobShadow" Send="Create FlyerShadow"/>
+        <On index="6" Terms="ActorCreation; ValidateUnit IsNotFlying; Option Shadow Low; $AllowBlobShadow" Send="Create GroundShadow"/>
+        <On index="7" Terms="StatusOn.*.PreTargetingModel" Send="Create ModelPretargetGround"/>
+        <On index="8" Terms="StatusOff.*.PreTargetingModel" Target="ModelPretargetGround" Send="Destroy"/>
+        <On index="9" Terms="StatusOn.*.PreTargetingModel; ValidateUnit IsFlying" Send="Create GroundPreSelection"/>
+        <On index="10" Target="GroundPreSelection"/>
+        <On index="11" Terms="PreTargetingUpdate.*.Start" Send="SetTintColorBlendPair 255,192,192 255,128,128 0.150000 Bounce Pretarget"/>
+        <On index="12" Terms="PreTargetingUpdate.*.Stop" Target="" Send="ClearTintColor 0.100000 Pretarget"/>
+        <On index="13" Terms="StatusOn.*.PreTargetingTint" Send="PreTargetingUpdate Start"/>
+        <On index="14" Terms="StatusOff.*.PreTargetingTint" Send="PreTargetingUpdate Stop"/>
+        <On index="15" Terms="CursorUpdate.*.Start; ValidateUnit IsFlying" Send="StatusIncrement FlyerHelper"/>
+        <On index="16" Terms="CursorUpdate.*.Stop; ValidateUnit IsFlying; HasStatus FlyerHelper" Send="StatusDecrement FlyerHelper"/>
+        <On index="17" Terms="ActorCreation; ScopeContains GroundLocalSelection" Send="StatusSet Selected 1"/>
+        <On index="18" Terms="SelectionLocalUpdate.*.Start" Send="StatusSet Selected 1"/>
+        <On index="19" Terms="SelectionLocalUpdate.*.Stop" Send="StatusSet Selected 0"/>
+        <On index="20" Terms="StatusOn.*.Selected; ValidateUnit IsFlying" Send="StatusIncrement FlyerHelper"/>
+        <On index="21" Terms="StatusOff.*.Selected; ValidateUnit IsFlying; HasStatus FlyerHelper" Send="StatusDecrement FlyerHelper"/>
+        <On index="22" Terms="StatusOn.*.FlyerHelper; FlyerHelper All" Send="Create FlyerHelperSplat"/>
+        <On index="23" Terms="StatusOn.*.FlyerHelper; FlyerHelper Selected" Send="Create FlyerHelperSplat"/>
+        <On index="24" Terms="StatusOff.*.FlyerHelper; FlyerHelper Selected" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On index="25" Terms="ActorCreation; FlyerHelper All; ValidateUnit IsFlying"/>
+        <On index="26" Terms="ActorDestruction; FlyerHelper All; !HasStatus FlyerHelper"/>
+        <On index="27" Terms="FlyerHelperChange; FlyerHelper None" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On index="28" Terms="FlyerHelperChange; FlyerHelper Selected; HasStatus FlyerHelper; !ScopeContains FlyerHelperSplat" Target="" Send="Create FlyerHelperSplat"/>
+        <On index="29" Terms="FlyerHelperChange; FlyerHelper Selected; !HasStatus FlyerHelper"/>
+        <On index="30" Terms="FlyerHelperChange; FlyerHelper All; ValidateUnit IsFlying; !ScopeContains FlyerHelperSplat"/>
+        <On index="31" Terms="UnitBirth.*.Normal" Target="" Send="$Birth 0 0.000000"/>
+        <On index="32" Terms="UnitFidget" Send="AnimPlay Fidget Fidget"/>
+        <On index="33" Terms="UnitMovementUpdate.*.Walk" Send="AnimClear Fidget"/>
+        <On index="34" Terms="UnitDetectedByViewer.*.On; ValidateUnit IsHallucination" Target="_HallucinationTinter" Send="Signal HallucinationTintOn"/>
+        <On index="35" Terms="UnitDetectedByViewer.*.Off; ValidateUnit IsHallucination" Target="_HallucinationTinter" Send="Signal HallucinationTintOff"/>
+        <On index="36" Terms="Behavior.PhoenixAntiGrav.On" Send="ModelSuddenMotionStart"/>
+        <On index="37" Terms="Behavior.PhoenixAntiGrav.Off" Send="ModelSuddenMotionStop"/>
+        <On index="38" Terms="Behavior.ForceLowDeath.On" Send="DeathCustomsEnablePhysics 0"/>
+        <On index="39" Terms="UnitBirth.IceBanelingBurrowed" Send="Create"/>
+        <On index="40" Terms="UnitBirth.IceBanelingBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
+        <On index="41" Terms="UnitTaunt.*.Start; Taunt Dance" Send="AnimPlay Dance Stand,Dance"/>
+        <On index="42" Terms="UnitTaunt.*.Stop; Taunt Dance" Send="AnimClear Dance"/>
+        <On index="43" Terms="ActorCreation" Send="StatusSet InAir 0"/>
+        <On index="44" Terms="UnitHeightUpdate.*.Lift" Send="StatusSet InAir 1"/>
+        <On index="45" Terms="UnitHeightUpdate.*.Land" Send="StatusSet InAir 0"/>
+        <On index="46" Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On index="47" Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On index="48" Terms="WeaponStart.*.AttackStart; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On index="49" Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On index="50" Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On index="51" Terms="UnitBirth.BanelingBurrowed" Send="Create"/>
+        <On index="52" Terms="UnitBirth.BanelingBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
+        <On index="53" Terms="AbilMorph.*.Finish; MorphTo Baneling; MorphFrom BanelingCocoon" Send="Create"/>
+        <On index="54" Terms="ActorCreation; ValidateUnit CentrificalHooksResearched" Send="AnimGroupApply Superior"/>
+        <On index="55" Terms="ActorCreation; ValidateUnit CentrificalHooksResearched" Send="SetWalkAnimMoveSpeed 3"/>
+        <On index="56" Terms="Upgrade.CentrificalHooks.Add" Send="AnimGroupApply Superior"/>
+        <On index="57" Terms="Upgrade.CentrificalHooks.Add" Send="SetWalkAnimMoveSpeed 3"/>
+        <On index="58" Terms="Upgrade.CentrificalHooks.Remove" Send="AnimGroupRemove Superior"/>
+        <On index="59" Terms="Upgrade.CentrificalHooks.Remove" Send="SetWalkAnimMoveSpeed 2"/>
+        <On index="60" Terms="AbilMorph.*.Cancel; MorphFrom Baneling; MorphTo BanelingBurrowed" Send="AnimClear Burrow"/>
+        <On index="61" Terms="WeaponStart.VolatileBurst.AttackStart" Send="StatusSet DeathSuicide 1"/>
+        <On index="62" Terms="Abil.Explode.SourceCastStart" Send="StatusSet DeathSuicide 1"/>
+        <On index="63" Terms="UnitMovementUpdate.*.Walk; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On index="64" removed="1"/>
+        <On index="65" removed="1"/>
+        <On index="66" removed="1"/>
+        <On index="67" removed="1"/>
+        <On index="68" removed="1"/>
+        <On index="69" removed="1"/>
+        <On index="70" removed="1"/>
+        <Model value="Invisible"/>
+        <HighlightTooltip value="Unit/Name/Baneling2"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+    </CActorUnit>
+    <CActorUnit id="BanelingShadow" parent="Baneling" unitName="IceBanelingShadow">
+        <On index="0" Terms="UnitBirth.IceBanelingShadow" Send="Create SoundEmitter IceBaneling_Ambience"/>
+        <On index="1" Terms="UnitBirth.IceBanelingShadow"/>
+        <On index="2" Terms="UnitRevive.IceBanelingShadow"/>
+        <On index="3" Terms="UnitRevive.IceBanelingShadow"/>
+        <On index="4" Terms="UnitConstruction.IceBanelingShadow"/>
+        <On index="5" Terms="UnitConstruction.IceBanelingShadow"/>
+        <On Terms="ActorCreation" Target="" Send="SetTintColor {31,87,139 2.000000}"/>
+        <On Terms="ActorCreation" Target="" Send="SetOpacity 0.350000"/>
+        <HighlightTooltip value="Unit/Name/IceBanelingShadow"/>
+    </CActorUnit>
+    <CActorModel id="CreatureWarmupNotify" parent="ModelAnimationStyleOneShot">
+        <EditorCategories value=""/>
+        <Model value="WarpGateWarpCast"/>
+        <Scale value="0.700000"/>
+    </CActorModel>
+    <CActorUnit id="ForceFieldWallHorizLONG" parent="GenericUnitStandard" unitName="ForceFieldWallHorizLONG">
+        <CopySource value=""/>
+        <Aliases index="0" value="_Doodad"/>
+        <Macros index="0" removed="1"/>
+        <AcceptedTransfers index="AnimProps" value="0"/>
+        <AcceptedTransfers index="Textures" value="0"/>
+        <AcceptedTransfers index="Status" value="0"/>
+        <AcceptedHostedPropTransfers index="BaseModelScale" value="1"/>
+        <EditorCategories value="DoodadType:Structures"/>
+        <Model value="ForceFieldWall"/>
+        <Scale value="10.000000,1.000000,1.000000"/>
+        <ModelFlags index="IgnoreWalkables" value="1"/>
+        <ModelFlags index="NeedsVolumeMonitoring" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="0"/>
+        <EventDataFootprint index="0" removed="1"/>
+        <EventDataSound index="0" removed="1"/>
+        <BuildModel value="ForceFieldWall"/>
+        <DeathArray index="Normal" ModelLink="ForceFieldWall"/>
+        <EditorModel value="ForceFieldWall"/>
+        <PlacementModel value="ForceFieldWall"/>
+        <PlacementActorModel value="ForceFieldWallWithFootprint"/>
+        <HighlightTooltip value="Unit/Name/Bogus"/>
+    </CActorUnit>
+    <CActorUnit id="IceBanelingTimeShadow" parent="Baneling" unitName="IceBanelingTimeShadow">
+        <On index="0" Terms="UnitBirth.IceBanelingTimeShadow" Send="Create SoundEmitter IceBaneling_Ambience"/>
+        <On index="1" Terms="UnitBirth.IceBanelingTimeShadow"/>
+        <On index="2" Terms="UnitRevive.IceBanelingTimeShadow"/>
+        <On index="3" Terms="UnitConstruction.IceBanelingTimeShadow.Start"/>
+        <On index="4" Terms="UnitConstruction.IceBanelingTimeShadow.Finish"/>
+        <On index="38" Terms="UnitBirth.IceBanelingBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
+        <On index="39" Terms="UnitTaunt.*.Start; Taunt Dance" Send="AnimPlay Dance Stand,Dance"/>
+        <On index="40" Terms="UnitTaunt.*.Stop; Taunt Dance" Send="AnimClear Dance"/>
+        <On index="41" Terms="ActorCreation" Send="StatusSet InAir 0"/>
+        <On index="42" Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On index="43" Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On index="44" Terms="UnitBirth.BanelingBurrowed" Send="Create"/>
+        <On index="45" Terms="UnitBirth.BanelingBurrowed" Send="AnimBracketStart Burrow Burrow IGNORE Unburrow ClosingFull,OpeningPlayForever,Instant"/>
+        <On index="46" Terms="AbilMorph.*.Finish; MorphTo Baneling; MorphFrom BanelingCocoon" Send="Create"/>
+        <On index="47" Terms="AbilMorph.*.Finish; MorphTo Baneling; MorphFrom BanelingCocoon" Send="$Birth 0 0.000000"/>
+        <On index="48" Terms="ActorCreation; ValidateUnit CentrificalHooksResearched" Send="AnimGroupApply Superior"/>
+        <On index="49" Terms="ActorCreation; ValidateUnit CentrificalHooksResearched" Send="SetWalkAnimMoveSpeed 3"/>
+        <On index="50" Terms="Upgrade.CentrificalHooks.Add" Send="AnimGroupApply Superior"/>
+        <On index="51" Terms="Upgrade.CentrificalHooks.Add" Send="SetWalkAnimMoveSpeed 3"/>
+        <On index="52" Terms="Upgrade.CentrificalHooks.Remove" Send="AnimGroupRemove Superior"/>
+        <On index="53" Terms="Upgrade.CentrificalHooks.Remove" Send="SetWalkAnimMoveSpeed 2"/>
+        <On index="54" Terms="AbilMorph.*.Cancel; MorphFrom Baneling; MorphTo BanelingBurrowed" Send="AnimClear Burrow"/>
+        <On index="55" Terms="AbilMorph.*.Finish; MorphTo Baneling; MorphFrom BanelingBurrowed" Send="AnimBracketStop Burrow"/>
+        <On index="56" Terms="AbilMorph.*.Finish; MorphTo Baneling; MorphFrom BanelingBurrowed" Send="AnimClear Burrow"/>
+        <On index="57" Terms="WeaponStart.VolatileBurst.AttackStart" Send="StatusSet DeathSuicide 1"/>
+        <On index="58" Terms="Abil.Explode.SourceCastStart" Send="StatusSet DeathSuicide 1"/>
+        <On index="59" Terms="UnitDeathCustomize; IsStatus DeathSuicide 0" Send="Create BanelingDeathNormalSound"/>
+        <On index="60" Terms="UnitDeathCustomize; IsStatus DeathSuicide 1" Send="Create BanelingDeathSuicideSound"/>
+        <On index="61" Terms="UnitMovementUpdate.*.Walk; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On index="62" Terms="ActorCreation" Send="SetCastShadows"/>
+        <On index="63" Terms="ActorCreation" Send="SetOpacity"/>
+        <On index="64" removed="1"/>
+        <On index="65" removed="1"/>
+        <On index="66" removed="1"/>
+        <On index="67" removed="1"/>
+        <On index="68" removed="1"/>
+        <On index="69" removed="1"/>
+        <On index="70" removed="1"/>
+        <HighlightTooltip value="Unit/Name/IceBanelingTimeShadow"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+    </CActorUnit>
+    <CActorUnit id="Beacon_Protoss2" parent="GenericUnitStandard" unitName="Beacon_Protoss2">
+        <WalkAnimMoveSpeed value="0"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-general-circleofpower-protoss.dds"/>
+        </GroupIcon>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-general-circleofpower-protoss.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="Beacon_ZergSmall2" parent="GenericUnitStandard" unitName="Beacon_ZergSmall2">
+        <DeathCustoms index="0" ModelLink="ProtossSmallUnitDeath2" Name="AntiGravProtoss"/>
+        <DeathCustoms index="1" ModelLink="TerranSmallUnitDeath2" Name="AntiGravTerran"/>
+        <DeathCustoms index="2" ModelLink="ZergSmallUnitDeath2" Name="AntiGravZerg"/>
+        <PortraitModel value="StaticPortrait2"/>
+        <WalkAnimMoveSpeed value="0"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\wireframe-general-circleofpower-zerg.dds"/>
+        </GroupIcon>
+        <MinimapRenderPriority value="Resource"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <Wireframe>
+            <Image value="Assets\Textures\wireframe-general-circleofpower-zerg.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="BlinkOriginModel2" parent="ModelAnimationStyleOneShot">
+        <InheritType value="OneShot"/>
+        <Inherits index="BaseModelScale" value="1"/>
+        <Inherits index="Scale" value="1"/>
+        <On Terms="Effect.Blink4.Start; At Source" Send="Create"/>
+        <On Terms="Effect.Blink4.Start; At Source; ValidateUnit NoDarkProtoss" Send="ModelSwap DarkBlinkOriginModel"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOriginStationary"/>
+        <Model value="BlinkOriginModel3"/>
+    </CActorModel>
+    <CActorSound id="BlinkStopSound2" parent="SoundOneShot">
+        <On Terms="Effect.Blink4.Stop; At Source" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOrigin"/>
+        <Sound value="Stalker_Blink2"/>
+    </CActorSound>
+    <CActorDoodad id="Bush">
+        <Aliases index="1" removed="1"/>
+        <Aliases index="2" removed="1"/>
+        <AcceptedHostedPropTransfers index="CreepEngulfment" value="0"/>
+        <On index="2" removed="1"/>
+        <On index="3" removed="1"/>
+        <On index="4" removed="1"/>
+        <On index="5" removed="1"/>
+    </CActorDoodad>
+    <!-- Crabeetle                                                                            -->
+    <CActorUnit id="Crabeetle">
+        <Scale value="1.500000"/>
+    </CActorUnit>
+    <CActorUnit id="DarkTemplarNoAttack" parent="DarkTemplar" unitName="DarkTemplarNoAttack">
+        <On index="0" Terms="UnitBirth.DarkTemplarNoAttack"/>
+        <On index="1" Terms="UnitBirth.DarkTemplarNoAttack"/>
+        <On index="2" Terms="UnitRevive.DarkTemplarNoAttack"/>
+        <On index="3" Terms="UnitRevive.DarkTemplarNoAttack"/>
+        <On index="4" Terms="UnitConstruction.DarkTemplarNoAttack.Start"/>
+        <On index="5" Terms="UnitConstruction.DarkTemplarNoAttack.Finish"/>
+        <On Terms="ActorCreation; IsInEditor" Send="Create CollDarkTemplar"/>
+        <HighlightTooltip value="Unit/Name/DarkTemplarNoAttack"/>
+    </CActorUnit>
+    <!--                                                                                         -->
+    <!-- Marauder (Dominion Kill Team) ......................................................... -->
+    <!--                                                                                         -->
+    <CActorUnit id="DominionKillTeam">
+        <Scale value="1.800000"/>
+    </CActorUnit>
+    <CActorDoodad id="ExhaustPipes">
+        <On index="0" removed="1"/>
+        <On index="1" removed="1"/>
+        <On index="2" removed="1"/>
+        <On index="3" removed="1"/>
+        <On index="4" removed="1"/>
+        <On index="5" removed="1"/>
+        <On index="6" removed="1"/>
+        <Scale value="1.000000,1.000000,1.500000"/>
+        <Footprint value=""/>
+    </CActorDoodad>
+    <CActorSound id="FeedbackImpactSound">
+        <Sound value="VoidSeeker_PsytrousOxideOn"/>
+    </CActorSound>
+    <CActorSound id="FeedbackLaunchSound">
+        <Sound value="VoidSeeker_PsytrousOxideOff"/>
+    </CActorSound>
+    <!--                                                                                         -->
+    <!-- Feederling ............................................................................ -->
+    <!--                                                                                         -->
+    <CActorUnit id="Feederling">
+        <Scale value="1.400000"/>
+    </CActorUnit>
+    <CActorUnit id="ForceFieldWallWithFootprint" parent="GenericUnitStandard" unitName="ForceFieldWall">
+        <CopySource value=""/>
+        <Aliases index="0" value="_Doodad"/>
+        <Macros index="0" removed="1"/>
+        <AcceptedTransfers index="AnimProps" value="0"/>
+        <AcceptedTransfers index="Textures" value="0"/>
+        <AcceptedTransfers index="Status" value="0"/>
+        <AcceptedHostedPropTransfers index="BaseModelScale" value="1"/>
+        <EditorCategories value="DoodadType:Structures"/>
+        <ModelFlags index="IgnoreWalkables" value="1"/>
+        <ModelFlags index="NeedsVolumeMonitoring" value="0"/>
+        <ModelFlags index="UseSyncSeed" value="0"/>
+        <EventDataFootprint index="0" removed="1"/>
+        <EventDataSound index="0" removed="1"/>
+        <EditorModel value="ForceFieldWall"/>
+        <HighlightTooltip value="Unit/Name/Bogus"/>
+        <Scale value="1.200000,1.000000,1.000000"/>
+        <PlacementActorModel value="ForceFieldWallWithFootprint"/>
+    </CActorUnit>
+    <CActorUnit id="Gateway">
+        <AcceptedHostedPropTransfers index="CastShadows" value="0"/>
+        <EventDataFootprint index="0" Model=""/>
+    </CActorUnit>
+    <CActorModel id="GenericAttackDamageModel2" parent="GenericAttackModel"/>
+    <CActorSound id="GenericAttackDamageSound2" parent="GenericAttackSound"/>
+    <CActorModel id="GenericAttackImpactModel2" parent="GenericAttackModel"/>
+    <CActorSound id="GenericAttackImpactSound2" parent="GenericAttackSound"/>
+    <CActorModel id="GenericAttackLaunchModel2" parent="GenericAttackModel"/>
+    <CActorSound id="GenericAttackLaunchSound2" parent="GenericAttackSound"/>
+    <CActorModel id="IceTerrainFlatMoving2" parent="ModelAddition" unitName="IceTerrainFlatMoving">
+        <CopySource value="_Unit"/>
+        <Aliases index="0" value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Inherits index="BaseModelScale" value="0"/>
+        <Inherits index="CastShadows" value="0"/>
+        <Inherits index="CloakEffect" value="0"/>
+        <Inherits index="CreepEngulfment" value="0"/>
+        <Inherits index="Decal" value="0"/>
+        <Inherits index="Opacity" value="0"/>
+        <Inherits index="Scale" value="0"/>
+        <Inherits index="TeamColor" value="0"/>
+        <Inherits index="TimeScale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <Inherits index="Visibility" value="0"/>
+        <Inherits index="WarpGroup" value="0"/>
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+        <AcceptedHostedPropTransfers index="BaseModelScale" value="0"/>
+        <AcceptedHostedPropTransfers index="CastShadows" value="0"/>
+        <AcceptedHostedPropTransfers index="CloakEffect" value="0"/>
+        <AcceptedHostedPropTransfers index="CreepEngulfment" value="0"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <AcceptedHostedPropTransfers index="LocalTintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Opacity" value="0"/>
+        <AcceptedHostedPropTransfers index="Scale" value="0"/>
+        <AcceptedHostedPropTransfers index="TeamColor" value="0"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <AcceptedHostedPropTransfers index="TintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Visibility" value="0"/>
+        <AcceptedHostedPropTransfers index="WarpGroup" value="0"/>
+        <EditorCategories value="DoodadType:Environment"/>
+        <On index="0" Terms="ActorCreation" Send="TimerSet 0.100000 attch1"/>
+        <On index="1" Terms="UnitBirth.IceTerrainFlatMoving" Send="Create"/>
+        <On index="2" Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureNormal"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="SetTintColor {255,255,255 1.100000}"/>
+        <Host Subject=""/>
+        <HostSiteOps Ops="SOpFlatIceMove12"/>
+        <Model value="IceTerrainFlat"/>
+        <Scale value="0.300000,0.250000,1.000000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <ModelFlags index="IgnoreWalkables" value="1"/>
+        <EventDataFootprint Actor="UnitFootprint" Model="MarineFootprint"/>
+        <EventDataSound Actor="UnitSound"/>
+    </CActorModel>
+    <CActorModel id="IceTerrainFlatMoving22" parent="ModelAddition" unitName="IceTerrainFlatMoving">
+        <CopySource value="_Unit"/>
+        <Aliases index="0" value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Inherits index="BaseModelScale" value="0"/>
+        <Inherits index="CastShadows" value="0"/>
+        <Inherits index="CloakEffect" value="0"/>
+        <Inherits index="CreepEngulfment" value="0"/>
+        <Inherits index="Decal" value="0"/>
+        <Inherits index="Opacity" value="0"/>
+        <Inherits index="Scale" value="0"/>
+        <Inherits index="TeamColor" value="0"/>
+        <Inherits index="TimeScale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <Inherits index="Visibility" value="0"/>
+        <Inherits index="WarpGroup" value="0"/>
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+        <AcceptedHostedPropTransfers index="BaseModelScale" value="0"/>
+        <AcceptedHostedPropTransfers index="CastShadows" value="0"/>
+        <AcceptedHostedPropTransfers index="CloakEffect" value="0"/>
+        <AcceptedHostedPropTransfers index="CreepEngulfment" value="0"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <AcceptedHostedPropTransfers index="LocalTintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Opacity" value="0"/>
+        <AcceptedHostedPropTransfers index="Scale" value="0"/>
+        <AcceptedHostedPropTransfers index="TeamColor" value="0"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <AcceptedHostedPropTransfers index="TintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Visibility" value="0"/>
+        <AcceptedHostedPropTransfers index="WarpGroup" value="0"/>
+        <EditorCategories value="DoodadType:Environment"/>
+        <On index="0" Terms="ActorCreation" Send="TimerSet 0.100000 attch1"/>
+        <On index="1" Terms="UnitBirth.IceTerrainFlatMoving" Send="Create"/>
+        <On index="2" Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureNormal"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="SetTintColor {255,255,255 1.100000}"/>
+        <Host Subject=""/>
+        <HostSiteOps Ops="SOpFlatIceMove122"/>
+        <Model value="IceTerrainFlat"/>
+        <Scale value="0.150000,0.150000,1.000000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <ModelFlags index="IgnoreWalkables" value="1"/>
+        <EventDataFootprint Actor="UnitFootprint" Model="MarineFootprint"/>
+        <EventDataSound Actor="UnitSound"/>
+    </CActorModel>
+    <CActorModel id="IceTerrainFlatMoving222" parent="ModelAddition" unitName="IceTerrainFlatMoving">
+        <CopySource value="_Unit"/>
+        <Aliases index="0" value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Inherits index="BaseModelScale" value="0"/>
+        <Inherits index="CastShadows" value="0"/>
+        <Inherits index="CloakEffect" value="0"/>
+        <Inherits index="CreepEngulfment" value="0"/>
+        <Inherits index="Decal" value="0"/>
+        <Inherits index="Opacity" value="0"/>
+        <Inherits index="Scale" value="0"/>
+        <Inherits index="TeamColor" value="0"/>
+        <Inherits index="TimeScale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <Inherits index="Visibility" value="0"/>
+        <Inherits index="WarpGroup" value="0"/>
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+        <AcceptedHostedPropTransfers index="BaseModelScale" value="0"/>
+        <AcceptedHostedPropTransfers index="CastShadows" value="0"/>
+        <AcceptedHostedPropTransfers index="CloakEffect" value="0"/>
+        <AcceptedHostedPropTransfers index="CreepEngulfment" value="0"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <AcceptedHostedPropTransfers index="LocalTintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Opacity" value="0"/>
+        <AcceptedHostedPropTransfers index="Scale" value="0"/>
+        <AcceptedHostedPropTransfers index="TeamColor" value="0"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <AcceptedHostedPropTransfers index="TintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Visibility" value="0"/>
+        <AcceptedHostedPropTransfers index="WarpGroup" value="0"/>
+        <EditorCategories value="DoodadType:Environment"/>
+        <On index="0" Terms="ActorCreation" Send="TimerSet 0.100000 attch1"/>
+        <On index="1" Terms="UnitBirth.IceTerrainFlatMoving" Send="Create"/>
+        <On index="2" Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureNormal"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="SetTintColor {255,255,255 1.100000}"/>
+        <Host Subject=""/>
+        <HostSiteOps Ops="SOpFlatIceMove1222"/>
+        <Model value="IceTerrainFlat"/>
+        <Scale value="0.300000,0.250000,1.000000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <ModelFlags index="IgnoreWalkables" value="1"/>
+        <EventDataFootprint Actor="UnitFootprint" Model="MarineFootprint"/>
+        <EventDataSound Actor="UnitSound"/>
+    </CActorModel>
+    <CActorModel id="IceTerrainFlatMoving2222" parent="ModelAddition" unitName="IceTerrainFlatMoving">
+        <CopySource value="_Unit"/>
+        <Aliases index="0" value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Inherits index="BaseModelScale" value="0"/>
+        <Inherits index="CastShadows" value="0"/>
+        <Inherits index="CloakEffect" value="0"/>
+        <Inherits index="CreepEngulfment" value="0"/>
+        <Inherits index="Decal" value="0"/>
+        <Inherits index="Opacity" value="0"/>
+        <Inherits index="Scale" value="0"/>
+        <Inherits index="TeamColor" value="0"/>
+        <Inherits index="TimeScale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <Inherits index="Visibility" value="0"/>
+        <Inherits index="WarpGroup" value="0"/>
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+        <AcceptedHostedPropTransfers index="BaseModelScale" value="0"/>
+        <AcceptedHostedPropTransfers index="CastShadows" value="0"/>
+        <AcceptedHostedPropTransfers index="CloakEffect" value="0"/>
+        <AcceptedHostedPropTransfers index="CreepEngulfment" value="0"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <AcceptedHostedPropTransfers index="LocalTintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Opacity" value="0"/>
+        <AcceptedHostedPropTransfers index="Scale" value="0"/>
+        <AcceptedHostedPropTransfers index="TeamColor" value="0"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <AcceptedHostedPropTransfers index="TintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Visibility" value="0"/>
+        <AcceptedHostedPropTransfers index="WarpGroup" value="0"/>
+        <EditorCategories value="DoodadType:Environment"/>
+        <On index="0" Terms="ActorCreation" Send="TimerSet 0.100000 attch1"/>
+        <On index="1" Terms="UnitBirth.IceTerrainFlatMoving" Send="Create"/>
+        <On index="2" Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureNormal"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="SetTintColor {255,255,255 1.100000}"/>
+        <Host Subject=""/>
+        <HostSiteOps Ops="SOpFlatIceMove12222"/>
+        <Model value="IceTerrainFlat"/>
+        <Scale value="0.300000,0.250000,1.000000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <ModelFlags index="IgnoreWalkables" value="1"/>
+        <EventDataFootprint Actor="UnitFootprint" Model="MarineFootprint"/>
+        <EventDataSound Actor="UnitSound"/>
+    </CActorModel>
+    <CActorModel id="IceTerrainFlatMoving22222" parent="ModelAddition" unitName="IceTerrainFlatMoving">
+        <CopySource value="_Unit"/>
+        <Aliases index="0" value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Inherits index="BaseModelScale" value="0"/>
+        <Inherits index="CastShadows" value="0"/>
+        <Inherits index="CloakEffect" value="0"/>
+        <Inherits index="CreepEngulfment" value="0"/>
+        <Inherits index="Decal" value="0"/>
+        <Inherits index="Opacity" value="0"/>
+        <Inherits index="Scale" value="0"/>
+        <Inherits index="TeamColor" value="0"/>
+        <Inherits index="TimeScale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <Inherits index="Visibility" value="0"/>
+        <Inherits index="WarpGroup" value="0"/>
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+        <AcceptedHostedPropTransfers index="BaseModelScale" value="0"/>
+        <AcceptedHostedPropTransfers index="CastShadows" value="0"/>
+        <AcceptedHostedPropTransfers index="CloakEffect" value="0"/>
+        <AcceptedHostedPropTransfers index="CreepEngulfment" value="0"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <AcceptedHostedPropTransfers index="LocalTintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Opacity" value="0"/>
+        <AcceptedHostedPropTransfers index="Scale" value="0"/>
+        <AcceptedHostedPropTransfers index="TeamColor" value="0"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <AcceptedHostedPropTransfers index="TintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Visibility" value="0"/>
+        <AcceptedHostedPropTransfers index="WarpGroup" value="0"/>
+        <EditorCategories value="DoodadType:Environment"/>
+        <On index="0" Terms="ActorCreation" Send="TimerSet 0.100000 attch1"/>
+        <On index="1" Terms="UnitBirth.IceTerrainFlatMoving" Send="Create"/>
+        <On index="2" Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureNormal"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="SetTintColor {255,255,255 1.100000}"/>
+        <Host Subject=""/>
+        <HostSiteOps Ops="SOpFlatIceMove122222"/>
+        <Model value="IceTerrainFlat"/>
+        <Scale value="0.150000,0.150000,1.000000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <ModelFlags index="IgnoreWalkables" value="1"/>
+        <EventDataFootprint Actor="UnitFootprint" Model="MarineFootprint"/>
+        <EventDataSound Actor="UnitSound"/>
+    </CActorModel>
+    <CActorModel id="IceTerrainFlatMoving222222" parent="ModelAddition" unitName="IceTerrainFlatMoving">
+        <CopySource value="_Unit"/>
+        <Aliases index="0" value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Inherits index="BaseModelScale" value="0"/>
+        <Inherits index="CastShadows" value="0"/>
+        <Inherits index="CloakEffect" value="0"/>
+        <Inherits index="CreepEngulfment" value="0"/>
+        <Inherits index="Decal" value="0"/>
+        <Inherits index="Opacity" value="0"/>
+        <Inherits index="Scale" value="0"/>
+        <Inherits index="TeamColor" value="0"/>
+        <Inherits index="TimeScale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <Inherits index="Visibility" value="0"/>
+        <Inherits index="WarpGroup" value="0"/>
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+        <AcceptedHostedPropTransfers index="BaseModelScale" value="0"/>
+        <AcceptedHostedPropTransfers index="CastShadows" value="0"/>
+        <AcceptedHostedPropTransfers index="CloakEffect" value="0"/>
+        <AcceptedHostedPropTransfers index="CreepEngulfment" value="0"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <AcceptedHostedPropTransfers index="LocalTintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Opacity" value="0"/>
+        <AcceptedHostedPropTransfers index="Scale" value="0"/>
+        <AcceptedHostedPropTransfers index="TeamColor" value="0"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <AcceptedHostedPropTransfers index="TintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Visibility" value="0"/>
+        <AcceptedHostedPropTransfers index="WarpGroup" value="0"/>
+        <EditorCategories value="DoodadType:Environment"/>
+        <On index="0" Terms="ActorCreation" Send="TimerSet 0.100000 attch1"/>
+        <On index="1" Terms="UnitBirth.IceTerrainFlatMoving" Send="Create"/>
+        <On index="2" Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureNormal"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="SetTintColor {255,255,255 1.100000}"/>
+        <Host Subject=""/>
+        <HostSiteOps Ops="SOpFlatIceMove1222222"/>
+        <Model value="IceTerrainFlat"/>
+        <Scale value="0.200000,0.200000,1.000000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <ModelFlags index="IgnoreWalkables" value="1"/>
+        <EventDataFootprint Actor="UnitFootprint" Model="MarineFootprint"/>
+        <EventDataSound Actor="UnitSound"/>
+    </CActorModel>
+    <CActorModel id="IceTerrainFlatMoving2222222" parent="ModelAddition" unitName="IceTerrainFlatMoving">
+        <CopySource value="_Unit"/>
+        <Aliases index="0" value="_Unit"/>
+        <Aliases value="_Selectable"/>
+        <Macros value="DeadAnimationMacro"/>
+        <Macros value="UnloadDropAnim"/>
+        <Macros value="PhysicsDeathsSwarmGround"/>
+        <Macros value="TerrainSquibAnimations"/>
+        <Inherits index="BaseModelScale" value="0"/>
+        <Inherits index="CastShadows" value="0"/>
+        <Inherits index="CloakEffect" value="0"/>
+        <Inherits index="CreepEngulfment" value="0"/>
+        <Inherits index="Decal" value="0"/>
+        <Inherits index="Opacity" value="0"/>
+        <Inherits index="Scale" value="0"/>
+        <Inherits index="TeamColor" value="0"/>
+        <Inherits index="TimeScale" value="0"/>
+        <Inherits index="TintColor" value="0"/>
+        <Inherits index="Visibility" value="0"/>
+        <Inherits index="WarpGroup" value="0"/>
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+        <AcceptedHostedPropTransfers index="BaseModelScale" value="0"/>
+        <AcceptedHostedPropTransfers index="CastShadows" value="0"/>
+        <AcceptedHostedPropTransfers index="CloakEffect" value="0"/>
+        <AcceptedHostedPropTransfers index="CreepEngulfment" value="0"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <AcceptedHostedPropTransfers index="LocalTintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Opacity" value="0"/>
+        <AcceptedHostedPropTransfers index="Scale" value="0"/>
+        <AcceptedHostedPropTransfers index="TeamColor" value="0"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <AcceptedHostedPropTransfers index="TintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Visibility" value="0"/>
+        <AcceptedHostedPropTransfers index="WarpGroup" value="0"/>
+        <EditorCategories value="DoodadType:Environment"/>
+        <On index="0" Terms="ActorCreation" Send="TimerSet 0.100000 attch1"/>
+        <On index="1" Terms="UnitBirth.IceTerrainFlatMoving" Send="Create"/>
+        <On index="2" Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureNormal"/>
+        <On Terms="TimerExpired; TimerName attch1" Send="SetTintColor {255,255,255 1.100000}"/>
+        <Host Subject=""/>
+        <HostSiteOps Ops="SOpFlatIceMove12222222"/>
+        <Model value="IceTerrainFlat"/>
+        <Scale value="0.150000,0.150000,1.000000"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+        <ModelFlags index="IgnoreWalkables" value="1"/>
+        <EventDataFootprint Actor="UnitFootprint" Model="MarineFootprint"/>
+        <EventDataSound Actor="UnitSound"/>
+    </CActorModel>
+    <CActorUnit id="InvisibleIceMover" parent="Marine" unitName="InvisibleIceMover">
+        <Macros index="0" removed="1"/>
+        <Macros index="1" removed="1"/>
+        <Macros index="2" removed="1"/>
+        <Macros index="3" removed="1"/>
+        <Macros index="4" removed="1"/>
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedHostedPropTransfers index="CastShadows" value="0"/>
+        <AcceptedHostedPropTransfers index="CloakEffect" value="0"/>
+        <AcceptedHostedPropTransfers index="CreepEngulfment" value="0"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <AcceptedHostedPropTransfers index="LocalTintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Opacity" value="0"/>
+        <AcceptedHostedPropTransfers index="Scale" value="0"/>
+        <AcceptedHostedPropTransfers index="TeamColor" value="0"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <AcceptedHostedPropTransfers index="TintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Visibility" value="0"/>
+        <AcceptedHostedPropTransfers index="WarpGroup" value="0"/>
+        <EditorCategories value="DoodadType:Environment"/>
+        <On index="0" Terms="UnitBirth.InvisibleIceMover" Send="Create"/>
+        <On index="1" removed="1"/>
+        <On index="2" removed="1"/>
+        <On index="3" removed="1"/>
+        <On index="4" removed="1"/>
+        <On index="5" removed="1"/>
+        <On index="6" removed="1"/>
+        <On index="7" removed="1"/>
+        <On index="8" removed="1"/>
+        <On index="9" removed="1"/>
+        <On index="10" removed="1"/>
+        <On index="11" removed="1"/>
+        <On index="12" removed="1"/>
+        <On index="13" removed="1"/>
+        <On index="14" removed="1"/>
+        <On index="15" removed="1"/>
+        <On index="16" removed="1"/>
+        <On index="17" removed="1"/>
+        <On index="18" removed="1"/>
+        <On index="19" removed="1"/>
+        <On index="20" removed="1"/>
+        <On index="21" removed="1"/>
+        <On index="22" removed="1"/>
+        <On index="23" removed="1"/>
+        <On index="24" removed="1"/>
+        <On index="25" removed="1"/>
+        <On index="26" removed="1"/>
+        <On index="27" removed="1"/>
+        <On index="28" removed="1"/>
+        <On index="29" removed="1"/>
+        <On index="30" removed="1"/>
+        <On index="31" removed="1"/>
+        <On index="32" removed="1"/>
+        <On index="33" removed="1"/>
+        <On index="34" removed="1"/>
+        <On index="35" removed="1"/>
+        <On index="36" removed="1"/>
+        <On index="37" removed="1"/>
+        <On index="38" removed="1"/>
+        <On index="39" removed="1"/>
+        <On index="40" removed="1"/>
+        <On index="41" removed="1"/>
+        <On index="42" removed="1"/>
+        <On index="43" removed="1"/>
+        <On index="44" removed="1"/>
+        <On index="45" removed="1"/>
+        <On index="46" removed="1"/>
+        <On index="47" removed="1"/>
+        <On index="48" removed="1"/>
+        <On index="49" removed="1"/>
+        <On index="50" removed="1"/>
+        <On index="51" removed="1"/>
+        <On index="52" removed="1"/>
+        <On index="53" removed="1"/>
+        <On index="54" removed="1"/>
+        <On index="55" removed="1"/>
+        <On index="56" removed="1"/>
+        <On index="57" removed="1"/>
+        <On index="58" removed="1"/>
+        <On index="59" removed="1"/>
+        <On index="60" removed="1"/>
+        <On index="61" removed="1"/>
+        <On index="62" removed="1"/>
+        <On index="63" removed="1"/>
+        <On index="64" removed="1"/>
+        <On index="65" removed="1"/>
+        <On index="66" removed="1"/>
+        <On index="67" removed="1"/>
+        <On index="68" removed="1"/>
+        <On index="69" removed="1"/>
+        <On index="70" removed="1"/>
+        <On index="71" removed="1"/>
+        <On index="72" removed="1"/>
+        <On index="73" removed="1"/>
+        <On index="74" removed="1"/>
+        <On index="75" removed="1"/>
+        <On index="76" removed="1"/>
+        <On index="77" removed="1"/>
+        <On index="78" removed="1"/>
+        <On index="79" removed="1"/>
+        <Model value="Invisible"/>
+        <ModelFlags index="IgnoreWalkables" value="1"/>
+        <ModelFlags index="NeedsVolumeMonitoring" value="0"/>
+        <BuildModel value="Invisible"/>
+        <DeathArray index="Normal">
+            <AnimProps value=""/>
+            <ModelLink value=""/>
+            <SoundLink value=""/>
+            <VoiceLink value=""/>
+        </DeathArray>
+        <DeathArray index="Blast" ModelLink=""/>
+        <DeathArray index="Disintegrate" ModelLink="" SoundLink=""/>
+        <DeathArray index="Eat" AnimProps="" ModelLink="" SoundLink=""/>
+        <DeathArray index="Eviscerate" AnimProps="" ModelLink="" SoundLink=""/>
+        <DeathArray index="Fire" AnimProps="" ModelLink="" SoundLink=""/>
+        <DeathArray index="Silentkill" AnimProps="" SoundLink=""/>
+        <DeathArray index="Squish" AnimProps="" SoundLink=""/>
+        <DeathArray index="UnderConstruction" AnimProps=""/>
+        <DeathCustoms index="0" removed="1"/>
+        <DeathCustoms index="1" removed="1"/>
+        <DeathCustoms index="2" removed="1"/>
+        <DeathCustoms index="3" removed="1"/>
+        <DeathCustoms index="4" removed="1"/>
+        <DeathCustoms index="5" removed="1"/>
+        <DeathCustoms index="6" removed="1"/>
+        <DeathCustoms index="7" removed="1"/>
+        <DeathCustoms index="8" removed="1"/>
+        <DeathCustoms index="9" removed="1"/>
+        <DeathCustoms index="10" removed="1"/>
+        <DeathCustoms index="11" removed="1"/>
+        <DeathCustoms index="12" removed="1"/>
+        <DeathCustoms index="13" removed="1"/>
+        <DeathCustoms index="14" removed="1"/>
+        <DeathCustoms index="15" removed="1"/>
+        <DeathCustoms index="16" removed="1"/>
+        <DeathActorModel value="UnitDeathModel"/>
+        <EditorModel value="PhysicsSphere"/>
+        <PlacementModel value="Invisible"/>
+        <PortraitModel value="StaticPortrait"/>
+        <AbilSoundArray index="0" AbilCmd="" Sound=""/>
+        <GroupIcon>
+            <Image index="0" value="Assets\Textures\btn-command-returncargo.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value=""/>
+        <GroupSoundArray index="Yes" value=""/>
+        <GroupSoundArray index="Attack" value=""/>
+        <GroupSoundArray index="Board" value=""/>
+        <HeroIcon value="Assets\Textures\btn-command-returncargo.dds"/>
+        <HighlightTooltip value="Unit/Name/InvisibleIceMover"/>
+        <LifeArmorIcon value="Assets\Textures\btn-command-returncargo.dds"/>
+        <SoundArray index="Birth" value=""/>
+        <SoundArray index="Ready" value=""/>
+        <SoundArray index="Help" value=""/>
+        <SoundArray index="What" value=""/>
+        <SoundArray index="Yes" value=""/>
+        <SoundArray index="Attack" value=""/>
+        <SoundArray index="Pissed" value=""/>
+        <SoundArray index="Movement" value=""/>
+        <SoundArray index="Turning" value=""/>
+        <SoundArray index="Board" value=""/>
+        <SoundArray index="Click" value=""/>
+        <SoundArray index="ClickError" value=""/>
+        <SoundArray index="Highlight" value=""/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <UnitIcon value="Assets\Textures\btn-command-returncargo.dds"/>
+        <Wireframe>
+            <Image index="0" value="Assets\Textures\btn-command-returncargo.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorDoodad id="IceWorldRock2">
+        <EditorCategories value="DoodadType:Environment"/>
+        <Model value="DestructibleIce6x6"/>
+        <TexSets value="IceWorld"/>
+        <Footprint value="Footprint4x4DestructibleRockDiagonal"/>
+    </CActorDoodad>
+    <CActorDoodad id="IceWorldRock22">
+        <EditorCategories value="DoodadType:Environment"/>
+        <On index="0" Terms="ActorCreation" Send="Create SoundEmitter Doodad_IceWorldRock2"/>
+        <Model value="DestructibleIceHuge"/>
+        <TexSets value="IceWorld"/>
+    </CActorDoodad>
+    <!-- Karak Female                                                            -->
+    <CActorUnit id="KarakFemale">
+        <Scale value="2.000000"/>
+    </CActorUnit>
+    <CActorUnit id="KarakFemale2" parent="GenericUnitCritter" unitName="KarakFemale2">
+        <On Terms="Effect.Suicide.Start" Send="Create CritterExplosion"/>
+        <Model value="KarakFemale"/>
+        <Scale value="0.700000,0.700000,0.800000"/>
+        <BuildModel value="KarakFemale"/>
+        <DeathArray index="Normal" ModelLink="KarakFemaleDeath" SoundLink="Zerg_ExplosionSmall"/>
+        <PlacementModel value="KarakFemale"/>
+        <PortraitModel value="KarakFemalePortrait"/>
+        <WalkAnimMoveSpeed value="2"/>
+        <BarOffset value="40"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-critter-karakfemale.dds"/>
+        </GroupIcon>
+        <SoundArray index="What" value="Karak_What"/>
+        <SoundArray index="Yes" value="Karak_What"/>
+        <SoundArray index="Attack" value="Karak_What"/>
+        <UnitIcon value="Assets\Textures\Wireframe-critter-karakfemale.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-critter-karakfemale.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <!-- Karak Male                                                            -->
+    <CActorUnit id="KarakMale">
+        <Scale value="2.900000"/>
+    </CActorUnit>
+    <!--                                                                                         -->
+    <!-- Karass ................................................................................ -->
+    <!--                                                                                         -->
+    <CActorUnit id="Karass">
+        <Model value="Baneling"/>
+        <EventDataFootprint index="0" Model=""/>
+        <BuildModel value="Baneling"/>
+        <DeathArray index="Normal" ModelLink="BanelingDeath" SoundLink="Baneling_Death" VoiceLink=""/>
+        <PlacementModel value="Baneling"/>
+        <PortraitModel value="Baneling"/>
+    </CActorUnit>
+    <CActorModel id="KarassPsiStormImpact">
+        <Model value=""/>
+        <Scale value="0.500000"/>
+    </CActorModel>
+    <CActorModel id="KarassPsiStormModel">
+        <Scale value="0.250000"/>
+    </CActorModel>
+    <CActorDoodad id="LavaSplash2">
+        <EditorCategories value="DoodadType:Environment"/>
+        <Model value="PhysicsImpactLavaMedium"/>
+        <On Terms="UnitBirth.Marine" Send="Create"/>
+        <On Terms="UnitBirth.Marine" Send="AnimPlay Birth"/>
+        <Scale value="2.000000,2.000000,0.700000"/>
+    </CActorDoodad>
+    <CActorUnit id="Lyote">
+        <On Terms="ActorCreation" Send="SetMinimapVisibility"/>
+    </CActorUnit>
+    <CActorDoodad id="MarSaraCurtain">
+        <AcceptedHostedPropTransfers index="CloakEffect" value="0"/>
+        <AcceptedHostedPropTransfers index="Opacity" value="0"/>
+        <AcceptedHostedPropTransfers index="TintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Visibility" value="0"/>
+        <AddToProximitySystem value="0"/>
+        <Footprint value=""/>
+        <VisibleOpacity value="1.000000"/>
+    </CActorDoodad>
+    <CActorDoodad id="MarSaraTunnel">
+        <Scale value="2.000000"/>
+        <Footprint value="tunnelMarsaraInner200Pc"/>
+    </CActorDoodad>
+    <CActorDoodad id="MarSaraTunnel2" parent="MarSaraTunnel">
+        <Footprint value="tunnelMarsara200EndPiece"/>
+    </CActorDoodad>
+    <CActorUnit id="Marine2" parent="Marine" unitName="Marine2">
+        <EditorCategories value="DoodadType:Environment"/>
+        <On index="0" Terms="UnitBirth.Marine2" Send="Create"/>
+        <On index="1" Terms="UnitRevive.Marine2"/>
+        <On index="2" Terms="UnitRevive.Marine2" Send="RefSet ::HostTurretBody _Selectable"/>
+        <On index="3" Terms="UnitConstruction.Marine2.Start" Send="Create"/>
+        <On index="4" Terms="UnitConstruction.Marine2.Finish" Send="AnimPlay ConstructionDeath Stand,Birth,Death FullMatch"/>
+        <On index="5" Terms="AnimDone.*.Missing; AnimName ConstructionDeath" Send="Destroy"/>
+        <On index="6" Terms="ActorCreation; ValidateUnit IsFlying; Option Shadow Low; $AllowBlobShadow" Send="Create FlyerShadow"/>
+        <On index="7" Terms="ActorCreation; ValidateUnit IsNotFlying; Option Shadow Low; $AllowBlobShadow" Send="Create GroundShadow"/>
+        <On index="8" Terms="StatusOn.*.PreTargetingModel" Send="Create ModelPretargetGround"/>
+        <On index="9" Terms="StatusOff.*.PreTargetingModel" Target="ModelPretargetGround" Send="Destroy"/>
+        <On index="10" Terms="StatusOn.*.PreTargetingModel; ValidateUnit IsFlying" Target="" Send="Create GroundPreSelection"/>
+        <On index="11" Terms="StatusOff.*.PreTargetingModel" Target="GroundPreSelection" Send="Destroy"/>
+        <On index="12" Terms="PreTargetingUpdate.*.Start" Target="" Send="SetTintColorBlendPair 255,192,192 255,128,128 0.150000 Bounce Pretarget"/>
+        <On index="13" Terms="PreTargetingUpdate.*.Stop" Send="ClearTintColor 0.100000 Pretarget"/>
+        <On index="14" Terms="StatusOn.*.PreTargetingTint" Send="PreTargetingUpdate Start"/>
+        <On index="15" Terms="StatusOff.*.PreTargetingTint" Send="PreTargetingUpdate Stop"/>
+        <On index="16" Terms="CursorUpdate.*.Start; ValidateUnit IsFlying" Send="StatusIncrement FlyerHelper"/>
+        <On index="17" Terms="CursorUpdate.*.Stop; ValidateUnit IsFlying; HasStatus FlyerHelper" Send="StatusDecrement FlyerHelper"/>
+        <On index="18" Terms="ActorCreation; ScopeContains GroundLocalSelection" Send="StatusSet Selected 1"/>
+        <On index="19" Terms="SelectionLocalUpdate.*.Start"/>
+        <On index="20" Terms="SelectionLocalUpdate.*.Stop" Send="StatusSet Selected 0"/>
+        <On index="21" Terms="StatusOn.*.Selected; ValidateUnit IsFlying" Send="StatusIncrement FlyerHelper"/>
+        <On index="22" Terms="StatusOff.*.Selected; ValidateUnit IsFlying; HasStatus FlyerHelper" Send="StatusDecrement FlyerHelper"/>
+        <On index="23" Terms="StatusOn.*.FlyerHelper; FlyerHelper All" Send="Create FlyerHelperSplat"/>
+        <On index="24" Terms="StatusOn.*.FlyerHelper; FlyerHelper Selected"/>
+        <On index="25" Terms="StatusOff.*.FlyerHelper; FlyerHelper Selected" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On index="26" Terms="ActorCreation; FlyerHelper All; ValidateUnit IsFlying"/>
+        <On index="27" Terms="ActorDestruction; FlyerHelper All; !HasStatus FlyerHelper" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On index="28" Terms="FlyerHelperChange; FlyerHelper None"/>
+        <On index="29" Terms="FlyerHelperChange; FlyerHelper Selected; HasStatus FlyerHelper; !ScopeContains FlyerHelperSplat"/>
+        <On index="30" Terms="FlyerHelperChange; FlyerHelper Selected; !HasStatus FlyerHelper"/>
+        <On index="31" Terms="FlyerHelperChange; FlyerHelper All; ValidateUnit IsFlying; !ScopeContains FlyerHelperSplat" Target="" Send="Create FlyerHelperSplat"/>
+        <On index="32" Terms="UnitBirth.*.Normal" Send="$Birth 0 0.000000"/>
+        <On index="33" Terms="UnitMovementUpdate.*.Walk" Send="AnimClear Fidget"/>
+        <On index="34" Terms="UnitDetectedByViewer.*.On; ValidateUnit IsHallucination" Target="_HallucinationTinter" Send="Signal HallucinationTintOn"/>
+        <On index="35" Terms="UnitDetectedByViewer.*.Off; ValidateUnit IsHallucination" Target="_HallucinationTinter" Send="Signal HallucinationTintOff"/>
+        <On index="36" Terms="UnitDeathCustomize; ValidateUnit NotStructure; IsStatus InAir 1" Send="DeathCustomize AntiGravGeneric"/>
+        <On index="37" Terms="UnitDeathCustomize; ValidateUnit IsProtossUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravProtoss"/>
+        <On index="38" Terms="UnitDeathCustomize; ValidateUnit IsTerranUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravTerran"/>
+        <On index="39" Terms="UnitDeathCustomize; ValidateUnit IsZergUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravZerg"/>
+        <On index="40" Terms="UnitDeathCustomize; ValidateUnit IsVortexed" Send="DeathCustomize Vortex"/>
+        <On index="41" Terms="UnitDeathCustomize; ValidateUnit HasForceLowDeathProtoss"/>
+        <On index="42" Terms="UnitDeathCustomize; ValidateUnit HasForceLowDeathZerg" Send="DeathCustomize AntiGravZerg"/>
+        <On index="43" Terms="UnitDeathCustomize; ValidateUnit HasForceLowDeathTerran" Send="DeathCustomize AntiGravTerran"/>
+        <On index="44" Terms="Behavior.PhoenixAntiGrav.On" Send="ModelSuddenMotionStart"/>
+        <On index="45" Terms="Behavior.PhoenixAntiGrav.Off" Send="ModelSuddenMotionStop"/>
+        <On index="46" Terms="Behavior.ForceLowDeath.On" Send="DeathCustomsEnablePhysics 0"/>
+        <On index="47" Terms="UnitTaunt.*.Start; Taunt" Send="AnimPlay Cheer Stand,Victory"/>
+        <On index="48" Terms="UnitTaunt.*.Stop; Taunt" Send="AnimClear Cheer"/>
+        <On index="49" Terms="UnitTaunt.*.Start; Taunt Dance" Send="AnimPlay Dance Stand,Dance"/>
+        <On index="50" Terms="UnitTaunt.*.Stop; Taunt Dance" Send="AnimClear Dance"/>
+        <On index="51" Terms="ActorCreation" Send="StatusSet InAir 0"/>
+        <On index="52" Terms="UnitHeightUpdate.*.Lift" Send="StatusSet InAir 1"/>
+        <On index="53" Terms="UnitHeightUpdate.*.Land"/>
+        <On index="54" Terms="ActorCreation; ValidatePlayer NoMarineShield" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
+        <On index="55" Terms="Upgrade.ShieldWall.Add" Send="AnimClear Cover"/>
+        <On index="56" Terms="Upgrade.ShieldWall.Remove"/>
+        <On index="57" Terms="UnitDeath.Marine2; AnimPlaying Cover" Target="_DeathModel" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
+        <On index="58" Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On index="59" Terms="WeaponStart.*.AttackStart; WeaponTargetElevation GE 20.000000" Send="AnimBracketStart Attack Attack,Superior"/>
+        <On index="60" Terms="WeaponStart.*.AttackStart; WeaponTargetElevation LE -20.000000" Send="AnimBracketStart Attack Attack,Inferior"/>
+        <On index="61" Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On index="62" Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On index="63" Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On index="64" Terms="ModelEvent; ModelEventName SquibStart" Send="Create MarineCheerSquib"/>
+        <On index="65" Terms="ModelEvent; ModelEventName SquibStop" Target="MarineCheerSquib" Send="Destroy"/>
+        <On index="66" Terms="ModelEvent; ModelEventName SquibStop" Target="MarineCheerSquibSound" Send="Destroy"/>
+        <On index="67" Terms="AnimDone; AnimName Cheer"/>
+        <On index="68" Terms="AnimDone; AnimName Cheer"/>
+        <On index="69" Terms="UnitHeightUpdate.*.Land" Send="Create Marine_Land"/>
+        <On index="70" Terms="Upgrade.CombatShield.Add" Send="AnimClear Cover"/>
+        <On index="71" Terms="Upgrade.CombatShield.Remove" Send="AnimPlay Cover Cover PlayForever"/>
+        <On index="72" Terms="UnitBirth.Marine2" Send="SetTintColor {255,128,64 7.000000}"/>
+        <On index="73" removed="1"/>
+        <On index="74" removed="1"/>
+        <On index="75" removed="1"/>
+        <On index="76" removed="1"/>
+        <On index="77" removed="1"/>
+        <On index="78" removed="1"/>
+        <On index="79" removed="1"/>
+        <Model value="Marine2"/>
+        <BuildModel value="Marine2"/>
+        <PlacementModel value="Marine2"/>
+        <GroupIcon>
+            <Image index="0" value="Assets\Textures\btn-command-returncargo.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\btn-command-returncargo.dds"/>
+        <HighlightTooltip value="Unit/Name/Marine2"/>
+        <LifeArmorIcon value="Assets\Textures\btn-command-returncargo.dds"/>
+        <UnitIcon value="Assets\Textures\btn-command-returncargo.dds"/>
+        <Wireframe>
+            <Image index="0" value="Assets\Textures\btn-command-returncargo.dds"/>
+        </Wireframe>
+        <EditorModel value="Marine2"/>
+        <DeathArray index="Normal">
+            <AnimProps value=""/>
+            <ModelLink value=""/>
+            <SoundLink value=""/>
+            <VoiceLink value=""/>
+        </DeathArray>
+        <DeathArray index="Blast" ModelLink=""/>
+        <DeathArray index="Disintegrate" ModelLink="" SoundLink=""/>
+        <DeathArray index="Eat" AnimProps="" ModelLink="" SoundLink=""/>
+        <DeathArray index="Eviscerate" AnimProps="" ModelLink="" SoundLink=""/>
+        <DeathArray index="Fire" AnimProps="" ModelLink="" SoundLink=""/>
+        <DeathArray index="Silentkill" AnimProps="" SoundLink=""/>
+        <DeathArray index="Squish" AnimProps="" SoundLink=""/>
+        <DeathArray index="UnderConstruction" AnimProps=""/>
+        <DeathCustoms index="0" removed="1"/>
+        <DeathCustoms index="1" removed="1"/>
+        <DeathCustoms index="2" removed="1"/>
+        <DeathCustoms index="3" removed="1"/>
+        <DeathCustoms index="4" removed="1"/>
+        <DeathCustoms index="5" removed="1"/>
+        <DeathCustoms index="6" removed="1"/>
+        <DeathCustoms index="7" removed="1"/>
+        <DeathCustoms index="8" removed="1"/>
+        <DeathCustoms index="9" removed="1"/>
+        <DeathCustoms index="10" removed="1"/>
+        <DeathCustoms index="11" removed="1"/>
+        <DeathCustoms index="12" removed="1"/>
+        <DeathCustoms index="13" removed="1"/>
+        <DeathCustoms index="14" removed="1"/>
+        <DeathCustoms index="15" removed="1"/>
+        <DeathCustoms index="16" removed="1"/>
+        <DeathActorModel value="UnitDeathModel"/>
+        <PortraitModel value="StaticPortrait"/>
+        <AbilSoundArray index="0" AbilCmd="" Sound=""/>
+        <GroupSoundArray index="What" value=""/>
+        <GroupSoundArray index="Yes" value=""/>
+        <GroupSoundArray index="Attack" value=""/>
+        <GroupSoundArray index="Board" value=""/>
+        <SoundArray index="Birth" value=""/>
+        <SoundArray index="Ready" value=""/>
+        <SoundArray index="Help" value=""/>
+        <SoundArray index="What" value=""/>
+        <SoundArray index="Yes" value=""/>
+        <SoundArray index="Attack" value=""/>
+        <SoundArray index="Pissed" value=""/>
+        <SoundArray index="Movement" value=""/>
+        <SoundArray index="Turning" value=""/>
+        <SoundArray index="Board" value=""/>
+        <SoundArray index="Click" value=""/>
+        <SoundArray index="ClickError" value=""/>
+        <SoundArray index="Highlight" value=""/>
+    </CActorUnit>
+    <CActorUnit id="LavaPlatform" parent="Marine" unitName="LavaPlatform">
+        <EditorCategories value="DoodadType:Environment"/>
+        <On index="0" Terms="UnitBirth.LavaPlatform" Send="Create"/>
+        <On index="1" Terms="UnitRevive.LavaPlatform"/>
+        <On index="2" Terms="UnitRevive.LavaPlatform" Send="RefSet ::HostTurretBody _Selectable"/>
+        <On index="3" Terms="UnitConstruction.LavaPlatform.Start" Send="Create"/>
+        <On index="4" Terms="AnimDone.*.Missing; AnimName ConstructionDeath" Send="Destroy"/>
+        <On index="5" Terms="ActorCreation; ValidateUnit IsFlying; Option Shadow Low; $AllowBlobShadow" Send="Create FlyerShadow"/>
+        <On index="6" Terms="ActorCreation; ValidateUnit IsNotFlying; Option Shadow Low; $AllowBlobShadow" Send="Create GroundShadow"/>
+        <On index="7" Terms="StatusOn.*.PreTargetingModel" Send="Create ModelPretargetGround"/>
+        <On index="8" Terms="StatusOff.*.PreTargetingModel" Target="ModelPretargetGround" Send="Destroy"/>
+        <On index="9" Terms="StatusOn.*.PreTargetingModel; ValidateUnit IsFlying" Send="Create GroundPreSelection"/>
+        <On index="10" Target="GroundPreSelection"/>
+        <On index="11" Terms="CursorUpdate.*.Start; ValidateUnit IsFlying" Send="StatusIncrement FlyerHelper"/>
+        <On index="12" Terms="CursorUpdate.*.Stop; ValidateUnit IsFlying; HasStatus FlyerHelper" Target="" Send="StatusDecrement FlyerHelper"/>
+        <On index="13" Terms="ActorCreation; ScopeContains GroundLocalSelection" Send="StatusSet Selected 1"/>
+        <On index="14" Terms="SelectionLocalUpdate.*.Start" Send="StatusSet Selected 1"/>
+        <On index="15" Terms="SelectionLocalUpdate.*.Stop" Send="StatusSet Selected 0"/>
+        <On index="16" Terms="StatusOn.*.Selected; ValidateUnit IsFlying" Send="StatusIncrement FlyerHelper"/>
+        <On index="17" Terms="StatusOff.*.Selected; ValidateUnit IsFlying; HasStatus FlyerHelper" Send="StatusDecrement FlyerHelper"/>
+        <On index="18" Terms="StatusOn.*.FlyerHelper; FlyerHelper All" Send="Create FlyerHelperSplat"/>
+        <On index="19" Terms="StatusOn.*.FlyerHelper; FlyerHelper Selected" Send="Create FlyerHelperSplat"/>
+        <On index="20" Terms="StatusOff.*.FlyerHelper; FlyerHelper Selected" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On index="21" Terms="ActorCreation; FlyerHelper All; ValidateUnit IsFlying" Send="Create FlyerHelperSplat"/>
+        <On index="22" Terms="ActorDestruction; FlyerHelper All; !HasStatus FlyerHelper" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On index="23" Terms="FlyerHelperChange; FlyerHelper None" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On index="24" Terms="FlyerHelperChange; FlyerHelper Selected; HasStatus FlyerHelper; !ScopeContains FlyerHelperSplat"/>
+        <On index="25" Terms="FlyerHelperChange; FlyerHelper Selected; !HasStatus FlyerHelper" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On index="26" Terms="FlyerHelperChange; FlyerHelper All; ValidateUnit IsFlying; !ScopeContains FlyerHelperSplat"/>
+        <On index="27" Terms="UnitBirth.*.Normal" Send="$Birth 0 0.000000"/>
+        <On index="28" Terms="UnitMovementUpdate.*.Walk" Target="" Send="AnimClear Fidget"/>
+        <On index="29" Terms="UnitDetectedByViewer.*.On; ValidateUnit IsHallucination" Target="_HallucinationTinter" Send="Signal HallucinationTintOn"/>
+        <On index="30" Terms="UnitDetectedByViewer.*.Off; ValidateUnit IsHallucination" Target="_HallucinationTinter" Send="Signal HallucinationTintOff"/>
+        <On index="31" Terms="UnitDeathCustomize; ValidateUnit NotStructure; IsStatus InAir 1" Target="" Send="DeathCustomize AntiGravGeneric"/>
+        <On index="32" Terms="UnitDeathCustomize; ValidateUnit IsProtossUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravProtoss"/>
+        <On index="33" Terms="UnitDeathCustomize; ValidateUnit IsTerranUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravTerran"/>
+        <On index="34" Terms="UnitDeathCustomize; ValidateUnit IsZergUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravZerg"/>
+        <On index="35" Terms="UnitDeathCustomize; ValidateUnit IsVortexed" Send="DeathCustomize Vortex"/>
+        <On index="36" Terms="UnitDeathCustomize; ValidateUnit HasForceLowDeathProtoss" Send="DeathCustomize AntiGravProtoss"/>
+        <On index="37" Terms="UnitDeathCustomize; ValidateUnit HasForceLowDeathZerg" Send="DeathCustomize AntiGravZerg"/>
+        <On index="38" Terms="UnitDeathCustomize; ValidateUnit HasForceLowDeathTerran" Send="DeathCustomize AntiGravTerran"/>
+        <On index="39" Terms="UnitTaunt.*.Start; Taunt" Send="AnimPlay Cheer Stand,Victory"/>
+        <On index="40" Terms="UnitTaunt.*.Stop; Taunt" Send="AnimClear Cheer"/>
+        <On index="41" Terms="UnitTaunt.*.Start; Taunt Dance" Send="AnimPlay Dance Stand,Dance"/>
+        <On index="42" Terms="UnitTaunt.*.Stop; Taunt Dance" Send="AnimClear Dance"/>
+        <On index="43" Terms="ActorCreation" Send="StatusSet InAir 0"/>
+        <On index="44" Terms="UnitHeightUpdate.*.Lift" Send="StatusSet InAir 1"/>
+        <On index="45" Terms="UnitHeightUpdate.*.Land" Send="StatusSet InAir 0"/>
+        <On index="46" Terms="ActorCreation; ValidatePlayer NoMarineShield" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
+        <On index="47" Terms="Upgrade.ShieldWall.Add" Send="AnimClear Cover"/>
+        <On index="48" Terms="Upgrade.ShieldWall.Remove" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
+        <On index="49" Terms="UnitDeath.LavaPlatform; AnimPlaying Cover" Target="_DeathModel" Send="AnimPlay Cover Cover PlayForever 0.000000"/>
+        <On index="50" Terms="ModelEvent; ModelEventName SquibStart" Send="Create MarineCheerSquib"/>
+        <On index="51" Terms="ModelEvent; ModelEventName SquibStop" Target="MarineCheerSquib" Send="Destroy"/>
+        <On index="52" Terms="ModelEvent; ModelEventName SquibStop" Target="MarineCheerSquibSound" Send="Destroy"/>
+        <On index="53" Terms="AnimDone; AnimName Cheer" Target="MarineCheerSquib" Send="Destroy"/>
+        <On index="54" Terms="AnimDone; AnimName Cheer" Target="MarineCheerSquibSound" Send="Destroy"/>
+        <On index="55" Terms="Upgrade.CombatShield.Add" Send="AnimClear Cover"/>
+        <On index="56" Terms="UnitBirth.LavaPlatform" Send="SetTintColor 241,141,107"/>
+        <On index="57" removed="1"/>
+        <On index="58" removed="1"/>
+        <On index="59" removed="1"/>
+        <On index="60" removed="1"/>
+        <On index="61" removed="1"/>
+        <On index="62" removed="1"/>
+        <On index="63" removed="1"/>
+        <On index="64" removed="1"/>
+        <On index="65" removed="1"/>
+        <On index="66" removed="1"/>
+        <On index="67" removed="1"/>
+        <On index="68" removed="1"/>
+        <On index="69" removed="1"/>
+        <On index="70" removed="1"/>
+        <On index="71" removed="1"/>
+        <On index="72" removed="1"/>
+        <On index="73" removed="1"/>
+        <On index="74" removed="1"/>
+        <On index="75" removed="1"/>
+        <On index="76" removed="1"/>
+        <On index="77" removed="1"/>
+        <On index="78" removed="1"/>
+        <On index="79" removed="1"/>
+        <HostSiteOps Ops="SOp45 SOp270"/>
+        <Model value="Invisible"/>
+        <BuildModel value="Invisible"/>
+        <DeathArray index="Normal">
+            <AnimProps value=""/>
+            <ModelLink value=""/>
+            <SoundLink value=""/>
+            <VoiceLink value=""/>
+        </DeathArray>
+        <DeathArray index="Blast" ModelLink=""/>
+        <DeathArray index="Disintegrate" ModelLink="" SoundLink=""/>
+        <DeathArray index="Eat" AnimProps="" ModelLink="" SoundLink=""/>
+        <DeathArray index="Eviscerate" AnimProps="" ModelLink="" SoundLink=""/>
+        <DeathArray index="Fire" AnimProps="" ModelLink="" SoundLink=""/>
+        <DeathArray index="Silentkill" AnimProps="" SoundLink=""/>
+        <DeathArray index="Squish" AnimProps="" SoundLink=""/>
+        <DeathArray index="UnderConstruction" AnimProps=""/>
+        <DeathCustoms index="0" removed="1"/>
+        <DeathCustoms index="1" removed="1"/>
+        <DeathCustoms index="2" removed="1"/>
+        <DeathCustoms index="3" removed="1"/>
+        <DeathCustoms index="4" removed="1"/>
+        <DeathCustoms index="5" removed="1"/>
+        <DeathCustoms index="6" removed="1"/>
+        <DeathCustoms index="7" removed="1"/>
+        <DeathCustoms index="8" removed="1"/>
+        <DeathCustoms index="9" removed="1"/>
+        <DeathCustoms index="10" removed="1"/>
+        <DeathCustoms index="11" removed="1"/>
+        <DeathCustoms index="12" removed="1"/>
+        <DeathCustoms index="13" removed="1"/>
+        <DeathCustoms index="14" removed="1"/>
+        <DeathCustoms index="15" removed="1"/>
+        <DeathCustoms index="16" removed="1"/>
+        <DeathActorModel value="UnitDeathModel"/>
+        <EditorModel value="ShapeSphere"/>
+        <PlacementModel value="Invisible"/>
+        <PortraitModel value="StaticPortrait"/>
+        <AbilSoundArray index="0" AbilCmd="" Sound=""/>
+        <GroupIcon>
+            <Image index="0" value="Assets\Textures\btn-command-returncargo.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value=""/>
+        <GroupSoundArray index="Yes" value=""/>
+        <GroupSoundArray index="Attack" value=""/>
+        <GroupSoundArray index="Board" value=""/>
+        <HeroIcon value="Assets\Textures\btn-command-returncargo.dds"/>
+        <HighlightTooltip value="Unit/Name/LavaPlatform"/>
+        <LifeArmorIcon value="Assets\Textures\btn-command-returncargo.dds"/>
+        <SoundArray index="Birth" value=""/>
+        <SoundArray index="Ready" value=""/>
+        <SoundArray index="Help" value=""/>
+        <SoundArray index="What" value=""/>
+        <SoundArray index="Yes" value=""/>
+        <SoundArray index="Attack" value=""/>
+        <SoundArray index="Pissed" value=""/>
+        <SoundArray index="Movement" value=""/>
+        <SoundArray index="Turning" value=""/>
+        <SoundArray index="Board" value=""/>
+        <SoundArray index="Click" value=""/>
+        <SoundArray index="ClickError" value=""/>
+        <SoundArray index="Highlight" value=""/>
+        <UnitIcon value="Assets\Textures\btn-command-returncargo.dds"/>
+        <Wireframe>
+            <Image index="0" value="Assets\Textures\btn-command-returncargo.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="IceTerrainFlatMoving" parent="Marine" unitName="IceTerrainFlatMoving">
+        <AcceptedHostedPropTransfers index="CastShadows" value="0"/>
+        <AcceptedHostedPropTransfers index="CloakEffect" value="0"/>
+        <AcceptedHostedPropTransfers index="CreepEngulfment" value="0"/>
+        <AcceptedHostedPropTransfers index="Decal" value="0"/>
+        <AcceptedHostedPropTransfers index="LocalTintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Opacity" value="0"/>
+        <AcceptedHostedPropTransfers index="Scale" value="0"/>
+        <AcceptedHostedPropTransfers index="TeamColor" value="0"/>
+        <AcceptedHostedPropTransfers index="TimeScale" value="0"/>
+        <AcceptedHostedPropTransfers index="TintColor" value="0"/>
+        <AcceptedHostedPropTransfers index="Visibility" value="0"/>
+        <AcceptedHostedPropTransfers index="WarpGroup" value="0"/>
+        <EditorCategories value="DoodadType:Environment"/>
+        <On index="0" Terms="ActorCreation" Send="TimerSet 0.100000 attch1"/>
+        <On index="1" Terms="UnitBirth.IceTerrainFlatMoving"/>
+        <On index="2" Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On index="3" Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On index="4" Terms="TimerExpired; TimerName attch1" Send="TextureSelectById Terrain_IceTextureNormal"/>
+        <On index="5" Terms="TimerExpired; TimerName attch1" Send="SetTintColor {255,255,255 1.100000}"/>
+        <On index="6" Terms="ActorCreation" Send="SetOpacity 0.500000"/>
+        <On index="7" removed="1"/>
+        <On index="8" removed="1"/>
+        <On index="9" removed="1"/>
+        <On index="10" removed="1"/>
+        <On index="11" removed="1"/>
+        <On index="12" removed="1"/>
+        <On index="13" removed="1"/>
+        <On index="14" removed="1"/>
+        <On index="15" removed="1"/>
+        <On index="16" removed="1"/>
+        <On index="17" removed="1"/>
+        <On index="18" removed="1"/>
+        <On index="19" removed="1"/>
+        <On index="20" removed="1"/>
+        <On index="21" removed="1"/>
+        <On index="22" removed="1"/>
+        <On index="23" removed="1"/>
+        <On index="24" removed="1"/>
+        <On index="25" removed="1"/>
+        <On index="26" removed="1"/>
+        <On index="27" removed="1"/>
+        <On index="28" removed="1"/>
+        <On index="29" removed="1"/>
+        <On index="30" removed="1"/>
+        <On index="31" removed="1"/>
+        <On index="32" removed="1"/>
+        <On index="33" removed="1"/>
+        <On index="34" removed="1"/>
+        <On index="35" removed="1"/>
+        <On index="36" removed="1"/>
+        <On index="37" removed="1"/>
+        <On index="38" removed="1"/>
+        <On index="39" removed="1"/>
+        <On index="40" removed="1"/>
+        <On index="41" removed="1"/>
+        <On index="42" removed="1"/>
+        <On index="43" removed="1"/>
+        <On index="44" removed="1"/>
+        <On index="45" removed="1"/>
+        <On index="46" removed="1"/>
+        <On index="47" removed="1"/>
+        <On index="48" removed="1"/>
+        <On index="49" removed="1"/>
+        <On index="50" removed="1"/>
+        <On index="51" removed="1"/>
+        <On index="52" removed="1"/>
+        <On index="53" removed="1"/>
+        <On index="54" removed="1"/>
+        <On index="55" removed="1"/>
+        <On index="56" removed="1"/>
+        <On index="57" removed="1"/>
+        <On index="58" removed="1"/>
+        <On index="59" removed="1"/>
+        <On index="60" removed="1"/>
+        <On index="61" removed="1"/>
+        <On index="62" removed="1"/>
+        <On index="63" removed="1"/>
+        <On index="64" removed="1"/>
+        <On index="65" removed="1"/>
+        <On index="66" removed="1"/>
+        <On index="67" removed="1"/>
+        <On index="68" removed="1"/>
+        <On index="69" removed="1"/>
+        <On index="70" removed="1"/>
+        <On index="71" removed="1"/>
+        <On index="72" removed="1"/>
+        <On index="73" removed="1"/>
+        <On index="74" removed="1"/>
+        <On index="75" removed="1"/>
+        <On index="76" removed="1"/>
+        <On index="77" removed="1"/>
+        <On index="78" removed="1"/>
+        <On index="79" removed="1"/>
+        <Model value="IceTerrainFlat"/>
+        <BuildModel value="IceTerrainFlat"/>
+        <DeathArray index="Normal">
+            <AnimProps value=""/>
+            <ModelLink value=""/>
+            <SoundLink value=""/>
+            <VoiceLink value=""/>
+        </DeathArray>
+        <DeathArray index="Blast" ModelLink=""/>
+        <DeathArray index="Disintegrate" ModelLink="" SoundLink=""/>
+        <DeathArray index="Eat" AnimProps="" ModelLink="" SoundLink=""/>
+        <DeathArray index="Eviscerate" AnimProps="" ModelLink="" SoundLink=""/>
+        <DeathArray index="Fire" AnimProps="" ModelLink="" SoundLink=""/>
+        <DeathArray index="Silentkill" AnimProps="" SoundLink=""/>
+        <DeathArray index="Squish" AnimProps="" SoundLink=""/>
+        <DeathArray index="UnderConstruction" AnimProps=""/>
+        <DeathCustoms index="0" removed="1"/>
+        <DeathCustoms index="1" removed="1"/>
+        <DeathCustoms index="2" removed="1"/>
+        <DeathCustoms index="3" removed="1"/>
+        <DeathCustoms index="4" removed="1"/>
+        <DeathCustoms index="5" removed="1"/>
+        <DeathCustoms index="6" removed="1"/>
+        <DeathCustoms index="7" removed="1"/>
+        <DeathCustoms index="8" removed="1"/>
+        <DeathCustoms index="9" removed="1"/>
+        <DeathCustoms index="10" removed="1"/>
+        <DeathCustoms index="11" removed="1"/>
+        <DeathCustoms index="12" removed="1"/>
+        <DeathCustoms index="13" removed="1"/>
+        <DeathCustoms index="14" removed="1"/>
+        <DeathCustoms index="15" removed="1"/>
+        <DeathCustoms index="16" removed="1"/>
+        <DeathActorModel value="UnitDeathModel"/>
+        <EditorModel value="IceTerrainFlat"/>
+        <PlacementModel value="IceTerrainFlat"/>
+        <PortraitModel value="StaticPortrait"/>
+        <AbilSoundArray index="0" AbilCmd="" Sound=""/>
+        <GroupIcon>
+            <Image index="0" value="Assets\Textures\btn-command-returncargo.dds"/>
+        </GroupIcon>
+        <GroupSoundArray index="What" value=""/>
+        <GroupSoundArray index="Yes" value=""/>
+        <GroupSoundArray index="Attack" value=""/>
+        <GroupSoundArray index="Board" value=""/>
+        <HeroIcon value="Assets\Textures\btn-command-returncargo.dds"/>
+        <HighlightTooltip value="Unit/Name/IceTerrainFlatMoving"/>
+        <LifeArmorIcon value="Assets\Textures\btn-command-returncargo.dds"/>
+        <SoundArray index="Birth" value=""/>
+        <SoundArray index="Ready" value=""/>
+        <SoundArray index="Help" value=""/>
+        <SoundArray index="What" value=""/>
+        <SoundArray index="Yes" value=""/>
+        <SoundArray index="Attack" value=""/>
+        <SoundArray index="Pissed" value=""/>
+        <SoundArray index="Movement" value=""/>
+        <SoundArray index="Turning" value=""/>
+        <SoundArray index="Board" value=""/>
+        <SoundArray index="Click" value=""/>
+        <SoundArray index="ClickError" value=""/>
+        <SoundArray index="Highlight" value=""/>
+        <UnitIcon value="Assets\Textures\btn-command-returncargo.dds"/>
+        <Wireframe>
+            <Image index="0" value="Assets\Textures\btn-command-returncargo.dds"/>
+        </Wireframe>
+        <Macros index="0" removed="1"/>
+        <Macros index="1" removed="1"/>
+        <Macros index="2" removed="1"/>
+        <Macros index="3" removed="1"/>
+        <Macros index="4" removed="1"/>
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <HostSiteOps Ops="SOpFlatIceMove1"/>
+        <Scale value="0.280000,0.320000,1.000000"/>
+        <ModelFlags index="IgnoreWalkables" value="1"/>
+        <ModelFlags index="NeedsVolumeMonitoring" value="0"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+    </CActorUnit>
+    <CActorAction id="MarineAttack2" parent="GenericAttack" effectAttack="">
+        <On index="0" Terms="Effect.Stop; FromEffectTreeDescendant" Send="ActionImpactPhysics"/>
+        <On index="3" Terms="Effect.GuassRifle.Start; At Caster" Send="Create"/>
+        <On index="5" Terms="Effect.Start; At Caster" Send="Create"/>
+        <LaunchAssets Model="MarineAttackLaunch" Sound="Marine_AttackLaunch"/>
+        <LaunchModel value="GenericAttackLaunchModel2"/>
+        <LaunchSound value="GenericAttackLaunchSound2"/>
+        <ContainerAssets Model="MarineBunkerAttackLaunch" Sound="Marine_BunkerAttackLaunch"/>
+        <ContainerModel value="GenericAttackLaunchModel2"/>
+        <ContainerSound value="GenericAttackLaunchSound2"/>
+        <ImpactMap index="None" Model="MarineAttackImpact" Sound="Marine_AttackImpact"/>
+        <ImpactMap index="Flesh" ModelReaction="BloodTargetImpact"/>
+        <ImpactModel value="GenericAttackImpactModel2"/>
+        <ImpactSound value="GenericAttackImpactSound2"/>
+        <DamageMap index="None" Sound=""/>
+        <DamageModel value="GenericAttackDamageModel2"/>
+        <DamageSound value="GenericAttackDamageSound2"/>
+        <AcquisitionYawHalfArc value="10.000000"/>
+        <AcquisitionPitchHalfArc value="15.000000"/>
+        <AccuracyHalfArc value="5.000000"/>
+    </CActorAction>
+    <CActorSound id="Marine_Death2" parent="SoundOneShot">
+        <On Terms="UnitDeath.MarineCopy; PassChance 100.000000" Send="Create"/>
+        <On Terms="UnitDeath.WarPig; PassChance 100.000000" Send="Create"/>
+        <Sound value="Marine_Death"/>
+    </CActorSound>
+    <CActorSound id="Marine_Stimpack2" parent="SoundOneShot">
+        <On Terms="Abil.Stimpack.SourceCastStart" Send="Create"/>
+        <Sound value="Marine_Stimpack"/>
+    </CActorSound>
+    <!--                                                                                         -->
+    <!-- Monlyth Force Field Statue ............................................................ -->
+    <!--                                                                                         -->
+    <CActorUnit id="MonlythForceFieldStatue">
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <MinimapRenderPriority value="Doodad"/>
+    </CActorUnit>
+    <CActorUnit id="MonlythForceFieldStatue2" parent="GenericUnitStandardNoAutoSoundLinks" unitName="MonlythForceFieldStatue2">
+        <On Terms="Behavior.MonlythStatueForceFieldBeam.On" Send="Create MonlythForceFieldBeam"/>
+        <On Terms="Behavior.MonlythStatueForceFieldBeam.Off" Target="MonlythForceFieldBeam" Send="Destroy"/>
+        <Model value="MonlythForceFieldStatue"/>
+        <BuildModel value="MonlythForceFieldStatue"/>
+        <DeathArray index="Normal" ModelLink="ProtossBuildingDeath"/>
+        <PlacementModel value="MonlythForceFieldStatue"/>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <MinimapRenderPriority value="Doodad"/>
+    </CActorUnit>
+    <CActorUnit id="Phoenix2" parent="Phoenix" unitName="PhoenixLow">
+        <On index="0" Terms="UnitBirth.PhoenixLow"/>
+        <On index="1" Terms="UnitBirth.PhoenixLow"/>
+        <On index="2" Terms="UnitRevive.PhoenixLow"/>
+        <On index="3" Terms="UnitRevive.PhoenixLow"/>
+        <On index="4" Terms="UnitConstruction.PhoenixLow.Start"/>
+        <On index="5" Terms="UnitConstruction.PhoenixLow.Finish"/>
+        <HighlightTooltip value="Unit/Name/Phoenix2"/>
+    </CActorUnit>
+    <!--                                                                                         -->
+    <!-- Chrono Rift Charge .................................................................... -->
+    <!--                                                                                         -->
+    <CActorUnit id="PickupChronoRiftCharge">
+        <AnimBlendTime value="1.000000"/>
+        <Baselines index="Walk" AnimProps="Stand"/>
+        <WalkAnimTimeScalingAsFlyer value="1"/>
+    </CActorUnit>
+    <CActorModel id="PortalD12222" parent="ModelAddition">
+        <EditorCategories value=""/>
+        <On Terms="UnitBirth.LavaPlatform" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetTintColor 241,141,107"/>
+        <HostSiteOps Ops="portalDOffset12"/>
+        <Model value="InstallationRoof2"/>
+        <Scale value="1.100000,1.100000,1.000000"/>
+        <ProximityPosition value="CenterActor"/>
+    </CActorModel>
+    <CActorSiteOpRotationExplicit id="SOp45">
+        <Forward value="1.000000,1.000000,0.000000"/>
+        <IsLocal value="1"/>
+    </CActorSiteOpRotationExplicit>
+    <CActorSiteOpLocalOffset id="SOpFlatIceMove1">
+        <EditorCategories value=""/>
+        <LocalOffset value="-0.320000,0.130000,0.000000"/>
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Position" value="1"/>
+        <AcceptedTransfers index="Rotation" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="SOpFlatIceMove12">
+        <EditorCategories value=""/>
+        <LocalOffset value="0.100000,0.260000,0.000000"/>
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Position" value="1"/>
+        <AcceptedTransfers index="Rotation" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="SOpFlatIceMove122">
+        <EditorCategories value=""/>
+        <LocalOffset value="0.820000,-0.360000,0.000000"/>
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Position" value="1"/>
+        <AcceptedTransfers index="Rotation" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureNormal"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="SOpFlatIceMove1222">
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Position" value="1"/>
+        <AcceptedTransfers index="Rotation" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureNormal"/>
+        <LocalOffset value="0.270000,-0.240000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="SOpFlatIceMove12222">
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Position" value="1"/>
+        <AcceptedTransfers index="Rotation" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureNormal"/>
+        <LocalOffset value="-0.420000,-0.120000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="SOpFlatIceMove122222">
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Position" value="1"/>
+        <AcceptedTransfers index="Rotation" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureNormal"/>
+        <LocalOffset value="0.420000,-0.190000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="SOpFlatIceMove1222222">
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Position" value="1"/>
+        <AcceptedTransfers index="Rotation" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureNormal"/>
+        <LocalOffset value="0.310000,-0.130000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="SOpFlatIceMove12222222">
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Position" value="1"/>
+        <AcceptedTransfers index="Rotation" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureNormal"/>
+        <LocalOffset value="-0.420000,0.060000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="SOpIncreasePortalHeight">
+        <LocalOffset value="0.000000,0.000000,-2.370000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorUnit id="SecurityGateDiagonalULBR2" parent="GenericUnitGate" unitName="SecurityGateDiagonalULBR2" alt="Lowered">
+        <On Terms="ModelEvent; ModelEventName GateOpenStart" Send="Create GateOpenSoundLoop"/>
+        <On Terms="ModelEvent; ModelEventName GateOpenStop" Send="Create GateOpenSoundComplete"/>
+        <On Terms="ModelEvent; ModelEventName GateOpenStop" Target="GateOpenSoundLoop" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStart" Send="Create GateCloseSoundLoop"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStop" Send="Create GateCloseSoundComplete"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStop" Target="GateCloseSoundLoop" Send="Destroy"/>
+        <Model value="SecurityGateDiagonal"/>
+        <Scale value="2.000000"/>
+        <DeathArray index="Normal" SoundLink="SecurityGateDeath"/>
+        <BarOffset value="22"/>
+        <BarWidth value="45"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\btn-missing-kaeo.dds"/>
+        </GroupIcon>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <Wireframe>
+            <Image value="Assets\Textures\btn-missing-kaeo.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="SecurityGateStraightHorizontal2" parent="GenericUnitGate" unitName="SecurityGateStraightHorizontal2" alt="Lowered">
+        <On Terms="ModelEvent; ModelEventName GateOpenStart" Send="Create GateOpenSoundLoop"/>
+        <On Terms="ModelEvent; ModelEventName GateOpenStop" Send="Create GateOpenSoundComplete"/>
+        <On Terms="ModelEvent; ModelEventName GateOpenStop" Target="GateOpenSoundLoop" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStart" Send="Create GateCloseSoundLoop"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStop" Send="Create GateCloseSoundComplete"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStop" Target="GateCloseSoundLoop" Send="Destroy"/>
+        <Model value="SecurityGateStraight"/>
+        <DeathArray index="Normal" SoundLink="SecurityGateDeath"/>
+        <BarOffset value="22"/>
+        <BarWidth value="45"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\btn-missing-kaeo.dds"/>
+        </GroupIcon>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <Wireframe>
+            <Image value="Assets\Textures\btn-missing-kaeo.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="SecurityGateStraightHorizontalBF2" parent="GenericUnitGate" unitName="SecurityGateStraightHorizontalBF2" alt="Lowered">
+        <On Terms="ModelEvent; ModelEventName GateOpenStart" Send="Create GateOpenSoundLoop"/>
+        <On Terms="ModelEvent; ModelEventName GateOpenStop" Send="Create GateOpenSoundComplete"/>
+        <On Terms="ModelEvent; ModelEventName GateOpenStop" Target="GateOpenSoundLoop" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStart" Send="Create GateCloseSoundLoop"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStop" Send="Create GateCloseSoundComplete"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStop" Target="GateCloseSoundLoop" Send="Destroy"/>
+        <Model value="SecurityGateStraight"/>
+        <Scale value="1.500000"/>
+        <DeathArray index="Normal" SoundLink="SecurityGateDeath"/>
+        <BarOffset value="22"/>
+        <BarWidth value="45"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\btn-missing-kaeo.dds"/>
+        </GroupIcon>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <Wireframe>
+            <Image value="Assets\Textures\btn-missing-kaeo.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="SecurityGateStraightHorizontalBF22" parent="GenericUnitGate" unitName="SecurityGateStraightHorizontalBF22" alt="Lowered">
+        <On Terms="ModelEvent; ModelEventName GateOpenStart" Send="Create GateOpenSoundLoop"/>
+        <On Terms="ModelEvent; ModelEventName GateOpenStop" Send="Create GateOpenSoundComplete"/>
+        <On Terms="ModelEvent; ModelEventName GateOpenStop" Target="GateOpenSoundLoop" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStart" Send="Create GateCloseSoundLoop"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStop" Send="Create GateCloseSoundComplete"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStop" Target="GateCloseSoundLoop" Send="Destroy"/>
+        <Model value="SecurityGateStraight"/>
+        <Scale value="2.500000"/>
+        <DeathArray index="Normal" SoundLink="SecurityGateDeath"/>
+        <BarOffset value="22"/>
+        <BarWidth value="45"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\btn-missing-kaeo.dds"/>
+        </GroupIcon>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <Wireframe>
+            <Image value="Assets\Textures\btn-missing-kaeo.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="ShapeArrowPointer">
+        <Scale value="0.300000"/>
+    </CActorUnit>
+    <CActorDoodad id="IceTerrainFlat">
+        <EditorCategories value="DoodadType:Environment"/>
+        <On index="0" Terms="ActorCreation" Send="TimerSet 0.100000 attchD1"/>
+        <On index="1" Terms="TimerExpired; TimerName attchD1" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="TimerExpired; TimerName attchD1" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="TimerExpired; TimerName attchD1" Send="TextureSelectById Terrain_IceTextureNormal"/>
+        <On Terms="TimerExpired; TimerName attchD1" Send="SetTintColor {255,255,255 1.100000}"/>
+        <TexSets value="IceWorld"/>
+        <RandomScaleRange value="1.000000,1.000000"/>
+        <ModelFlags index="AllowHitTest" value="0"/>
+        <ModelFlags index="IgnoreWalkables" value="0"/>
+        <Facing value="90"/>
+        <VisibleOpacity value="0.500000"/>
+    </CActorDoodad>
+    <CActorUnit id="ShapeCapsule">
+        <On Terms="UnitBirth.ShapeCapsule" Send="SetOpacity 0.000000 0.000000 none"/>
+        <Scale value="2.800000,2.800000,1.400000"/>
+        <EventDataFootprint index="0" removed="1"/>
+        <PlacementActorModel value=""/>
+    </CActorUnit>
+    <CActorModel id="PortalTargetStandardA1" parent="ModelAddition">
+        <Inherits index="LocalTintColor" value="1"/>
+        <Host Subject="_Unit" FailOnNoHost="1"/>
+        <HostSiteOps Ops="SOpAttachCenter"/>
+        <Model value="PortalTargetStandard"/>
+    </CActorModel>
+    <CActorSiteOpLocalOffset id="PortalDecalP4SOpOffset">
+        <EditorCategories value=""/>
+        <LocalOffset value="-0.340000,0.340000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="sfFlamethrowerHeightFix">
+        <EditorCategories value=""/>
+        <LocalOffset value="0.000000,0.000000,-1.230000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorUnit id="StoneInlay" parent="PolygonBase" unitName="StoneInlay">
+        <EditorCategories value=""/>
+        <Scale value="0.200000,0.200000,2.250000"/>
+    </CActorUnit>
+    <CActorTerrainDeformer id="TerrainDeformerAtU1">
+        <EditorCategories value=""/>
+        <On Terms="ActorOrphan" Send="Destroy"/>
+        <InfluenceRange value="5.000000"/>
+        <HeightDelta value="-1.500000"/>
+    </CActorTerrainDeformer>
+    <CActorUnit id="TerrainDeformerU1" parent="GenericUnitMinimal" unitName="TerrainDeformerU1">
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation" Send="Create TerrainDeformerAtU1"/>
+        <Model value="Invisible"/>
+    </CActorUnit>
+    <CActorUnit id="Ufo" parent="GenericUnitStandardNoAutoSoundLinks" unitName="Ufo">
+        <On index="0" Send="Create"/>
+        <On index="1" Terms="UnitRevive.Ufo"/>
+        <On index="2" Send="RefSet ::HostTurretBody _Selectable"/>
+        <On index="3" Terms="UnitConstruction.Ufo.Start" Send="Create"/>
+        <On index="4" Terms="UnitConstruction.Ufo.Finish" Send="AnimPlay ConstructionDeath Stand,Birth,Death FullMatch"/>
+        <On index="5" Terms="AnimDone.*.Missing; AnimName ConstructionDeath" Send="Destroy"/>
+        <On index="6" Terms="ActorCreation; ValidateUnit IsFlying; Option Shadow Low; $AllowBlobShadow" Send="Create FlyerShadow"/>
+        <On index="7" Terms="ActorCreation; ValidateUnit IsNotFlying; Option Shadow Low; $AllowBlobShadow" Send="Create GroundShadow"/>
+        <On index="8" Terms="StatusOn.*.PreTargetingModel" Send="Create ModelPretargetGround"/>
+        <On index="9" Terms="StatusOff.*.PreTargetingModel" Target="ModelPretargetGround" Send="Destroy"/>
+        <On index="10" Terms="StatusOn.*.PreTargetingModel; ValidateUnit IsFlying" Target="" Send="Create GroundPreSelection"/>
+        <On index="11" Terms="StatusOff.*.PreTargetingModel" Target="GroundPreSelection" Send="Destroy"/>
+        <On index="12" Terms="PreTargetingUpdate.*.Start" Target="" Send="SetTintColorBlendPair 255,192,192 255,128,128 0.150000 Bounce Pretarget"/>
+        <On index="13" Terms="PreTargetingUpdate.*.Stop" Send="ClearTintColor 0.100000 Pretarget"/>
+        <On index="14" Terms="StatusOn.*.PreTargetingTint" Send="PreTargetingUpdate Start"/>
+        <On index="15" Terms="StatusOff.*.PreTargetingTint" Send="PreTargetingUpdate Stop"/>
+        <On index="16" Terms="CursorUpdate.*.Start; ValidateUnit IsFlying" Send="StatusIncrement FlyerHelper"/>
+        <On index="17" Terms="CursorUpdate.*.Stop; ValidateUnit IsFlying; HasStatus FlyerHelper" Send="StatusDecrement FlyerHelper"/>
+        <On index="18" Terms="ActorCreation; ScopeContains GroundLocalSelection" Send="StatusSet Selected 1"/>
+        <On index="19" Terms="SelectionLocalUpdate.*.Start"/>
+        <On index="20" Terms="SelectionLocalUpdate.*.Stop" Send="StatusSet Selected 0"/>
+        <On index="21" Terms="StatusOn.*.Selected; ValidateUnit IsFlying" Send="StatusIncrement FlyerHelper"/>
+        <On index="22" Terms="StatusOff.*.Selected; ValidateUnit IsFlying; HasStatus FlyerHelper" Send="StatusDecrement FlyerHelper"/>
+        <On index="23" Terms="StatusOn.*.FlyerHelper; FlyerHelper All" Send="Create FlyerHelperSplat"/>
+        <On index="24" Terms="StatusOn.*.FlyerHelper; FlyerHelper Selected"/>
+        <On index="25" Terms="StatusOff.*.FlyerHelper; FlyerHelper Selected" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On index="26" Terms="ActorCreation; FlyerHelper All; ValidateUnit IsFlying"/>
+        <On index="27" Terms="ActorDestruction; FlyerHelper All; !HasStatus FlyerHelper" Target="FlyerHelperSplat" Send="Destroy"/>
+        <On index="28" Terms="FlyerHelperChange; FlyerHelper None"/>
+        <On index="29" Terms="FlyerHelperChange; FlyerHelper Selected; HasStatus FlyerHelper; !ScopeContains FlyerHelperSplat"/>
+        <On index="30" Terms="FlyerHelperChange; FlyerHelper Selected; !HasStatus FlyerHelper"/>
+        <On index="31" Terms="FlyerHelperChange; FlyerHelper All; ValidateUnit IsFlying; !ScopeContains FlyerHelperSplat" Target="" Send="Create FlyerHelperSplat"/>
+        <On index="32" Terms="UnitBirth.*.Normal" Send="$Birth 0 0.000000"/>
+        <On index="33" Terms="UnitFidget" Send="AnimPlay Fidget Fidget"/>
+        <On index="34" Terms="UnitMovementUpdate.*.Walk" Send="AnimClear Fidget"/>
+        <On index="35" Terms="UnitDetectedByViewer.*.On; ValidateUnit IsHallucination" Target="_HallucinationTinter" Send="Signal HallucinationTintOn"/>
+        <On index="36" Terms="UnitDetectedByViewer.*.Off; ValidateUnit IsHallucination" Send="Signal HallucinationTintOff"/>
+        <On index="37" Terms="UnitDeathCustomize; ValidateUnit NotStructure; IsStatus InAir 1" Send="DeathCustomize AntiGravGeneric"/>
+        <On index="38" Terms="UnitDeathCustomize; ValidateUnit IsProtossUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravProtoss"/>
+        <On index="39" Terms="UnitDeathCustomize; ValidateUnit IsTerranUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravTerran"/>
+        <On index="40" Terms="UnitDeathCustomize; ValidateUnit IsZergUnit; IsStatus InAir 1" Send="DeathCustomize AntiGravZerg"/>
+        <On index="41" Terms="UnitDeathCustomize; ValidateUnit IsVortexed" Send="DeathCustomize Vortex"/>
+        <On index="42" Terms="UnitDeathCustomize; ValidateUnit HasForceLowDeathProtoss" Send="DeathCustomize AntiGravProtoss"/>
+        <On index="43" Terms="UnitDeathCustomize; ValidateUnit HasForceLowDeathZerg"/>
+        <On index="44" Terms="UnitDeathCustomize; ValidateUnit HasForceLowDeathTerran" Send="DeathCustomize AntiGravTerran"/>
+        <On index="45" Terms="Behavior.PhoenixAntiGrav.On" Send="ModelSuddenMotionStart"/>
+        <On index="46" Terms="Behavior.PhoenixAntiGrav.Off" Send="ModelSuddenMotionStop"/>
+        <On index="47" Terms="Behavior.ForceLowDeath.On" Send="DeathCustomsEnablePhysics 0"/>
+        <On index="48" Terms="UnitTaunt.*.Start; Taunt" Send="AnimPlay Cheer Stand,Victory"/>
+        <On index="49" Terms="UnitTaunt.*.Stop; Taunt" Send="AnimClear Cheer"/>
+        <On index="50" Terms="UnitTaunt.*.Start; Taunt Dance" Send="AnimPlay Dance Stand,Dance"/>
+        <On index="51" Terms="UnitTaunt.*.Stop; Taunt Dance" Send="AnimClear Dance"/>
+        <On index="52" Terms="ActorCreation" Send="StatusSet InAir 0"/>
+        <On index="53" Terms="UnitHeightUpdate.*.Lift" Send="StatusSet InAir 1"/>
+        <On index="54" Terms="UnitHeightUpdate.*.Land" Send="StatusSet InAir 0"/>
+        <On index="55" Terms="Abil.attack.ReadyStart" Send="AnimGroupApply Ready"/>
+        <On index="56" Terms="WeaponStart.*.AttackStart" Send="AnimBracketStart Attack Attack"/>
+        <On index="57" Terms="WeaponStart.*.AttackStart; AnimPlaying Birth" Send="AnimClear Birth"/>
+        <On index="58" Terms="WeaponStop.*.AttackStop" Send="AnimBracketStop Attack"/>
+        <On index="59" Terms="Abil.attack.ReadyStop" Send="AnimGroupRemove Ready"/>
+        <On index="60" Terms="ActorCreation" Send="SetTeamColor 255,0,0 244,255,34"/>
+        <Model value="PickupChronoRiftDevice"/>
+        <Scale value="1.000000,1.000000,0.320000"/>
+        <BuildModel value="PickupChronoRiftDevice"/>
+        <DeathArray index="Normal" ModelLink="PickupChronoRiftDevice"/>
+        <PlacementModel value="PickupChronoRiftDevice"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-general-pickupchronoriftdevice.dds"/>
+        </GroupIcon>
+        <StatusBarFlags index="Shields" value="0"/>
+        <StatusBarFlags index="Life" value="0"/>
+        <StatusBarFlags index="Energy" value="0"/>
+        <StatusBarFlags index="Cargo" value="0"/>
+        <StatusBarFlags index="Progress" value="0"/>
+        <StatusBarFlags index="Duration" value="0"/>
+        <UnitIcon value="Assets\Textures\Wireframe-general-pickupchronoriftdevice.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-general-pickupchronoriftdevice.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="PortalDecalP1" parent="ModelAddition">
+        <EditorCategories value=""/>
+        <On Terms="UnitBirth.PortalDestination" Send="Create"/>
+        <On Terms="ActorCreation" Send="SetTintColor {255,255,255 1.500000}"/>
+        <On Terms="ActorCreation" Send="ModelSwap DecalProtoss 5"/>
+        <On Terms="Signal.*.a" Send="SetTintColor {255,13,13 5.000000}"/>
+        <Host Subject="_Unit"/>
+        <HostSiteOps Ops="SOp180 portalDOffset13 SOpIncreasePortalHeight22"/>
+        <Model value="DecalProtoss"/>
+        <ProximityPosition value="CenterActor"/>
+    </CActorModel>
+    <CActorUnit id="PortalDestination" parent="GenericUnitStandard" unitName="PortalDestination">
+        <AcceptedHostedPropTransfers index="BaseModelScale" value="1"/>
+        <EditorCategories value=""/>
+        <On index="0" Terms="ActorCreation" Send="AnimBracketStart BSD Birth Stand Death"/>
+        <On index="1" Terms="ActorOrphan" Send="Destroy"/>
+        <On index="2" Terms="AnimBracketState.*.AfterClosing; !AnimBracketExitReason ModelSwap; AnimName BSD" Send="Destroy"/>
+        <On index="3" Terms="UnitBirth.PortalDestination" Send="Create"/>
+        <On index="4" Terms="ActorCreation" Send="SetTintColor {255,255,255 1.500000}"/>
+        <On index="5" removed="1"/>
+        <On index="6" removed="1"/>
+        <On index="7" removed="1"/>
+        <On index="8" removed="1"/>
+        <On index="9" removed="1"/>
+        <On index="10" removed="1"/>
+        <On index="11" removed="1"/>
+        <On index="12" removed="1"/>
+        <On index="13" removed="1"/>
+        <On index="14" removed="1"/>
+        <On index="15" removed="1"/>
+        <On index="16" removed="1"/>
+        <On index="17" removed="1"/>
+        <On index="18" removed="1"/>
+        <On index="19" removed="1"/>
+        <On index="20" removed="1"/>
+        <On index="21" removed="1"/>
+        <On index="22" removed="1"/>
+        <On index="23" removed="1"/>
+        <On index="24" removed="1"/>
+        <On index="25" removed="1"/>
+        <On index="26" removed="1"/>
+        <On index="27" removed="1"/>
+        <On index="28" removed="1"/>
+        <On index="29" removed="1"/>
+        <On index="30" removed="1"/>
+        <On index="31" removed="1"/>
+        <On index="32" removed="1"/>
+        <On index="33" removed="1"/>
+        <On index="34" removed="1"/>
+        <On index="35" removed="1"/>
+        <On index="36" removed="1"/>
+        <On index="37" removed="1"/>
+        <On index="38" removed="1"/>
+        <On index="39" removed="1"/>
+        <On index="40" removed="1"/>
+        <On index="41" removed="1"/>
+        <On index="42" removed="1"/>
+        <On index="43" removed="1"/>
+        <On index="44" removed="1"/>
+        <On index="45" removed="1"/>
+        <On index="46" removed="1"/>
+        <On index="47" removed="1"/>
+        <On index="48" removed="1"/>
+        <On index="49" removed="1"/>
+        <On index="50" removed="1"/>
+        <On index="51" removed="1"/>
+        <On index="52" removed="1"/>
+        <On index="53" removed="1"/>
+        <On index="54" removed="1"/>
+        <On index="55" removed="1"/>
+        <On index="56" removed="1"/>
+        <On index="57" removed="1"/>
+        <On index="58" removed="1"/>
+        <On index="59" removed="1"/>
+        <On index="60" removed="1"/>
+        <On index="61" removed="1"/>
+        <On index="62" removed="1"/>
+        <On index="63" removed="1"/>
+        <On index="64" removed="1"/>
+        <HostSiteOps Ops="SOpIncreasePortalHeight2"/>
+        <Model value="Invisible"/>
+        <Scale value="0.400000"/>
+        <ProximityPosition value="CenterActor"/>
+        <BuildModel value="Invisible"/>
+        <DeathArray index="Normal">
+            <AnimProps value=""/>
+            <ModelLink value=""/>
+            <SoundLink value=""/>
+            <VoiceLink value=""/>
+        </DeathArray>
+        <DeathArray index="Eat" AnimProps=""/>
+        <DeathArray index="Eviscerate" AnimProps=""/>
+        <DeathArray index="Fire" AnimProps=""/>
+        <DeathArray index="Silentkill" AnimProps=""/>
+        <DeathArray index="Squish" AnimProps=""/>
+        <DeathArray index="UnderConstruction" AnimProps=""/>
+        <DeathCustoms index="0" removed="1"/>
+        <DeathCustoms index="1" removed="1"/>
+        <DeathCustoms index="2" removed="1"/>
+        <DeathCustoms index="3" removed="1"/>
+        <DeathCustoms index="4" removed="1"/>
+        <DeathCustomData index="0" removed="1"/>
+        <DeathCustomData index="1" removed="1"/>
+        <DeathCustomData index="2" removed="1"/>
+        <DeathCustomData index="3" removed="1"/>
+        <DeathCustomData index="4" removed="1"/>
+        <DeathCustomData index="5" removed="1"/>
+        <DeathCustomData index="6" removed="1"/>
+        <DeathCustomData index="7" removed="1"/>
+        <DeathCustomData index="8" removed="1"/>
+        <DeathCustomData index="9" removed="1"/>
+        <DeathCustomData index="10" removed="1"/>
+        <DeathCustomData index="11" removed="1"/>
+        <DeathCustomData index="12" removed="1"/>
+        <DeathCustomData index="13" removed="1"/>
+        <DeathCustomData index="14" removed="1"/>
+        <EditorModel value="DecalProtoss"/>
+        <PlacementModel value="Invisible"/>
+        <HighlightTooltip value="Unit/Name/Bogus"/>
+    </CActorUnit>
+    <!--                                                                                         -->
+    <!-- Predator .............................................................................. -->
+    <!--                                                                                         -->
+    <CActorUnit id="Predator">
+        <Scale value="0.800000"/>
+    </CActorUnit>
+    <CActorUnit id="Predator2" parent="GenericUnitStandard" unitName="largerpredator">
+        <Macros value="UnloadDropAnim"/>
+        <Model value="Predator"/>
+        <Scale value="1.200000"/>
+        <Baselines index="Walk" AnimProps="Walk,Fast"/>
+        <BuildModel value="Predator"/>
+        <DeathArray index="Normal" ModelLink="PredatorDeath" SoundLink="Predator_Explode"/>
+        <PlacementModel value="Predator"/>
+        <PortraitModel value="CyberCatPortrait"/>
+        <BarOffset value="50"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Terran-predator.dds"/>
+        </GroupIcon>
+        <HeroIcon value="Assets\Textures\BTN-Unit-Terran-Predator.dds"/>
+        <HighlightTooltip value="Unit/Name/Predator2"/>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-terran-vehicleplatinglevel0.dds"/>
+        <SoundArray index="Ready" value="Predator_Ready"/>
+        <SoundArray index="What" value="Predator_What"/>
+        <SoundArray index="Yes" value="Predator_Yes"/>
+        <SoundArray index="Attack" value="Predator_Attack"/>
+        <UnitIcon value="Assets\Textures\BTN-Unit-Terran-Predator.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Terran-predator.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <!--                                                                                         -->
+    <!-- Prison Zealot ................................................................................ -->
+    <!--                                                                                         -->
+    <CActorUnit id="PrisonZealot">
+        <Scale value="1.250000"/>
+    </CActorUnit>
+    <!-- Redstone Lava Critter                                                                   -->
+    <CActorUnit id="RedstoneLavaCritter">
+        <Scale value="8.000000"/>
+    </CActorUnit>
+    <!--       Wraith                                                                                  -->
+    <CActorUnit id="SJWraith">
+        <Scale value="1.400000"/>
+    </CActorUnit>
+    <CActorSiteOpLocalOffset id="SOpIncreasePortalHeight2">
+        <LocalOffset value="0.000000,0.000000,-10.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="SOpIncreasePortalHeight22">
+        <LocalOffset value="0.000000,0.000000,10.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorDoodad id="Searchlight">
+        <On index="0" Terms="ActorCreation" Send="$Stand PlayForever,RandomStartOffset"/>
+        <On index="1" Terms="ActorCreation; ModelVariation 2" Send="Create SoundEmitter Doodad_Searchlight02"/>
+        <On index="2" Terms="Signal.*.LightPowerDown" Send="AnimGroupApply Unpowered"/>
+        <On index="3" Terms="Signal.*.LightPowerUp" Send="AnimGroupRemove Unpowered"/>
+        <On index="4" removed="1"/>
+    </CActorDoodad>
+    <CActorUnit id="ShapeTorus2" parent="PolygonBase" unitName="ShapeTorus22">
+        <Model value="ShapeTorus"/>
+        <BuildModel value="ShapeTorus"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="ShapeTorus"/>
+        <HighlightTooltip value="Unit/Name/ShapeTorus2"/>
+    </CActorUnit>
+    <CActorUnit id="ShapeTorus222" parent="PolygonBase" unitName="ShapeTorus3">
+        <Model value="ShapeTorus"/>
+        <BuildModel value="ShapeTorus"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="ShapeTorus"/>
+        <HighlightTooltip value="Unit/Name/ShapeTorus222"/>
+    </CActorUnit>
+    <CActorUnit id="ShapeTorus23" parent="PolygonBase" unitName="ShapeTorus222">
+        <Model value="ShapeTorus"/>
+        <BuildModel value="ShapeTorus"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="ShapeTorus"/>
+        <HighlightTooltip value="Unit/Name/ShapeTorus23"/>
+    </CActorUnit>
+    <CActorUnit id="ShapeTorus232" parent="PolygonBase" unitName="ShapeTorus2">
+        <Model value="ShapeTorus"/>
+        <BuildModel value="ShapeTorus"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="ShapeTorus"/>
+        <HighlightTooltip value="Unit/Name/ShapeTorus232"/>
+    </CActorUnit>
+    <CActorUnit id="ShapeTorus24" parent="PolygonBase" unitName="ShapeTorus4">
+        <Model value="ShapeTorus"/>
+        <BuildModel value="ShapeTorus"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="ShapeTorus"/>
+        <HighlightTooltip value="Unit/Name/ShapeTorus24"/>
+    </CActorUnit>
+    <CActorDoodad id="TempleStoneInlaywAnims">
+        <EditorCategories value=""/>
+    </CActorDoodad>
+    <CActorSiteOpAction id="SOpIceTerrainTextureSwap">
+        <AcceptedTransfers index="Animator" value="1"/>
+        <AcceptedTransfers index="AnimProps" value="1"/>
+        <AcceptedTransfers index="FOWColor" value="1"/>
+        <AcceptedTransfers index="FOWShader" value="1"/>
+        <AcceptedTransfers index="Model" value="1"/>
+        <AcceptedTransfers index="Position" value="1"/>
+        <AcceptedTransfers index="Rotation" value="1"/>
+        <AcceptedTransfers index="Textures" value="1"/>
+        <AcceptedTransfers index="Status" value="1"/>
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureSpecular"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureDiffuse"/>
+        <On Terms="ActorCreation" Send="TextureSelectById Terrain_IceTextureNormal"/>
+    </CActorSiteOpAction>
+    <!-- Ursadak Female                                                            -->
+    <CActorUnit id="UrsadakFemale">
+        <On Terms="ActorCreation" Send="SetMinimapVisibility"/>
+    </CActorUnit>
+    <!-- Ursadak Female Exotic                                                                   -->
+    <CActorUnit id="UrsadakFemaleExotic">
+        <Scale value="0.600000,0.550000,0.600000"/>
+    </CActorUnit>
+    <CActorUnit id="UrsadakFemaleExoticLarge" parent="GenericUnitCritter" unitName="FemaleUrsadakLarge">
+        <On Terms="Effect.Suicide.Start" Send="Create CritterExplosion"/>
+        <Model value="UrsadakFemaleExotic"/>
+        <Scale value="0.900000,0.820000,0.900000"/>
+        <BuildModel value="UrsadakFemaleExotic"/>
+        <DeathArray index="Normal" ModelLink="UrsadakFemaleExoticDeath" SoundLink="Zerg_ExplosionMedium"/>
+        <PlacementModel value="UrsadakFemaleExotic"/>
+        <PortraitModel value="UrsadakExoticPortrait"/>
+        <WalkAnimMoveSpeed value="1.5976"/>
+        <BarOffset value="40"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-critter-ursadakfemale.dds"/>
+        </GroupIcon>
+        <HighlightTooltip value="Unit/Name/UrsadakFemaleExoticLarge"/>
+        <SoundArray index="What" value="Ursadak_What"/>
+        <SoundArray index="Yes" value="Ursadak_What"/>
+        <SoundArray index="Attack" value="Ursadak_What"/>
+        <UnitIcon value="Assets\Textures\Wireframe-critter-ursadakfemale.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-critter-ursadakfemale.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <!-- Ursadak Male                                                            -->
+    <CActorUnit id="UrsadakMale">
+        <On Terms="ActorCreation" Send="SetMinimapVisibility"/>
+    </CActorUnit>
+    <!-- Ursadak Male Exotic                                                                     -->
+    <CActorUnit id="UrsadakMaleExotic">
+        <On Terms="ActorCreation" Send="SetMinimapVisibility"/>
+    </CActorUnit>
+    <CActorUnit id="WarpGate">
+        <HostSiteOps Ops="SOpIncreasePortalHeight"/>
+        <Baselines index="Walk" AnimProps="Stand"/>
+        <WalkAnimTimeScalingAsFlyer value="1"/>
+    </CActorUnit>
+    <CActorUnit id="catapult1" parent="PolygonBase" unitName="catapult1">
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <FogVisibility value="Dimmed"/>
+    </CActorUnit>
+    <CActorUnit id="catapult12" parent="PolygonBase" unitName="catapult12">
+        <Model value="catapult1"/>
+        <Scale value="0.750000,0.750000,1.000000"/>
+        <BuildModel value="catapult1"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="catapult1"/>
+        <FogVisibility value="Dimmed"/>
+    </CActorUnit>
+    <CActorUnit id="catapult122" parent="PolygonBase" unitName="catapult122">
+        <Model value="catapult1"/>
+        <Scale value="0.500000,0.500000,1.000000"/>
+        <BuildModel value="catapult1"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="catapult1"/>
+        <FogVisibility value="Dimmed"/>
+    </CActorUnit>
+    <CActorUnit id="catapult1222" parent="PolygonBase" unitName="catapult1222">
+        <Model value="catapult1"/>
+        <Scale value="0.750000,1.000000,1.000000"/>
+        <BuildModel value="catapult1"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="catapult1"/>
+        <FogVisibility value="Dimmed"/>
+    </CActorUnit>
+    <CActorUnit id="catapult12222" parent="PolygonBase" unitName="catapult12222">
+        <Model value="catapult1"/>
+        <Scale value="0.500000,1.000000,1.000000"/>
+        <BuildModel value="catapult1"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="catapult1"/>
+        <FogVisibility value="Dimmed"/>
+    </CActorUnit>
+    <CActorUnit id="catapult122222" parent="PolygonBase" unitName="catapult122222">
+        <Model value="catapult1"/>
+        <Scale value="1.000000,0.750000,1.000000"/>
+        <BuildModel value="catapult1"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="catapult1"/>
+        <FogVisibility value="Dimmed"/>
+    </CActorUnit>
+    <CActorUnit id="catapult1222222" parent="PolygonBase" unitName="catapult1222222">
+        <Model value="catapult1"/>
+        <Scale value="1.000000,0.500000,1.000000"/>
+        <BuildModel value="catapult1"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="catapult1"/>
+        <FogVisibility value="Dimmed"/>
+    </CActorUnit>
+    <CActorUnit id="catapult12222222" parent="PolygonBase" unitName="catapult12222222">
+        <Model value="catapult1"/>
+        <Scale value="0.750000,0.500000,1.000000"/>
+        <BuildModel value="catapult1"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="catapult1"/>
+        <FogVisibility value="Dimmed"/>
+    </CActorUnit>
+    <CActorUnit id="catapult122223" parent="PolygonBase" unitName="catapult122223">
+        <Model value="catapult1"/>
+        <Scale value="0.500000,0.750000,1.000000"/>
+        <BuildModel value="catapult1"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="catapult1"/>
+        <FogVisibility value="Dimmed"/>
+    </CActorUnit>
+    <CActorDoodad id="FlamePipeShooterDouble">
+        <EditorCategories value=""/>
+        <Model value="flamePipeShooterDouble"/>
+    </CActorDoodad>
+    <CActorUnit id="catapult13" parent="PolygonBase" unitName="catapult13">
+        <Model value="catapult1"/>
+        <Scale value="1.200000,1.450000,1.000000"/>
+        <BuildModel value="catapult1"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="catapult1"/>
+        <FogVisibility value="Dimmed"/>
+    </CActorUnit>
+    <CActorSiteOpLocalOffset id="portalDOffset1">
+        <EditorCategories value=""/>
+        <HoldRotation value="1"/>
+        <LocalOffset value="-0.340000,0.340000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="portalDOffset12">
+        <EditorCategories value=""/>
+        <HoldRotation value="1"/>
+        <LocalOffset value="0.000000,-1.700000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="portalDOffset13">
+        <EditorCategories value=""/>
+        <HoldRotation value="1"/>
+        <LocalOffset value="-0.340000,0.340000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorSiteOpLocalOffset id="portalDOffset132">
+        <EditorCategories value=""/>
+        <HoldRotation value="1"/>
+        <LocalOffset value="-0.340000,0.340000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <!-- Scantipede                                                                              -->
+    <CActorUnit id="Scantipede">
+        <Scale value="1.400000"/>
+        <On Terms="ActorCreation" Send="SetMinimapVisibility"/>
+    </CActorUnit>
+    <CActorUnit id="SecurityGateStraightVerticalLF2" parent="GenericUnitGate" unitName="SecurityGateStraightVerticalLF" alt="Lowered">
+        <On index="0" Terms="UnitBirth.SecurityGateStraightVerticalLF2"/>
+        <On index="1" Terms="UnitBirth.SecurityGateStraightVerticalLF2"/>
+        <On index="2" Terms="UnitRevive.SecurityGateStraightVerticalLF2"/>
+        <On index="3" Terms="UnitRevive.SecurityGateStraightVerticalLF2"/>
+        <On index="4" Terms="UnitConstruction.SecurityGateStraightVerticalLF2"/>
+        <On index="5" Terms="UnitConstruction.SecurityGateStraightVerticalLF2"/>
+        <On index="53" Terms="UnitBirth.SecurityGateStraightVerticalLFLowered2" Send="Create"/>
+        <On index="54" Terms="UnitBirth.SecurityGateStraightVerticalLFLowered2" Send="AnimGroupApply Unpowered Unpowered,Start Unpowered,End Instant"/>
+        <On index="55" Terms="AbilMorph.*.Start; MorphTo SecurityGateStraightVerticalLFLowered2" Send="AnimGroupApply Unpowered Unpowered,Start Unpowered,End"/>
+        <On index="56" Terms="AbilMorph.*.Finish; MorphTo SecurityGateStraightVerticalLFLowered2" Send="AnimGroupApply Unpowered Unpowered,Start Unpowered,End Instant"/>
+        <On index="57" Terms="AbilMorph.*.Start; MorphTo SecurityGateStraightVerticalLF2" Send="AnimGroupRemove Unpowered"/>
+        <On index="58" Terms="AbilMorph.*.Finish; MorphTo SecurityGateStraightVerticalLF2" Send="AnimGroupRemove Unpowered Instant"/>
+        <On Terms="ModelEvent; ModelEventName GateOpenStart" Send="Create GateOpenSoundLoop"/>
+        <On Terms="ModelEvent; ModelEventName GateOpenStop" Send="Create GateOpenSoundComplete"/>
+        <On Terms="ModelEvent; ModelEventName GateOpenStop" Target="GateOpenSoundLoop" Send="Destroy"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStart" Send="Create GateCloseSoundLoop"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStop" Send="Create GateCloseSoundComplete"/>
+        <On Terms="ModelEvent; ModelEventName GateCloseStop" Target="GateCloseSoundLoop" Send="Destroy"/>
+        <Model value="SecurityGateStraight"/>
+        <Scale value="1.500000"/>
+        <DeathArray index="Normal" SoundLink="SecurityGateDeath"/>
+        <BarOffset value="22"/>
+        <BarWidth value="45"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\btn-missing-kaeo.dds"/>
+        </GroupIcon>
+        <HighlightTooltip value="Unit/Name/SecurityGateStraightVerticalLF2"/>
+        <UnitFlags index="ShowBlobShadow" value="0"/>
+        <Wireframe>
+            <Image value="Assets\Textures\btn-missing-kaeo.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="Sheep2" parent="GenericUnitCritter" unitName="PillarHostile">
+        <On Terms="Effect.Suicide.Start" Send="Create CritterExplosion"/>
+        <Model value="ShakurasHexColumns"/>
+        <BuildModel value="ShakurasHexColumns"/>
+        <DeathArray index="Normal" ModelLink="SheepDeath" SoundLink="Zerg_ExplosionSmall"/>
+        <PlacementModel value="ShakurasHexColumns"/>
+        <WalkAnimMoveSpeed value="1"/>
+        <BarOffset value="40"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-critter-sheep.dds"/>
+        </GroupIcon>
+        <HighlightTooltip value="Unit/Name/Sheep2"/>
+        <SoundArray index="What" value="Sheep_What"/>
+        <UnitIcon value="Assets\Textures\Wireframe-critter-sheep.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-critter-sheep.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorModel id="StimpackEndImpact2" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Behavior.Stimpack.Off" Send="Create"/>
+        <On Terms="Behavior.StimpackMarauder.Off" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="StimpackEndImpact"/>
+    </CActorModel>
+    <CActorModel id="StimpackStartImpact2" parent="ModelAnimationStyleOneShot">
+        <Inherits index="CloakEffect" value="1"/>
+        <On Terms="Abil.Stimpack.SourceCastStart" Send="Create"/>
+        <On Terms="Abil.StimpackMarauder.SourceCastStart" Send="Create"/>
+        <Host Subject="_Selectable"/>
+        <HostSiteOps Ops="SOpAttachOverhead"/>
+        <Model value="StimpackStartImpact"/>
+    </CActorModel>
+    <CActorUnit id="StoneZealot2" parent="GenericUnitStandard" unitName="StoneZealot2">
+        <Model value="StoneZealot"/>
+        <Scale value="0.410000"/>
+        <BuildModel value="StoneZealot"/>
+        <DeathArray index="Normal" ModelLink="StoneZealotDeath" SoundLink="StoneZealot_Death"/>
+        <DeathActorModelLow value="UnitDeathModel"/>
+        <PlacementModel value="StoneZealot"/>
+        <WalkAnimMoveSpeed value="2.3867"/>
+        <BarOffset value="180"/>
+        <BarWidth value="102"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-Protoss-stonezealot.dds"/>
+        </GroupIcon>
+        <LifeArmorIcon value="Assets\Textures\btn-upgrade-protoss-groundarmorlevel1.dds"/>
+        <NameOffset value="80"/>
+        <SoundArray index="Birth" value="StoneZealot_Birth"/>
+        <UnitIcon value="Assets\Textures\btn-unit-protoss-stonezealot.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-Protoss-stonezealot.dds"/>
+        </Wireframe>
+        <WireframeShield>
+            <Image value="Assets\Textures\Wireframe-Protoss-stonezealot-Shield01.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-stonezealot-Shield02.dds"/>
+            <Image value="Assets\Textures\Wireframe-Protoss-stonezealot-Shield03.dds"/>
+        </WireframeShield>
+    </CActorUnit>
+    <!-- Ursadak Calf                                                            -->
+    <CActorUnit id="UrsadakCalf">
+        <Scale value="1.600000,1.600000,1.000000"/>
+    </CActorUnit>
+    <CActorUnit id="UrsadakCalf2" parent="GenericUnitCritter" unitName="UrsadakCalfSmall">
+        <On Terms="Effect.Suicide.Start" Send="Create CritterExplosion"/>
+        <Model value="UrsadakCalf"/>
+        <Scale value="0.800000"/>
+        <BuildModel value="UrsadakCalf"/>
+        <DeathArray index="Normal" ModelLink="UrsadakCalfDeath" SoundLink="Zerg_ExplosionSmall"/>
+        <PlacementModel value="UrsadakCalf"/>
+        <PortraitModel value="UrsadakPortrait"/>
+        <WalkAnimMoveSpeed value="1.5976"/>
+        <BarOffset value="40"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-critter-ursadakfemale.dds"/>
+        </GroupIcon>
+        <HighlightTooltip value="Unit/Name/UrsadakCalf2"/>
+        <SoundArray index="What" value="Ursadak_What"/>
+        <SoundArray index="Yes" value="Ursadak_What"/>
+        <SoundArray index="Attack" value="Ursadak_What"/>
+        <UnitIcon value="Assets\Textures\Wireframe-critter-ursadakfemale.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-critter-ursadakfemale.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="UrsadakCalf22" parent="GenericUnitCritter" unitName="smallMotherShip">
+        <On Terms="Effect.Suicide.Start" Send="Create CritterExplosion"/>
+        <Model value="Phoenix"/>
+        <Scale value="0.900000,0.900000,0.950000"/>
+        <BuildModel value=""/>
+        <DeathArray index="Normal" ModelLink="UrsadakCalfDeath" SoundLink="Zerg_ExplosionSmall"/>
+        <PlacementModel value=""/>
+        <PortraitModel value=""/>
+        <WalkAnimMoveSpeed value="0"/>
+        <BarOffset value="40"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-critter-ursadakfemale.dds"/>
+        </GroupIcon>
+        <HighlightTooltip value="Unit/Name/UrsadakCalf22"/>
+        <SoundArray index="What" value="Ursadak_What"/>
+        <SoundArray index="Yes" value="Ursadak_What"/>
+        <SoundArray index="Attack" value="Ursadak_What"/>
+        <UnitIcon value="Assets\Textures\Wireframe-critter-ursadakfemale.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-critter-ursadakfemale.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorUnit id="UrsadakCalf23" parent="GenericUnitCritter" unitName="UrsadakCalfSmallMinimapVis">
+        <On Terms="Effect.Suicide.Start" Send="Create CritterExplosion"/>
+        <Model value="UrsadakCalf"/>
+        <Scale value="0.800000"/>
+        <BuildModel value="UrsadakCalf"/>
+        <DeathArray index="Normal" ModelLink="UrsadakCalfDeath" SoundLink="Zerg_ExplosionSmall"/>
+        <PlacementModel value="UrsadakCalf"/>
+        <PortraitModel value="UrsadakPortrait"/>
+        <WalkAnimMoveSpeed value="1.5976"/>
+        <BarOffset value="40"/>
+        <BarWidth value="36"/>
+        <GroupIcon>
+            <Image value="Assets\Textures\Wireframe-critter-ursadakfemale.dds"/>
+        </GroupIcon>
+        <HighlightTooltip value="Unit/Name/UrsadakCalf23"/>
+        <SoundArray index="What" value="Ursadak_What"/>
+        <SoundArray index="Yes" value="Ursadak_What"/>
+        <SoundArray index="Attack" value="Ursadak_What"/>
+        <UnitIcon value="Assets\Textures\Wireframe-critter-ursadakfemale.dds"/>
+        <Wireframe>
+            <Image value="Assets\Textures\Wireframe-critter-ursadakfemale.dds"/>
+        </Wireframe>
+    </CActorUnit>
+    <CActorSound id="WinterWind2" parent="SoundOneShot">
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation" Send="Create"/>
+        <Sound value="WinterWind3"/>
+    </CActorSound>
+    <!--                                                                                         -->
+    <!-- Map Objects                                                                             -->
+    <!--                                                                                         -->
+    <CActorUnit id="XelNagaTower">
+        <Scale value="0.500000"/>
+    </CActorUnit>
+    <CActorUnit id="iceRingComponent" parent="PolygonBase" unitName="iceRingComponent">
+        <Model value="NaturalMinerals"/>
+        <Scale value="1.000000,1.000000,0.400000"/>
+        <BuildModel value="NaturalMinerals"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="NaturalMinerals"/>
+    </CActorUnit>
+    <CActorSiteOpLocalOffset id="offsetSmallUrsa">
+        <EditorCategories value=""/>
+        <LocalOffset value="0.000000,-0.150000,0.000000"/>
+    </CActorSiteOpLocalOffset>
+    <CActorUnit id="sfBushLarge" parent="GenericUnitMinimal" unitName="sfBushLarge">
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation" Send="SetTintColor {15,121,179 2.000000}"/>
+        <On Terms="ActorCreation; IsInEditor" Send="Create CollBushLarge"/>
+        <Model value="sfBush"/>
+        <Scale value="1.900000"/>
+        <BuildModel value="sfBush"/>
+        <PlacementModel value="sfBush"/>
+    </CActorUnit>
+    <CActorUnit id="sfBushSmall" parent="GenericUnitMinimal" unitName="sfBushSmall">
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation" Send="SetTintColor {15,121,179 2.000000}"/>
+        <On Terms="ActorCreation; IsInEditor" Send="Create CollBushSmall"/>
+        <Model value="sfBush"/>
+        <Scale value="1.200000"/>
+        <BuildModel value="sfBush"/>
+        <PlacementModel value="sfBush"/>
+    </CActorUnit>
+    <CActorUnit id="sfBushMedium" parent="GenericUnitMinimal" unitName="sfBushMedium">
+        <EditorCategories value=""/>
+        <On Terms="ActorCreation" Send="SetTintColor {15,121,179 2.000000}"/>
+        <On Terms="ActorCreation; IsInEditor" Send="Create CollBushMedium"/>
+        <Model value="sfBush"/>
+        <Scale value="1.550000"/>
+        <BuildModel value="sfBush"/>
+        <PlacementModel value="sfBush"/>
+    </CActorUnit>
+    <CActorUnit id="sfFlamethrower" parent="GenericUnitMinimal" unitName="sfFlamethrower">
+        <EditorCategories value=""/>
+        <HostSiteOps Ops="sfFlamethrowerHeightFix"/>
+    </CActorUnit>
+    <CActorUnit id="slabSwitch" parent="GenericUnitStandard" unitName="slabSwitch">
+        <EditorCategories value=""/>
+        <Model value="TempleBricksLarge"/>
+        <BuildModel value="TempleBricksLarge"/>
+        <PlacementModel value="TempleBricksLarge"/>
+        <HighlightTooltip value="Unit/Name/Bogus"/>
+    </CActorUnit>
+    <CActorUnit id="spikes" parent="GenericUnitStandard" unitName="spikes">
+        <EditorCategories value=""/>
+        <On Terms="UnitBirth.spikes" Send="SetTintColor {160,203,254 1.200000}"/>
+        <Scale value="0.370000,0.370000,0.600000"/>
+        <HighlightTooltip value="Unit/Name/Bogus"/>
+    </CActorUnit>
+    <CActorUnit id="vortexSmallART" parent="PolygonBase" unitName="vortexART">
+        <Model value="VortexModel"/>
+        <Scale value="0.200000"/>
+        <BuildModel value="VortexModel"/>
+        <DeathArray index="Normal" ModelLink="ShapeTorus"/>
+        <PlacementModel value="VortexModel"/>
+        <HighlightTooltip value="Unit/Name/vortexSmallART"/>
+        <AcceptedTransfers index="Position" value="0"/>
+        <Baselines index="Walk" AnimProps=""/>
+        <WalkAnimMoveSpeed value="0"/>
+    </CActorUnit>
+</Catalog>

@@ -1,0 +1,98 @@
+// const int IBE_STAT_GDIFF_MAX = 2;
+// const int IBE_STAT_GSPEED_MAX = 2;
+const int IBE_STAT_CHALLENGE_MAX = 30;
+const int IBE_STAT_CHALLENGE_POWERUP_MAX = 8;
+const int IBE_STAT_CHALLENGE_BUTTON_MAX = 8;
+
+//
+//
+//
+
+const int IBE_STAT_PROFILE_CURRENT_VERSION = 7;
+
+const int IBE_STAT_PROFILE_ABIL_BOOST = 0;
+const int IBE_STAT_PROFILE_ABIL_CREEP = 1;
+const int IBE_STAT_PROFILE_ABIL_THROW_ESSENCE = 2;
+const int IBE_STAT_PROFILE_ABIL_ART = 3;
+const int IBE_STAT_PROFILE_ABIL_SHADE_CREATE = 4;
+const int IBE_STAT_PROFILE_ABIL_SHADE_USE = 5;
+const int IBE_STAT_PROFILE_ABIL_THROW_ESSENCE_REVIVE = 6;
+const int IBE_STAT_PROFILE_ABIL_ART_REVIVE = 7;
+
+const int IBE_STAT_ABIL_MAX = 8;
+
+struct ibe_stat_profile_challenge_t {
+    fixed best_time;
+    int completions;
+    int powerups;
+    int buttons;
+};
+
+struct ibe_stat_profile_gmode_t {
+    int time_played;
+    fixed escape_best_time;
+    int games_played;
+    int games_completed;
+    ibe_stat_profile_challenge_t[IBE_STAT_CHALLENGE_MAX] chal;
+};
+
+struct ibe_stat_profile_t {
+    bank storage;
+
+    int deaths;
+    int revives;
+    int games_started;
+    int[IBE_STAT_ABIL_MAX] abils;
+
+    ibe_stat_profile_gmode_t[IBE_GM_MAX] gm;
+};
+
+//
+// GAME RESULT
+//
+
+const int IBE_STAT_GRESULT_CURRENT_VERSION = 4;
+
+struct ibe_stat_gresult_player_t {
+    bool exists;
+    string phandle;
+    text tname;
+    bool left;
+
+    int level;
+    int deaths;
+    int revives;
+    int[IBE_STAT_ABIL_MAX] abilities_used;
+};
+
+struct ibe_stat_gresult_chal_t {
+    int completed_by;
+    fixed time;
+    int[IBE_STAT_CHALLENGE_BUTTON_MAX] buttons_by;
+    int[IBE_STAT_CHALLENGE_POWERUP_MAX] powerups_by;
+};
+
+struct ibe_stat_gresult_t {
+    int game_version;
+    int gm_code;
+    fixed escape_time;
+    ibe_stat_gresult_player_t[MAX_PLAYERS + 1] players;
+    ibe_stat_gresult_chal_t[IBE_STAT_CHALLENGE_MAX] challenges;
+};
+
+//
+// GAME RESULT LIST | RANKING
+//
+
+const int IBE_STAT_GRL_PLIMIT = 200;
+const int IBE_STAT_GLR_PLAYER_MAX = 1024;
+const int IBE_STAT_GLR_MAX = IBE_STAT_GRL_PLIMIT * MAX_PLAYERS;
+
+const int IBE_STAT_RK_CHAL_MAX = MAX_PLAYERS * IBE_STAT_CHALLENGE_MAX * IBE_GM_MAX;
+
+struct ibe_stat_rk_chal_t {
+    int gm_code;
+    int chal_id;
+    int player;
+    fixed time;
+};

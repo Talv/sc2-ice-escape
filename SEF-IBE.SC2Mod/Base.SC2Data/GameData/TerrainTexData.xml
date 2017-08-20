@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Catalog>
+    <CTerrainTex id="sfSuperReverseIce">
+        <Texture value="Assets\Textures\niflheim_ice_cracked.dds"/>
+        <Normalmap value="Assets\Textures\niflheim_ice_crackednormal.dds"/>
+        <EditorIcon value="Assets\Textures\ui-editoricon-niflheim_ice_cracked.dds"/>
+        <PhysicsMaterial value="Ice"/>
+    </CTerrainTex>
+    <CTerrainTex id="sfSuperIce">
+        <Texture value="Assets\Textures\IceWorld_6.dds"/>
+        <Normalmap value="Assets\Textures\IceWorld_6Normal.dds"/>
+        <EditorIcon value="Assets\Textures\ui-editoricon-IceWorld_6.dds"/>
+        <PhysicsMaterial value="Ice"/>
+    </CTerrainTex>
+    <CTerrainTex id="ShakurasSandDark">
+        <Texture value="Assets\Textures\niflheim_ice_cracked.dds"/>
+        <Normalmap value="Assets\Textures\niflheim_ice_crackednormal.dds"/>
+        <EditorIcon value="Assets\Textures\ui-editoricon-niflheim_ice_cracked.dds"/>
+        <PhysicsMaterial value="Ice"/>
+    </CTerrainTex>
+    <CTerrainTex id="ZhakulDasDarkRock">
+        <Texture value="Assets\Textures\storm_icec2.dds"/>
+        <Normalmap value="Assets\Textures\skyboxchar_planetemissive.dds"/>
+        <PhysicsMaterial value="Ice"/>
+    </CTerrainTex>
+    <CTerrainTex id="ZhakulDasDirtCracked">
+        <Texture value="Assets\Textures\niflheim_ice_frosty.dds"/>
+        <Normalmap value="Assets\Textures\zhakuldas_dirt_crackednormal.dds"/>
+    </CTerrainTex>
+    <CTerrainTex id="ZhakulDasLightRock">
+        <Texture value="Assets\Textures\niflheim_snow.dds"/>
+        <Normalmap value="Assets\Textures\iceworld_4normal.dds"/>
+        <EditorIcon value="Assets\Textures\ui-editoricon-niflheim_snow.dds"/>
+    </CTerrainTex>
+    <CTerrainTex id="ZhakulDasMercuryCracks">
+        <Texture value="Assets\Textures\niflheim_ice_smooth.dds"/>
+        <Normalmap value="Assets\Textures\niflheim_ice_smoothnormal.dds"/>
+    </CTerrainTex>
+    <CTerrainTex id="Ice">
+        <Texture value="Assets\Textures\niflheim_ice_smooth.dds"/>
+        <Normalmap value="Assets\Textures\niflheim_ice_smoothnormal.dds"/>
+        <EditorIcon value="Assets\Textures\ui-editoricon-niflheim_ice_smooth.dds"/>
+        <PhysicsMaterial value="Ice"/>
+    </CTerrainTex>
+    <CTerrainTex id="NiflheimIceSmooth">
+        <Texture value="Assets\Textures\niflheim_ice_smooth.dds"/>
+        <Normalmap value="Assets\Textures\niflheim_ice_smoothnormal.dds"/>
+        <EditorIcon value="Assets\Textures\ui-editoricon-niflheim_ice_smooth.dds"/>
+        <PhysicsMaterial value="Ice"/>
+    </CTerrainTex>
+    <CTerrainTex id="ShakurasSandDark2">
+        <Texture value="Assets\Textures\niflheim_ice_cracked.dds"/>
+        <Normalmap value="Assets\Textures\niflheim_ice_crackednormal.dds"/>
+        <EditorIcon value="Assets\Textures\ui-editoricon-niflheim_ice_cracked.dds"/>
+        <DoodadEntry>
+            <Model value="PlantMixShakuras"/>
+            <RandomRotation value="1"/>
+            <Probability value="0.100000"/>
+            <PlacementRadius value="1.000000"/>
+        </DoodadEntry>
+        <DoodadEntry>
+            <Model value="DynamicGrassShakuras"/>
+            <RandomRotation value="1"/>
+            <Probability value="0.500000"/>
+            <PlacementRadius value="1.000000"/>
+        </DoodadEntry>
+        <PhysicsMaterial value="Ice"/>
+    </CTerrainTex>
+    <CTerrainTex id="ShakurasSandDark22">
+        <Texture value="Assets\Textures\niflheim_ice_cracked.dds"/>
+        <Normalmap value="Assets\Textures\niflheim_cliff0_specular.dds"/>
+        <EditorIcon value="Assets\Textures\icewave_diffuse.dds"/>
+        <DoodadEntry>
+            <Model value="PlantMixShakuras"/>
+            <RandomRotation value="1"/>
+            <Probability value="0.100000"/>
+            <PlacementRadius value="1.000000"/>
+        </DoodadEntry>
+        <DoodadEntry>
+            <Model value="DynamicGrassShakuras"/>
+            <RandomRotation value="1"/>
+            <Probability value="0.500000"/>
+            <PlacementRadius value="1.000000"/>
+        </DoodadEntry>
+        <PhysicsMaterial value="Ice"/>
+    </CTerrainTex>
+    <CTerrainTex id="ZhakulDasDirtCracked2">
+        <Texture value="Assets\Textures\niflheim_ice_frosty.dds"/>
+        <Normalmap value="Assets\Textures\zhakuldas_dirt_crackednormal.dds"/>
+        <EditorIcon value="Assets\Textures\ui-editoricon-ZhakulDas_Dirt_Cracked.dds"/>
+        <DoodadEntry>
+            <Model value="PlantMixZhakulDas"/>
+            <RandomRotation value="1"/>
+            <Probability value="0.050000"/>
+            <PlacementRadius value="1.000000"/>
+        </DoodadEntry>
+        <DoodadEntry>
+            <Model value="RockMixZhakulDas"/>
+            <RandomRotation value="1"/>
+            <Probability value="0.100000"/>
+            <PlacementRadius value="1.000000"/>
+        </DoodadEntry>
+    </CTerrainTex>
+    <CTerrainTex id="ZhakulDasGrass"/>
+    <CTerrainTex id="ZhakulDasLightRock2">
+        <Texture value="Assets\Textures\niflheim_snow.dds"/>
+        <Normalmap value="Assets\Textures\iceworld_4normal.dds"/>
+        <EditorIcon value="Assets\Textures\ui-editoricon-niflheim_snow.dds"/>
+        <DoodadEntry>
+            <Model value="RockMixZhakulDas"/>
+            <RandomRotation value="1"/>
+            <Probability value="0.100000"/>
+            <PlacementRadius value="1.000000"/>
+        </DoodadEntry>
+        <PhysicsMaterial value="Rock"/>
+    </CTerrainTex>
+    <CTerrainTex id="ZhakulDasMercuryCracks2">
+        <Texture value="Assets\Textures\niflheim_ice_smooth.dds"/>
+        <Normalmap value="Assets\Textures\niflheim_ice_smoothnormal.dds"/>
+        <EditorIcon value="Assets\Textures\ui-editoricon-ZhakulDas_Mercury_Cracks.dds"/>
+        <DoodadEntry>
+            <Model value="PlantMixZhakulDas"/>
+            <RandomRotation value="1"/>
+            <Probability value="0.100000"/>
+            <PlacementRadius value="1.000000"/>
+        </DoodadEntry>
+        <PhysicsMaterial value="Rock"/>
+    </CTerrainTex>
+    <CTerrainTex id="ZhakulDasTiles"/>
+</Catalog>

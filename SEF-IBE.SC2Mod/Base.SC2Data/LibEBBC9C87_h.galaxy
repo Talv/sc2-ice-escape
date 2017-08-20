@@ -1,0 +1,17 @@
+include "TriggerLibs/natives"
+
+//--------------------------------------------------------------------------------------------------
+// Library: SEF - Core
+//--------------------------------------------------------------------------------------------------
+// Preset Declarations
+string libEBBC9C87_ge_sfPhysicsSurfaceKind_Ident (int lp_val);
+
+// Constants
+const int libEBBC9C87_gv_sfEMPTYLINKTOBEREMOVED = -1;
+
+// Function Declarations
+void libEBBC9C87_gf_sfHeroChangePosition (unit lp_herounit, point lp_position, fixed lp_facing);
+
+// Library Initialization
+void libEBBC9C87_InitVariables ();
+

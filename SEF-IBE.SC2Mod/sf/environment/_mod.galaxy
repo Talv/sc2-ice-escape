@@ -1,0 +1,39 @@
+const int SF_ENVI_OBJECT_TYPE_LIMIT = 32;
+const int SF_ENVI_OBJECT_INSTANCE_LIMIT = 256;
+
+const int SF_ENVI_OBJECT_TYPE_GENERIC = 1;
+const int SF_ENVI_OBJECT_TYPE_CREATURE = 2;
+const int SF_ENVI_OBJECT_TYPE_BUTTON = 3;
+const int SF_ENVI_OBJECT_TYPE_GATE = 4;
+const int SF_ENVI_OBJECT_TYPE_CATAPULT = 5;
+const int SF_ENVI_OBJECT_TYPE_JUMP_ZONE = 6;
+const int SF_ENVI_OBJECT_TYPE_PORTAL = 7;
+const int SF_ENVI_OBJECT_TYPE_TURN_FORCER = 8;
+const int SF_ENVI_OBJECT_TYPE_IMITATOR = 9;
+const int SF_ENVI_OBJECT_TYPE_SPIKE = 10;
+const int SF_ENVI_OBJECT_TYPE_POWERUP = 11;
+const int SF_ENVI_OBJECT_TYPE_SURFACE = 12;
+const int SF_ENVI_OBJECT_TYPE_FLAMER = 13;
+const int SF_ENVI_OBJECT_TYPE_EFENCE = 14;
+// const int SF_ENVI_OBJECT_TYPE_GRAVITY_DISRUPTOR = 8;
+
+void sf_envi_prototype_object_instance_fn(int obj_id);
+void sf_envi_prototype_object_challenge_fn(int chal_id);
+typedef funcref<sf_envi_prototype_object_instance_fn> sf_envi_object_object_instance_fn_t;
+typedef funcref<sf_envi_prototype_object_challenge_fn> sf_envi_object_object_challenge_fn_t;
+
+struct sf_envi_object_type_t {
+    string name;
+    sf_envi_object_object_instance_fn_t fn_destroy;
+    sf_envi_object_object_challenge_fn_t fn_challenge_cleanup;
+};
+
+struct sf_envi_object_instance_t {
+    int type_id;
+    // string name;
+    bool enabled;
+    unitgroup ugroup;
+    unit main_unit;
+    bool preserve_main_unit;
+    point main_unit_init_pos;
+};

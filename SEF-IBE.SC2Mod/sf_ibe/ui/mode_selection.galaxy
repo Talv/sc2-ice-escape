@@ -1,0 +1,337 @@
+
+const fixed IBE_UI_GMS_VOTE_TIME = 15.0;
+
+const int IBE_UI_GMS_NO_VOTE = 0;
+const int IBE_UI_GMS_VOTE_SPEED_NORM = 1;
+const int IBE_UI_GMS_VOTE_SPEED_SPEEDY = 2;
+const int IBE_UI_GMS_VOTE_DIFF_NORM = 1;
+const int IBE_UI_GMS_VOTE_DIFF_EXTREME = 2;
+
+static int[MAX_PLAYERS + 1] ibe_ui_gms_votes_speed;
+static int[MAX_PLAYERS + 1] ibe_ui_gms_votes_diff;
+
+static int ibe_ui_gms_mainDialog;
+static int ibe_ui_gms_mainPanel;
+
+static int ibe_ui_gms_lblTimeleft;
+static timer ibe_ui_gms_timer;
+
+static int ibe_ui_gms_btn_diff_norm;
+static int ibe_ui_gms_btn_diff_extreme;
+
+static int ibe_ui_gms_btn_speed_norm;
+static int ibe_ui_gms_btn_speed_speedy;
+
+static ibe_menu_rank_sect_t ibe_ui_gms_dg_players;
+static int[MAX_PLAYERS + 1] ibe_ui_gms_dg_idx;
+
+int ibe_ui_gms_row_count()
+{
+    int i;
+    int count = 0;
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        if (PlayerType(i) == c_playerTypeNone) { continue; }
+        ibe_ui_gms_dg_idx[count] = i;
+        count += 1;
+    }
+
+    return count;
+}
+
+text ibe_ui_gms_cell_text(int idx, int col, int row)
+{
+    int i;
+    int player;
+    text txt = StringToText("");
+    int tmp;
+
+    player = ibe_ui_gms_dg_idx[idx];
+
+    if (col == 0) {
+        txt = StringToText(IntToString(row + 1) + ".");
+    }
+    else if (col == 1) {
+        txt = sf_player_name_colored(player);
+    }
+    else if (col == 2) {
+        if (gm_players[player].ingame) {
+            txt += StringToText("<c val=\"00ff00\">Ingame</c>");
+        }
+        else {
+            txt += StringToText("<c val=\"999999\">Left</c>");
+        }
+    }
+    else if (col == 3) {
+        txt = ibe_gm_name_diff(ibe_ui_gms_votes_diff[player] - 1);
+    }
+    else if (col == 4) {
+        txt = ibe_gm_name_speed(ibe_ui_gms_votes_speed[player] - 1);
+    }
+    else if (col == 5) {
+        for (i = 0; i < IBE_GM_MAX; i += 1) {
+            tmp += ibe_stat_profiles[player].gm[i].games_played;
+        }
+        txt = IntToText(tmp);
+    }
+
+    return txt;
+}
+
+text ibe_ui_gms_cell_tooltip(int idx, int col, int row)
+{
+    int i;
+    int player;
+    text txt = StringToText("");
+
+    player = ibe_ui_gms_dg_idx[idx];
+
+    return txt;
+}
+
+int ibe_ui_gms_cell_sort_value(int idx, int col)
+{
+    int player;
+
+    player = ibe_ui_gms_dg_idx[idx];
+
+    return 0;
+}
+
+static int ibe_ui_gms_votes_left() {
+    int i;
+    int count = 0;
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        if (PlayerType(i) == c_playerTypeComputer || PlayerType(i) == c_playerTypeNone || PlayerStatus(i) == c_playerStatusLeft) { continue; }
+        if (ibe_ui_gms_votes_diff[i] != IBE_UI_GMS_NO_VOTE && ibe_ui_gms_votes_speed[i] != IBE_UI_GMS_NO_VOTE) { continue; }
+        count += 1;
+    }
+
+    return count;
+}
+
+void ibe_ui_gms_setupDialog() {
+    ibe_ui_gms_mainDialog = DialogCreate(1600, 1200, c_anchorCenter, 0, 0, true);
+    DialogSetImageVisible(ibe_ui_gms_mainDialog, false);
+    DialogSetFullscreen(ibe_ui_gms_mainDialog, true);
+    ibe_ui_gms_mainPanel = DialogControlCreateFromTemplate(ibe_ui_gms_mainDialog, c_triggerControlTypePanel, "IBE_ModeSelection/ModeSelection");
+    DialogControlSetFullDialog(ibe_ui_gms_mainPanel, PlayerGroupAll(), true);
+
+    DialogControlHookup(ibe_ui_gms_mainPanel, c_triggerControlTypeLabel, "Panel/Header/Timeleft");
+    ibe_ui_gms_lblTimeleft = DialogControlLastCreated();
+
+    ibe_ui_gms_btn_diff_norm = DialogControlHookup(ibe_ui_gms_mainPanel, c_triggerControlTypeButton, "Panel/DifficultySection/VoteButton1");
+    ibe_ui_gms_btn_diff_extreme = DialogControlHookup(ibe_ui_gms_mainPanel, c_triggerControlTypeButton, "Panel/DifficultySection/VoteButton2");
+    ibe_ui_gms_btn_speed_norm = DialogControlHookup(ibe_ui_gms_mainPanel, c_triggerControlTypeButton, "Panel/SpeedSection/VoteButton1");
+    ibe_ui_gms_btn_speed_speedy = DialogControlHookup(ibe_ui_gms_mainPanel, c_triggerControlTypeButton, "Panel/SpeedSection/VoteButton2");
+
+    DialogSetVisible(ibe_ui_gms_mainDialog, PlayerGroupAll(), true);
+
+    TriggerAddEventDialogControl(TriggerCreate("ibe_ui_gms_onVote"), c_playerAny, 0, c_triggerControlEventTypeClick);
+}
+
+int ibe_ui_gms_calc_votes() {
+    int i;
+    int[3] votes_diff;
+    int final_vote_diff;
+    int[3] votes_speed;
+    int final_vote_speed;
+    text txt;
+    int code;
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        if (PlayerType(i) == c_playerTypeComputer || PlayerType(i) == c_playerTypeNone || PlayerStatus(i) != c_playerStatusLeft) { continue; }
+        votes_diff[ibe_ui_gms_votes_diff[i]] += 1;
+        votes_speed[ibe_ui_gms_votes_speed[i]] += 1;
+    }
+
+    if (votes_diff[IBE_UI_GMS_VOTE_DIFF_NORM] >= votes_diff[IBE_UI_GMS_VOTE_DIFF_EXTREME]) {
+        final_vote_diff = IBE_UI_GMS_VOTE_DIFF_NORM;
+    }
+    else {
+        final_vote_diff = IBE_UI_GMS_VOTE_DIFF_EXTREME;
+    }
+
+    if (votes_speed[IBE_UI_GMS_VOTE_SPEED_NORM] >= votes_speed[IBE_UI_GMS_VOTE_SPEED_SPEEDY]) {
+        final_vote_speed = IBE_UI_GMS_VOTE_SPEED_NORM;
+    }
+    else {
+        final_vote_speed = IBE_UI_GMS_VOTE_SPEED_SPEEDY;
+    }
+
+    code = ibe_gm_code(final_vote_diff - 1, final_vote_speed - 1);
+    // Dbg("[gms/votes] diff = " + IntToString(final_vote_diff) + " speed = " + IntToString(final_vote_speed) + " code = " + IntToString(code));
+
+    return code;
+}
+
+void ibe_ui_gms_cleanup()
+{
+    int i;
+
+    DialogControlSetPropertyAsBool(ibe_ui_gms_btn_diff_norm, c_triggerControlPropertyEnabled, PlayerGroupAll(), false);
+    DialogControlSetPropertyAsBool(ibe_ui_gms_btn_diff_extreme, c_triggerControlPropertyEnabled, PlayerGroupAll(), false);
+    DialogControlSetPropertyAsBool(ibe_ui_gms_btn_speed_norm, c_triggerControlPropertyEnabled, PlayerGroupAll(), false);
+    DialogControlSetPropertyAsBool(ibe_ui_gms_btn_speed_speedy, c_triggerControlPropertyEnabled, PlayerGroupAll(), false);
+    ui_setLabelText(ibe_ui_gms_lblTimeleft, StringToText(""));
+
+    //
+    if (!sf_game_dbg_fast_ui) {
+        CinematicFade(false, 1.5, c_fadeStyleSine, Color(0.00, 0.00, 0.00), 0.0, true);
+    }
+    DialogDestroy(ibe_ui_gms_mainDialog);
+    TriggerDestroy(TriggerFind("ibe_ui_gms_onVote"));
+
+    UISetDragSelectEnabled(PlayerGroupAll(), true);
+    UISetMode(PlayerGroupAll(), c_uiModeConsole, 0);
+    // DialogControlSetVisible(ui_consoleContainer, PlayerGroupAll(), true);
+    // DialogControlSetVisible(ui_consolePanel, PlayerGroupAll(), true);
+
+    if (!sf_game_dbg_fast_ui) {
+        CinematicFade(false, 1.5, c_fadeStyleSine, Color(0.00, 0.00, 0.00), 0.0, true);
+    }
+}
+
+void ibe_ui_gms_dg_prepare()
+{
+    ibe_ui_gms_dg_players.panel = DialogControlCreateInPanelFromTemplate(
+        ibe_ui_gms_mainPanel,
+        c_triggerControlTypePanel,
+        "IBE_Ranking/Table"
+    );
+    DialogControlSetSize(
+        ibe_ui_gms_dg_players.panel,
+        PlayerGroupAll(),
+        IBE_MENU_PANEL_WIDTH - 60,
+        IBE_MENU_PANEL_HEIGHT - 400
+    );
+    DialogControlSetPositionRelative(
+        ibe_ui_gms_dg_players.panel,
+        PlayerGroupAll(),
+        c_anchorTop,
+        ibe_ui_gms_mainPanel,
+        c_anchorTop,
+        0, 450
+    );
+    ibe_ui_gms_dg_players.table = DialogControlHookup(ibe_ui_gms_dg_players.panel, c_triggerControlTypePanel, "Inner");
+    ibe_ui_dg_create(ibe_ui_gms_dg_players.dg);
+    ibe_ui_dg_set_handlers(
+        ibe_ui_gms_dg_players.dg,
+        ibe_ui_gms_row_count,
+        ibe_ui_gms_cell_text,
+        ibe_ui_gms_cell_tooltip,
+        ibe_ui_gms_cell_sort_value,
+        null
+    );
+    ibe_ui_dg_column_add(ibe_ui_gms_dg_players.dg, StringToText("No."), false);
+    ibe_ui_dg_column_set_size(ibe_ui_gms_dg_players.dg, IBE_UI_DG_COL_LAST_CREATED, 0.5, -1, -1);
+    ibe_ui_dg_column_add(ibe_ui_gms_dg_players.dg, StringToText("Player"), false);
+    ibe_ui_dg_column_set_size(ibe_ui_gms_dg_players.dg, IBE_UI_DG_COL_LAST_CREATED, 1.7, -1, -1);
+    ibe_ui_dg_column_add(ibe_ui_gms_dg_players.dg, StringToText("Status"), false);
+    ibe_ui_dg_column_set_size(ibe_ui_gms_dg_players.dg, IBE_UI_DG_COL_LAST_CREATED, 0.8, -1, -1);
+    ibe_ui_dg_column_add(ibe_ui_gms_dg_players.dg, StringToText("Selected difficulty"), false);
+    ibe_ui_dg_column_add(ibe_ui_gms_dg_players.dg, StringToText("Selected speed"), false);
+    ibe_ui_dg_column_add(ibe_ui_gms_dg_players.dg, StringToText("Games played"), false);
+    ibe_ui_dg_view_generate(
+        ibe_ui_gms_dg_players.dg,
+        ibe_ui_gms_dg_players.table,
+        IBE_MENU_PANEL_WIDTH - 60 - 20,
+        IBE_MENU_PANEL_HEIGHT - 420 - 30 - 20
+    );
+}
+
+int ibe_ui_gms_launch() {
+    int i;
+    int code;
+
+    // disable ibe menu
+    if (TriggerFind("ibe_menu_on_click")) {
+        TriggerEnable(TriggerFind("ibe_menu_on_click"), false);
+        TriggerEnable(TriggerFind("ibe_menu_on_key_press"), false);
+        for (i = 1; i <= MAX_PLAYERS; i += 1) {
+            ibe_menu_open(i, false);
+        }
+    }
+
+    if (!sf_game_dbg_fast_ui) {
+        CinematicFade(true, 1.5, c_fadeStyleSine, Color(0.00, 0.00, 0.00), 0.0, false);
+    }
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        ibe_ui_gms_votes_speed[i] = IBE_UI_GMS_NO_VOTE;
+        ibe_ui_gms_votes_diff[i] = IBE_UI_GMS_NO_VOTE;
+    }
+
+
+    UISetDragSelectEnabled(PlayerGroupAll(), false);
+    UISetMode(PlayerGroupAll(), c_uiModeFullscreen, 0);
+
+    ibe_ui_gms_setupDialog();
+
+    // players list
+    ibe_ui_gms_dg_prepare();
+
+    // wait for votes
+    ibe_ui_gms_timer = TimerCreate();
+    TimerStart(ibe_ui_gms_timer, IBE_UI_GMS_VOTE_TIME, false, c_timeReal);
+    for (;;) {
+        ibe_ui_dg_view_redraw(ibe_ui_gms_dg_players.dg, c_playerAny);
+        ui_setLabelText(ibe_ui_gms_lblTimeleft, StringToText(FixedToString(TimerGetRemaining(ibe_ui_gms_timer), 0) + " seconds left"));
+        Wait(TICK_PERIOD, c_timeGame);
+        if (ibe_ui_gms_votes_left() == 0) { break; }
+        if (TimerGetRemaining(ibe_ui_gms_timer) <= 0) { break; }
+    }
+
+    //
+    ibe_ui_gms_cleanup();
+    ibe_ui_dg_cleanup(ibe_ui_gms_dg_players.dg);
+
+    // re-enable ibe menu
+    if (TriggerFind("ibe_menu_on_click")) {
+        TriggerEnable(TriggerFind("ibe_menu_on_click"), true);
+        TriggerEnable(TriggerFind("ibe_menu_on_key_press"), true);
+    }
+
+    code = ibe_ui_gms_calc_votes();
+    UIDisplayMessage(PlayerGroupActive(), c_messageAreaSubtitle, StringToText("Difficulty set to ") + ibe_gm_name(code));
+    return code;
+}
+
+bool ibe_ui_gms_onVote(bool testConds, bool runActions) {
+    int vote = IBE_UI_GMS_NO_VOTE;
+
+    if (EventDialogControl() == ibe_ui_gms_btn_diff_norm || EventDialogControl() == ibe_ui_gms_btn_diff_extreme) {
+        DialogControlSetPropertyAsBool(ibe_ui_gms_btn_diff_norm, c_triggerControlPropertyToggled, PlayerGroupSingle(EventPlayer()), false);
+        DialogControlSetPropertyAsBool(ibe_ui_gms_btn_diff_extreme, c_triggerControlPropertyToggled, PlayerGroupSingle(EventPlayer()), false);
+        DialogControlSetPropertyAsBool(EventDialogControl(), c_triggerControlPropertyToggled, PlayerGroupSingle(EventPlayer()), true);
+        if (EventDialogControl() == ibe_ui_gms_btn_diff_norm) {
+            vote = IBE_UI_GMS_VOTE_SPEED_NORM;
+        }
+        else if (EventDialogControl() == ibe_ui_gms_btn_diff_extreme) {
+            vote = IBE_UI_GMS_VOTE_SPEED_SPEEDY;
+        }
+        ibe_ui_gms_votes_diff[EventPlayer()] = vote;
+    }
+    else if (EventDialogControl() == ibe_ui_gms_btn_speed_norm || EventDialogControl() == ibe_ui_gms_btn_speed_speedy) {
+        DialogControlSetPropertyAsBool(ibe_ui_gms_btn_speed_norm, c_triggerControlPropertyToggled, PlayerGroupSingle(EventPlayer()), false);
+        DialogControlSetPropertyAsBool(ibe_ui_gms_btn_speed_speedy, c_triggerControlPropertyToggled, PlayerGroupSingle(EventPlayer()), false);
+        DialogControlSetPropertyAsBool(EventDialogControl(), c_triggerControlPropertyToggled, PlayerGroupSingle(EventPlayer()), true);
+        if (EventDialogControl() == ibe_ui_gms_btn_speed_norm) {
+            vote = IBE_UI_GMS_VOTE_SPEED_NORM;
+        }
+        else if (EventDialogControl() == ibe_ui_gms_btn_speed_speedy) {
+            vote = IBE_UI_GMS_VOTE_SPEED_SPEEDY;
+        }
+        ibe_ui_gms_votes_speed[EventPlayer()] = vote;
+    }
+    else {
+        return false;
+    }
+
+    if (ibe_ui_gms_votes_diff[EventPlayer()] == IBE_UI_GMS_NO_VOTE || ibe_ui_gms_votes_speed[EventPlayer()] == IBE_UI_GMS_NO_VOTE) { return false; }
+
+    ibe_ui_dg_view_redraw(ibe_ui_gms_dg_players.dg, EventPlayer());
+
+    return true;
+}

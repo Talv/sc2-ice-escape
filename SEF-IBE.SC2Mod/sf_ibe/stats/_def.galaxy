@@ -1,0 +1,53 @@
+string ibe_stat_bk_get_value_str(bank storage, string section, string key);
+void ibe_stat_bk_set_value_str(bank storage, string section, string key, string value);
+
+//
+// STATS
+//
+
+string ibe_stat_game_name = "";
+int ibe_stat_game_version = 0;
+string ibe_stat_bank_name = "";
+
+//
+// PROFILE
+//
+
+ibe_stat_profile_t[MAX_PLAYERS + 1] ibe_stat_profiles;
+STATS_SESSION[MAX_PLAYERS + 1] ibe_stat_profile_prev_stats;
+playergroup ibe_stat_profile_pgroup = PlayerGroupEmpty();
+timer ibe_stat_profile_chal_timer;
+timer ibe_stat_profile_timer_total;
+unitgroup ibe_stat_profile_chal_buttons_pushed = UnitGroupEmpty();
+
+void ibe_stat_init(string game_name, int game_version, string profile_bank_name);
+void ibe_stat_activate(string game_name, int game_version, string profile_bank_name);
+int ibe_stat_player_encryption_key(int player);
+bool ibe_stat_profile_load(int player);
+void ibe_stat_profile_save(int player);
+
+//
+// GAME RESULT
+//
+
+ibe_stat_gresult_t ibe_stat_gresult_current;
+
+void ibe_stat_gresult_reset(structref<ibe_stat_gresult_t> gresult);
+void ibe_stat_gresult_store(bank bstorage, string section, structref<ibe_stat_gresult_t> gresult);
+
+//
+// GAME RESULT LIST | RANKING
+//
+
+ibe_stat_gresult_t[IBE_STAT_GLR_MAX] ibe_stat_grl_list;
+int ibe_stat_grl_list_counter;
+
+void ibe_stat_grl_init();
+void ibe_stat_grl_load_section(int player, string section);
+void ibe_stat_grl_load_player(int player);
+
+ibe_stat_rk_chal_t[IBE_STAT_RK_CHAL_MAX] ibe_stat_rk_chals;
+int ibe_stat_rk_chal_counter;
+
+void ibe_stat_rk_init();
+void ibe_stat_rk_set_challenge(int gm_code, int chal_id, int player, fixed time);

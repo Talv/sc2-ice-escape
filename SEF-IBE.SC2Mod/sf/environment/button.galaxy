@@ -1,0 +1,264 @@
+struct sf_envi_button_t {
+    region rg_act;
+    bool enabled;
+    bool release_on_leave;
+    bool pushable;
+    fixed release_timeout;
+    bool pressed;
+    trigger trig_push;
+    trigger trig_release;
+};
+
+sf_envi_button_t [SF_ENVI_OBJECT_INSTANCE_LIMIT]sf_envi_buttons;
+
+static void sf_envi_button_on_destroy(int obj_id)
+{
+    if (TriggerGetFunction(sf_envi_buttons[obj_id].trig_push) != null) {
+        TriggerDestroy(sf_envi_buttons[obj_id].trig_push);
+    }
+    if (TriggerGetFunction(sf_envi_buttons[obj_id].trig_release) != null) {
+        TriggerDestroy(sf_envi_buttons[obj_id].trig_release);
+    }
+    sf_envi_buttons[obj_id].rg_act = null;
+    sf_envi_buttons[obj_id].trig_push = null;
+    sf_envi_buttons[obj_id].trig_release = null;
+}
+
+static int sf_envi_button_get_by_region(region area)
+{
+    int i;
+    int obj_id = -1;
+
+    for (i = 0; i < SF_ENVI_OBJECT_INSTANCE_LIMIT; i += 1) {
+        if (sf_envi_buttons[i].rg_act == area) {
+            obj_id = i;
+            break;
+        }
+    }
+
+    return obj_id;
+}
+
+static bool sf_envi_button_change_state(int obj_id, bool activate, int player, fixed state_time)
+{
+    structref<sf_envi_button_t> btn = sf_envi_buttons[obj_id];
+
+    if (activate) {
+        if (btn.pressed) { return false; }
+
+        btn.pressed = true;
+        UnitBehaviorAdd(
+            sf_envi_object_instances[obj_id].main_unit,
+            "ButtonActive",
+            sf_envi_object_instances[obj_id].main_unit,
+            1
+        );
+    }
+    else {
+        if (!btn.pressed) { return false; }
+
+        btn.pressed = false;
+        UnitBehaviorRemove(sf_envi_object_instances[obj_id].main_unit, "ButtonActive", 1);
+    }
+
+    DataTableSetInt(false, TriggerEventParamName("sf_envi_ge_button_state_changed", "sf_envi_event_param_object"), obj_id);
+    DataTableSetInt(false, TriggerEventParamName("sf_envi_ge_button_state_changed", "sf_envi_event_param_button_state"), sf_bool_to_int(btn.pressed));
+    TriggerSendEvent("sf_envi_ge_button_state_changed");
+
+    sf_core_event_prepare("button_state_changed");
+    sf_core_event_set_int("challenge_id", lv_current);
+    sf_core_event_set_int("button", obj_id);
+    sf_core_event_set_int("player", player);
+    sf_core_event_set_fixed("state_time", state_time);
+    sf_core_event_set_bool("state", btn.pressed);
+    sf_core_event_send();
+
+    return true;
+}
+
+static bool sf_envi_button_handle_trigger(bool in)
+{
+    int i;
+    int obj_id = -1;
+    structref<sf_envi_button_t> btn;
+    unit tmp_unit;
+    region tmp_rg;
+    int player;
+    fixed state_time = -1.0;
+
+    tmp_unit = EventUnit();
+    player = UnitGetOwner(EventUnit());
+    tmp_rg = EventUnitRegion();
+
+    if (!UnitGroupHasUnit(gm_herogroup, tmp_unit)) {
+        return false;
+    }
+
+    if (sf_phys_is_unit_during_jump(tmp_unit)) {
+        return false;
+    }
+
+    obj_id = sf_envi_button_get_by_region(tmp_rg);
+
+    btn = sf_envi_buttons[obj_id];
+
+    if (!btn.enabled) {
+        return false;
+    }
+
+    if (in) {
+        if (!btn.pushable && btn.release_timeout > 0.0) {
+            state_time = btn.release_timeout;
+        }
+        if (sf_envi_button_change_state(obj_id, true, player, state_time)) {
+            if (btn.pushable) { return true; }
+            if (btn.release_timeout > 0.0) {
+                Wait(btn.release_timeout, c_timeGame);
+            }
+            if (btn.release_on_leave) {
+                for (;;) {
+                    // if no one more is on button
+                    // TODO: filter flying
+                    if (UnitGroupCount(UnitGroupFilterRegion(gm_herogroup, btn.rg_act, 1), c_unitCountAlive) == 0) {
+                        break;
+                    }
+                    // if deactivated by another trigger
+                    if (!btn.pressed) {
+                        return true;
+                    }
+                    Wait(TICK_PERIOD, c_timeGame);
+                }
+            }
+            sf_envi_button_change_state(obj_id, false, player, -1.0);
+        }
+    }
+    else {
+        if (!btn.pressed) { return true; }
+        // if (!btn.pushable) { return true; }
+        if (btn.release_on_leave) { return true; }
+        if (UnitGroupCount(UnitGroupFilterRegion(gm_herogroup, btn.rg_act, 1), c_unitCountAlive) > 0) { return true; }
+        sf_envi_button_change_state(obj_id, false, player, -1.0);
+    }
+
+    return true;
+}
+
+void sf_envi_button_init()
+{
+    sf_envi_object_type_t obj_type;
+
+    obj_type.name = "button";
+    obj_type.fn_destroy = sf_envi_button_on_destroy;
+    sf_envi_object_register_type_at(obj_type, SF_ENVI_OBJECT_TYPE_BUTTON);
+}
+
+int sf_envi_button_create(string unit_name, point pos, region btn_region)
+{
+    int obj_id;
+    structref<sf_envi_button_t> btn;
+
+    obj_id = sf_envi_object_create(SF_ENVI_OBJECT_TYPE_BUTTON);
+    btn = sf_envi_buttons[obj_id];
+    UnitCreate(1, unit_name, c_unitCreateIgnorePlacement, 0, pos, PointGetFacing(pos));
+    sf_envi_object_instances[obj_id].main_unit = UnitLastCreated();
+    UnitGroupAdd(sf_envi_object_instances[obj_id].ugroup, sf_envi_object_instances[obj_id].main_unit);
+
+    if (btn_region != null) {
+        btn.rg_act = btn_region;
+    }
+    else {
+        btn.rg_act = RegionCircle(pos, UnitGetPropertyFixed(sf_envi_object_instances[obj_id].main_unit, c_unitPropRadius, true));
+    }
+
+    btn.trig_push = TriggerFind("sf_envi_on_button_push");
+    if (btn.trig_push == null) {
+        btn.trig_push = TriggerCreate("sf_envi_on_button_push");
+    }
+    btn.trig_release = TriggerFind("sf_envi_on_button_release");
+    if (btn.trig_release == null) {
+        btn.trig_release = TriggerCreate("sf_envi_on_button_release");
+    }
+    TriggerAddEventUnitRegion(btn.trig_push, null, btn.rg_act, true);
+    TriggerAddEventUnitRegion(btn.trig_release, null, btn.rg_act, false);
+
+    sf_envi_buttons[obj_id].enabled = true;
+    sf_envi_buttons[obj_id].pressed = false;
+    sf_envi_buttons[obj_id].release_on_leave = false;
+    sf_envi_buttons[obj_id].pushable = true;
+    sf_envi_buttons[obj_id].release_timeout = 0.0;
+
+    return obj_id;
+}
+
+void sf_envi_button_set_state(int obj_id, int state)
+{
+    if (state == 1) {
+        sf_envi_button_change_state(obj_id, true, -1, -1.0);
+    }
+    else if (state == 0) {
+        sf_envi_button_change_state(obj_id, false, -1, -1.0);
+    }
+}
+
+int sf_envi_button_get_state(int obj_id)
+{
+    if (sf_envi_buttons[obj_id].pressed) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+void sf_envi_button_set_enabled(int obj_id, bool enabled)
+{
+    sf_envi_buttons[obj_id].enabled = enabled;
+}
+
+void sf_envi_button_set_release_on_leave(int obj_id, bool release)
+{
+    sf_envi_buttons[obj_id].release_on_leave = release;
+}
+
+void sf_envi_button_set_pushable(int obj_id, bool pushable)
+{
+    sf_envi_buttons[obj_id].pushable = pushable;
+}
+
+void sf_envi_button_set_release_timeout(int obj_id, fixed timeout)
+{
+    sf_envi_buttons[obj_id].release_timeout = timeout;
+}
+
+void sf_envi_add_event_button_state_changed(trigger trig)
+{
+    TriggerAddEventGeneric(trig, "sf_envi_ge_button_state_changed");
+}
+
+int sf_envi_event_param_button_state()
+{
+    return DataTableGetInt(false, TriggerEventParamName("sf_envi_ge_button_state_changed", "sf_envi_event_param_button_state"));
+}
+
+bool sf_envi_on_button_push(bool test_conds, bool run_actions)
+{
+    sf_core_event_prepare("button_unit_enter");
+    sf_core_event_set_bool("enter", true);
+    sf_core_event_set_int("button", sf_envi_button_get_by_region(EventUnitRegion()));
+    sf_core_event_set_unit("unit", EventUnit());
+    sf_core_event_send();
+
+    return sf_envi_button_handle_trigger(true);
+}
+
+bool sf_envi_on_button_release(bool test_conds, bool run_actions)
+{
+    sf_core_event_prepare("button_unit_enter");
+    sf_core_event_set_bool("enter", false);
+    sf_core_event_set_int("button", sf_envi_button_get_by_region(EventUnitRegion()));
+    sf_core_event_set_unit("unit", EventUnit());
+    sf_core_event_send();
+
+    // return sf_envi_button_handle_trigger(false);
+    return true;
+}

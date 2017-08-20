@@ -1,0 +1,45 @@
+//
+// LEVEL
+//
+
+LEVEL_INFO[MAX_LEVELS + 1] lv_info;
+
+bool lv_justCompleted;
+region lv_spawnRegion;
+region[16] lv_surfaceRegions;
+SURFACE_REGION[SURFACE_REGIONS_MAX] lv_surfaceDynamicRegions;
+int lv_current = -1;
+int lv_completedTotal = 0;
+bool sf_chal_initialized = false;
+trigger[MAX_LEVELS + 1][LEVEL_MAX_TRIGGERS] lv_exclusiveTriggers;
+trigger[LEVEL_MAX_TRIGGERS] lv_tempTriggers;
+
+struct LEVEL_GLOBAL_TRIGGER {
+    trigger trig;
+    bool wait;
+};
+
+const int LEVEL_TRIGGERS_GLOBAL_MAX = 16;
+LEVEL_GLOBAL_TRIGGER[MAX_LEVELS + 1][LEVEL_TRIGGERS_GLOBAL_MAX] lv_initTriggers;
+LEVEL_GLOBAL_TRIGGER[MAX_LEVELS + 1][LEVEL_TRIGGERS_GLOBAL_MAX] lv_destroyTriggers;
+
+int lv_currentLevelPriority = 0;
+
+revealer[MAX_PLAYERS + 1][SF_CHAL_REVEALER_MAX] sf_chal_revealers;
+
+void lv_setup(int level);
+void lv_registerTemporaryTrigger(trigger trig);
+trigger lv_allocateTrigger(string func);
+void lv_registerSurface(int surfaceType, region rg, bool dynamic);
+
+// to be removed:
+void lv_releaseCurrent();
+
+void chal_cleanup();
+
+void lv_loadRaw(int level);
+void lv_resetLevelOrder();
+void lv_setupNextLvl();
+int lv_getTotalCount();
+
+int sf_chal_event_param_challenge_id();

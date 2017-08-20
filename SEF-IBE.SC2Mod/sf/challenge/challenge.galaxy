@@ -1,0 +1,475 @@
+
+void chal_cleanup() {
+    int i;
+    int l;
+
+    if (lv_current == -1) {
+        return;
+    }
+
+    // for (i = 1; i <= MAX_PLAYERS; i += 1) {
+    //     if (!gm_players[i].active) { continue; }
+    //     UnitSetState(gm_players[i].hero.mainUnit, c_unitStateHidden, true);
+    // }
+
+    //
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        for (l = 0; l < SF_CHAL_REVEALER_MAX; l += 1) {
+            if (sf_chal_revealers[i][l] == null) { continue; }
+            VisRevealerDestroy(sf_chal_revealers[i][l]);
+            sf_chal_revealers[i][l] = null;
+        }
+    }
+
+    Wait(0.0, c_timeGame);
+
+    //
+    for (i = 0; i < 16; i += 1) {
+        if (!lv_surfaceRegions[i]) { continue; }
+        lv_surfaceRegions[i] = null;
+    }
+    for (i = 0; i < SURFACE_REGIONS_MAX; i += 1) {
+        if (lv_surfaceDynamicRegions[i].rg == null) { continue; }
+        lv_surfaceDynamicRegions[i].type = EMPTY;
+        lv_surfaceDynamicRegions[i].rg = null;
+    }
+
+    // temp trigs
+    for (i = 0; i < LEVEL_MAX_TRIGGERS; i += 1) {
+        if (!TriggerExists(lv_tempTriggers[i])) { break; }
+        TriggerStop(lv_tempTriggers[i]);
+        // TriggerDestroy(lv_tempTriggers[i]);
+        lv_tempTriggers[i] = null;
+    }
+    // exclusive trigs
+    for (i = 0; i < LEVEL_MAX_TRIGGERS; i += 1) {
+        if (!TriggerExists(lv_exclusiveTriggers[lv_current][i])) { break; }
+        TriggerStop(lv_exclusiveTriggers[lv_current][i]);
+        TriggerEnable(lv_exclusiveTriggers[lv_current][i], false);
+    }
+    // kill running init trigs
+    for (i = 0; i < LEVEL_TRIGGERS_GLOBAL_MAX; i += 1) {
+        if (!TriggerExists(lv_initTriggers[lv_current][i].trig) && !lv_initTriggers[lv_current][i].wait) { continue; }
+        // TODO: check for active count
+        TriggerStop(lv_initTriggers[lv_current][i].trig);
+    }
+    // destroy trigs
+    for (i = 0; i < LEVEL_TRIGGERS_GLOBAL_MAX; i += 1) {
+        if (!TriggerExists(lv_destroyTriggers[lv_current][i].trig)) { continue; }
+        TriggerEnable(lv_destroyTriggers[lv_current][i].trig, true);
+        TriggerExecute(lv_destroyTriggers[lv_current][i].trig, true, lv_destroyTriggers[lv_current][i].wait);
+        TriggerEnable(lv_destroyTriggers[lv_current][i].trig, false);
+    }
+
+
+    Wait(TICK_PERIOD, c_timeGame);
+    lv_current = -1;
+
+    sf_envi_mod_cleanup();
+    sf_ctrl_mod_cleanup();
+
+    Wait(TICK_PERIOD, c_timeGame);
+}
+
+static void lv_loadUp(bool spawn) {
+    int i;
+    int i2;
+    point pt;
+    structref<HERO> hero;
+
+    // init trigs
+    for (i = 0; i < LEVEL_TRIGGERS_GLOBAL_MAX; i += 1) {
+        if (!TriggerExists(lv_initTriggers[lv_current][i].trig)) { continue; }
+        TriggerEnable(lv_initTriggers[lv_current][i].trig, true);
+        TriggerExecute(lv_initTriggers[lv_current][i].trig, true, lv_initTriggers[lv_current][i].wait);
+        TriggerEnable(lv_initTriggers[lv_current][i].trig, false);
+    }
+    // exclusive trigs
+    for (i = 0; i < LEVEL_MAX_TRIGGERS; i += 1) {
+        if (!TriggerExists(lv_exclusiveTriggers[lv_current][i])) { break; }
+        TriggerEnable(lv_exclusiveTriggers[lv_current][i], true);
+    }
+
+    // hero triggers
+    for (i = 1; i <= UnitGroupCount(gm_herogroup, c_unitCountAll); i+= 1) {
+        hero = gm_players[gm_getPlayerByUnit(UnitGroupUnit(gm_herogroup, i))].hero;
+        if (!UnitIsValid(hero.mainUnit)) { continue; }
+        // end map
+        if (lv_info[lv_current].rg_finish != null) {
+            TriggerAddEventUnitRegion(
+                hr_allocateTrigger(hero, "lv_onEndLevel", true),
+                UnitRefFromUnit(hero.mainUnit),
+                lv_info[lv_current].rg_finish,
+                true
+            );
+        }
+    }
+
+    sf_core_event_prepare("challenge_ready");
+    sf_core_event_set_int("challenge_id", lv_current);
+    sf_core_event_send();
+
+    //
+    lv_justCompleted = false;
+}
+
+int lv_getTotalCount() {
+    int i;
+    int count = 0;
+
+    for (i = 1; i <= MAX_LEVELS; i += 1) {
+        if (!lv_info[i].exists) { continue; }
+        count += 1;
+    }
+
+    return count;
+}
+
+
+//
+// API
+//
+
+
+
+
+//
+// PUBLIC
+//
+
+void lv_registerTemporaryTrigger(trigger trig) {
+    int i;
+
+    for (i = 0; i < LEVEL_MAX_TRIGGERS; i += 1) {
+        if (TriggerExists(lv_tempTriggers[i])) { continue; }
+        if (lv_tempTriggers[i] == trig) { break; }
+        lv_tempTriggers[i] = trig;
+        break;
+    }
+}
+
+trigger lv_allocateTrigger(string func) {
+    trigger t;
+
+    t = TriggerCreate(func);
+    lv_registerTemporaryTrigger(t);
+
+    return t;
+}
+
+void lv_registerSurface(int surfaceType, region rg, bool dynamic) {
+    int i;
+
+    if (dynamic) {
+        for (i = 0; i < SURFACE_REGIONS_MAX; i += 1) {
+            if (lv_surfaceDynamicRegions[i].rg) { continue; }
+            lv_surfaceDynamicRegions[i].type = surfaceType;
+            lv_surfaceDynamicRegions[i].rg = rg;
+            break;
+        }
+    }
+    else {
+        if (!lv_surfaceRegions[surfaceType]) {
+            lv_surfaceRegions[surfaceType] = RegionEmpty();
+        }
+        RegionAddRegion(lv_surfaceRegions[surfaceType], rg);
+    }
+}
+
+void lv_setup(int level) {
+    int i;
+    int l;
+
+    //
+    if (lv_current != -1) {
+        if (!sf_game_dbg_fast_ui) {
+            CinematicFade(false, 1.5, c_fadeStyleSine, Color(0.00, 0.00, 0.00), 0.0, true);
+            Wait(2.0, c_timeReal);
+        }
+        else {
+            Wait(TICK_PERIOD, c_timeReal);
+        }
+
+        chal_cleanup();
+        if (!sf_game_dbg_fast_ui) {
+            Wait(1.0, c_timeReal);
+        }
+        else {
+            Wait(TICK_PERIOD, c_timeReal);
+        }
+    }
+
+    //
+    sf_chal_initialized = false;
+    lv_current = level;
+
+    //
+    CameraSetBounds(
+        PlayerGroupActive(),
+        lv_info[lv_current].mapBounds,
+        true
+    );
+    lv_spawnRegion = lv_info[lv_current].rg_spawn;
+    gm_spawnPlayers();
+    // setup cam
+    for (i = 1; i <= PlayerGroupCount(PlayerGroupActive()); i += 1) {
+        CameraPan(
+            PlayerGroupPlayer(PlayerGroupActive(), i),
+            RegionGetCenter(lv_spawnRegion),
+            0.0,
+            -1.0,
+            1.0,
+            false
+        );
+    }
+
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        VisExploreArea(i, RegionEntireMap(), false, false);
+    }
+
+    if (!sf_game_dbg_fast_ui) {
+        Wait(1.0, c_timeReal);
+    }
+    else {
+        Wait(TICK_PERIOD, c_timeReal);
+    }
+
+    //
+    lv_loadUp(true);
+    Wait(TICK_PERIOD, c_timeGame);
+
+    // reveal map
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        if (!gm_players[i].active) { continue; }
+        for (l = 0; l < SF_CHAL_REVEALER_MAX; l += 1) {
+            if (lv_info[lv_current].reveal_areas[l] == null) { continue; }
+            sf_chal_revealers[i][l] = VisRevealerCreate(i, lv_info[lv_current].reveal_areas[l]);
+        }
+    }
+
+    // fade in
+    if (sf_game_dbg_fast_ui) {
+        sf_chal_initialized = true;
+        CinematicFade(true, 0.0, c_fadeStyleSine, Color(0.00, 0.00, 0.00), 0.0, false);
+    }
+    else {
+        CinematicFade(true, 1.5, c_fadeStyleNormal, Color(0.00, 0.00, 0.00), 0.0, false);
+        Wait(0.75, c_timeReal);
+        sf_chal_initialized = true;
+        Wait(0.75, c_timeReal);
+    }
+    // GameSetLighting("Tyrador", 1.0);
+}
+
+void lv_loadRaw(int level) {
+    lv_current = level;
+    lv_loadUp(false);
+}
+
+void lv_releaseCurrent() {
+    chal_cleanup();
+}
+
+void lv_resetLevelOrder() {
+    int i;
+
+    lv_completedTotal = 0;
+    lv_currentLevelPriority = 0;
+
+    for (i = 1; i <= MAX_LEVELS; i += 1) {
+        lv_info[i].done = false;
+    }
+}
+
+void lv_setupNextLvl() {
+    int i;
+    int[MAX_LEVELS] levelsGroup;
+    int levelsGroupCount;
+
+    if (lv_current != -1) {
+        lv_info[lv_current].done = true;
+    }
+
+    levelsGroupCount = 0;
+    // for (i = 0; i < MAX_LEVELS; i += 1) {
+    //     levelsGroup = -1;
+    // }
+
+    lv_currentLevelPriority = 0;
+
+    while (lv_currentLevelPriority < MAX_LEVELS * 2) {
+        for (i = 1; i <= MAX_LEVELS; i += 1) {
+            if (!lv_info[i].exists) { continue; }
+            if (lv_info[i].done) { continue; }
+            if (lv_info[i].priority != lv_currentLevelPriority) { continue; }
+            if (lv_info[i].min_completed > lv_completedTotal) { continue; }
+
+            levelsGroup[levelsGroupCount] = i;
+            levelsGroupCount += 1;
+        }
+
+        if (levelsGroupCount > 0) {
+            lv_setup(levelsGroup[RandomInt(0, levelsGroupCount - 1)]);
+            Wait(3.0, c_timeReal);
+            return;
+        }
+
+        lv_currentLevelPriority += 1;
+    }
+}
+
+bool lv_onEndLevel(bool testConds, bool runActions) {
+    int i;
+    structref<HERO> hero;
+
+    hero = gm_players[EventHeroPlayer()].hero;
+
+    if (sf_phys_is_unit_during_jump(hero.mainUnit) || hero.paused) {
+        return false;
+    }
+    if (lv_justCompleted) {
+        return false;
+    }
+
+    lv_justCompleted = true;
+    lv_completedTotal += 1;
+
+    hr_heroLevelUp(hero);
+    UIDisplayMessage(
+        PlayerGroupActive(),
+        c_messageAreaSubtitle,
+        StringToText("Challenge " + IntToString(lv_completedTotal) + " completed by ") + sf_player_name_colored(EventHeroPlayer()) + StringToText("!")
+    );
+
+    sf_stat_session_stats[EventHeroPlayer()].challenges_completed += 1;
+    sf_stat_session_expire(EventHeroPlayer());
+
+    sf_core_event_prepare("challenge_completed");
+    sf_core_event_set_int("challenge_id", lv_current);
+    sf_core_event_set_int("player", EventHeroPlayer());
+    sf_core_event_send();
+
+    TriggerExecute(TriggerCreate("lv_onNextLvl"), false, false);
+
+    // while (TriggerExists(TriggerFind("lv_onEndLevel"))) {
+    //     TriggerDestroy(TriggerFind("lv_onEndLevel"));
+    // }
+
+    return true;
+}
+
+bool lv_onNextLvl(bool testConds, bool runActions) {
+    // SoundPlay(SoundLink("zVO_Mothership_Mothership_001", c_soundIndexAny), PlayerGroupAll(), 70.0, 0.0);
+    lv_setupNextLvl();
+
+    TriggerDestroy(TriggerGetCurrent());
+    return true;
+}
+
+string sf_chal_name(int chal_id, bool inc_num)
+{
+    string s = "";
+
+    if (inc_num) {
+        s += IntToString(chal_id) + ". ";
+    }
+    s += lv_info[chal_id].name;
+
+    return s;
+}
+
+void sf_chal_add_event_challenge_ready(trigger trig)
+{
+    sf_core_event_attach(trig, "challenge_ready");
+}
+
+void sf_chal_add_event_challenge_completed(trigger trig)
+{
+    sf_core_event_attach(trig, "challenge_completed");
+}
+
+int sf_chal_event_param_challenge_id()
+{
+    return sf_core_event_get_int("challenge_id");
+}
+
+//
+
+region LevelGetSpawnRegion() {
+    // region tmpRegion = RegionEmpty();
+    // RegionAddRegion(tmpRegion, lv_spawnRegion);
+    // return tmpRegion;
+    return lv_spawnRegion;
+}
+
+void LevelRegisterTemporaryTrigger(trigger trig) {
+    lv_registerTemporaryTrigger(trig);
+}
+
+void sf_chal_add_event_challenge_initialize(trigger trig, int level, bool waitToEnd) {
+    int i;
+
+    for (i = 0; i < LEVEL_TRIGGERS_GLOBAL_MAX; i += 1) {
+        if (TriggerExists(lv_initTriggers[level][i].trig)) { continue; }
+        lv_initTriggers[level][i].trig = trig;
+        lv_initTriggers[level][i].wait = waitToEnd;
+        TriggerEnable(trig, false);
+        break;
+    }
+}
+
+void TriggerAddEventLevelDestroy(trigger trig, int level, bool waitToEnd) {
+    int i;
+
+    for (i = 0; i < LEVEL_TRIGGERS_GLOBAL_MAX; i += 1) {
+        if (TriggerExists(lv_destroyTriggers[level][i].trig)) { continue; }
+        lv_destroyTriggers[level][i].trig = trig;
+        lv_destroyTriggers[level][i].wait = waitToEnd;
+        TriggerEnable(trig, false);
+        break;
+    }
+}
+
+void sf_chal_add_event_challenge_exclusive(trigger trig, int level) {
+    int i;
+
+    for (i = 0; i < LEVEL_MAX_TRIGGERS; i += 1) {
+        if (TriggerExists(lv_exclusiveTriggers[level][i])) { continue; }
+        lv_exclusiveTriggers[level][i] = trig;
+        TriggerEnable(lv_exclusiveTriggers[level][i], false);
+        break;
+    }
+}
+
+void LevelRegisterExclusiveTrigger(trigger trig) {
+    sf_chal_add_event_challenge_exclusive(trig, lv_current);
+}
+
+void sf_chal_register_challenge(int id, string name, text description, int priority, int min_completed, region mapBounds, region mapRevealer, region rg_spawn, region rg_finish)
+{
+    lv_info[id].exists = true;
+    lv_info[id].done = false;
+    lv_info[id].name = name;
+    lv_info[id].description = description;
+    lv_info[id].priority = priority;
+    lv_info[id].min_completed = min_completed;
+    lv_info[id].mapBounds = mapBounds;
+    lv_info[id].reveal_areas[0] = mapRevealer;
+    lv_info[id].rg_spawn = rg_spawn;
+    lv_info[id].rg_finish = rg_finish;
+}
+
+void sf_chal_register_reveal_area(int id, region area)
+{
+    int i;
+
+    for (i = 0; i < SF_CHAL_REVEALER_MAX; i += 1) {
+        if (lv_info[id].reveal_areas[i] != null) { continue; }
+        lv_info[id].reveal_areas[i] = area;
+        return;
+    }
+}
+
+void LevelCurrentAddSurfaceRegion(int surfaceType, region rg, bool dynamic) {
+    lv_registerSurface(surfaceType, rg, dynamic);
+}

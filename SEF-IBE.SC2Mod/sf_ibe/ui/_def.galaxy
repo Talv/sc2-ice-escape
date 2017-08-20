@@ -1,0 +1,30 @@
+//
+// CONSOLE
+//
+
+int gv_scoreBoard;
+
+void gf_MoveTimerForPlayer (int lp_player);
+void gf_RefreshPlayerUiMode (int lp_player);
+
+//
+// GAME MODE SELECTION
+//
+
+int ibe_ui_gms_launch();
+
+//
+// DATA GRID
+//
+
+void ibe_ui_dg_create(structref<ibe_ui_dg_t> dg);
+void ibe_ui_dg_cleanup(structref<ibe_ui_dg_t> dg);
+void ibe_ui_dg_set_handlers(structref<ibe_ui_dg_t> dg, ibe_ui_dg_prototype_row_count_t fn_row_count, ibe_ui_dg_prototype_get_text_t fn_get_text, ibe_ui_dg_prototype_get_tooltip_t fn_get_tooltip, ibe_ui_dg_prototype_get_sort_value_t fn_get_sort_value, trigger trig_ui_event_proxy);
+void ibe_ui_dg_register_filter(structref<ibe_ui_dg_t> dg, ibe_ui_dg_prototype_filter_item_t fn_filter_item);
+int ibe_ui_dg_column_add(structref<ibe_ui_dg_t> dg, text label, bool sortable);
+void ibe_ui_dg_column_set_size(structref<ibe_ui_dg_t> dg, int col, fixed size_hint, int min_width, int max_width);
+void ibe_ui_dg_column_set_default_sort(structref<ibe_ui_dg_t> dg, int col, bool asc);
+void ibe_ui_dg_sort(structref<ibe_ui_dg_t> dg, int player, bool asc, int column);
+void ibe_ui_dg_view_generate(structref<ibe_ui_dg_t> dg, int panel, int table_width, int table_height);
+int ibe_ui_dg_view_redraw(structref<ibe_ui_dg_t> dg, int player);
+void ibe_ui_dg_handle_ui_event(structref<ibe_ui_dg_t> dg);

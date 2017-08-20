@@ -1,0 +1,219 @@
+static bool cl_isFlyingUnit(unit munit) {
+    int uValue;
+    string t;
+
+    uValue = FixedToInt(UnitGetCustomValue(munit, UNIT_CUSTOM_IS_FLYER));
+
+    if (uValue == 0) {
+        t = CatalogFieldValueGet(c_gameCatalogUnit, UnitGetType(munit), "Mover", 0);
+        t = CatalogFieldValueGet(c_gameCatalogMover, t, "HeightMap", 0);
+        // if (StringEqual(t, "Ground", false) || StringEqual(t, "FlyLow", false)) {
+        // if (!StringEqual(t, "Fly", false)) {
+        if (!StringEqual(t, "Air", false)) {
+            uValue = 1;
+        }
+        else {
+            uValue = 2;
+            UnitSetCustomValue(munit, UNIT_CUSTOM_IS_FLYER, IntToFixed(uValue));
+        }
+    }
+
+    if (uValue == 1 && UnitGetHeight(munit) < 0.4) {
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
+fixed cl_getUnitRadius(unit munit, fixed collider_radius) {
+    int i;
+    fixed radius;
+    fixed radius_overridden;
+
+    radius_overridden = UnitGetCustomValue(munit, SF_GAME_UVAL_COLLIDER_RADIUS);
+    if (radius_overridden > 0.0) {
+        return radius_overridden;
+    }
+    // if (cl_info[i].unit_type == null || StringLength(cl_info[i].unit_type) == 0) {
+    //     cl_info[i].unit_type = UnitGetType(munit);
+    //     cl_info[i].radius = UnitGetPropertyFixed( munit, c_unitPropRadius, false );
+    //     return cl_info[i].radius;
+    //     break;
+    // }
+    for (i = 0; i < COLLISIONS_INFO_SIZE; i += 1) {
+        if (cl_info[i].unit_type == null) { continue; }
+        if (StringEqual(cl_info[i].unit_type, UnitGetType(munit), true)) {
+            radius = cl_info[i].radius;
+            if (cl_info[i].exclude_collider_radius) {
+                radius -= collider_radius;
+            }
+            return radius;
+        }
+    }
+
+    return UnitGetPropertyFixed(munit, c_unitPropRadius, false);
+}
+
+//
+
+void cl_registerUnit(unit rUnit, int type) {
+    UnitSetCustomValue(rUnit, UNIT_CUSTOM_COLLIDER_TYPE, type);
+    UnitSetCustomValue(rUnit, SF_GAME_UNIT_CUSTOM_COLLIDER_SHAPE, SF_PHYS_COLLIDER_SHAPE_CIRCLE);
+    UnitGroupAdd(cl_group, rUnit);
+}
+
+void sf_phys_collider_track(unit rUnit, int type, int shape, fixed size_x, fixed size_y) {
+    UnitSetCustomValue(rUnit, UNIT_CUSTOM_COLLIDER_TYPE, type);
+    UnitSetCustomValue(rUnit, SF_GAME_UNIT_CUSTOM_COLLIDER_SHAPE, shape);
+    UnitSetCustomValue(rUnit, SF_GAME_UNIT_CUSTOM_COLLIDER_SIZE_X, size_x);
+    UnitSetCustomValue(rUnit, SF_GAME_UNIT_CUSTOM_COLLIDER_SIZE_Y, size_y);
+    UnitGroupAdd(cl_group, rUnit);
+}
+
+void cl_unregisterUnit(unit rUnit) {
+    UnitSetCustomValue(rUnit, UNIT_CUSTOM_COLLIDER_TYPE, 0);
+    UnitGroupRemove(cl_group, rUnit);
+}
+
+void cl_clear() {
+    UnitGroupClear(cl_group);
+}
+
+unitgroup cl_getCollidingUnits(unit mainUnit, fixed collisionRadius) {
+    unitgroup collidingGroup = UnitGroupEmpty();
+    region circleRegion;
+    unitgroup closeUnits;
+    int i;
+    unit cUnit;
+    fixed distance;
+    fixed totalRadius;
+    fixed unitRadius;
+    int shape;
+    region rg;
+    bool in_air;
+
+    if (!UnitGroupCount(cl_group, c_unitCountAlive)) {
+        return collidingGroup;
+    }
+
+    // TODO RegionAttachToUnit
+    circleRegion = RegionEmpty();
+    RegionAddCircle(circleRegion, true, UnitGetPosition(mainUnit), 4.0);
+    closeUnits = UnitGroupFilterRegion(cl_group, circleRegion, c_noMaxCount);
+    in_air = cl_isFlyingUnit(mainUnit);
+
+    for (i = 1; i <= UnitGroupCount(closeUnits, c_unitCountAll); i += 1) {
+        cUnit = UnitGroupUnit(closeUnits, i);
+        if (UnitTestState(cUnit, c_unitStateInsideTransport)) { continue; }
+        if (in_air != cl_isFlyingUnit(cUnit)) { continue; }
+
+        shape = FixedToInt(UnitGetCustomValue(cUnit, SF_GAME_UNIT_CUSTOM_COLLIDER_SHAPE));
+
+        if (shape == SF_PHYS_COLLIDER_SHAPE_CIRCLE) {
+            unitRadius = cl_getUnitRadius(cUnit, collisionRadius);
+
+            if (unitRadius <= 0) {
+                continue;
+            }
+
+            totalRadius = unitRadius + collisionRadius;
+            if (DistanceBetweenPoints( UnitGetPosition(mainUnit), UnitGetPosition( cUnit ) ) > totalRadius) {
+                continue;
+            }
+        }
+        else if (shape == SF_PHYS_COLLIDER_SHAPE_SQUARE) {
+            rg = RegionRect(0, 0, UnitGetCustomValue(cUnit, SF_GAME_UNIT_CUSTOM_COLLIDER_SIZE_X), UnitGetCustomValue(cUnit, SF_GAME_UNIT_CUSTOM_COLLIDER_SIZE_Y));
+            RegionSetCenter(rg, UnitGetPosition(cUnit));
+
+            if (!RegionContainsPoint(rg, UnitGetPosition(mainUnit))) {
+                continue;
+            }
+        }
+
+        UnitGroupAdd(collidingGroup, cUnit);
+    }
+
+    return collidingGroup;
+}
+
+void cl_periodicTest(structref<HERO> hero) {
+    int i;
+    unit cUnit;
+    fixed unit_type;
+    unitgroup collidingGroup;
+    fixed angle;
+
+    if (UnitTestState(hero.mainUnit, c_unitStateInvulnerable)) {
+        return;
+    }
+
+    collidingGroup = cl_getCollidingUnits(hero.mainUnit, cl_getUnitRadius(hero.mainUnit, 0.0));
+
+    for (i = 1; i <= UnitGroupCount(collidingGroup, c_unitCountAll); i += 1) {
+        cUnit = UnitGroupUnit(collidingGroup, i);
+        unit_type = UnitGetCustomValue(cUnit, UNIT_CUSTOM_COLLIDER_TYPE);
+
+        if (unit_type == CL_TYPE_KILLER) {
+            UnitKill(hero.mainUnit);
+            break;
+        }
+        else if (unit_type == CL_TYPE_HERO_CORPSE) {
+            if (UnitHasBehavior(hero.mainUnit, "ART") || hero.artActive) {
+                angle = UnitGetFacing(hero.guideUnit);
+                if (hero.artSwitch) {
+                    angle -= 180.0;
+                }
+                hr_revive(UnitGetOwner(hero.mainUnit), gm_players[UnitGetOwner(cUnit)].hero, false);
+                gm_setHeroPosition(gm_players[UnitGetOwner(cUnit)].hero, UnitGetPosition(hero.mainUnit), angle, HERO_POSITION_CHANGE_REASON_ART);
+                SoundPlayAtPoint(SoundLink("Mothership_TimeWarpEnd", -1), PlayerGroupAll(), UnitGetPosition(hero.mainUnit), 0.0, 100.0, 0.0);
+
+                sf_core_event_prepare("art_revive");
+                sf_core_event_set_int("player", hero.player);
+                sf_core_event_set_int("player_revived", UnitGetOwner(cUnit));
+                sf_core_event_send();
+            }
+            else {
+                hr_revive(UnitGetOwner(hero.mainUnit), gm_players[UnitGetOwner(cUnit)].hero, true);
+                // gm_spawnHero(gm_players[UnitGetOwner(cUnit)].hero);
+            }
+        }
+    }
+}
+
+void sf_phys_collision_info_override(string unit_type, fixed radius, bool exclude_collider_radius)
+{
+    int i;
+
+    for (i = 0; i < COLLISIONS_INFO_SIZE; i += 1) {
+        if (cl_info[i].unit_type == null || cl_info[i].unit_type == "" || StringEqual(cl_info[i].unit_type, unit_type, true)) {
+            cl_info[i].unit_type = unit_type;
+            cl_info[i].radius = radius;
+            cl_info[i].exclude_collider_radius = exclude_collider_radius;
+            break;
+        }
+    }
+}
+
+void sf_phys_collision_info_clear(string unit_type)
+{
+    int i;
+
+    for (i = 0; i < COLLISIONS_INFO_SIZE; i += 1) {
+        if (cl_info[i].unit_type == null || !StringEqual(cl_info[i].unit_type, unit_type, true)) { continue; }
+        cl_info[i].unit_type = null;
+        cl_info[i].radius = 0.0;
+        cl_info[i].exclude_collider_radius = false;
+    }
+}
+
+void sf_phys_local_collision_info_override(unit munit, fixed radius, bool exclude_collider_radius)
+{
+    UnitSetCustomValue(munit, SF_GAME_UVAL_COLLIDER_RADIUS, radius);
+}
+
+void sf_phys_local_collision_info_clear(unit munit)
+{
+    UnitSetCustomValue(munit, SF_GAME_UVAL_COLLIDER_RADIUS, 0);
+}
+

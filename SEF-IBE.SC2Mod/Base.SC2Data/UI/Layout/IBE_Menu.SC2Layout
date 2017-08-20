@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Desc>
+    <Frame type="Button" name="MenuButtonTemplate" template="VoidShared_GenericTemplates/StoryButtonTemplate">
+        <Width val="230"/>
+        <Height val="70"/>
+        <ClickSound val="@UI_ActionButtonSelect"/>
+        <!--<TooltipFrame val="ScoreScreenTooltip"/>-->
+    </Frame>
+
+    <Frame type="Frame" name="Menu" template="IBE_GenericTemplates/DefaultWindow">
+        <Frame type="Button" name="OverviewButton" template="IBE_Menu/MenuButtonTemplate">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Min" offset="-10"/>
+            <Anchor side="Left" relative="$parent/BackgroundFrame" pos="Min" offset="240"/>
+            <Text val="Overview"/>
+        </Frame>
+
+        <Frame type="Button" name="RankingButton" template="IBE_Menu/MenuButtonTemplate">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Min" offset="-10"/>
+            <Anchor side="Left" relative="$parent/OverviewButton" pos="Max" offset="-5"/>
+            <Text val="Ranking"/>
+        </Frame>
+
+        <Frame type="Button" name="ProfilesButton" template="IBE_Menu/MenuButtonTemplate">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Min" offset="-10"/>
+            <Anchor side="Left" relative="$parent/RankingButton" pos="Max" offset="-5"/>
+            <Text val="Profiles"/>
+        </Frame>
+
+        <Frame type="Button" name="OptionsButton" template="IBE_Menu/MenuButtonTemplate">
+            <Anchor side="Top" relative="$parent/BackgroundFrame" pos="Min" offset="-10"/>
+            <Anchor side="Left" relative="$parent/ProfilesButton" pos="Max" offset="-5"/>
+            <Text val="Options"/>
+        </Frame>
+
+        <Frame type="Button" name="CloseButton" template="IBE_Menu/MenuButtonTemplate">
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="-110"/>
+            <Anchor side="Left" relative="$parent" pos="Mid" offset="-70"/>
+            <Anchor side="Right" relative="$parent" pos="Mid" offset="70"/>
+            <Text val="Close"/>
+            <!--<Shortcut val="C"/>-->
+        </Frame>
+
+        <!--<Frame type="Frame" name="Inner">
+            <Anchor side="Top" relative="$parent/StatFrame" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent/StatFrame" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent/StatFrame" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent/StatFrame" pos="Max" offset="0"/>
+        </Frame>-->
+
+        <Frame type="Frame" name="Overview" template="IBE_Overview/Overview">
+            <Anchor side="Top" relative="$parent/StatFrame" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent/StatFrame" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent/StatFrame" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent/StatFrame" pos="Max" offset="0"/>
+            <Visible val="False" />
+        </Frame>
+
+        <Frame type="Frame" name="Profile" template="IBE_Profile/Profile">
+            <Anchor side="Top" relative="$parent/StatFrame" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent/StatFrame" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent/StatFrame" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent/StatFrame" pos="Max" offset="0"/>
+            <Visible val="False" />
+        </Frame>
+
+        <Frame type="Frame" name="Ranking" template="IBE_Ranking/Ranking">
+            <Anchor side="Top" relative="$parent/StatFrame" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent/StatFrame" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent/StatFrame" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent/StatFrame" pos="Max" offset="0"/>
+            <Visible val="False" />
+        </Frame>
+
+        <Frame type="Frame" name="Options" template="IBE_Options/Options">
+            <Anchor side="Top" relative="$parent/StatFrame" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent/StatFrame" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent/StatFrame" pos="Min" offset="0"/>
+            <Anchor side="Right" relative="$parent/StatFrame" pos="Max" offset="0"/>
+            <Visible val="False" />
+        </Frame>
+    </Frame>
+</Desc>

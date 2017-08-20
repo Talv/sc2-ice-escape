@@ -1,0 +1,47 @@
+static void sf_envi_gate_on_destroy(int obj_id)
+{
+    sf_envi_gate_open(obj_id, false);
+}
+
+void sf_envi_gate_init()
+{
+    sf_envi_object_type_t obj_type;
+
+    obj_type.name = "gate";
+    obj_type.fn_destroy = sf_envi_gate_on_destroy;
+    sf_envi_object_register_type_at(obj_type, SF_ENVI_OBJECT_TYPE_GATE);
+}
+
+void sf_envi_gate_create_from_unit(unitref gate_ref)
+{
+    int obj_id;
+
+    obj_id = sf_envi_object_create(SF_ENVI_OBJECT_TYPE_GATE);
+
+    sf_envi_object_instances[obj_id].main_unit = UnitRefToUnit(gate_ref);
+    UnitGroupAdd(sf_envi_object_instances[obj_id].ugroup, sf_envi_object_instances[obj_id].main_unit);
+    sf_envi_object_instances[obj_id].preserve_main_unit = true;
+}
+
+void sf_envi_gate_open(int obj_id, bool open)
+{
+    structref<sf_envi_object_instance_t> obj_ins;
+    abilcmd abil;
+    bool currently_opened;
+
+    obj_ins = sf_envi_object_instances[obj_id];
+
+    currently_opened = false;
+    if (StringFind(UnitGetType(obj_ins.main_unit), "Lowered", true) != c_stringNotFound) {
+        currently_opened = true;
+    }
+
+    abil = AbilityCommand(CatalogFieldValueGet(c_gameCatalogUnit, UnitGetType(obj_ins.main_unit), "AbilArray[0].Link", 0), 0);
+
+    if (open && !currently_opened) {
+        UnitIssueOrder(obj_ins.main_unit, Order(abil), c_orderQueueReplace);
+    }
+    else if (!open && currently_opened) {
+        UnitIssueOrder(obj_ins.main_unit, Order(abil), c_orderQueueAddToEnd);
+    }
+}

@@ -1,0 +1,8 @@
+void sf_core_bootstrap() {
+    sf_game_init();
+    sf_phys_init();
+    sf_envi_init();
+    sf_ctrl_mod_init();
+    sf_stat_init();
+    cmd_init();
+}

@@ -1,0 +1,307 @@
+ibe_profile_section_t[IBE_PROFILE_SECTION_MAX] ibe_profile_sections;
+ibe_profile_section_info_t[IBE_PROFILE_SECTION_MAX] ibe_profile_section_infos;
+int[MAX_PLAYERS + 1] ibe_menu_profile_dpd_index;
+
+static void ibe_profile_section_add(string title, int relative_top, int relative_y, structref<ibe_profile_section_t> sect)
+{
+    sect.panel = DialogControlCreateInPanelFromTemplate(ibe_profile_panel, c_triggerControlTypePanel, "IBE_Profile/SectionTemplate");
+    DialogControlSetSize(sect.panel, PlayerGroupAll(), IBE_MENU_PANEL_WIDTH - 80, 300);
+    DialogControlSetPositionRelative(
+        sect.panel,
+        PlayerGroupAll(),
+        c_anchorTopLeft,
+        relative_top,
+        c_anchorTopLeft,
+        40,
+        relative_y
+    );
+
+    sect.lbl_heading = DialogControlHookup(sect.panel, c_triggerControlTypeLabel, "SummaryHeadingLabel");
+    DialogControlSetPropertyAsText(
+        sect.lbl_heading,
+        c_triggerControlPropertyText,
+        PlayerGroupAll(),
+        StringToText(title)
+    );
+}
+
+static void ibe_profile_section_info_add(structref<ibe_profile_section_t> sect, string title, structref<ibe_profile_section_info_t> info)
+{
+    info.panel = DialogControlCreateInPanelFromTemplate(ibe_profile_panel, c_triggerControlTypePanel, "IBE_Profile/ProfileLineTemplate");
+    DialogControlSetSize(info.panel, PlayerGroupAll(), DialogControlGetWidth(sect.panel, 1), 28);
+    DialogControlSetPositionRelative(
+        info.panel,
+        PlayerGroupAll(),
+        c_anchorTopLeft,
+        sect.panel,
+        c_anchorTopLeft,
+        80,
+        90 + (sect.info_count * 30)
+    );
+
+    info.lbl_title = DialogControlHookup(info.panel, c_triggerControlTypeLabel, "TextTitle");
+    DialogControlSetPropertyAsText(
+        info.lbl_title,
+        c_triggerControlPropertyText,
+        PlayerGroupAll(),
+        StringToText(title)
+    );
+    info.lbl_value = DialogControlHookup(info.panel, c_triggerControlTypeLabel, "TextValue");
+    DialogControlSetPropertyAsText(
+        info.lbl_value,
+        c_triggerControlPropertyText,
+        PlayerGroupAll(),
+        StringToText("")
+    );
+
+    sect.info_count += 1;
+}
+
+static void ibe_profile_section_info_set_value(structref<ibe_profile_section_info_t> info, int player, text value)
+{
+    DialogControlSetPropertyAsText(
+        info.lbl_value,
+        c_triggerControlPropertyText,
+        PlayerGroupSingle(player),
+        value
+    );
+}
+
+void ibe_profile_init()
+{
+    int i;
+    int l;
+    int primary_section;
+    int line;
+    int temp;
+    int temp2;
+
+    ibe_profile_dpd_player = DialogControlHookup(ibe_profile_panel, c_triggerControlTypePulldown, "PlayerPulldown");
+    TriggerAddEventDialogControl(TriggerCreate("ibe_menu_profile_on_player_dropdown"), c_playerAny, ibe_profile_dpd_player, c_triggerControlEventTypeSelectionChanged);
+
+    // primary_section = DialogControlHookup(ibe_profile_panel, c_triggerControlTypePanel, "PrimarySection");
+    // DialogControlSetPropertyAsText(
+    //     DialogControlHookup(primary_section, c_triggerControlTypeLabel, "SummaryHeadingLabel"),
+    //     c_triggerControlPropertyText,
+    //     PlayerGroupAll(),
+    //     StringToText("General statistics")
+    // );
+    // line = DialogControlHookup(primary_section, c_triggerControlTypePanel, "Info1");
+    // DialogControlSetPropertyAsText(
+    //     DialogControlHookup(line, c_triggerControlTypeLabel, "TextTitle"),
+    //     c_triggerControlPropertyText,
+    //     PlayerGroupAll(),
+    //     StringToText("Deaths")
+    // );
+    // ibe_profile_lbl_revives = DialogControlHookup(line, c_triggerControlTypeLabel, "TextValue");
+
+    //
+    ibe_profile_section_add("Rating", ibe_profile_panel, 120, ibe_profile_sections[IBE_PROFILE_SECTION_RATING]);
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_RATING],
+        "Revives",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_REVIVES]
+    );
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_RATING],
+        "Deaths",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_DEATHS]
+    );
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_RATING],
+        "Completed challenges",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_CHALLENGES_COMPLETED_TOTAL]
+    );
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_RATING],
+        "Acquired powerups",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_POWERUPS_ACQUIRED_TOTAL]
+    );
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_RATING],
+        "Pushed buttons",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_BUTTONS_PUSHED_TOTAL]
+    );
+
+    ibe_profile_section_add("Games", ibe_profile_panel, 350, ibe_profile_sections[IBE_PROFILE_SECTION_GENERAL]);
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_GENERAL],
+        "Games played",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_GAMES_PLAYED]
+    );
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_GENERAL],
+        "Total time played",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_TIME_PLAYED]
+    );
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_GENERAL],
+        "Escapes",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ESCAPES]
+    );
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_GENERAL],
+        "Fastest escape",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ESCAPE_BEST_TIME]
+    );
+
+    ibe_profile_section_add("Abilities usage", ibe_profile_panel, 550, ibe_profile_sections[IBE_PROFILE_SECTION_ABIL]);
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_ABIL],
+        "Power boost",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ABIL_S1]
+    );
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_ABIL],
+        "Propel",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ABIL_S2]
+    );
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_ABIL],
+        "Throw essence",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ABIL_S3]
+    );
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_ABIL],
+        "ART",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ABIL_S4]
+    );
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_ABIL],
+        "Formed shades",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ABIL_S5]
+    );
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_ABIL],
+        "Used shades",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ABIL_S6]
+    );
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_ABIL],
+        "Revives with Throw essence",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ABIL_S7]
+    );
+    ibe_profile_section_info_add(
+        ibe_profile_sections[IBE_PROFILE_SECTION_ABIL],
+        "Revives with ART",
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ABIL_S8]
+    );
+
+    //
+    l = 1;
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        if (PlayerType(i) != c_playerTypeUser) { continue; }
+        DialogControlAddItem(ibe_profile_dpd_player, PlayerGroupAll(), PlayerName(i));
+        DialogControlSelectItem(ibe_profile_dpd_player, PlayerGroupSingle(i), l);
+        ibe_menu_profile_dpd_index[l] = i;
+        l += 1;
+    }
+}
+
+void ibe_profile_show(int for_player, int player)
+{
+    int i;
+    int l;
+    int chal_completed;
+    int powerups;
+    int buttons;
+    int escapes;
+    int games_played;
+    fixed escape_fastest;
+    int time_played;
+    text txt;
+
+    for (i = 0; i < IBE_GM_MAX; i += 1) {
+        escapes += ibe_stat_profiles[player].gm[i].games_completed;
+        games_played += ibe_stat_profiles[player].gm[i].games_played;
+        time_played += ibe_stat_profiles[player].gm[i].time_played;
+        if (escape_fastest == 0.0 || ibe_stat_profiles[player].gm[i].escape_best_time < escape_fastest) {
+            escape_fastest = ibe_stat_profiles[player].gm[i].escape_best_time;
+        }
+
+        for (l = 0; l < IBE_STAT_CHALLENGE_MAX; l += 1) {
+            chal_completed += ibe_stat_profiles[player].gm[i].chal[l].completions;
+            powerups += ibe_stat_profiles[player].gm[i].chal[l].powerups;
+            buttons += ibe_stat_profiles[player].gm[i].chal[l].buttons;
+        }
+    }
+
+    ibe_profile_section_info_set_value(
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_REVIVES],
+        for_player,
+        FormatNumber(ibe_stat_profiles[player].revives)
+    );
+    ibe_profile_section_info_set_value(
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_DEATHS],
+        for_player,
+        FormatNumber(ibe_stat_profiles[player].deaths)
+    );
+    ibe_profile_section_info_set_value(
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_CHALLENGES_COMPLETED_TOTAL],
+        for_player,
+        FormatNumber(chal_completed)
+    );
+    ibe_profile_section_info_set_value(
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_POWERUPS_ACQUIRED_TOTAL],
+        for_player,
+        FormatNumber(powerups)
+    );
+    ibe_profile_section_info_set_value(
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_BUTTONS_PUSHED_TOTAL],
+        for_player,
+        FormatNumber(buttons)
+    );
+
+    ibe_profile_section_info_set_value(
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_GAMES_PLAYED],
+        for_player,
+        FormatNumber(games_played)
+    );
+    txt = StringToText("");
+    if ((time_played / (3600  * 24)) > 0) {
+        txt += IntToText(time_played / (3600  * 24)) + StringToText("d ");
+    }
+    txt += TextTimeFormat(StringToText("<hour2/>:<min2/>:<sec2/>"), time_played % (3600  * 24));
+    ibe_profile_section_info_set_value(
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_TIME_PLAYED],
+        for_player,
+        txt
+    );
+    ibe_profile_section_info_set_value(
+        ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ESCAPES],
+        for_player,
+        FormatNumber(escapes)
+    );
+    if (escape_fastest == 0.0) {
+        ibe_profile_section_info_set_value(
+            ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ESCAPE_BEST_TIME],
+            for_player,
+            StringToText("-")
+        );
+    }
+    else {
+        ibe_profile_section_info_set_value(
+            ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ESCAPE_BEST_TIME],
+            for_player,
+            TextTimeFormat(StringToText("<hour/>:<min2/>:<sec2/>"), FixedToInt(escape_fastest))
+        );
+    }
+
+    // abils
+    for (i = 0; i < IBE_STAT_ABIL_MAX; i += 1) {
+        ibe_profile_section_info_set_value(
+            ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ABIL_S1 + i],
+            for_player,
+            FormatNumber(ibe_stat_profiles[player].abils[i])
+        );
+    }
+}
+
+bool ibe_menu_profile_on_player_dropdown(bool test_conds, bool run_actions)
+{
+    int value;
+
+    value = DialogControlGetSelectedItem(ibe_profile_dpd_player, EventPlayer());
+    ibe_profile_show(EventPlayer(), ibe_menu_profile_dpd_index[value]);
+    return true;
+}
