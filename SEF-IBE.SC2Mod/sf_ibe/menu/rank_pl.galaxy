@@ -42,7 +42,7 @@ text ibe_menu_rank_pl_cell_text(int idx, int col, int row)
             powerups += ibe_stat_profiles[player].gm[i].chal[l].powerups;
             if (ibe_stat_profiles[player].gm[i].chal[l].completions) {
                 chal_compl_table[l] += ibe_stat_profiles[player].gm[i].chal[l].completions;
-                if (ibe_stat_profiles[player].gm[i].chal[l].best_time < chal_compl_times[i]) {
+                if (chal_compl_times[i] == 0 || ibe_stat_profiles[player].gm[i].chal[l].best_time < chal_compl_times[i]) {
                     chal_compl_times[i] = ibe_stat_profiles[player].gm[i].chal[l].completions;
                 }
             }
@@ -227,7 +227,12 @@ int ibe_menu_rank_pl_cell_sort_value(int idx, int col)
         return escapes;
     }
     else if (col == 8) {
-        return FixedToInt(escape_fastest);
+        if (escape_fastest == 0) {
+            return 0xfff;
+        }
+        else {
+            return FixedToInt(escape_fastest);
+        }
     }
 
     return 0;

@@ -329,8 +329,7 @@ void ibe_handle_as(int player, int reason)
     selected_units = UnitGroupSelected(player);
     if (
         UnitGroupCount(selected_units, c_unitCountAlive) > 0 &&
-        PlayerGetAlliance(UnitGetOwner(UnitGroupUnit(selected_units, 1)), c_allianceIdControl, player) &&
-        gm_players[UnitGetOwner(UnitGroupUnit(selected_units, 1))].hero.ctrl_player == player
+        PlayerGetAlliance(UnitGetOwner(UnitGroupUnit(selected_units, 1)), c_allianceIdControl, player)
     ) {
         foregin_ctrl = true;
     }

@@ -141,7 +141,7 @@ int ibe_ui_gms_calc_votes() {
     int code;
 
     for (i = 1; i <= MAX_PLAYERS; i += 1) {
-        if (PlayerType(i) == c_playerTypeComputer || PlayerType(i) == c_playerTypeNone || PlayerStatus(i) != c_playerStatusLeft) { continue; }
+        if (PlayerType(i) == c_playerTypeComputer || PlayerType(i) == c_playerTypeNone || PlayerStatus(i) == c_playerStatusLeft) { continue; }
         votes_diff[ibe_ui_gms_votes_diff[i]] += 1;
         votes_speed[ibe_ui_gms_votes_speed[i]] += 1;
     }

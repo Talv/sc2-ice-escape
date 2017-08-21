@@ -367,7 +367,6 @@ bool sd_on_heroOrder(bool testConds, bool runActions) {
     hero = gm_players[currnetPlayer].hero;
 
     targetPos = OrderGetTargetPosition(EventUnitOrder());
-    hero.ctrl_player = EventPlayer();
 
     if (sf_phys_restrain_next_order[UnitGetOwner(hero.mainUnit)]) {
         sf_phys_restrain_next_order[UnitGetOwner(hero.mainUnit)] = false;

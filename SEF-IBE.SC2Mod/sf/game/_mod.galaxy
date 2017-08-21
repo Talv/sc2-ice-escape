@@ -49,7 +49,6 @@ const int HERO_MAX_TRIGGERS = 128;
 
 struct HERO {
     int player;
-    int ctrl_player;
     unit mainUnit;
     unit guideUnit;
     unit corpseUnit;

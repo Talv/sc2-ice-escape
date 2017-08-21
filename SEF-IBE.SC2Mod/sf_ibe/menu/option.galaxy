@@ -263,7 +263,7 @@ static int ibe_menu_option_add_as_dpd(text description)
     DialogControlAddItem(dpd, PlayerGroupAll(), StringToText("Never"));
     DialogControlAddItem(dpd, PlayerGroupAll(), StringToText("Always"));
     DialogControlAddItem(dpd, PlayerGroupAll(), StringToText("Always, unless I have other unit selected"));
-    DialogControlAddItem(dpd, PlayerGroupAll(), StringToText("Always, unless I have other unit selected which I'm currently controling"));
+    DialogControlAddItem(dpd, PlayerGroupAll(), StringToText("Always, unless I have other unit selected which I can control"));
 
     return dpd;
 }
