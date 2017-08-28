@@ -28,7 +28,7 @@ text ibe_menu_rank_ch_cell_text(int idx, int col, int row)
     }
     else if (col == 5) {
         txt = sf_format_time(ibe_stat_rk_chals[idx].time);
-        }
+    }
 
     return txt;
 }
@@ -63,9 +63,9 @@ int ibe_menu_rank_ch_cell_sort_value(int idx, int col)
     }
     else if (col == 5) {
         if (ibe_stat_rk_chals[idx].time < 0) {
-            return 3600;
+            return 0xffff;
         }
-        return FixedToInt(ibe_stat_rk_chals[idx].time);
+        return ibe_ui_dg_fixed_to_sort(ibe_stat_rk_chals[idx].time);
     }
 
     return 0;

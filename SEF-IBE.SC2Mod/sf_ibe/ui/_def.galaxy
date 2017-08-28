@@ -28,3 +28,4 @@ void ibe_ui_dg_sort(structref<ibe_ui_dg_t> dg, int player, bool asc, int column)
 void ibe_ui_dg_view_generate(structref<ibe_ui_dg_t> dg, int panel, int table_width, int table_height);
 int ibe_ui_dg_view_redraw(structref<ibe_ui_dg_t> dg, int player);
 void ibe_ui_dg_handle_ui_event(structref<ibe_ui_dg_t> dg);
+int ibe_ui_dg_fixed_to_sort(fixed in);

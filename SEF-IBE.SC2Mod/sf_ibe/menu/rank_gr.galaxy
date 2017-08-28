@@ -228,7 +228,6 @@ text ibe_menu_rank_gr_cell_tooltip(int idx, int col, int row)
 
 int ibe_menu_rank_gr_cell_sort_value(int idx, int col)
 {
-    int value = 0;
     int i;
     int tmp;
     structref<ibe_stat_gresult_t> gres;
@@ -241,15 +240,14 @@ int ibe_menu_rank_gr_cell_sort_value(int idx, int col)
                 if (gres.challenges[i].completed_by == 0) { continue; }
                 tmp += 1;
             }
-            value = 3600 * 10 - tmp;
+            return 0xffff - tmp;
         }
         else {
-            value = FixedToInt(gres.escape_time);
-            // value += FixedToInt((gres.escape_time - IntToFixed(FixedToInt(gres.escape_time))) * 4096.0);
+            return ibe_ui_dg_fixed_to_sort(gres.escape_time);
         }
     }
 
-    return value;
+    return 0;
 }
 
 void ibe_menu_rank_gr_init(structref<ibe_menu_rank_sect_t> rank_sect)

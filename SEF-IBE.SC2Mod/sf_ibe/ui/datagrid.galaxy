@@ -377,3 +377,11 @@ void ibe_ui_dg_handle_ui_event(structref<ibe_ui_dg_t> dg)
 
     ibe_ui_dg_view_redraw(dg, player);
 }
+
+int ibe_ui_dg_fixed_to_sort(fixed in)
+{
+    int out;
+    out = FixedToInt(in) << 8;
+    out += (FixedToInt((in - FloorI(in)) * 4096.0) / 16);
+    return out;
+}
