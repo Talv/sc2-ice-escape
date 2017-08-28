@@ -23,27 +23,30 @@ text ibe_menu_rank_pl_cell_text(int idx, int col, int row)
     int chal_completed;
     int powerups;
     int escapes;
-    fixed escape_fastest;
+    fixed escape_fastest = -1.0;
     int chal_per_ch;
     int[IBE_STAT_CHALLENGE_MAX] chal_compl_table;
-    int[IBE_STAT_CHALLENGE_MAX] chal_compl_times;
+    fixed[IBE_STAT_CHALLENGE_MAX] chal_compl_times;
     fixed chal_total_time;
 
     player = ibe_menu_rank_pl_map_idx[idx];
 
     for (i = 0; i < IBE_GM_MAX; i += 1) {
         escapes += ibe_stat_profiles[player].gm[i].games_completed;
-        if (escape_fastest == 0.0 || ibe_stat_profiles[player].gm[i].escape_best_time > escape_fastest) {
+        if (ibe_stat_profiles[player].gm[i].games_completed > 0) {
+            if (escape_fastest == -1.0 || ibe_stat_profiles[player].gm[i].escape_best_time < escape_fastest) {
             escape_fastest = ibe_stat_profiles[player].gm[i].escape_best_time;
+        }
         }
 
         for (l = 0; l < IBE_STAT_CHALLENGE_MAX; l += 1) {
             chal_completed += ibe_stat_profiles[player].gm[i].chal[l].completions;
             powerups += ibe_stat_profiles[player].gm[i].chal[l].powerups;
-            if (ibe_stat_profiles[player].gm[i].chal[l].completions) {
+
+            if (ibe_stat_profiles[player].gm[i].chal[l].completions > 0) {
                 chal_compl_table[l] += ibe_stat_profiles[player].gm[i].chal[l].completions;
-                if (chal_compl_times[i] == 0 || ibe_stat_profiles[player].gm[i].chal[l].best_time < chal_compl_times[i]) {
-                    chal_compl_times[i] = ibe_stat_profiles[player].gm[i].chal[l].completions;
+                if (chal_compl_times[l] == 0 || ibe_stat_profiles[player].gm[i].chal[l].best_time < chal_compl_times[l]) {
+                    chal_compl_times[l] = ibe_stat_profiles[player].gm[i].chal[l].best_time;
                 }
             }
         }
@@ -176,23 +179,31 @@ int ibe_menu_rank_pl_cell_sort_value(int idx, int col)
     int chal_completed;
     int powerups;
     int escapes;
-    fixed escape_fastest;
+    fixed escape_fastest = -1.0;
     int chal_per_ch;
     int[IBE_STAT_CHALLENGE_MAX] chal_compl_table;
+    fixed[IBE_STAT_CHALLENGE_MAX] chal_compl_times;
+    fixed chal_total_time;
 
     player = ibe_menu_rank_pl_map_idx[idx];
 
     for (i = 0; i < IBE_GM_MAX; i += 1) {
         escapes += ibe_stat_profiles[player].gm[i].games_completed;
-        if (escape_fastest == 0.0 || ibe_stat_profiles[player].gm[i].escape_best_time > escape_fastest) {
+        if (ibe_stat_profiles[player].gm[i].games_completed > 0) {
+            if (escape_fastest == -1.0 || ibe_stat_profiles[player].gm[i].escape_best_time < escape_fastest) {
             escape_fastest = ibe_stat_profiles[player].gm[i].escape_best_time;
+            }
         }
 
         for (l = 0; l < IBE_STAT_CHALLENGE_MAX; l += 1) {
             chal_completed += ibe_stat_profiles[player].gm[i].chal[l].completions;
             powerups += ibe_stat_profiles[player].gm[i].chal[l].powerups;
-            if (ibe_stat_profiles[player].gm[i].chal[l].completions) {
+
+            if (ibe_stat_profiles[player].gm[i].chal[l].completions > 0) {
                 chal_compl_table[l] += ibe_stat_profiles[player].gm[i].chal[l].completions;
+                if (chal_compl_times[l] == 0 || ibe_stat_profiles[player].gm[i].chal[l].best_time < chal_compl_times[l]) {
+                    chal_compl_times[l] = ibe_stat_profiles[player].gm[i].chal[l].best_time;
+                }
             }
         }
     }
