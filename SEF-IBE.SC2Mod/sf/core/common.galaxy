@@ -47,6 +47,40 @@ string sf_string_width_space(string str, int width)
     return str;
 }
 
+text sf_format_time(fixed time)
+{
+    text txt;
+
+    if (time >= 3600.0) {
+        txt += TextTimeFormat(
+            StringToText("<hour/>h "),
+            FixedToInt(time)
+        );
+    }
+    if (time >= 60.0) {
+        txt += TextTimeFormat(
+            StringToText("<min/>m "),
+            FixedToInt(time)
+        );
+    }
+    txt += TextTimeFormat(
+        StringToText("<sec2/>"),
+        FixedToInt(time)
+    );
+
+    if (time <= 3600.0) {
+        txt += StringToText(".") + StringToText(StringSub(
+            FixedToString(time - IntToFixed(FixedToInt(time)), 2),
+            3,
+            5
+        ));
+    }
+
+    txt += StringToText("s");
+
+    return txt;
+}
+
 text sf_player_name_colored(int player)
 {
     color col;

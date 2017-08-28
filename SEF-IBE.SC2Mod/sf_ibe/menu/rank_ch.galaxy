@@ -27,21 +27,8 @@ text ibe_menu_rank_ch_cell_text(int idx, int col, int row)
         txt = sf_player_name_colored(ibe_stat_rk_chals[idx].player);
     }
     else if (col == 5) {
-        if (ibe_stat_rk_chals[idx].time < 0) {
-            txt = StringToText("bugged = " + FixedToString(ibe_stat_rk_chals[idx].time, -1));
-            return txt;
+        txt = sf_format_time(ibe_stat_rk_chals[idx].time);
         }
-        if (ibe_stat_rk_chals[idx].time >= 3600.0) {
-            txt += TextTimeFormat(
-                StringToText("<hour/>:"),
-                FixedToInt(ibe_stat_rk_chals[idx].time)
-            );
-        }
-        txt += TextTimeFormat(
-            StringToText("<min2/>:<sec2/>"),
-            FixedToInt(ibe_stat_rk_chals[idx].time)
-        );
-    }
 
     return txt;
 }

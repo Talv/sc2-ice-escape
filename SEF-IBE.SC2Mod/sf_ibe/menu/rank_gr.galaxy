@@ -114,12 +114,7 @@ text ibe_menu_rank_gr_cell_text(int idx, int col, int row)
             txt = StringToText(IntToString(tmp) + " / " + IntToString(lv_getTotalCount()));
         }
         else {
-            txt = TextTimeFormat(StringToText("<hour/>:<min2/>:<sec2/>"), FixedToInt(gres.escape_time));
-            txt += StringToText(".") + StringToText(StringSub(
-                FixedToString(gres.escape_time - IntToFixed(FixedToInt(gres.escape_time)), 2),
-                3,
-                5
-            ));
+            txt = sf_format_time(gres.escape_time);
         }
     }
     else {
@@ -220,16 +215,7 @@ text ibe_menu_rank_gr_cell_tooltip(int idx, int col, int row)
             }
             first = false;
             txt += StringToText(sf_string_width_space(IntToString(i), 2) + ". ");
-            if (gres.challenges[i].time >= 3600.0) {
-                txt += TextTimeFormat(
-                    StringToText("<hour/>:"),
-                    FixedToInt(gres.challenges[i].time)
-                );
-            }
-            txt += TextTimeFormat(
-                StringToText("<min2/>:<sec2/>"),
-                FixedToInt(gres.challenges[i].time)
-            );
+            txt += sf_format_time(gres.challenges[i].time);
             txt += StringToText(" by ") + gres.players[gres.challenges[i].completed_by].tname;
         }
     }

@@ -71,17 +71,8 @@ text ibe_menu_rank_pl_cell_text(int idx, int col, int row)
     }
     else if (col == 4) {
         if (chal_per_ch >= lv_getTotalCount()) {
-            if (chal_total_time >= 3600.0) {
-                txt += TextTimeFormat(
-                    StringToText("<hour/>:"),
-                    FixedToInt(chal_total_time)
-                );
+            txt = sf_format_time(chal_total_time);
             }
-            txt += TextTimeFormat(
-                StringToText("<min2/>:<sec2/>"),
-                FixedToInt(chal_total_time)
-            );
-        }
         else {
             txt = StringToText("-");
         }
@@ -101,20 +92,11 @@ text ibe_menu_rank_pl_cell_text(int idx, int col, int row)
         txt = IntToText(escapes);
     }
     else if (col == 8) {
-        if (escape_fastest > 0) {
-            if (escape_fastest >= 3600.0) {
-                txt += TextTimeFormat(
-                    StringToText("<hour/>:"),
-                    FixedToInt(escape_fastest)
-                );
-            }
-            txt += TextTimeFormat(
-                StringToText("<min2/>:<sec2/>"),
-                FixedToInt(escape_fastest)
-            );
-        }
-        else {
+        if (escape_fastest == -1.0) {
             txt = StringToText("-");
+            }
+        else {
+            txt = sf_format_time(escape_fastest);
         }
     }
 

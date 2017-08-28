@@ -217,8 +217,8 @@ void ibe_profile_show(int for_player, int player)
         time_played += ibe_stat_profiles[player].gm[i].time_played;
         if (ibe_stat_profiles[player].gm[i].games_completed > 0) {
             if (escape_fastest == -1.0 || ibe_stat_profiles[player].gm[i].escape_best_time < escape_fastest) {
-            escape_fastest = ibe_stat_profiles[player].gm[i].escape_best_time;
-        }
+                escape_fastest = ibe_stat_profiles[player].gm[i].escape_best_time;
+            }
         }
 
         for (l = 0; l < IBE_STAT_CHALLENGE_MAX; l += 1) {
@@ -274,7 +274,7 @@ void ibe_profile_show(int for_player, int player)
         for_player,
         FormatNumber(escapes)
     );
-    if (escape_fastest == 0.0) {
+    if (escape_fastest == -1.0) {
         ibe_profile_section_info_set_value(
             ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ESCAPE_BEST_TIME],
             for_player,
@@ -285,7 +285,7 @@ void ibe_profile_show(int for_player, int player)
         ibe_profile_section_info_set_value(
             ibe_profile_section_infos[IBE_PROFILE_SECTION_INFO_ESCAPE_BEST_TIME],
             for_player,
-            TextTimeFormat(StringToText("<hour/>:<min2/>:<sec2/>"), FixedToInt(escape_fastest))
+            sf_format_time(escape_fastest)
         );
     }
 
