@@ -127,8 +127,6 @@
                 </Frame>
                 <Frame type="Button" name="VoteButton2">
                     <Text val="EXTREME"/>
-                    <Enabled val="false" />
-                    <Tooltip val="Coming soon ™" />
                 </Frame>
             </Frame>
 
