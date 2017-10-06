@@ -1,0 +1,12 @@
+bool sfi_reward_register(int reward_id, int kind, bool exclusive, text title, text desc, string icon)
+{
+    return false;
+}
+
+void sfi_reward_unlock_for_player(int reward_id, int player_id)
+{
+}
+
+void sfi_reward_add_event_activation(trigger trig)
+{
+}

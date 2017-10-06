@@ -8,6 +8,7 @@ include "sf_ibe/db/_mod"
 include "sf_ibe/ui/_mod"
 include "sf_ibe/stats/_mod"
 include "sf_ibe/menu/_mod.galaxy"
+include "sf_ibe/rewards/_mod"
 
 //
 // DEFINITIONS
@@ -17,6 +18,7 @@ include "sf_ibe/db/_def.galaxy"
 include "sf_ibe/menu/_def.galaxy"
 include "sf_ibe/ui/_def.galaxy"
 include "sf_ibe/stats/_def.galaxy"
+include "sf_ibe/rewards/_def.galaxy"
 
 void ibe_votekick_cmdhand_kick(structref<sf_tool_command_payload_t> payload);
 void ibe_votekick_cmdhand_c(structref<sf_tool_command_payload_t> payload);
@@ -54,6 +56,8 @@ include "sf_ibe/ui/mode_selection.galaxy"
 include "sf_ibe/ui/console.galaxy"
 include "sf_ibe/ui/scoreboard.galaxy"
 include "sf_ibe/ui/datagrid.galaxy"
+
+include "sf_ibe/rewards/rewards.galaxy"
 
 include "sf_ibe/votekick.galaxy"
 include "sf_ibe/ibe.galaxy"

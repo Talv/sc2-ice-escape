@@ -3826,6 +3826,7 @@
             <Item Type="Category" Library="3FB28C60" Id="367008AD"/>
             <Item Type="Category" Library="3FB28C60" Id="8F9BB53C"/>
             <Item Type="Category" Library="3FB28C60" Id="9BC9DCA2"/>
+            <Item Type="Category" Library="3FB28C60" Id="5C07F3AC"/>
             <Item Type="CustomScript" Library="3FB28C60" Id="99A582BD"/>
         </Root>
         <Element Type="Category" Id="48E6B664">
@@ -14408,6 +14409,112 @@
             <ScriptCode>
                 if (ibe_game_difficulty == 1) { return true; } else { return false; }
             </ScriptCode>
+        </Element>
+        <Element Type="Category" Id="5C07F3AC">
+            <Item Type="Preset" Library="3FB28C60" Id="2984C84E"/>
+            <Item Type="Preset" Library="3FB28C60" Id="E5E96A5B"/>
+            <Item Type="FunctionDef" Library="3FB28C60" Id="01AF891D"/>
+            <Item Type="FunctionDef" Library="3FB28C60" Id="08E58BFF"/>
+            <Item Type="FunctionDef" Library="3FB28C60" Id="334093DA"/>
+        </Element>
+        <Element Type="Preset" Id="2984C84E">
+            <PresetInteger/>
+            <BaseType Value="int"/>
+            <PresetGenConstVar/>
+        </Element>
+        <Element Type="Preset" Id="E5E96A5B">
+            <PresetCustom/>
+            <BaseType Value="int"/>
+            <PresetGenConstVar/>
+            <Item Type="PresetValue" Library="3FB28C60" Id="A8CEC833"/>
+            <Item Type="PresetValue" Library="3FB28C60" Id="2FEB1B8D"/>
+        </Element>
+        <Element Type="PresetValue" Id="A8CEC833">
+            <Value>IBE_REWARD_KIND_GLAZE</Value>
+        </Element>
+        <Element Type="PresetValue" Id="2FEB1B8D">
+            <Value>IBE_REWARD_KIND_SKIN</Value>
+        </Element>
+        <Element Type="FunctionDef" Id="01AF891D">
+            <Identifier>sfi_reward_register</Identifier>
+            <FlagAction/>
+            <FlagNative/>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="81A62429"/>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="C8982D23"/>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="3B32DACE"/>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="F3C9F2FD"/>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="B0785A18"/>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="A90EC4DF"/>
+        </Element>
+        <Element Type="ParamDef" Id="81A62429">
+            <ParameterType>
+                <Type Value="preset"/>
+                <TypeElement Type="Preset" Library="3FB28C60" Id="2984C84E"/>
+            </ParameterType>
+        </Element>
+        <Element Type="ParamDef" Id="C8982D23">
+            <ParameterType>
+                <Type Value="preset"/>
+                <TypeElement Type="Preset" Library="3FB28C60" Id="E5E96A5B"/>
+            </ParameterType>
+        </Element>
+        <Element Type="ParamDef" Id="3B32DACE">
+            <ParameterType>
+                <Type Value="bool"/>
+            </ParameterType>
+            <Default Type="Param" Library="3FB28C60" Id="879908D9"/>
+        </Element>
+        <Element Type="Param" Id="879908D9">
+            <Value>false</Value>
+            <ValueType Type="bool"/>
+        </Element>
+        <Element Type="ParamDef" Id="F3C9F2FD">
+            <ParameterType>
+                <Type Value="text"/>
+            </ParameterType>
+        </Element>
+        <Element Type="ParamDef" Id="B0785A18">
+            <ParameterType>
+                <Type Value="text"/>
+            </ParameterType>
+            <Default Type="Param" Library="3FB28C60" Id="EEBFEEEE"/>
+        </Element>
+        <Element Type="Param" Id="EEBFEEEE">
+            <Preset Type="PresetValue" Library="Ntve" Id="50BDC6EF"/>
+        </Element>
+        <Element Type="ParamDef" Id="A90EC4DF">
+            <ParameterType>
+                <Type Value="gamelink"/>
+                <GameType Value="Texture"/>
+            </ParameterType>
+            <ParamFlagPreload/>
+            <Default Type="Param" Library="3FB28C60" Id="68105E4C"/>
+        </Element>
+        <Element Type="Param" Id="68105E4C">
+            <Preset Type="PresetValue" Library="Ntve" Id="C9DCA6C0"/>
+        </Element>
+        <Element Type="FunctionDef" Id="08E58BFF">
+            <Identifier>sfi_reward_unlock_for_player</Identifier>
+            <FlagAction/>
+            <FlagNative/>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="83554F24"/>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="ECABAF32"/>
+        </Element>
+        <Element Type="ParamDef" Id="83554F24">
+            <ParameterType>
+                <Type Value="preset"/>
+                <TypeElement Type="Preset" Library="3FB28C60" Id="2984C84E"/>
+            </ParameterType>
+        </Element>
+        <Element Type="ParamDef" Id="ECABAF32">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+        </Element>
+        <Element Type="FunctionDef" Id="334093DA">
+            <Identifier>sfi_reward_add_event_activation</Identifier>
+            <FlagEvent/>
+            <FlagNative/>
         </Element>
         <Element Type="CustomScript" Id="99A582BD">
             <ScriptCode>
