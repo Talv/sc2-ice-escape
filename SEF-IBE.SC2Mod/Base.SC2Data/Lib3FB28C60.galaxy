@@ -917,7 +917,7 @@ bool lib3FB28C60_gt_ChallengeCompleted_Func (bool testConds, bool runActions) {
         autoD9781801_u = 1;
         for ( ; autoD9781801_u <= UnitGroupCount(autoD9781801_g, c_unitCountAll) ; autoD9781801_u += BoolToInt(lv_unit == UnitGroupUnit(autoD9781801_g, autoD9781801_u)) ) {
             lv_unit = UnitGroupUnit(autoD9781801_g, autoD9781801_u);
-            hr_heroLevelUp( gm_players[gm_getPlayerByUnit(lv_unit)].hero );
+            sf_game_hero_grant_powerup(lv_unit);
         }
     }
 

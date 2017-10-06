@@ -52,6 +52,27 @@ void libEBBC9C87_gf_sfHeroChangePosition (unit lp_herounit, point lp_position, f
     gm_setHeroPosition(gm_players[UnitGetOwner(lp_herounit)].hero, lp_position, lp_facing, 0);
 }
 
+trigger auto_libEBBC9C87_gf_sfChallengeSwap_Trigger = null;
+int auto_libEBBC9C87_gf_sfChallengeSwap_lp_id;
+
+void libEBBC9C87_gf_sfChallengeSwap (int lp_id) {
+    auto_libEBBC9C87_gf_sfChallengeSwap_lp_id = lp_id;
+
+    if (auto_libEBBC9C87_gf_sfChallengeSwap_Trigger == null) {
+        auto_libEBBC9C87_gf_sfChallengeSwap_Trigger = TriggerCreate("auto_libEBBC9C87_gf_sfChallengeSwap_TriggerFunc");
+    }
+
+    TriggerExecute(auto_libEBBC9C87_gf_sfChallengeSwap_Trigger, false, false);
+}
+
+bool auto_libEBBC9C87_gf_sfChallengeSwap_TriggerFunc (bool testConds, bool runActions) {
+    int lp_id = auto_libEBBC9C87_gf_sfChallengeSwap_lp_id;
+
+    // Implementation
+    lv_setup(lp_id);
+    return true;
+}
+
 //--------------------------------------------------------------------------------------------------
 // Library Initialization
 //--------------------------------------------------------------------------------------------------

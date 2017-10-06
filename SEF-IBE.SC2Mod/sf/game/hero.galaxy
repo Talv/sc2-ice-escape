@@ -256,16 +256,6 @@ void hr_clearSlot(structref<HERO> hero) {
 }
 
 
-void hr_heroLevelUp(structref<HERO> hero) {
-    PlayerCreateEffectUnit(0, "Feedback", hero.mainUnit);
-    // UnitBehaviorAdd(hero.mainUnit, "LevelUpDummyBehavior", hero.mainUnit, 1);
-    UnitSetPropertyFixed(
-        hero.mainUnit,
-        c_unitPropLevel,
-        UnitGetPropertyFixed(hero.mainUnit, c_unitPropLevel, c_unitPropCurrent) + 1.0
-    );
-}
-
 void hr_revive(int revivingPlayer, structref<HERO> hero, bool spawnHero) {
     if (spawnHero) {
         gm_spawnHero(hero, HERO_POSITION_CHANGE_REASON_REVIVE);
@@ -322,3 +312,13 @@ unitgroup sf_game_hero_get_unitgroup() {
 //     }
 // }
 
+void sf_game_hero_grant_powerup(unit munit)
+{
+    PlayerCreateEffectUnit(0, "Feedback", munit);
+    // UnitBehaviorAdd(munit, "LevelUpDummyBehavior", munit, 1);
+    UnitSetPropertyFixed(
+        munit,
+        c_unitPropLevel,
+        UnitGetPropertyFixed(munit, c_unitPropLevel, c_unitPropCurrent) + 1.0
+    );
+}

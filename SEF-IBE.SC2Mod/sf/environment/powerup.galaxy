@@ -75,7 +75,7 @@ bool sf_envi_powerup_on_acquire(bool test_conds, bool run_actions)
         return false;
     }
 
-    hr_heroLevelUp(hero);
+    sf_game_hero_grant_powerup(hero.mainUnit);
 
     sf_stat_session_stats[player_id].powerups += 1;
     sf_stat_session_expire(player_id);

@@ -189,7 +189,8 @@ unit sf_envi_object_get_base_unit(int obj_id)
     return UnitGroupUnit(obj_ins.ugroup, 1);
 }
 
+// @deprecated
 int sf_envi_event_param_object()
 {
-    return DataTableGetInt(false, TriggerEventParamName("sf_envi_ge_button_state_changed", "sf_envi_event_param_object"));
+    return sf_core_event_get_int("button");
 }

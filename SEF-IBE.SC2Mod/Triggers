@@ -288,6 +288,7 @@
             <Item Type="FunctionDef" Library="EBBC9C87" Id="C1BD3FD4"/>
             <Item Type="FunctionDef" Library="EBBC9C87" Id="86476748"/>
             <Item Type="FunctionDef" Library="EBBC9C87" Id="34FA57DF"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="AAAF30C7"/>
         </Element>
         <Element Type="FunctionDef" Id="C1BD3FD4">
             <Identifier>sf_game_hero_get_unit</Identifier>
@@ -339,6 +340,24 @@
                 gm_setHeroPosition(gm_players[UnitGetOwner(lp_herounit)].hero, lp_position, lp_facing, 0);
             </ScriptCode>
         </Element>
+        <Element Type="FunctionDef" Id="AAAF30C7">
+            <Identifier>sf_game_hero_grant_powerup</Identifier>
+            <FlagAction/>
+            <FlagNative/>
+            <Parameter Type="ParamDef" Library="EBBC9C87" Id="C5C5B1DC"/>
+        </Element>
+        <Element Type="ParamDef" Id="C5C5B1DC">
+            <ParameterType>
+                <Type Value="unit"/>
+            </ParameterType>
+            <Default Type="Param" Library="EBBC9C87" Id="665FFAC1"/>
+        </Element>
+        <Element Type="Param" Id="665FFAC1">
+            <FunctionCall Type="FunctionCall" Library="EBBC9C87" Id="F1DB7790"/>
+        </Element>
+        <Element Type="FunctionCall" Id="F1DB7790">
+            <FunctionDef Type="FunctionDef" Library="EBBC9C87" Id="C1BD3FD4"/>
+        </Element>
         <Element Type="Category" Id="91BF0BF0">
             <Item Type="FunctionDef" Library="EBBC9C87" Id="8D795C9F"/>
             <Item Type="FunctionDef" Library="EBBC9C87" Id="8E11A3EB"/>
@@ -351,6 +370,8 @@
             <Item Type="FunctionDef" Library="EBBC9C87" Id="3123A2B7"/>
             <Item Type="FunctionDef" Library="EBBC9C87" Id="CD2E5FD9"/>
             <Item Type="FunctionDef" Library="EBBC9C87" Id="9F6482D0"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="7D9599FC"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="E74B1CD9"/>
             <Item Type="FunctionDef" Library="EBBC9C87" Id="708791B9"/>
         </Element>
         <Element Type="FunctionDef" Id="8D795C9F">
@@ -572,6 +593,36 @@
         </Element>
         <Element Type="Param" Id="96B44932">
             <Preset Type="PresetValue" Library="Ntve" Id="F5E3F3AD"/>
+        </Element>
+        <Element Type="FunctionDef" Id="7D9599FC">
+            <Identifier>lv_setup</Identifier>
+            <FlagAction/>
+            <FlagNative/>
+            <Parameter Type="ParamDef" Library="EBBC9C87" Id="42D74BA0"/>
+        </Element>
+        <Element Type="ParamDef" Id="42D74BA0">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+        </Element>
+        <Element Type="FunctionDef" Id="E74B1CD9">
+            <FlagAction/>
+            <FlagCreateThread/>
+            <Parameter Type="ParamDef" Library="EBBC9C87" Id="9EB92A76"/>
+            <FunctionCall Type="FunctionCall" Library="EBBC9C87" Id="B3C5A61E"/>
+        </Element>
+        <Element Type="ParamDef" Id="9EB92A76">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+        </Element>
+        <Element Type="FunctionCall" Id="B3C5A61E">
+            <FunctionDef Type="FunctionDef" Library="EBBC9C87" Id="7D9599FC"/>
+            <Parameter Type="Param" Library="EBBC9C87" Id="06B9D231"/>
+        </Element>
+        <Element Type="Param" Id="06B9D231">
+            <ParameterDef Type="ParamDef" Library="EBBC9C87" Id="42D74BA0"/>
+            <Parameter Type="ParamDef" Library="EBBC9C87" Id="9EB92A76"/>
         </Element>
         <Element Type="FunctionDef" Id="708791B9">
             <NotYetImplemented/>
@@ -895,7 +946,10 @@
         <Element Type="Category" Id="C4A009C5">
             <Item Type="Preset" Library="EBBC9C87" Id="FAFF42F4"/>
             <Item Type="FunctionDef" Library="EBBC9C87" Id="E457191B"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="9FC0D941"/>
             <Item Type="FunctionDef" Library="EBBC9C87" Id="2EE638E6"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="5E9B550A"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="200BB05F"/>
             <Item Type="FunctionDef" Library="EBBC9C87" Id="D1FDC523"/>
             <Item Type="FunctionDef" Library="EBBC9C87" Id="EEFB4CD2"/>
             <Item Type="FunctionDef" Library="EBBC9C87" Id="6A5A1743"/>
@@ -925,6 +979,15 @@
             <FlagEvent/>
             <FlagNative/>
         </Element>
+        <Element Type="FunctionDef" Id="9FC0D941">
+            <Identifier>sf_envi_event_param_button_chalenge_id</Identifier>
+            <FlagCall/>
+            <FlagNative/>
+            <ReturnType>
+                <Type Value="int"/>
+            </ReturnType>
+            <EventResponse Type="FunctionDef" Library="EBBC9C87" Id="E457191B"/>
+        </Element>
         <Element Type="FunctionDef" Id="2EE638E6">
             <Identifier>sf_envi_event_param_button_state</Identifier>
             <FlagCall/>
@@ -932,6 +995,25 @@
             <ReturnType>
                 <Type Value="preset"/>
                 <TypeElement Type="Preset" Library="EBBC9C87" Id="FAFF42F4"/>
+            </ReturnType>
+            <EventResponse Type="FunctionDef" Library="EBBC9C87" Id="E457191B"/>
+        </Element>
+        <Element Type="FunctionDef" Id="5E9B550A">
+            <Identifier>sf_envi_event_param_button</Identifier>
+            <FlagCall/>
+            <FlagNative/>
+            <ReturnType>
+                <Type Value="preset"/>
+                <TypeElement Type="Preset" Library="EBBC9C87" Id="51338C5D"/>
+            </ReturnType>
+            <EventResponse Type="FunctionDef" Library="EBBC9C87" Id="E457191B"/>
+        </Element>
+        <Element Type="FunctionDef" Id="200BB05F">
+            <Identifier>sf_envi_event_param_button_player</Identifier>
+            <FlagCall/>
+            <FlagNative/>
+            <ReturnType>
+                <Type Value="int"/>
             </ReturnType>
             <EventResponse Type="FunctionDef" Library="EBBC9C87" Id="E457191B"/>
         </Element>
@@ -12944,7 +13026,7 @@
             <SubFunctionType Type="SubFuncType" Library="Ntve" Id="00000004"/>
             <Parameter Type="Param" Library="3FB28C60" Id="8C0446B9"/>
             <Parameter Type="Param" Library="3FB28C60" Id="D9742F68"/>
-            <FunctionCall Type="FunctionCall" Library="3FB28C60" Id="64DE4C58"/>
+            <FunctionCall Type="FunctionCall" Library="3FB28C60" Id="E5612CBE"/>
         </Element>
         <Element Type="Param" Id="8C0446B9">
             <ParameterDef Type="ParamDef" Library="Ntve" Id="00000618"/>
@@ -12957,12 +13039,14 @@
             <ParameterDef Type="ParamDef" Library="Ntve" Id="00000617"/>
             <Variable Type="Variable" Library="3FB28C60" Id="D3859FAD"/>
         </Element>
-        <Element Type="FunctionCall" Id="64DE4C58">
-            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000123"/>
+        <Element Type="FunctionCall" Id="E5612CBE">
+            <FunctionDef Type="FunctionDef" Library="EBBC9C87" Id="AAAF30C7"/>
             <SubFunctionType Type="SubFuncType" Library="Ntve" Id="00000007"/>
-            <ScriptCode>
-                hr_heroLevelUp( gm_players[gm_getPlayerByUnit(lv_unit)].hero );
-            </ScriptCode>
+            <Parameter Type="Param" Library="3FB28C60" Id="3C42D810"/>
+        </Element>
+        <Element Type="Param" Id="3C42D810">
+            <ParameterDef Type="ParamDef" Library="EBBC9C87" Id="C5C5B1DC"/>
+            <Variable Type="Variable" Library="3FB28C60" Id="D3859FAD"/>
         </Element>
         <Element Type="FunctionCall" Id="D09EF17C">
             <FunctionDef Type="FunctionDef" Library="Ntve" Id="C439C375"/>

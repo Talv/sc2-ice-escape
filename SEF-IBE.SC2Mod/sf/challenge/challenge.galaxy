@@ -334,7 +334,7 @@ bool lv_onEndLevel(bool testConds, bool runActions) {
     lv_justCompleted = true;
     lv_completedTotal += 1;
 
-    hr_heroLevelUp(hero);
+    sf_game_hero_grant_powerup(hero.mainUnit);
     UIDisplayMessage(
         PlayerGroupActive(),
         c_messageAreaSubtitle,

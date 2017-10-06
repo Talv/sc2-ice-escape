@@ -61,10 +61,6 @@ static bool sf_envi_button_change_state(int obj_id, bool activate, int player, f
         UnitBehaviorRemove(sf_envi_object_instances[obj_id].main_unit, "ButtonActive", 1);
     }
 
-    DataTableSetInt(false, TriggerEventParamName("sf_envi_ge_button_state_changed", "sf_envi_event_param_object"), obj_id);
-    DataTableSetInt(false, TriggerEventParamName("sf_envi_ge_button_state_changed", "sf_envi_event_param_button_state"), sf_bool_to_int(btn.pressed));
-    TriggerSendEvent("sf_envi_ge_button_state_changed");
-
     sf_core_event_prepare("button_state_changed");
     sf_core_event_set_int("challenge_id", lv_current);
     sf_core_event_set_int("button", obj_id);
@@ -232,12 +228,27 @@ void sf_envi_button_set_release_timeout(int obj_id, fixed timeout)
 
 void sf_envi_add_event_button_state_changed(trigger trig)
 {
-    TriggerAddEventGeneric(trig, "sf_envi_ge_button_state_changed");
+    sf_core_event_attach(trig, "button_state_changed");
+}
+
+int sf_envi_event_param_button_chalenge_id()
+{
+    return sf_core_event_get_int("challenge_id");
+}
+
+int sf_envi_event_param_button()
+{
+    return sf_core_event_get_int("button");
 }
 
 int sf_envi_event_param_button_state()
 {
-    return DataTableGetInt(false, TriggerEventParamName("sf_envi_ge_button_state_changed", "sf_envi_event_param_button_state"));
+    return sf_bool_to_int(sf_core_event_get_bool("state"));
+}
+
+int sf_envi_event_param_button_player()
+{
+    return sf_core_event_get_int("player");
 }
 
 bool sf_envi_on_button_push(bool test_conds, bool run_actions)
