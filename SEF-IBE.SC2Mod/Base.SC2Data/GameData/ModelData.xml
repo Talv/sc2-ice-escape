@@ -401,4 +401,36 @@
     <CModel id="VoidSeekerSpeedShadow">
         <Model value="Assets\Effects\Protoss\NullifierBeamImpact\NullifierBeamImpact.m3"/>
     </CModel>
+
+    <!-- Glazes -->
+    <CModel id="Storm_Glaze_BlackArrow_TangentSpace">
+        <Model value="Assets/Glazes/Storm_Glaze_BlackArrow_TangentSpace.m3"/>
+    </CModel>
+    <CModel id="Storm_Glaze_Crusader_Base_FallingSword">
+        <Model value="Assets/Glazes/Storm_Glaze_Crusader_Base_FallingSword.m3"/>
+    </CModel>
+    <CModel id="Storm_Glaze_Kaelthas_Base_LivingBomb">
+        <Model value="Assets/Glazes/Storm_Glaze_Kaelthas_Base_LivingBomb.m3"/>
+    </CModel>
+    <CModel id="Storm_Glaze_Nova_Novazon_Decoy">
+        <Model value="Assets/Glazes/Storm_Glaze_Nova_Novazon_Decoy.m3"/>
+    </CModel>
+    <CModel id="Glaze_Tech">
+        <Model value="Assets/Glazes/Glaze_Tech.m3"/>
+    </CModel>
+    <CModel id="Glaze_Tech_Scales_Blue1">
+        <Model value="Assets/Glazes/Glaze_Tech_Scales_Blue1.m3"/>
+    </CModel>
+    <CModel id="Caev_Glaze_Rainbow_Orange">
+        <Model value="Assets/Glazes/Caev_Glaze_Rainbow_Orange.m3"/>
+    </CModel>
+    <CModel id="Caev_Glaze_Rainbow_Purple">
+        <Model value="Assets/Glazes/Caev_Glaze_Rainbow_Purple.m3"/>
+    </CModel>
+    <CModel id="Caev_Glaze_Camouflage">
+        <Model value="Assets/Glazes/Caev_Glaze_Camouflage.m3"/>
+    </CModel>
+    <CModel id="Caev_Glaze_Terrain">
+        <Model value="Assets/Glazes/Caev_Glaze_Terrain.m3"/>
+    </CModel>
 </Catalog>

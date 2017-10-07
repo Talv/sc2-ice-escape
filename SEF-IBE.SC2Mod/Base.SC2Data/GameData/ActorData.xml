@@ -2945,4 +2945,22 @@
         <Baselines index="Walk" AnimProps=""/>
         <WalkAnimMoveSpeed value="0"/>
     </CActorUnit>
+
+    <!-- Glazes -->
+    <CActorModelMaterial default="1" id="SfGlaze" parent="BuffContinuous">
+        <Inherits index="CloakEffect" value="0"/>
+        <Inherits index="Decal" value="0"/>
+        <Inherits index="Visibility" value="0"/>
+        <ModelFlags index="AutomateGlobalLoops" value="1"/>
+    </CActorModelMaterial>
+    <CActorModelMaterial id="Storm_Glaze_BlackArrow_TangentSpace" parent="SfGlaze" />
+    <CActorModelMaterial id="Storm_Glaze_Crusader_Base_FallingSword" parent="SfGlaze" />
+    <CActorModelMaterial id="Storm_Glaze_Kaelthas_Base_LivingBomb" parent="SfGlaze" />
+    <CActorModelMaterial id="Storm_Glaze_Nova_Novazon_Decoy" parent="SfGlaze" />
+    <CActorModelMaterial id="Glaze_Tech" parent="SfGlaze" />
+    <CActorModelMaterial id="Glaze_Tech_Scales_Blue1" parent="SfGlaze" />
+    <CActorModelMaterial id="Caev_Glaze_Rainbow_Orange" parent="SfGlaze" />
+    <CActorModelMaterial id="Caev_Glaze_Rainbow_Purple" parent="SfGlaze" />
+    <CActorModelMaterial id="Caev_Glaze_Camouflage" parent="SfGlaze" />
+    <CActorModelMaterial id="Caev_Glaze_Terrain" parent="SfGlaze" />
 </Catalog>
