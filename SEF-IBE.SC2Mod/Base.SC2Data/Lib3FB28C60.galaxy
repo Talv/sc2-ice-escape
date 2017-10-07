@@ -43,6 +43,16 @@ void lib3FB28C60_InitCustomScript () {
 
 // Presets
 // Functions
+int lib3FB28C60_gf_sfiTriggeringRewardId () {
+    // Implementation
+    return sf_core_event_get_int("reward_id");
+}
+
+int lib3FB28C60_gf_sfiTriggeringRewardKind () {
+    // Implementation
+    return sf_core_event_get_int("reward_kind");
+}
+
 fixed lib3FB28C60_gf_CircumferenceOfCircle (fixed lp_radius) {
     // Implementation
     return (lp_radius * 2.0 * lib3FB28C60_gv_pI);

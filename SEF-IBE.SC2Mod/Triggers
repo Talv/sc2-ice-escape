@@ -31,6 +31,13 @@
         <Element Type="Category" Id="D61F4646">
             <Item Type="Preset" Library="EBBC9C87" Id="A56FA896"/>
             <Item Type="FunctionDef" Library="EBBC9C87" Id="C6A645FA"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="9176F47D"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="B9A01A0C"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="40C6A10E"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="D6D5B3E5"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="911327F4"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="5C98FC86"/>
+            <Item Type="Category" Library="EBBC9C87" Id="B90F8DAB"/>
         </Element>
         <Element Type="Preset" Id="A56FA896">
             <PresetCustom/>
@@ -48,6 +55,113 @@
             <Identifier>sf_core_bootstrap</Identifier>
             <FlagAction/>
             <FlagNative/>
+        </Element>
+        <Element Type="FunctionDef" Id="9176F47D">
+            <Identifier>sf_core_event_get_string</Identifier>
+            <FlagCall/>
+            <FlagNative/>
+            <ReturnType>
+                <Type Value="string"/>
+            </ReturnType>
+            <Parameter Type="ParamDef" Library="EBBC9C87" Id="CC679E43"/>
+        </Element>
+        <Element Type="ParamDef" Id="CC679E43">
+            <ParameterType>
+                <Type Value="string"/>
+            </ParameterType>
+        </Element>
+        <Element Type="FunctionDef" Id="B9A01A0C">
+            <Identifier>sf_core_event_get_int</Identifier>
+            <FlagCall/>
+            <FlagNative/>
+            <ReturnType>
+                <Type Value="int"/>
+            </ReturnType>
+            <Parameter Type="ParamDef" Library="EBBC9C87" Id="9D0186E0"/>
+        </Element>
+        <Element Type="ParamDef" Id="9D0186E0">
+            <ParameterType>
+                <Type Value="string"/>
+            </ParameterType>
+        </Element>
+        <Element Type="FunctionDef" Id="40C6A10E">
+            <Identifier>sf_core_event_get_fixed</Identifier>
+            <FlagCall/>
+            <FlagNative/>
+            <ReturnType>
+                <Type Value="fixed"/>
+            </ReturnType>
+            <Parameter Type="ParamDef" Library="EBBC9C87" Id="8272172D"/>
+        </Element>
+        <Element Type="ParamDef" Id="8272172D">
+            <ParameterType>
+                <Type Value="string"/>
+            </ParameterType>
+        </Element>
+        <Element Type="FunctionDef" Id="D6D5B3E5">
+            <Identifier>sf_core_event_get_bool</Identifier>
+            <FlagCall/>
+            <FlagNative/>
+            <ReturnType>
+                <Type Value="bool"/>
+            </ReturnType>
+            <Parameter Type="ParamDef" Library="EBBC9C87" Id="6ECC90AA"/>
+        </Element>
+        <Element Type="ParamDef" Id="6ECC90AA">
+            <ParameterType>
+                <Type Value="string"/>
+            </ParameterType>
+        </Element>
+        <Element Type="FunctionDef" Id="911327F4">
+            <Identifier>sf_core_event_get_unit</Identifier>
+            <FlagCall/>
+            <FlagNative/>
+            <ReturnType>
+                <Type Value="unit"/>
+            </ReturnType>
+            <Parameter Type="ParamDef" Library="EBBC9C87" Id="8346C445"/>
+        </Element>
+        <Element Type="ParamDef" Id="8346C445">
+            <ParameterType>
+                <Type Value="string"/>
+            </ParameterType>
+        </Element>
+        <Element Type="FunctionDef" Id="5C98FC86">
+            <Identifier>sf_core_event_get_point</Identifier>
+            <FlagCall/>
+            <FlagNative/>
+            <ReturnType>
+                <Type Value="point"/>
+            </ReturnType>
+            <Parameter Type="ParamDef" Library="EBBC9C87" Id="EEBE3B79"/>
+        </Element>
+        <Element Type="ParamDef" Id="EEBE3B79">
+            <ParameterType>
+                <Type Value="string"/>
+            </ParameterType>
+        </Element>
+        <Element Type="Category" Id="B90F8DAB">
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="5E6D4C88"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="1BE2C7EF"/>
+        </Element>
+        <Element Type="FunctionDef" Id="5E6D4C88">
+            <Identifier>sf_event_param_player</Identifier>
+            <FlagCall/>
+            <FlagNative/>
+            <ReturnType>
+                <Type Value="int"/>
+            </ReturnType>
+            <EventResponse Type="FunctionDef" Library="EBBC9C87" Id="FAAD1334"/>
+            <EventResponse Type="FunctionDef" Library="3FB28C60" Id="334093DA"/>
+        </Element>
+        <Element Type="FunctionDef" Id="1BE2C7EF">
+            <Identifier>sf_event_param_hero_unit</Identifier>
+            <FlagCall/>
+            <FlagNative/>
+            <ReturnType>
+                <Type Value="unit"/>
+            </ReturnType>
+            <EventResponse Type="FunctionDef" Library="EBBC9C87" Id="FAAD1334"/>
         </Element>
         <Element Type="Category" Id="01B7E3B1">
             <Item Type="FunctionDef" Library="EBBC9C87" Id="97487C59"/>
@@ -289,6 +403,8 @@
             <Item Type="FunctionDef" Library="EBBC9C87" Id="86476748"/>
             <Item Type="FunctionDef" Library="EBBC9C87" Id="34FA57DF"/>
             <Item Type="FunctionDef" Library="EBBC9C87" Id="AAAF30C7"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="958D9FAE"/>
+            <Item Type="FunctionDef" Library="EBBC9C87" Id="FAAD1334"/>
         </Element>
         <Element Type="FunctionDef" Id="C1BD3FD4">
             <Identifier>sf_game_hero_get_unit</Identifier>
@@ -357,6 +473,40 @@
         </Element>
         <Element Type="FunctionCall" Id="F1DB7790">
             <FunctionDef Type="FunctionDef" Library="EBBC9C87" Id="C1BD3FD4"/>
+        </Element>
+        <Element Type="FunctionDef" Id="958D9FAE">
+            <Identifier>sf_hero_revive</Identifier>
+            <FlagAction/>
+            <FlagNative/>
+            <Parameter Type="ParamDef" Library="EBBC9C87" Id="2334A34C"/>
+            <Parameter Type="ParamDef" Library="EBBC9C87" Id="130D8C23"/>
+        </Element>
+        <Element Type="ParamDef" Id="2334A34C">
+            <ParameterType>
+                <Type Value="unit"/>
+            </ParameterType>
+            <Default Type="Param" Library="EBBC9C87" Id="109B95F5"/>
+        </Element>
+        <Element Type="Param" Id="109B95F5">
+            <FunctionCall Type="FunctionCall" Library="EBBC9C87" Id="BE665C7E"/>
+        </Element>
+        <Element Type="FunctionCall" Id="BE665C7E">
+            <FunctionDef Type="FunctionDef" Library="EBBC9C87" Id="C1BD3FD4"/>
+        </Element>
+        <Element Type="ParamDef" Id="130D8C23">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+            <Default Type="Param" Library="EBBC9C87" Id="A59BB540"/>
+        </Element>
+        <Element Type="Param" Id="A59BB540">
+            <Value>-1</Value>
+            <ValueType Type="int"/>
+        </Element>
+        <Element Type="FunctionDef" Id="FAAD1334">
+            <Identifier>sf_game_add_event_hero_spawn</Identifier>
+            <FlagEvent/>
+            <FlagNative/>
         </Element>
         <Element Type="Category" Id="91BF0BF0">
             <Item Type="FunctionDef" Library="EBBC9C87" Id="8D795C9F"/>
@@ -3812,6 +3962,7 @@
     </Library>
     <Library Id="3FB28C60">
         <Root>
+            <Item Type="Category" Library="3FB28C60" Id="4B33AC3F"/>
             <Item Type="Category" Library="3FB28C60" Id="48E6B664"/>
             <Item Type="Category" Library="3FB28C60" Id="0D70C986"/>
             <Item Type="Category" Library="3FB28C60" Id="3A26E757"/>
@@ -3829,6 +3980,50 @@
             <Item Type="Category" Library="3FB28C60" Id="5C07F3AC"/>
             <Item Type="CustomScript" Library="3FB28C60" Id="99A582BD"/>
         </Root>
+        <Element Type="Category" Id="4B33AC3F">
+            <Item Type="FunctionDef" Library="3FB28C60" Id="138BEC60"/>
+            <Item Type="FunctionDef" Library="3FB28C60" Id="2D74C941"/>
+        </Element>
+        <Element Type="FunctionDef" Id="138BEC60">
+            <FlagCall/>
+            <ReturnType>
+                <Type Value="preset"/>
+                <TypeElement Type="Preset" Library="3FB28C60" Id="2984C84E"/>
+            </ReturnType>
+            <FunctionCall Type="FunctionCall" Library="3FB28C60" Id="A3E4BD38"/>
+            <EventResponse Type="FunctionDef" Library="3FB28C60" Id="334093DA"/>
+        </Element>
+        <Element Type="FunctionCall" Id="A3E4BD38">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000097"/>
+            <Parameter Type="Param" Library="3FB28C60" Id="FD152D3B"/>
+        </Element>
+        <Element Type="Param" Id="FD152D3B">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000488"/>
+            <CustomType Type="preset"/>
+            <ScriptCode>
+                sf_core_event_get_int(&quot;reward_id&quot;)
+            </ScriptCode>
+        </Element>
+        <Element Type="FunctionDef" Id="2D74C941">
+            <FlagCall/>
+            <ReturnType>
+                <Type Value="preset"/>
+                <TypeElement Type="Preset" Library="3FB28C60" Id="E5E96A5B"/>
+            </ReturnType>
+            <FunctionCall Type="FunctionCall" Library="3FB28C60" Id="92A202C0"/>
+            <EventResponse Type="FunctionDef" Library="3FB28C60" Id="334093DA"/>
+        </Element>
+        <Element Type="FunctionCall" Id="92A202C0">
+            <FunctionDef Type="FunctionDef" Library="Ntve" Id="00000097"/>
+            <Parameter Type="Param" Library="3FB28C60" Id="5CD1102F"/>
+        </Element>
+        <Element Type="Param" Id="5CD1102F">
+            <ParameterDef Type="ParamDef" Library="Ntve" Id="00000488"/>
+            <CustomType Type="preset"/>
+            <ScriptCode>
+                sf_core_event_get_int(&quot;reward_kind&quot;)
+            </ScriptCode>
+        </Element>
         <Element Type="Category" Id="48E6B664">
             <Item Type="FunctionDef" Library="3FB28C60" Id="C8698784"/>
             <Item Type="FunctionDef" Library="3FB28C60" Id="AA46EE11"/>
@@ -14414,20 +14609,31 @@
             <Item Type="Preset" Library="3FB28C60" Id="2984C84E"/>
             <Item Type="Preset" Library="3FB28C60" Id="E5E96A5B"/>
             <Item Type="FunctionDef" Library="3FB28C60" Id="01AF891D"/>
+            <Item Type="FunctionDef" Library="3FB28C60" Id="C8128393"/>
             <Item Type="FunctionDef" Library="3FB28C60" Id="08E58BFF"/>
+            <Item Type="FunctionDef" Library="3FB28C60" Id="4D9B715F"/>
+            <Item Type="FunctionDef" Library="3FB28C60" Id="DA124308"/>
             <Item Type="FunctionDef" Library="3FB28C60" Id="334093DA"/>
         </Element>
         <Element Type="Preset" Id="2984C84E">
-            <PresetInteger/>
+            <PresetCustom/>
             <BaseType Value="int"/>
             <PresetGenConstVar/>
+            <Item Type="PresetValue" Library="3FB28C60" Id="7F10CCE9"/>
+        </Element>
+        <Element Type="PresetValue" Id="7F10CCE9">
+            <Value>-1</Value>
         </Element>
         <Element Type="Preset" Id="E5E96A5B">
             <PresetCustom/>
             <BaseType Value="int"/>
             <PresetGenConstVar/>
+            <Item Type="PresetValue" Library="3FB28C60" Id="6F82E13A"/>
             <Item Type="PresetValue" Library="3FB28C60" Id="A8CEC833"/>
             <Item Type="PresetValue" Library="3FB28C60" Id="2FEB1B8D"/>
+        </Element>
+        <Element Type="PresetValue" Id="6F82E13A">
+            <Value>-1</Value>
         </Element>
         <Element Type="PresetValue" Id="A8CEC833">
             <Value>IBE_REWARD_KIND_GLAZE</Value>
@@ -14493,8 +14699,13 @@
         <Element Type="Param" Id="68105E4C">
             <Preset Type="PresetValue" Library="Ntve" Id="C9DCA6C0"/>
         </Element>
+        <Element Type="FunctionDef" Id="C8128393">
+            <Identifier>sfi_reward_players_loadup</Identifier>
+            <FlagAction/>
+            <FlagNative/>
+        </Element>
         <Element Type="FunctionDef" Id="08E58BFF">
-            <Identifier>sfi_reward_unlock_for_player</Identifier>
+            <Identifier>sfi_reward_player_unlock_reward</Identifier>
             <FlagAction/>
             <FlagNative/>
             <Parameter Type="ParamDef" Library="3FB28C60" Id="83554F24"/>
@@ -14509,6 +14720,49 @@
         <Element Type="ParamDef" Id="ECABAF32">
             <ParameterType>
                 <Type Value="int"/>
+            </ParameterType>
+        </Element>
+        <Element Type="FunctionDef" Id="4D9B715F">
+            <Identifier>sfi_reward_player_has_reward</Identifier>
+            <FlagCall/>
+            <FlagNative/>
+            <ReturnType>
+                <Type Value="bool"/>
+            </ReturnType>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="B4F24186"/>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="889D100A"/>
+        </Element>
+        <Element Type="ParamDef" Id="B4F24186">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+        </Element>
+        <Element Type="ParamDef" Id="889D100A">
+            <ParameterType>
+                <Type Value="preset"/>
+                <TypeElement Type="Preset" Library="3FB28C60" Id="E5E96A5B"/>
+            </ParameterType>
+        </Element>
+        <Element Type="FunctionDef" Id="DA124308">
+            <Identifier>sfi_reward_player_get_active_reward</Identifier>
+            <FlagCall/>
+            <FlagNative/>
+            <ReturnType>
+                <Type Value="preset"/>
+                <TypeElement Type="Preset" Library="3FB28C60" Id="2984C84E"/>
+            </ReturnType>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="13137FAA"/>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="1EB3D9E9"/>
+        </Element>
+        <Element Type="ParamDef" Id="13137FAA">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+        </Element>
+        <Element Type="ParamDef" Id="1EB3D9E9">
+            <ParameterType>
+                <Type Value="preset"/>
+                <TypeElement Type="Preset" Library="3FB28C60" Id="E5E96A5B"/>
             </ParameterType>
         </Element>
         <Element Type="FunctionDef" Id="334093DA">

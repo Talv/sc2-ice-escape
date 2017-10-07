@@ -24,6 +24,8 @@ void sf_game_finalize(int player);
 void gm_spawnHero(structref<HERO> hero, int reason);
 void gm_spawnPlayers();
 
+void sf_game_add_event_hero_spawn(trigger trig);
+
 //
 // HERO
 //

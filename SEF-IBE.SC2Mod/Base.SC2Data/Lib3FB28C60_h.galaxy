@@ -47,6 +47,8 @@ int lib3FB28C60_gv_numoflevelsstartedtotal;
 lib3FB28C60_gs_StartupParametersType lib3FB28C60_gv_iBELaunchParameters;
 
 // Function Declarations
+int lib3FB28C60_gf_sfiTriggeringRewardId ();
+int lib3FB28C60_gf_sfiTriggeringRewardKind ();
 fixed lib3FB28C60_gf_CircumferenceOfCircle (fixed lp_radius);
 fixed lib3FB28C60_gf_PercentValueToMultiplierFactor (fixed lp_perecent);
 void lib3FB28C60_gf_RegisterTriggerAsTemporaryForCurrentChallenge (trigger lp_trig);

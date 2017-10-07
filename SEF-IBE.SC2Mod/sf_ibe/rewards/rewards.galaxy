@@ -3,8 +3,22 @@ bool sfi_reward_register(int reward_id, int kind, bool exclusive, text title, te
     return false;
 }
 
-void sfi_reward_unlock_for_player(int reward_id, int player_id)
+void sfi_reward_players_loadup()
 {
+}
+
+void sfi_reward_player_unlock_reward(int player_id, int reward_id)
+{
+}
+
+bool sfi_reward_player_has_reward(int player_id, int reward_id)
+{
+    return false;
+}
+
+int sfi_reward_player_get_active_reward(int player_id, int reward_kind)
+{
+    return -1;
 }
 
 void sfi_reward_add_event_activation(trigger trig)

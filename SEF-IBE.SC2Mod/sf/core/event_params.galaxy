@@ -1,0 +1,9 @@
+int sf_event_param_player()
+{
+    return sf_core_event_get_int("player");
+}
+
+unit sf_event_param_hero_unit()
+{
+    return sf_core_event_get_unit("hero_unit");
+}

@@ -149,6 +149,16 @@ void gm_spawnHero(structref<HERO> hero, int reason) {
         RandomFixed(-180.0, 180.0),
         reason
     );
+
+    sf_core_event_prepare("sf_hero_spawn");
+    sf_core_event_set_int("player", hero.player);
+    sf_core_event_set_unit("hero_unit", hero.mainUnit);
+    sf_core_event_send();
+}
+
+void sf_game_add_event_hero_spawn(trigger trig)
+{
+    sf_core_event_attach(trig, "sf_hero_spawn");
 }
 
 // new:
@@ -265,6 +275,11 @@ void hr_revive(int revivingPlayer, structref<HERO> hero, bool spawnHero) {
         sf_stat_session_stats[revivingPlayer].revives += 1;
         sf_stat_session_expire(revivingPlayer);
     }
+}
+
+void sf_hero_revive(unit hero_unit, int reviving_player)
+{
+    hr_revive(reviving_player, gm_players[UnitGetOwner(hero_unit)].hero, true);
 }
 
 //
