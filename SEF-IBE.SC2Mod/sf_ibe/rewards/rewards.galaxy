@@ -29,10 +29,10 @@ void sfi_reward_player_unlock_reward(int player, int reward_id)
     if (reward.kind == -1) { return; }
 
     // TODO: until selection UI is done most recently unlocked reward will be selected
-    ibe_stat_profiles[player].rewards_choice[player] = reward_id;
+    ibe_stat_profiles[player].rewards_choice[reward.kind] = reward_id;
 
-    if (ibe_stat_profiles[player].rewards_choice[player] == -1) {
-        ibe_stat_profiles[player].rewards_choice[player] = reward_id;
+    if (ibe_stat_profiles[player].rewards_choice[reward.kind] == -1) {
+        ibe_stat_profiles[player].rewards_choice[reward.kind] = reward_id;
         sf_core_event_prepare("reward_activation");
         sf_core_event_set_int("reward_id", reward_id);
         sf_core_event_set_int("reward_kind", reward.kind);
