@@ -6,9 +6,9 @@ include "sf_ibe/common.galaxy"
 // include "sf_ibe/svs/_mod"
 include "sf_ibe/db/_mod"
 include "sf_ibe/ui/_mod"
+include "sf_ibe/rewards/_mod"
 include "sf_ibe/stats/_mod"
 include "sf_ibe/menu/_mod.galaxy"
-include "sf_ibe/rewards/_mod"
 
 //
 // DEFINITIONS

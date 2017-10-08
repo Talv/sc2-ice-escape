@@ -1,4 +1,5 @@
 const int IBE_REWARD_MAX = 64;
+const int IBE_REWARD_KIND_MAX = 8;
 
 const int IBE_REWARD_KIND_GLAZE = 1;
 const int IBE_REWARD_KIND_SKIN = 2;
@@ -9,8 +10,4 @@ struct ibe_reward_t {
     text title;
     text desc;
     string icon;
-};
-
-struct ibe_reward_player_t {
-    bool[IBE_REWARD_MAX] rewards;
 };

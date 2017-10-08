@@ -116,6 +116,26 @@ void db_stream_init(structref<db_stream_t> stream)
     stream.values = 0;
 }
 
+void db_stream_load(structref<db_stream_t> stream, string buff)
+{
+    string search_buff;
+    int loc;
+
+    stream.buff = buff;
+    stream.values = 0;
+
+    search_buff = buff;
+    while (StringLength(search_buff) > 0) {
+        stream.values += 1;
+        loc = StringFind(search_buff, DB_STREAM_DELIMETER, false);
+        if (loc == c_stringNotFound) {
+            break;
+        }
+
+        search_buff = StringSub(search_buff, loc + 1, StringLength(search_buff));
+    }
+}
+
 string db_stream_pop_chunk(structref<db_stream_t> stream)
 {
     string chunk;

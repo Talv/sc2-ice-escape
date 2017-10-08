@@ -24,6 +24,14 @@ static void profile_save_to_stream(structref<db_stream_t> stream, structref<ibe_
     for (i = 0; i < IBE_STAT_ABIL_MAX; i += 1) {
         db_stream_push_int(stream, prof.abils[i]);
     }
+
+    // rewards
+    for (i = 0; i < IBE_REWARD_MAX; i += 1) {
+        db_stream_push_bool(stream, prof.rewards_unlocked[i]);
+    }
+    for (i = 0; i < IBE_REWARD_KIND_MAX; i += 1) {
+        db_stream_push_int(stream, prof.rewards_choice[i]);
+    }
 }
 
 static void profile_load_from_stream(structref<db_stream_t> stream, structref<ibe_stat_profile_t> prof)
@@ -51,6 +59,14 @@ static void profile_load_from_stream(structref<db_stream_t> stream, structref<ib
 
     for (i = 0; i < IBE_STAT_ABIL_MAX; i += 1) {
         prof.abils[i] = db_stream_pop_int(stream);
+    }
+
+    // rewards
+    for (i = 0; i < IBE_REWARD_MAX; i += 1) {
+        prof.rewards_unlocked[i] = db_stream_pop_bool(stream);
+    }
+    for (i = 0; i < IBE_REWARD_KIND_MAX; i += 1) {
+        prof.rewards_choice[i] = db_stream_pop_int(stream);
     }
 }
 
@@ -117,6 +133,17 @@ bool ibe_stat_profile_storage_migrate(structref<db_stream_t> stream, int from_ve
         profile_save_to_stream(stream, prof);
     }
 
+    // introduce rewards
+    if (from_ver <= 7) {
+        for (i = 0; i < 64; i += 1) {
+            db_stream_push_bool(stream, false);
+        }
+
+        for (i = 0; i < 8; i += 1) {
+            db_stream_push_int(stream, -1);
+        }
+    }
+
     return true;
 }
 
@@ -148,7 +175,7 @@ bool ibe_stat_profile_load(int player)
             return false;
         }
 
-        stream.buff = db_crypt_decrypt(ibe_stat_player_encryption_key(player), buff);
+        db_stream_load(stream, db_crypt_decrypt(ibe_stat_player_encryption_key(player), buff));
 
         version = BankValueGetAsInt(ibe_stat_profiles[player].storage, "profile", "v");
         if (version < IBE_STAT_PROFILE_CURRENT_VERSION) {

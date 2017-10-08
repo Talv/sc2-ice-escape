@@ -14609,7 +14609,6 @@
             <Item Type="Preset" Library="3FB28C60" Id="2984C84E"/>
             <Item Type="Preset" Library="3FB28C60" Id="E5E96A5B"/>
             <Item Type="FunctionDef" Library="3FB28C60" Id="01AF891D"/>
-            <Item Type="FunctionDef" Library="3FB28C60" Id="C8128393"/>
             <Item Type="FunctionDef" Library="3FB28C60" Id="08E58BFF"/>
             <Item Type="FunctionDef" Library="3FB28C60" Id="4D9B715F"/>
             <Item Type="FunctionDef" Library="3FB28C60" Id="DA124308"/>
@@ -14698,11 +14697,6 @@
         </Element>
         <Element Type="Param" Id="68105E4C">
             <Preset Type="PresetValue" Library="Ntve" Id="C9DCA6C0"/>
-        </Element>
-        <Element Type="FunctionDef" Id="C8128393">
-            <Identifier>sfi_reward_players_loadup</Identifier>
-            <FlagAction/>
-            <FlagNative/>
         </Element>
         <Element Type="FunctionDef" Id="08E58BFF">
             <Identifier>sfi_reward_player_unlock_reward</Identifier>

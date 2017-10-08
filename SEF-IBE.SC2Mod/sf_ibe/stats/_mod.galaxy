@@ -8,7 +8,7 @@ const int IBE_STAT_CHALLENGE_BUTTON_MAX = 8;
 //
 //
 
-const int IBE_STAT_PROFILE_CURRENT_VERSION = 7;
+const int IBE_STAT_PROFILE_CURRENT_VERSION = 8;
 
 const int IBE_STAT_PROFILE_ABIL_BOOST = 0;
 const int IBE_STAT_PROFILE_ABIL_CREEP = 1;
@@ -45,6 +45,9 @@ struct ibe_stat_profile_t {
     int[IBE_STAT_ABIL_MAX] abils;
 
     ibe_stat_profile_gmode_t[IBE_GM_MAX] gm;
+
+    bool[IBE_REWARD_MAX] rewards_unlocked;
+    int[IBE_REWARD_KIND_MAX] rewards_choice;
 };
 
 //

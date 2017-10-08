@@ -127,7 +127,6 @@ FunctionDef/Name/lib_3FB28C60_BD6B5C01=Spikes Create
 FunctionDef/Name/lib_3FB28C60_BE6B1EF3=Patrollers Line Chain Create
 FunctionDef/Name/lib_3FB28C60_C163688C=Stalker Zone Create
 FunctionDef/Name/lib_3FB28C60_C488C952=Modify Unit Speed By Percent
-FunctionDef/Name/lib_3FB28C60_C8128393=sfi Reward Players Loadup
 FunctionDef/Name/lib_3FB28C60_C8680CE9=IBE Menu Init
 FunctionDef/Name/lib_3FB28C60_C8698784=Circumference Of Circle
 FunctionDef/Name/lib_3FB28C60_CA24AD3F=Create Colored Zealot
