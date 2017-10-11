@@ -1,4 +1,4 @@
-static bool[MAX_PLAYERS][IBE_REWARD_MAX] sfi_reward_player_unlocked_temp;
+static bool[MAX_PLAYERS + 1][IBE_REWARD_MAX] sfi_reward_player_unlocked_temp;
 
 void sfi_reward_init()
 {
@@ -29,18 +29,25 @@ void sfi_reward_player_unlock_reward(int player, int reward_id)
     if (reward.kind == -1) { return; }
 
     // TODO: until selection UI is done most recently unlocked reward will be selected
-    ibe_stat_profiles[player].rewards_choice[reward.kind] = reward_id;
+    // if (ibe_stat_profiles[player].rewards_choice[reward.kind] == -1) {
+    // }
 
-    if (ibe_stat_profiles[player].rewards_choice[reward.kind] == -1) {
-        ibe_stat_profiles[player].rewards_choice[reward.kind] = reward_id;
-        sf_core_event_prepare("reward_activation");
-        sf_core_event_set_int("reward_id", reward_id);
-        sf_core_event_set_int("reward_kind", reward.kind);
-        sf_core_event_set_int("player", player);
-        sf_core_event_send();
-    }
+    ibe_stat_profiles[player].rewards_choice[reward.kind] = reward_id;
+    sf_core_event_prepare("reward_activation");
+    sf_core_event_set_int("reward_id", reward_id);
+    sf_core_event_set_int("reward_kind", reward.kind);
+    sf_core_event_set_int("player", player);
+    sf_core_event_send();
 
     if (!reward.exclusive) {
+        if (!ibe_stat_profiles[player].rewards_unlocked[reward_id]) {
+            UIDisplayMessage(
+                PlayerGroupActive(),
+                c_messageAreaSubtitle,
+                sf_player_name_colored(player) + StringToText(" has earned <c val=\"00ff00\">") + reward.title + StringToText("</c> glaze!")
+            );
+        }
+
         ibe_stat_profiles[player].rewards_unlocked[reward_id] = true;
         ibe_stat_profile_save(player);
     }
@@ -51,8 +58,6 @@ void sfi_reward_player_unlock_reward(int player, int reward_id)
 
 bool sfi_reward_player_has_reward(int player, int reward_id)
 {
-    if (PlayerType(player) != c_playerTypeUser) { return false; }
-
     if (sfi_rewards[reward_id].exclusive) {
         return sfi_reward_player_unlocked_temp[player][reward_id];
     }
@@ -63,9 +68,15 @@ bool sfi_reward_player_has_reward(int player, int reward_id)
 
 int sfi_reward_player_get_active_reward(int player, int reward_kind)
 {
-    if (PlayerType(player) != c_playerTypeUser) { return -1; }
+    int reward_id;
 
-    return ibe_stat_profiles[player].rewards_choice[player];
+    reward_id = ibe_stat_profiles[player].rewards_choice[reward_kind];
+
+    if (reward_id == -1 || !sfi_reward_player_has_reward(player, reward_id)) {
+        return -1;
+    }
+
+    return reward_id;
 }
 
 void sfi_reward_add_event_activation(trigger trig)

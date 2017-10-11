@@ -22,6 +22,7 @@ bool gm_onReleaseHero(bool testConds, bool runActions) {
 
 void gm_setHeroPosition(structref<HERO> hero, point position, fixed facing, int reason) {
     bool revived;
+    bool just_created = false;
 
     hero.supress_turn = false;
 
@@ -49,6 +50,8 @@ void gm_setHeroPosition(structref<HERO> hero, point position, fixed facing, int 
         UnitSelect(hero.mainUnit, UnitGetOwner(hero.mainUnit), true);
 
         TriggerAddEventUnitDied(hr_allocateTrigger(hero, "gm_onHeroDeath", false), UnitRefFromUnit(hero.mainUnit));
+
+        just_created = true;
     }
     if (!UnitIsValid(hero.guideUnit)) {
         UnitCreate(1, "IceBaneling2", c_unitCreateIgnorePlacement, hero.player, position, facing);
@@ -103,6 +106,13 @@ void gm_setHeroPosition(structref<HERO> hero, point position, fixed facing, int 
     UnitIssueOrder(hero.mainUnit, Order(AbilityCommand("stop", 0)), c_orderQueueReplace);
     UnitIssueOrder(hero.guideUnit, Order(AbilityCommand("stop", 0)), c_orderQueueReplace);
 
+    if (revived || just_created) {
+        sf_core_event_prepare("sf_hero_spawn");
+        sf_core_event_set_int("player", hero.player);
+        sf_core_event_set_unit("hero_unit", hero.mainUnit);
+        sf_core_event_send();
+    }
+
     if (revived) {
         Wait(0.0, c_timeGame);
 
@@ -149,11 +159,6 @@ void gm_spawnHero(structref<HERO> hero, int reason) {
         RandomFixed(-180.0, 180.0),
         reason
     );
-
-    sf_core_event_prepare("sf_hero_spawn");
-    sf_core_event_set_int("player", hero.player);
-    sf_core_event_set_unit("hero_unit", hero.mainUnit);
-    sf_core_event_send();
 }
 
 void sf_game_add_event_hero_spawn(trigger trig)

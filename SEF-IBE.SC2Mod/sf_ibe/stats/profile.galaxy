@@ -77,60 +77,8 @@ bool ibe_stat_profile_storage_migrate(structref<db_stream_t> stream, int from_ve
     int l;
     ibe_stat_profile_t prof;
 
-    if (from_ver <= 2) {
-        return false;
-    }
-
-    // broken fixed value serializing - overflow above ~128.0
-    if (from_ver <= 3) {
-        profile_load_from_stream(stream, prof);
-
-        for (i = 0; i < IBE_GM_MAX; i += 1) {
-            prof.gm[i].escape_best_time = 0.0;
-
-            for (l = 0; l < IBE_STAT_CHALLENGE_MAX; l += 1) {
-                if (prof.gm[i].chal[l].best_time >= 524287) {
-                    prof.gm[i].chal[l].best_time = 0;
-                    prof.gm[i].chal[l].completions = 0;
-                }
-                else {
-                    prof.gm[i].chal[l].best_time /= 4096.0;
-                }
-            }
-        }
-
-        db_stream_init(stream);
-        profile_save_to_stream(stream, prof);
-    }
-
-    // negative times?
-    if (from_ver <= 5) {
-        profile_load_from_stream(stream, prof);
-
-        for (i = 0; i < IBE_GM_MAX; i += 1) {
-            for (l = 0; l < IBE_STAT_CHALLENGE_MAX; l += 1) {
-                if (prof.gm[i].chal[l].best_time < 0) {
-                    prof.gm[i].chal[l].best_time = 0;
-                    prof.gm[i].chal[l].completions = 0;
-                }
-            }
-        }
-
-        db_stream_init(stream);
-        profile_save_to_stream(stream, prof);
-    }
-
-    // erase records from normal - speedy
     if (from_ver <= 6) {
-        profile_load_from_stream(stream, prof);
-
-        for (l = 0; l < IBE_STAT_CHALLENGE_MAX; l += 1) {
-            prof.gm[2].chal[l].best_time = 0;
-            prof.gm[2].chal[l].completions = 0;
-        }
-
-        db_stream_init(stream);
-        profile_save_to_stream(stream, prof);
+        return false;
     }
 
     // introduce rewards

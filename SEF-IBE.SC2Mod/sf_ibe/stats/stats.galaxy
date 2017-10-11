@@ -90,7 +90,9 @@ int ibe_stat_player_encryption_key(int player)
 {
     string phand;
 
-    phand = PlayerHandle(player);
+    if (PlayerType(player) != c_playerTypeNone) {
+        phand = PlayerHandle(player);
+    }
 
     if (phand == "") {
         // Dbg("[enckey] local");
@@ -102,12 +104,22 @@ int ibe_stat_player_encryption_key(int player)
     }
 }
 
+void ibe_stat_player_init(int player)
+{
+    int i;
+
+    for (i = 0; i < IBE_REWARD_KIND_MAX; i += 1) {
+        ibe_stat_profiles[player].rewards_choice[i] = -1;
+    }
+}
+
 bool ibe_stat_on_map_init(bool test_conds, bool run_actions)
 {
     int i;
     int player;
 
     for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        ibe_stat_player_init(i);
         if (PlayerType(i) != c_playerTypeUser) { continue; }
         if (PlayerStatus(i) != c_playerStatusActive) { continue; }
         PlayerGroupAdd(ibe_stat_profile_pgroup, i);

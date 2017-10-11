@@ -14702,18 +14702,18 @@
             <Identifier>sfi_reward_player_unlock_reward</Identifier>
             <FlagAction/>
             <FlagNative/>
-            <Parameter Type="ParamDef" Library="3FB28C60" Id="83554F24"/>
             <Parameter Type="ParamDef" Library="3FB28C60" Id="ECABAF32"/>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="83554F24"/>
+        </Element>
+        <Element Type="ParamDef" Id="ECABAF32">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
         </Element>
         <Element Type="ParamDef" Id="83554F24">
             <ParameterType>
                 <Type Value="preset"/>
                 <TypeElement Type="Preset" Library="3FB28C60" Id="2984C84E"/>
-            </ParameterType>
-        </Element>
-        <Element Type="ParamDef" Id="ECABAF32">
-            <ParameterType>
-                <Type Value="int"/>
             </ParameterType>
         </Element>
         <Element Type="FunctionDef" Id="4D9B715F">
