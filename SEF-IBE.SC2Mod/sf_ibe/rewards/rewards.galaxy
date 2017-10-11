@@ -41,8 +41,13 @@ void sfi_reward_player_unlock_reward(int player, int reward_id)
 
     if (!reward.exclusive) {
         if (!ibe_stat_profiles[player].rewards_unlocked[reward_id]) {
+            libNtve_gf_CreateModelWithPointFacing("HybridWarpInEffect", libNtve_gf_PointFromPositionAndAngle(libNtve_gf_PointWithZOffset(UnitGetPosition(gm_players[player].hero.mainUnit), 0.0), UnitGetFacing(gm_players[player].hero.mainUnit)));
+            libNtve_gf_PlayAnimation(libNtve_gf_ActorLastCreated(), c_animNameDefault, "Stand", 0, c_animTimeDefault);
+            ActorSend(libNtve_gf_ActorLastCreated(), "SetOpacity 0.000000 1.475000");
+
+            SoundPlay(SoundLink("AbathurA_EvolutionComplete", 0), PlayerGroupAll(), 120.0, 0.0);
             UIDisplayMessage(
-                PlayerGroupActive(),
+                PlayerGroupAll(),
                 c_messageAreaSubtitle,
                 sf_player_name_colored(player) + StringToText(" has earned <c val=\"00ff00\">") + reward.title + StringToText("</c> glaze!")
             );
