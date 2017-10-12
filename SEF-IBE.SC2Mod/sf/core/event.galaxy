@@ -7,7 +7,7 @@ void sf_core_event_prepare(string name)
 
 void sf_core_event_send()
 {
-    Dbg("[core/event] emitting: " + sf_core_event_current);
+    Dbg("[event/send] emitting: " + sf_core_event_current);
     TriggerSendEvent(sf_core_event_current);
     sf_core_event_current = null;
 }
@@ -19,6 +19,7 @@ void sf_core_event_attach(trigger trig, string name)
 
 void sf_core_event_set_string(string param, string value)
 {
+    Dbg("[event/string] set " + param + " = " + value);
     DataTableSetString(false, TriggerEventParamName(sf_core_event_current, param), value);
 }
 
@@ -29,6 +30,7 @@ string sf_core_event_get_string(string param)
 
 void sf_core_event_set_int(string param, int value)
 {
+    Dbg("[event/int] set " + param + " = " + IntToString(value));
     DataTableSetInt(false, TriggerEventParamName(sf_core_event_current, param), value);
 }
 
@@ -39,6 +41,7 @@ int sf_core_event_get_int(string param)
 
 void sf_core_event_set_fixed(string param, fixed value)
 {
+    Dbg("[event/fixed] set " + param + " = " + FixedToString(value, -1));
     DataTableSetFixed(false, TriggerEventParamName(sf_core_event_current, param), value);
 }
 
@@ -49,6 +52,7 @@ fixed sf_core_event_get_fixed(string param)
 
 void sf_core_event_set_bool(string param, bool value)
 {
+    Dbg("[event/bool] set " + param + " = " + libNtve_gf_ConvertBooleanToString(value));
     DataTableSetBool(false, TriggerEventParamName(sf_core_event_current, param), value);
 }
 
@@ -59,6 +63,7 @@ bool sf_core_event_get_bool(string param)
 
 void sf_core_event_set_unit(string param, unit value)
 {
+    DbgText(StringToText("[event/unit] set " + param + " = ") + UnitGetName(value));
     DataTableSetUnit(false, TriggerEventParamName(sf_core_event_current, param), value);
 }
 
@@ -69,6 +74,7 @@ unit sf_core_event_get_unit(string param)
 
 void sf_core_event_set_point(string param, point value)
 {
+    Dbg("[event/point] set " + param + " = " + sf_point_to_string(value));
     DataTableSetPoint(false, TriggerEventParamName(sf_core_event_current, param), value);
 }
 

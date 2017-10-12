@@ -26,7 +26,11 @@ void sfi_reward_player_unlock_reward(int player, int reward_id)
 
     reward = sfi_rewards[reward_id];
 
-    if (reward.kind == -1) { return; }
+    Dbg("[reward/player_unlock_reward] p = " + IntToString(player) + " ; r_id = " + IntToString(reward_id) + " ; r_kind = " + IntToString(reward.kind));
+
+    if (reward.kind == -1) {
+        return;
+    }
 
     // TODO: until selection UI is done most recently unlocked reward will be selected
     // if (ibe_stat_profiles[player].rewards_choice[reward.kind] == -1) {
@@ -64,9 +68,11 @@ void sfi_reward_player_unlock_reward(int player, int reward_id)
 bool sfi_reward_player_has_reward(int player, int reward_id)
 {
     if (sfi_rewards[reward_id].exclusive) {
+        Dbg("[reward/player_has_reward] p = " + IntToString(player) + " ; r_id = " + IntToString(reward_id) + " ; rval = " + libNtve_gf_ConvertBooleanToString(sfi_reward_player_unlocked_temp[player][reward_id]) + " [EXC]");
         return sfi_reward_player_unlocked_temp[player][reward_id];
     }
     else {
+        Dbg("[reward/player_has_reward] p = " + IntToString(player) + " ; rval = " + libNtve_gf_ConvertBooleanToString(ibe_stat_profiles[player].rewards_unlocked[reward_id]) + " [NON-EXC]");
         return ibe_stat_profiles[player].rewards_unlocked[reward_id];
     }
 }
@@ -76,6 +82,8 @@ int sfi_reward_player_get_active_reward(int player, int reward_kind)
     int reward_id;
 
     reward_id = ibe_stat_profiles[player].rewards_choice[reward_kind];
+
+    Dbg("[reward/player_get_active] p = " + IntToString(player) + " ; r_kind = " + IntToString(reward_kind) + " ; r_id = " + IntToString(reward_id));
 
     if (reward_id == -1 || !sfi_reward_player_has_reward(player, reward_id)) {
         return -1;

@@ -107,7 +107,7 @@ void gm_setHeroPosition(structref<HERO> hero, point position, fixed facing, int 
     UnitIssueOrder(hero.guideUnit, Order(AbilityCommand("stop", 0)), c_orderQueueReplace);
 
     if (revived || just_created) {
-        sf_core_event_prepare("sf_hero_spawn");
+        sf_core_event_prepare("hero_spawn");
         sf_core_event_set_int("player", hero.player);
         sf_core_event_set_unit("hero_unit", hero.mainUnit);
         sf_core_event_send();
@@ -163,7 +163,7 @@ void gm_spawnHero(structref<HERO> hero, int reason) {
 
 void sf_game_add_event_hero_spawn(trigger trig)
 {
-    sf_core_event_attach(trig, "sf_hero_spawn");
+    sf_core_event_attach(trig, "hero_spawn");
 }
 
 // new:
