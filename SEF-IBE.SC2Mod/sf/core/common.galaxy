@@ -199,6 +199,34 @@ int sf_bool_to_int(bool b)
     }
 }
 
+int string_find_last(string s1, string s2, bool case_sens)
+{
+    int i;
+    int l;
+    int offset;
+    int s1_len;
+    int s2_len;
+
+    s1_len = StringLength(s1);
+    s2_len = StringLength(s2);
+
+    // Dbg("[sfind/last] s1 = '" + s1 + "' s2 = '" + s2 + "'");
+
+    for (i = s1_len; i >= s2_len; i -= 1) {
+        for (l = s2_len; l >= 1; l -= 1) {
+            offset = i + (l - s2_len);
+            // Dbg("[sfind/last] offset = " + IntToString(offset) + " c1 = '" + StringSub(s1, offset, offset) + "' c2 = '" + StringSub(s2, l, l) + "'");
+            if (StringCompare(StringSub(s1, offset, offset), StringSub(s2, l, l), case_sens) != 0) { break; }
+            // if (StringSub(s1, offset, offset) != StringSub(s2, l, l)) { break; }
+            if (l == 1) {
+                return offset;
+            }
+        }
+    }
+
+    return c_stringNotFound;
+}
+
 
 void sf_core_logger_setup() {
     int i;

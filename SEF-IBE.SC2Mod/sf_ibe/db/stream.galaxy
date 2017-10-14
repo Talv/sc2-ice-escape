@@ -2,7 +2,11 @@
 const string DB_STREAM_DELIMETER = "`";
 static string DB_STREAM_DIGIT_BASE = "0ia1l2p34xq5j6HE7W89LbcdDefghkRmnKorstuvwyzAMBFCGIJNQOPTUXSVYZ!$%/()=?,.;:_^#+* @{[]}|~";
 
+const int DB_STREAM_FIFO = 0;
+const int DB_STREAM_LIFO = 1;
+
 struct db_stream_t {
+    int type;
     string buff;
     int values;
 };
@@ -110,10 +114,11 @@ string db_stream_unserialize_string(string chunk)
     return chunk;
 }
 
-void db_stream_init(structref<db_stream_t> stream)
+void db_stream_init(structref<db_stream_t> stream, int type)
 {
     stream.buff = "";
     stream.values = 0;
+    stream.type = type;
 }
 
 void db_stream_load(structref<db_stream_t> stream, string buff)
@@ -142,25 +147,40 @@ string db_stream_pop_chunk(structref<db_stream_t> stream)
     int delimeter_pos;
     int end_pos;
 
-    delimeter_pos = StringFind(stream.buff, DB_STREAM_DELIMETER, true);
-    if (delimeter_pos == c_stringNotFound) {
-        end_pos = StringLength(stream.buff);
-    }
-    else {
-        end_pos = delimeter_pos - 1;
-    }
+    if (stream.type == DB_STREAM_FIFO) {
+        delimeter_pos = StringFind(stream.buff, DB_STREAM_DELIMETER, true);
+        if (delimeter_pos == c_stringNotFound) {
+            end_pos = StringLength(stream.buff);
+        }
+        else {
+            end_pos = delimeter_pos - 1;
+        }
 
-    if (end_pos <= 0) {
-        chunk = "";
+        if (end_pos <= 0) {
+            chunk = "";
+        }
+        else {
+            chunk = StringSub(stream.buff, 1, end_pos);
+        }
     }
     else {
-        chunk = StringSub(stream.buff, 1, end_pos);
+        delimeter_pos = string_find_last(stream.buff, DB_STREAM_DELIMETER, true);
+        if (delimeter_pos == c_stringNotFound) {
+            end_pos = StringLength(stream.buff);
+        }
+        else {
+            end_pos = StringLength(stream.buff) - delimeter_pos;
+        }
     }
 
     // Dbg("[stream/pop_chunk] before buff = " + stream.buff);
     // Dbg("[stream/pop_chunk] chunk = " + chunk);
-
-    stream.buff = StringReplace(stream.buff, "", 1, delimeter_pos);
+    if (stream.type == DB_STREAM_FIFO) {
+        stream.buff = StringReplace(stream.buff, "", 1, delimeter_pos);
+    }
+    else {
+        stream.buff = StringReplace(stream.buff, "", 1, delimeter_pos);
+    }
     // Dbg("[stream/pop_chunk] after buff = " + stream.buff);
 
     stream.values -= 1;

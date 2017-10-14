@@ -1,5 +1,7 @@
 void ibe_legacy_init();
 
+include "sf_ibe/test.galaxy"
+
 void ibe_init() {
     int i;
     int player;
@@ -14,6 +16,10 @@ void ibe_init() {
     if (!GameIsTestMap(false)) {
         GameSetSpeedLocked(true);
         GameCheatAllow(c_gameCheatAny, false);
+    }
+
+    if (GameIsTestMap(false)) {
+        test_run();
     }
 
     //

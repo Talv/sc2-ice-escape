@@ -122,7 +122,7 @@ bool ibe_stat_profile_load(int player)
         ibe_stat_profile_save(player);
     }
     else {
-        db_stream_init(stream);
+        db_stream_init(stream, DB_STREAM_FIFO);
 
         buff = ibe_stat_bk_get_value_str(ibe_stat_profiles[player].storage, "profile", "d");
         tmp = db_crypt_validate(buff);
@@ -160,7 +160,7 @@ void ibe_stat_profile_save(int player)
     db_stream_t stream;
     string buff;
 
-    db_stream_init(stream);
+    db_stream_init(stream, DB_STREAM_FIFO);
 
     if (!BankSectionExists(ibe_stat_profiles[player].storage, "profile")) {
         BankSectionCreate(ibe_stat_profiles[player].storage, "profile");

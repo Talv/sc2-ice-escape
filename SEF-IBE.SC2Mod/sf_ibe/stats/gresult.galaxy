@@ -140,7 +140,7 @@ void ibe_stat_gresult_store(bank bstorage, string section, structref<ibe_stat_gr
     string buff;
     int i;
 
-    db_stream_init(stream);
+    db_stream_init(stream, DB_STREAM_FIFO);
     ibe_stat_gresult_save_to_stream(gresult, stream);
     // Dbg("[gres/store] stream = " + stream.buff);
 
@@ -185,7 +185,7 @@ bool ibe_stat_gresult_migrate(structref<db_stream_t> stream, int from_version)
             }
         }
 
-        db_stream_init(stream);
+        db_stream_init(stream, DB_STREAM_FIFO);
         ibe_stat_gresult_save_to_stream(gresult, stream);
     }
 
@@ -196,7 +196,7 @@ bool ibe_stat_gresult_migrate(structref<db_stream_t> stream, int from_version)
             return false;
         }
 
-        db_stream_init(stream);
+        db_stream_init(stream, DB_STREAM_FIFO);
         ibe_stat_gresult_save_to_stream(gresult, stream);
     }
 
@@ -211,7 +211,7 @@ bool ibe_stat_gresult_load(bank bstorage, string section, structref<ibe_stat_gre
     int version;
     int tmp;
 
-    db_stream_init(stream);
+    db_stream_init(stream, DB_STREAM_FIFO);
 
     version = BankValueGetAsInt(bstorage, section, "v");
 
