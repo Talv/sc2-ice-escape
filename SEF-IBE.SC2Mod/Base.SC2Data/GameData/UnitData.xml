@@ -244,6 +244,9 @@
         <FlagArray index="Untargetable" value="1"/>
         <Speed value="3.8007"/>
         <Radius value="0.5625"/>
+        <Collide index="Ground" value="0"/>
+        <Collide index="ForceField" value="0"/>
+        <Collide index="Locust" value="0"/>
     </CUnit>
     <CUnit id="Lyote">
         <FlagArray index="Unclickable" value="1"/>
@@ -330,6 +333,8 @@
         <FlagArray index="Untargetable" value="1"/>
         <FlagArray index="Invulnerable" value="1"/>
         <Collide index="Ground" value="0"/>
+        <Collide index="ForceField" value="0"/>
+        <Collide index="Locust" value="0"/>
         <AbilArray index="0" Link="move"/>
         <AbilArray index="1" Link="stop"/>
         <AbilArray index="2" removed="1"/>
@@ -347,6 +352,7 @@
         <FlagArray index="Untargetable" value="1"/>
         <Collide index="Ground" value="0"/>
         <Collide index="ForceField" value="0"/>
+        <Collide index="Locust" value="0"/>
         <Speed value="3"/>
         <AbilArray index="1" Link="move"/>
         <AbilArray index="2" Link="Warpable"/>
@@ -1599,6 +1605,7 @@
         <AbilArray index="0" Link="move"/>
         <AbilArray index="1" Link="stop"/>
         <AbilArray index="2" removed="1"/>
+        <AbilArray index="3" removed="1"/>
         <BehaviorArray index="0" removed="1"/>
         <CardLayouts index="0">
             <LayoutButtons index="0" Face="Move" AbilCmd="move,Move"/>
@@ -1609,6 +1616,10 @@
             <LayoutButtons index="5" removed="1"/>
             <LayoutButtons index="6" removed="1"/>
             <LayoutButtons index="7" removed="1"/>
+            <LayoutButtons index="8" removed="1"/>
+            <LayoutButtons index="9" removed="1"/>
+            <LayoutButtons index="10" removed="1"/>
+            <LayoutButtons index="11" removed="1"/>
         </CardLayouts>
     </CUnit>
     <CUnit id="XelNagaTower">
@@ -1646,6 +1657,12 @@
         <MinimapRadius value="0.875"/>
         <Collide index="Ground" value="0"/>
         <Collide index="ForceField" value="0"/>
+    </CUnit>
+    <CUnit id="Zealot">
+        <Collide index="Ground" value="0"/>
+        <Collide index="ForceField" value="0"/>
+        <Collide index="Locust" value="0"/>
+        <!--BehaviorArray Link="SOACheatDeathSupply2"/-->
     </CUnit>
     <CUnit id="catapult1" parent="Shape">
         <ReviveType value="ShapeTorus"/>
