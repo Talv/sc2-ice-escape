@@ -71,9 +71,6 @@
     </Frame>
 
     <Frame type="Pulldown" name="PulldownTemplate">
-        <!-- <Anchor side="Top" relative="$parent" pos="Min" offset="50"/> -->
-        <Anchor side="Left" relative="$parent" pos="Mid" offset="0"/>
-        <Anchor side="Right" relative="$parent" pos="Mid" offset="0"/>
         <NormalImage val="NormalImage"/>
         <HoverImage val="HoverImage"/>
         <ArrowImage val="PulldownArrow"/>
@@ -81,8 +78,6 @@
         <ItemContainer val="ItemContainer"/>
         <Menu val="MenuListBox"/>
         <HighlightOnHover val="true"/>
-        <Height val="80"/>
-        <Width val="280"/>
         <MenuShownSound val="@UI_DropdownSelect"/>
         <MenuHiddenSound val="@UI_DropdownClose"/>
         <Style val="@DifficultyPulldown_Prot"/>

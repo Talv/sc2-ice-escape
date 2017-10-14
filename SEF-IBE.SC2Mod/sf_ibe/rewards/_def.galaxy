@@ -2,6 +2,8 @@ ibe_reward_t[IBE_REWARD_MAX] sfi_rewards;
 
 bool sfi_reward_register(int reward_id, int kind, bool exclusive, text title, text desc, string icon);
 void sfi_reward_player_unlock_reward(int player, int reward_id);
+void sfi_reward_player_activate_reward(int player, int reward_id);
 bool sfi_reward_player_has_reward(int player, int reward_id);
 int sfi_reward_player_get_active_reward(int player, int reward_kind);
 void sfi_reward_add_event_activation(trigger trig);
+void sfi_reward_add_event_unlocked(trigger trig);

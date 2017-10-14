@@ -1,12 +1,34 @@
 static bool[MAX_PLAYERS + 1][IBE_REWARD_MAX] sfi_reward_player_unlocked_temp;
+static string [IBE_REWARD_MAX] sfi_reward_actor_names;
 
 void sfi_reward_init()
 {
     int i;
 
+    // TODO: remove after map update
+    if (TriggerExists(TriggerFind("gt_RewardActivation"))) {
+        TriggerDestroy(TriggerFind("gt_RewardActivation"));
+    }
+    if (TriggerExists(TriggerFind("gt_HeroSpawn"))) {
+        TriggerDestroy(TriggerFind("gt_HeroSpawn"));
+    }
+
+    sf_core_event_attach(TriggerCreate("sfi_reward_on_player_spawn"), "hero_spawn");
+
     for (i = 0; i < IBE_REWARD_MAX; i += 1) {
         sfi_rewards[i].kind = -1;
     }
+
+    sfi_reward_actor_names[1] = "Storm_Glaze_Crusader_Base_FallingSword";
+    sfi_reward_actor_names[2] = "Storm_Glaze_Nova_Novazon_Decoy";
+    sfi_reward_actor_names[3] = "Caev_Glaze_Rainbow_Orange";
+    sfi_reward_actor_names[4] = "Glaze_Tech_Scales_Blue1";
+    sfi_reward_actor_names[5] = "Caev_Glaze_Terrain";
+    sfi_reward_actor_names[6] = "Caev_Glaze_Rainbow_Purple";
+    sfi_reward_actor_names[7] = "Caev_Glaze_Camouflage";
+    sfi_reward_actor_names[8] = "Glaze_Tech";
+    sfi_reward_actor_names[9] = "Storm_Glaze_Kaelthas_Base_LivingBomb";
+    sfi_reward_actor_names[10] = "Storm_Glaze_BlackArrow_TangentSpace";
 }
 
 bool sfi_reward_register(int reward_id, int kind, bool exclusive, text title, text desc, string icon)
@@ -15,7 +37,12 @@ bool sfi_reward_register(int reward_id, int kind, bool exclusive, text title, te
     sfi_rewards[reward_id].exclusive = exclusive;
     sfi_rewards[reward_id].title = title;
     sfi_rewards[reward_id].desc = desc;
-    sfi_rewards[reward_id].icon = icon;
+    if (icon != "") {
+        sfi_rewards[reward_id].icon = icon;
+    }
+    else {
+        sfi_rewards[reward_id].icon = "Assets\\Textures\\ui_ingame_help_techtree_questionmark.dds";
+    }
 
     return true;
 }
@@ -32,33 +59,27 @@ void sfi_reward_player_unlock_reward(int player, int reward_id)
         return;
     }
 
-    // TODO: until selection UI is done most recently unlocked reward will be selected
-    // if (ibe_stat_profiles[player].rewards_choice[reward.kind] == -1) {
-    // }
-
-    ibe_stat_profiles[player].rewards_choice[reward.kind] = reward_id;
-    sf_core_event_prepare("reward_activation");
-    sf_core_event_set_int("reward_id", reward_id);
-    sf_core_event_set_int("reward_kind", reward.kind);
-    sf_core_event_set_int("player", player);
-    sf_core_event_send();
-
     if (!reward.exclusive) {
         if (!ibe_stat_profiles[player].rewards_unlocked[reward_id]) {
-            libNtve_gf_CreateModelWithPointFacing("HybridWarpInEffect", libNtve_gf_PointFromPositionAndAngle(libNtve_gf_PointWithZOffset(UnitGetPosition(gm_players[player].hero.mainUnit), 0.0), UnitGetFacing(gm_players[player].hero.mainUnit)));
-            libNtve_gf_PlayAnimation(libNtve_gf_ActorLastCreated(), c_animNameDefault, "Stand", 0, c_animTimeDefault);
-            ActorSend(libNtve_gf_ActorLastCreated(), "SetOpacity 0.000000 1.475000");
-
-            SoundPlay(SoundLink("AbathurA_EvolutionComplete", 0), PlayerGroupAll(), 120.0, 0.0);
             UIDisplayMessage(
                 PlayerGroupAll(),
                 c_messageAreaSubtitle,
                 sf_player_name_colored(player) + StringToText(" has earned <c val=\"00ff00\">") + reward.title + StringToText("</c> glaze!")
             );
+
+            sf_core_event_prepare("reward_unlocked");
+            sf_core_event_set_int("reward_id", reward_id);
+            sf_core_event_set_int("reward_kind", reward.kind);
+            sf_core_event_set_int("player", player);
+            sf_core_event_send();
+
+            ibe_stat_profiles[player].rewards_unlocked[reward_id] = true;
+            ibe_stat_profile_save(player);
         }
 
-        ibe_stat_profiles[player].rewards_unlocked[reward_id] = true;
-        ibe_stat_profile_save(player);
+        if (ibe_stat_profiles[player].rewards_choice[reward.kind] == -1) {
+            sfi_reward_player_activate_reward(player, reward_id);
+        }
     }
     else {
         sfi_reward_player_unlocked_temp[player][reward_id] = true;
@@ -72,7 +93,7 @@ bool sfi_reward_player_has_reward(int player, int reward_id)
         return sfi_reward_player_unlocked_temp[player][reward_id];
     }
     else {
-        Dbg("[reward/player_has_reward] p = " + IntToString(player) + " ; rval = " + libNtve_gf_ConvertBooleanToString(ibe_stat_profiles[player].rewards_unlocked[reward_id]) + " [NON-EXC]");
+        Dbg("[reward/player_has_reward] p = " + IntToString(player) + " ; r_id = " + IntToString(reward_id) + " ; rval = " + libNtve_gf_ConvertBooleanToString(ibe_stat_profiles[player].rewards_unlocked[reward_id]) + " [NON-EXC]");
         return ibe_stat_profiles[player].rewards_unlocked[reward_id];
     }
 }
@@ -92,7 +113,82 @@ int sfi_reward_player_get_active_reward(int player, int reward_kind)
     return reward_id;
 }
 
+static void sfi_reward_apply_effect(int player, int reward_id, bool apply, bool fx)
+{
+    int kind;
+
+    kind = sfi_rewards[reward_id].kind;
+
+    if (apply) {
+        if (fx) {
+            libNtve_gf_CreateModelWithPointFacing("HybridWarpInEffect", libNtve_gf_PointFromPositionAndAngle(libNtve_gf_PointWithZOffset(UnitGetPosition(gm_players[player].hero.mainUnit), 0.0), UnitGetFacing(gm_players[player].hero.mainUnit)));
+            libNtve_gf_PlayAnimation(libNtve_gf_ActorLastCreated(), c_animNameDefault, "Stand", 0, c_animTimeDefault);
+            ActorSend(libNtve_gf_ActorLastCreated(), "SetOpacity 0.000000 1.475000");
+            SoundPlayAtPoint(SoundLink("AbathurA_EvolutionComplete", 0), PlayerGroupAll(), UnitGetPosition(gm_players[player].hero.mainUnit), 0, 120.0, 0);
+        }
+
+        ActorCreate(ActorScopeFromUnit(gm_players[player].hero.mainUnit), sfi_reward_actor_names[reward_id], null, null, null);
+        ActorScopeRefSet(ActorScopeFromUnit(gm_players[player].hero.mainUnit), "::scope.sf_gl", ActorLastCreated());
+    }
+    else {
+        ActorSend(ActorScopeRefGet(ActorScopeFromUnit(gm_players[player].hero.mainUnit), "::scope.sf_gl"), "ModelMaterialRemoveFrom ::Main");
+        ActorSend(ActorScopeRefGet(ActorScopeFromUnit(gm_players[player].hero.mainUnit), "::scope.sf_gl"), "Destroy");
+    }
+}
+
+void sfi_reward_player_activate_reward(int player, int reward_id)
+{
+    int kind;
+
+    if (!sfi_reward_player_has_reward(player, reward_id)) { return; }
+
+    kind = sfi_rewards[reward_id].kind;
+
+    if (UnitIsValid(gm_players[player].hero.mainUnit) && UnitIsAlive(gm_players[player].hero.mainUnit)) {
+        if (ibe_stat_profiles[player].rewards_choice[kind] != reward_id) {
+            if (ibe_stat_profiles[player].rewards_choice[kind] != -1) {
+                sfi_reward_apply_effect(player, ibe_stat_profiles[player].rewards_choice[kind], false, false);
+            }
+            sfi_reward_apply_effect(player, reward_id, true, true);
+        }
+        else {
+            sfi_reward_apply_effect(player, reward_id, false, false);
+        }
+    }
+
+    if (ibe_stat_profiles[player].rewards_choice[kind] != reward_id) {
+        ibe_stat_profiles[player].rewards_choice[kind] = reward_id;
+    }
+    else {
+        ibe_stat_profiles[player].rewards_choice[kind] = -1;
+    }
+
+    sf_core_event_prepare("reward_activation");
+    sf_core_event_set_int("reward_id", reward_id);
+    sf_core_event_set_int("reward_kind", kind);
+    sf_core_event_set_int("player", player);
+    sf_core_event_send();
+}
+
 void sfi_reward_add_event_activation(trigger trig)
 {
     sf_core_event_attach(trig, "reward_activation");
+}
+
+void sfi_reward_add_event_unlocked(trigger trig)
+{
+    sf_core_event_attach(trig, "reward_unlocked");
+}
+
+bool sfi_reward_on_player_spawn(bool test_conds, bool run_actions)
+{
+    int player;
+
+    player = sf_core_event_get_int("player");
+
+    if (ibe_stat_profiles[player].rewards_choice[1] != -1) {
+        sfi_reward_apply_effect(player, ibe_stat_profiles[player].rewards_choice[1], true, false);
+    }
+
+    return true;
 }

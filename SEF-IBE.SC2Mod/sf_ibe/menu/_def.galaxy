@@ -25,12 +25,9 @@ void ibe_menu_show_tab(int player, int tab);
 //
 
 int ibe_profile_panel;
-int ibe_profile_dpd_player;
-int ibe_profile_lbl_revives;
-int ibe_profile_lbl_deaths;
 
 void ibe_profile_init();
-void ibe_profile_show(int for_player, int player);
+void ibe_menu_profile_refresh(int for_player);
 
 //
 // RANKING

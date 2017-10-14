@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Desc>
-    <Include path="UI/Layout/Custom/VoidShared_GenericTemplates.SC2Layout"/>
+    <!-- <Include path="UI/Layout/Custom/VoidShared_GenericTemplates.SC2Layout"/> -->
     <Include path="UI/Layout/IBE_GenericTemplates.SC2Layout"/>
     <Include path="UI/Layout/IBE_Console.SC2Layout"/>
     <Include path="UI/Layout/IBE_Stats.SC2Layout"/>

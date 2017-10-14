@@ -139,6 +139,10 @@
     <Frame type="Frame" name="Ranking">
         <Frame type="Pulldown" name="SectionPulldown" template="IBE_GenericTemplates/PulldownTemplate">
             <Anchor side="Top" relative="$parent" pos="Min" offset="50"/>
+            <Anchor side="Left" relative="$parent" pos="Mid" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Mid" offset="0"/>
+            <Height val="80"/>
+            <Width val="280"/>
         </Frame>
     </Frame>
 </Desc>

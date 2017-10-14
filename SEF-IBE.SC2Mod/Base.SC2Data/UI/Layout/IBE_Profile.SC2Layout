@@ -1,32 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Desc>
-    <!--<Frame type="VictoryPanelStatisticListBoxItem" name="VictoryPanelStatisticListBoxItemTemplate">
-        <Width val="555"/>
-        <Height val="70"/>
+    <Constant name="NavWidth" val="300"/>
+    <Constant name="BtnWidth" val="270"/>
+    <Constant name="ContentGap" val="30"/>
+    <Constant name="NavGap" val="4"/>
 
-        <Frame type="Image" name="ValueBackgroundImage">
-            <Anchor side="Top" relative="$parent" pos="Min" offset="3"/>
-            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
-            <Texture val="@UI/LotV_ListBullet"/>
-        </Frame>
-
-        <Frame type="Label" name="TextLabel">
-            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
-            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
-            <Anchor side="Left" relative="$parent/ValueBackgroundImage" pos="Max" offset="5"/>
-            <Width val="555"/>
-            <Style val="Void_VictoryMissionRewardText"/>
-        </Frame>
-
-        <Frame type="Label" name="ValueLabel">
-            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
-            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
-            <Anchor side="Left" relative="$parent/TextLabel" pos="Max" offset="10"/>
-            <Anchor side="Right" relative="$parent" pos="Max" offset="-50"/>
-            <Style val="Void_VictoryMissionRewardText"/>
-        </Frame>
-    </Frame>-->
-
+    <!--  -->
+    <!-- GENERAL -->
+    <!--  -->
     <Frame type="Frame" name="ProfileLineTemplate">
         <Anchor side="Top" relative="$parent" pos="Max" offset="30"/>
         <Anchor side="Left" relative="$parent" pos="Min" offset="80"/>
@@ -130,125 +111,234 @@
         </Frame>
     </Frame>
 
-    <!--<Frame type="Frame" name="Profile" template="IBE_GenericTemplates/DefaultWindow">-->
-    <Frame type="Frame" name="Profile">
-        <Frame type="Pulldown" name="PlayerPulldown">
-            <Anchor side="Top" relative="$parent" pos="Min" offset="50"/>
+    <!--  -->
+    <!-- Rewards -->
+    <!--  -->
+    <Frame type="Image" name="RewardButtonShimmerTemplate">
+        <Anchor relative="$parent"/>
+        <Visible val="False"/>
+        <Alpha val="220"/>
+        <LayerCount val="2"/>
+
+        <Texture val="@UI/LotV_Story_SoA_AbilityFrame_Selected" layer="0"/>
+        <AlphaLayer val="True" layer="0"/>
+
+        <Texture val="Assets\Textures\ui_void_mission_soa_frame_energy_highlightmask.dds" layer="1"/>
+        <TextureCoords top="0" left="0" bottom="1" right="1" layer="1"/>
+
+        <Animation name="Highlight">
+            <Event event="OnShown" action="Reset" frame="$parent"/>
+            <Event event="OnShown" action="DirectionForward" frame="$parent"/>
+            <Event event="OnShown" action="Play" frame="$parent"/>
+            <Controller type="LayerUV" layer="1" side="Left" relative="false" sidelock="false" end="Loop">
+                <Key type="Curve" time="0" value="1" out="Auto"/>
+                <Key type="Curve" time="2.0" value="-1" out="Auto"/>
+            </Controller>
+            <Controller type="LayerUV" layer="1" side="Right" relative="false" sidelock="false" end="Loop">
+                <Key type="Curve" time="0" value="2" out="Auto"/>
+                <Key type="Curve" time="2.0" value="0" out="Auto"/>
+            </Controller>
+        </Animation>
+    </Frame>
+
+    <Frame type="Button" name="RewardButtonTemplate">
+        <Width val="116"/>
+        <Height val="116"/>
+        <DisplayType val="ImageLayer"/>
+
+        <Frame type="Image" name="IconBackground">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="22"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="-22"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="22"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-22"/>
+            <LayerColor val="000000"/>
+        </Frame>
+
+        <Frame type="Image" name="RewardButtonIcon">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="22"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="-22"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="22"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-22"/>
+
+            <Animation name="DisabledEvent">
+                <Event event="OnDisabled" action="Reset,Play"/>
+                <Event event="OnEnabled" action="Reset"/>
+                <Controller type="Desaturation" end="Pause">
+                    <Key type="Bool" time="0" value="True"/>
+                </Controller>
+                <Controller type="Color" end="Pause">
+                    <Key type="Curve" time="0" value="25,69,118" out="Step"/>
+                </Controller>
+            </Animation>
+        </Frame>
+
+        <Frame type="Image" name="NormalImage">
+            <Anchor relative="$parent"/>
+            <LayerCount val="4"/>
+            <StateCount val="1"/>
+            <Texture val="@UI/LotV_Story_SoA_AbilityFrame_Normal" layer="0"/>
+            <Texture val="@UI/LotV_Story_SoA_AbilityFrame_Selected" layer="1"/>
+            <Texture val="@UI/LotV_Story_SoA_AbilityFrame_Selected" layer="2"/>
+            <Texture val="@UI/LotV_Story_SoA_AbilityFrame_Disabled" layer="3"/>
+            <DesaturateOnDisable val="false"/>
+        </Frame>
+
+        <Frame type="Image" name="HoverImage">
+            <Anchor relative="$parent"/>
+            <StateCount val="1"/>
+            <LayerCount val="4"/>
+            <Texture val="@UI/LotV_Story_SoA_AbilityFrame_Hover" layer="0"/>
+            <Texture val="@UI/LotV_Story_SoA_AbilityFrame_Hover" layer="1"/>
+            <Texture val="@UI/LotV_Story_SoA_AbilityFrame_Selected" layer="2"/>
+            <Texture val="@UI/LotV_Story_SoA_AbilityFrame_Disabled" layer="3"/>
+            <DesaturateOnDisable val="false"/>
+        </Frame>
+
+        <Frame type="Frame" name="HitTestFrame">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="22"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="-22"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="22"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-22"/>
+        </Frame>
+
+        <Frame type="Image" name="Shimmer" template="IBE_Profile/RewardButtonShimmerTemplate">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="8"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="-8"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="8"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-8"/>
+            <DesaturateOnDisable val="true"/>
+            <DisabledAlpha val="120"/>
+            <DesaturationColor val="0052a6"/>
+        </Frame>
+    </Frame>
+
+    <Frame type="Frame" name="RewardItemTemplate">
+        <Width val="200"/>
+        <Height val="155"/>
+
+        <Frame type="Button" name="Button" template="IBE_Profile/RewardButtonTemplate">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
             <Anchor side="Left" relative="$parent" pos="Mid" offset="0"/>
             <Anchor side="Right" relative="$parent" pos="Mid" offset="0"/>
-            <NormalImage val="NormalImage"/>
-            <HoverImage val="HoverImage"/>
-            <ArrowImage val="PulldownArrow"/>
-            <ArrowHoverImage val="PulldownArrowHover"/>
-            <ItemContainer val="ItemContainer"/>
-            <Menu val="MenuListBox"/>
-            <HighlightOnHover val="true"/>
-            <Height val="80"/>
-            <Width val="280"/>
-            <MenuShownSound val="@UI_DropdownSelect"/>
-            <MenuHiddenSound val="@UI_DropdownClose"/>
-            <Style val="@DifficultyPulldown_Prot"/>
+            <ClickSound val="*@UI_Void_ShipScreen_ButtonClick_Ability_ActorSound"/>
+            <HoverSound val="@UI_Void_SolarCore_Button_RollOvers"/>
+        </Frame>
 
-            <Frame type="Image" name="NormalImage">
-                <Texture val="@@UI/DifficultyPulldownNormal"/>
-                <TextureType val="Border"/>
-                <StateCount val="2"/>
-                <Tiled val="true"/>
-                <LayerColor val="#StandardBorder_Prot"/>
-                <DescFlags val="Internal"/>
+        <Frame type="Label" name="Name">
+            <Height val="45"/>
+            <Anchor side="Top" relative="$parent/Button" pos="Max" offset="-5"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="15"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="-15"/>
+            <Style val="Void_ShipPrimaryLabelSmallDisabled"/>
+        </Frame>
+    </Frame>
+
+    <!--  -->
+    <!-- MAIN -->
+    <!--  -->
+    <Frame type="Button" name="CategoryButtonTemplate" template="VoidShared_GenericTemplates/StoryButtonTemplate">
+        <Width val="#BtnWidth"/>
+        <Height val="80"/>
+        <ClickSound val="@UI_ActionButtonSelect"/>
+        <Anchor side="Left" relative="$parent" pos="Mid" offset="0"/>
+        <Anchor side="Right" relative="$parent" pos="Mid" offset="0"/>
+    </Frame>
+
+    <Frame type="Frame" name="Profile">
+        <Frame type="Frame" name="Nav">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="60"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent" pos="Min" offset="40"/>
+            <Anchor side="Right" relative="$parent" pos="Min" offset="#NavWidth"/>
+
+            <Frame type="Pulldown" name="PlayerPulldown" template="IBE_GenericTemplates/PulldownTemplate">
+                <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+                <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+                <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+                <Height val="80"/>
             </Frame>
 
-            <Frame type="Image" name="HoverImage">
-                <Texture val="@@UI/DifficultyPulldownHover"/>
-                <TextureType val="Border"/>
-                <StateCount val="2"/>
-                <Tiled val="true"/>
-                <LayerColor val="#StandardBorder_Prot"/>
-                <DescFlags val="Internal"/>
+            <Frame type="Button" name="GeneralButton" template="IBE_Profile/CategoryButtonTemplate">
+                <Anchor side="Top" relative="$parent/PlayerPulldown" pos="Max" offset="#NavGap"/>
+                <Text val="General"/>
             </Frame>
 
-            <Frame type="Image" name="PulldownArrow">
-                <Anchor side="Top" relative="$parent" pos="Mid" offset="0"/>
-                <Anchor side="Bottom" relative="$parent" pos="Mid" offset="0"/>
-                <Anchor side="Right" relative="$parent" pos="Max" offset="-15"/>
-                <Texture val="@@UI/DifficultyPulldownArrow"/>
-                <TextureType val="Normal"/>
-                <StateCount val="2"/>
-                <Tiled val="false"/>
-                <LayerColor val="#StandardBorder_Prot"/>
-                <DescFlags val="Internal"/>
-            </Frame>
-
-            <Frame type="Image" name="PulldownArrowHover">
-                <Anchor side="Top" relative="$parent" pos="Mid" offset="0"/>
-                <Anchor side="Bottom" relative="$parent" pos="Mid" offset="0"/>
-                <Anchor side="Right" relative="$parent" pos="Max" offset="-15"/>
-                <Texture val="@@UI/DifficultyPulldownArrowHover"/>
-                <TextureType val="Normal"/>
-                <StateCount val="2"/>
-                <Tiled val="false"/>
-                <LayerColor val="#StandardBorder_Prot"/>
-                <DescFlags val="Internal"/>
-            </Frame>
-
-            <Frame type="ListBox" name="MenuListBox">
-                <ItemHeight val="34"/>
-                <Insets top="16" left="16" bottom="16" right="16"/>
-                <HighlightInsets top="-4" left="-10" bottom="-4" right="-10"/>
-                <BackgroundImage val="BackgroundImage"/>
-                <SelectedImage val="SelectedImage"/>
-                <HoverImage val="HoverImage"/>
-                <HighlightOnHover val="true"/>
-                <ItemClickSound val="@UI_DropdownListSelect"/>
-                <DescFlags val="Internal"/>
-                <Style val="@DifficultyPulldown_Prot"/>
-
-                <Frame type="Image" name="BackgroundImage">
-                    <Texture val="@@UI/DifficultyPulldownMenuBackground"/>
-                    <TextureType val="HorizontalBorder"/>
-                    <Tiled val="true"/>
-                    <LayerColor val="#StandardBorder_Prot"/>
-                    <DescFlags val="Internal"/>
-                </Frame>
-
-                <Frame type="Image" name="SelectedImage">
-                    <Texture val="@@UI/DifficultyPulldownMenuSelected"/>
-                    <TextureType val="Border"/>
-                    <Tiled val="true"/>
-                    <LayerColor val="#StandardBorder_Prot"/>
-                    <DescFlags val="Internal"/>
-                </Frame>
-
-                <Frame type="Image" name="HoverImage">
-                    <Texture val="@@UI/DifficultyPulldownMenuHover"/>
-                    <TextureType val="Border"/>
-                    <Tiled val="true"/>
-                    <LayerColor val="#StandardBorder_Prot"/>
-                    <DescFlags val="Internal"/>
-                </Frame>
-            </Frame>
-
-            <Frame type="Frame" name="ItemContainer">
-                <Anchor side="Top" relative="$parent" pos="Min" offset="8"/>
-                <Anchor side="Left" relative="$parent" pos="Min" offset="8"/>
-                <Anchor side="Bottom" relative="$parent" pos="Max" offset="-8"/>
-                <Anchor side="Right" relative="$parent" pos="Max" offset="-30"/>
-                <DescFlags val="Internal"/>
+            <Frame type="Button" name="RewardsButton" template="IBE_Profile/CategoryButtonTemplate">
+                <Anchor side="Top" relative="$parent/GeneralButton" pos="Max" offset="#NavGap"/>
+                <Text val="Rewards"/>
             </Frame>
         </Frame>
 
-        <!--<Frame type="Frame" name="PrimarySection" template="IBE_Profile/SectionTemplate">
-            <Anchor side="Top" relative="$parent/PlayerPulldown" pos="Max" offset="20"/>
-            <Anchor side="Left" relative="$parent" pos="Min" offset="40"/>
-            <Anchor side="Right" relative="$parent" pos="Max" offset="-40"/>
-            <Height val="300" />
+        <Frame type="Frame" name="ContentGap">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent/Nav" pos="Max" offset="0"/>
+            <Anchor side="Right" relative="$parent/Nav" pos="Max" offset="#ContentGap"/>
+        </Frame>
 
-            <Frame type="Frame" name="Info1" template="IBE_Profile/ProfileLineTemplate">
-                <Anchor side="Top" relative="$parent" pos="Min" offset="90"/>
+        <Frame type="Frame" name="Content">
+            <Anchor side="Top" relative="$parent" pos="Min" offset="60"/>
+            <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+            <Anchor side="Left" relative="$parent/ContentGap" pos="Max" offset="0"/>
+            <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+
+            <Frame type="Frame" name="General">
+                <!-- <Visible val="False" /> -->
+                <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+                <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+                <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+                <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
             </Frame>
-            <Frame type="Frame" name="Info2" template="IBE_Profile/ProfileLineTemplate">
-                <Anchor side="Top" relative="$parent/Info1" pos="Max" offset="0"/>
+
+            <Frame type="Frame" name="Rewards">
+                <!-- <Visible val="False" /> -->
+                <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+                <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+                <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+                <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+
+                <Frame type="Frame" name="Glaze" template="IBE_Profile/SectionTemplate">
+                    <Anchor side="Top" relative="$parent" pos="Min" offset="0"/>
+                    <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+                    <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+                    <Height val="600"/>
+
+                    <Frame type="Label" name="SummaryHeadingLabel">
+                        <Text val="Glazes"/>
+                    </Frame>
+
+                    <!-- <Frame type="Image" name="LockedIcon1">
+                        <Anchor side="Left" relative="$parent/Item1" pos="Mid" offset="0"/>
+                        <Anchor side="Right" relative="$parent/Item1" pos="Mid" offset="0"/>
+                        <Anchor side="Top" relative="$parent/Item1" pos="Min" offset="14"/>
+                        <DesaturateOnDisable val="false"/>
+                        <Texture val="@UI/LotV_Story_SoA_AbilityLocked"/>
+                        <Visible val="false"/>
+                    </Frame> -->
+
+                    <Frame type="Frame" name="List">
+                        <Anchor side="Top" relative="$parent" pos="Min" offset="70"/>
+                        <Anchor side="Bottom" relative="$parent" pos="Max" offset="0"/>
+                        <Anchor side="Left" relative="$parent" pos="Min" offset="60"/>
+                        <Anchor side="Right" relative="$parent" pos="Max" offset="0"/>
+
+                        <!-- <Frame type="Frame" name="Item1" template="IBE_Profile/RewardItemTemplate">
+                            <Anchor side="Top" relative="$parent" pos="Min" offset="300"/>
+                            <Anchor side="Left" relative="$parent" pos="Min" offset="0"/>
+
+                            <Frame type="Button" name="Button">
+                                <Frame type="Image" name="RewardButtonIcon">
+                                    <Texture val="Assets\Textures\btn-ability-spearofadun-deploypylon.dds"/>
+                                </Frame>
+                            </Frame>
+
+                            <Frame type="Label" name="Name">
+                                <Text val="Golden"/>
+                            </Frame>
+                        </Frame> -->
+                    </Frame>
+                </Frame>
             </Frame>
-        </Frame>-->
+        </Frame>
     </Frame>
 </Desc>

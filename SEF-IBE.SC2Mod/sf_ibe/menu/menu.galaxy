@@ -7,7 +7,7 @@ void ibe_menu_refresh_tab(int player)
             ibe_profile_init();
             ibe_menu_tabs_init[IBE_MENU_TAB_PROFILES] = true;
         }
-        ibe_profile_show(player, player);
+        ibe_menu_profile_refresh(player);
     }
     else if (ibe_menu_tab_current == IBE_MENU_TAB_RANKING) {
         ibe_menu_rank_refresh(player);

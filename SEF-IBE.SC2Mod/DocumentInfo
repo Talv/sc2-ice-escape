@@ -7,6 +7,7 @@
         <Value>bnet:Swarm (Campaign)/0.0/999,file:Campaigns/Swarm.SC2Campaign</Value>
         <Value>bnet:Swarm Story (Campaign)/0.0/999,file:Campaigns/SwarmStory.SC2Campaign</Value>
         <Value>bnet:Void (Mod)/0.0/999,file:Mods/Void.SC2Mod</Value>
+        <Value>bnet:Void (Campaign)/0.0/999,file:Campaigns/Void.SC2Campaign</Value>
         <Value>bnet:SEF-IBE-Assets/0.0/155202,file:Mods\SEF-IBE-Assets.SC2Mod</Value>
     </Dependencies>
 </DocInfo>

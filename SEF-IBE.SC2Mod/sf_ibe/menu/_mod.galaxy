@@ -10,6 +10,9 @@ const int IBE_MENU_TAB_OPTIONS = 4;
 // PROFILE
 //
 
+const int IBE_MENU_PROFILE_CAT_GENERAL = 1;
+const int IBE_MENU_PROFILE_CAT_REWARDS = 2;
+
 const int IBE_PROFILE_SECTION_MAX = 32;
 
 const int IBE_PROFILE_SECTION_RATING = 1;
@@ -43,6 +46,7 @@ struct ibe_profile_section_info_t {
 };
 
 struct ibe_profile_section_t {
+    int parent;
     int panel;
     int lbl_heading;
     int info_count;

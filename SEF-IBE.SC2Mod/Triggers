@@ -14610,9 +14610,11 @@
             <Item Type="Preset" Library="3FB28C60" Id="E5E96A5B"/>
             <Item Type="FunctionDef" Library="3FB28C60" Id="01AF891D"/>
             <Item Type="FunctionDef" Library="3FB28C60" Id="08E58BFF"/>
+            <Item Type="FunctionDef" Library="3FB28C60" Id="76080A4D"/>
             <Item Type="FunctionDef" Library="3FB28C60" Id="4D9B715F"/>
             <Item Type="FunctionDef" Library="3FB28C60" Id="DA124308"/>
             <Item Type="FunctionDef" Library="3FB28C60" Id="334093DA"/>
+            <Item Type="FunctionDef" Library="3FB28C60" Id="ADB7666B"/>
         </Element>
         <Element Type="Preset" Id="2984C84E">
             <PresetCustom/>
@@ -14716,6 +14718,24 @@
                 <TypeElement Type="Preset" Library="3FB28C60" Id="2984C84E"/>
             </ParameterType>
         </Element>
+        <Element Type="FunctionDef" Id="76080A4D">
+            <Identifier>sfi_reward_player_activate_reward</Identifier>
+            <FlagAction/>
+            <FlagNative/>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="4D079B79"/>
+            <Parameter Type="ParamDef" Library="3FB28C60" Id="DA247E14"/>
+        </Element>
+        <Element Type="ParamDef" Id="4D079B79">
+            <ParameterType>
+                <Type Value="int"/>
+            </ParameterType>
+        </Element>
+        <Element Type="ParamDef" Id="DA247E14">
+            <ParameterType>
+                <Type Value="preset"/>
+                <TypeElement Type="Preset" Library="3FB28C60" Id="2984C84E"/>
+            </ParameterType>
+        </Element>
         <Element Type="FunctionDef" Id="4D9B715F">
             <Identifier>sfi_reward_player_has_reward</Identifier>
             <FlagCall/>
@@ -14761,6 +14781,11 @@
         </Element>
         <Element Type="FunctionDef" Id="334093DA">
             <Identifier>sfi_reward_add_event_activation</Identifier>
+            <FlagEvent/>
+            <FlagNative/>
+        </Element>
+        <Element Type="FunctionDef" Id="ADB7666B">
+            <Identifier>sfi_reward_add_event_unlocked</Identifier>
             <FlagEvent/>
             <FlagNative/>
         </Element>

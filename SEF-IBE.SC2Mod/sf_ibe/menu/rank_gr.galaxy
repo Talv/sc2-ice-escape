@@ -240,7 +240,7 @@ int ibe_menu_rank_gr_cell_sort_value(int idx, int col)
                 if (gres.challenges[i].completed_by == 0) { continue; }
                 tmp += 1;
             }
-            return 0xffff - tmp;
+            return 0x7fffffff - tmp;
         }
         else {
             return ibe_ui_dg_fixed_to_sort(gres.escape_time);
