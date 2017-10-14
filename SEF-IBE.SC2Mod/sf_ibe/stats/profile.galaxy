@@ -92,6 +92,20 @@ bool ibe_stat_profile_storage_migrate(structref<db_stream_t> stream, int from_ve
         }
     }
 
+    if (from_ver <= 8) {
+        profile_load_from_stream(stream, prof);
+
+        for (i = 0; i < IBE_REWARD_MAX; i += 1) {
+            prof.rewards_unlocked[i] = false;
+        }
+        for (i = 0; i < IBE_REWARD_KIND_MAX; i += 1) {
+            prof.rewards_choice[i] = -1;
+        }
+
+        db_stream_init(stream, DB_STREAM_FIFO);
+        profile_save_to_stream(stream, prof);
+    }
+
     return true;
 }
 
