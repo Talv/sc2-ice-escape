@@ -1645,6 +1645,7 @@
         <MinimapRadius value="0.625"/>
         <Collide index="Ground" value="0"/>
         <Collide index="ForceField" value="0"/>
+        <Collide index="Locust" value="0"/>
     </CUnit>
     <CUnit id="YetiMomma">
         <FlagArray index="Unselectable" value="1"/>
@@ -1657,6 +1658,7 @@
         <MinimapRadius value="0.875"/>
         <Collide index="Ground" value="0"/>
         <Collide index="ForceField" value="0"/>
+        <Collide index="Locust" value="0"/>
     </CUnit>
     <CUnit id="Zealot">
         <Collide index="Ground" value="0"/>
