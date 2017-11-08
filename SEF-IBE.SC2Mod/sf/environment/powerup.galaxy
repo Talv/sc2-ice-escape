@@ -1,11 +1,19 @@
 trigger sf_envi_powerup_trig_acquire = null;
 
+bool [SF_ENVI_OBJECT_INSTANCE_LIMIT]sf_envi_powerups_taken;
+
 static void sf_envi_powerup_on_destroy(int obj_id)
 {
 }
 
 void sf_envi_powerup_cleanup()
 {
+    int i;
+
+    for (i = 0; i < SF_ENVI_OBJECT_INSTANCE_LIMIT; i += 1) {
+        sf_envi_powerups_taken[i] = false;
+    }
+
     if (sf_envi_powerup_trig_acquire != null) {
         TriggerStop(sf_envi_powerup_trig_acquire);
         TriggerDestroy(sf_envi_powerup_trig_acquire);
@@ -55,12 +63,20 @@ bool sf_envi_powerup_on_acquire(bool test_conds, bool run_actions)
     int player_id;
     unit hero_unit;
     unit powerup_unit;
+    int obj_id;
 
     hero_unit = EventUnit();
     powerup_unit = EventUnitRangeUnit();
 
     // if already taken (trigger still fires, even after unit was removed..)
     if (!UnitIsValid(powerup_unit)) {
+        return false;
+    }
+
+    obj_id = sf_envi_object_get_by_unit(powerup_unit);
+
+    // apparently units are still valid if removed within same game tick
+    if (sf_envi_powerups_taken[obj_id]) {
         return false;
     }
 
@@ -81,10 +97,12 @@ bool sf_envi_powerup_on_acquire(bool test_conds, bool run_actions)
     sf_stat_session_expire(player_id);
 
     sf_core_event_prepare("powerup_acquired");
-    sf_core_event_set_int("powerup", sf_envi_object_get_by_unit(powerup_unit));
+    sf_core_event_set_int("powerup", obj_id);
     sf_core_event_set_int("challenge_id", lv_current);
     sf_core_event_set_int("player", hero.player);
     sf_core_event_send();
+
+    sf_envi_powerups_taken[obj_id] = true;
 
     SoundPlay(SoundLink("UI_EvolutionPit_Mutate", 1), PlayerGroupAll(), 70.0, 0);
 
