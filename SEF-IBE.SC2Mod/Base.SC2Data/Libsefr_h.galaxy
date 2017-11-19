@@ -1,0 +1,10 @@
+include "TriggerLibs/natives"
+
+//--------------------------------------------------------------------------------------------------
+// Library: SEF - Rewards (Cold Voyage)
+//--------------------------------------------------------------------------------------------------
+// Preset Declarations
+
+// Function Declarations
+bool libsefr_gf_sfr_is_admin (int lp_player);
+

@@ -1,4 +1,13 @@
+string sfi_reward_bank_name = "sefiberewards";
+
 ibe_reward_t[IBE_REWARD_MAX] sfi_rewards;
+ibe_reward_state_t[MAX_PLAYERS + 1] sfi_reward_states;
+bank[MAX_PLAYERS + 1] sfi_reward_banks;
+
+void sfi_reward_init();
+void sfi_reward_load();
+void ibe_reward_state_save(int player);
+bool ibe_reward_state_load(int player);
 
 bool sfi_reward_register(int reward_id, int kind, bool exclusive, text title, text desc, string icon);
 void sfi_reward_player_unlock_reward(int player, int reward_id);

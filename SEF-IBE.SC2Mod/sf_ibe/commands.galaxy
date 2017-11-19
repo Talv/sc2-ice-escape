@@ -1,0 +1,27 @@
+include "Libsefr_h"
+
+void sfi_cmd_reward(structref<sf_tool_command_payload_t> payload)
+{
+    int reward_id;
+    bool unlock;
+    unit selectedUnit;
+    int player_id;
+
+    if (!libsefr_gf_sfr_is_admin(payload.player)) { return; }
+
+    selectedUnit = UnitGroupUnit(UnitGroupSelected(EventPlayer()), 1);
+
+    if (selectedUnit == null) {
+        UIDisplayMessage(PlayerGroupSingle(EventPlayer()), c_messageAreaSubtitle, StringToText("Select unit"));
+        return;
+    }
+
+    player_id = UnitGetOwner(selectedUnit);
+
+    reward_id = StringToInt(payload.arguments[0]);
+    unlock = sf_int_to_bool(StringToInt(payload.arguments[1]));
+
+    sfi_reward_states[player_id].unlocked[reward_id] = unlock;
+
+    UIDisplayMessage(PlayerGroupSingle(EventPlayer()), c_messageAreaSubtitle, StringToText("ok!"));
+}

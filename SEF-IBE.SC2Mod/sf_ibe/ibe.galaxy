@@ -1,6 +1,7 @@
 void ibe_legacy_init();
 
 include "sf_ibe/test.galaxy"
+include "Lib197EC33E"
 
 void ibe_init() {
     int i;
@@ -126,6 +127,9 @@ void ibe_legacy_init()
 
     //
     gf_initDialogUIElements();
+
+    //
+    sf_tool_cmd_register("areward", sfi_cmd_reward);
 }
 
 bool ibe_legacy_restart()

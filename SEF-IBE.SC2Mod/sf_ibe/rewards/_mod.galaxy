@@ -4,10 +4,17 @@ const int IBE_REWARD_KIND_MAX = 8;
 const int IBE_REWARD_KIND_GLAZE = 1;
 const int IBE_REWARD_KIND_SKIN = 2;
 
+const int IBE_REWARD_STATE_CURRENT_VERSION = 1;
+
 struct ibe_reward_t {
     int kind;
     bool exclusive;
     text title;
     text desc;
     string icon;
+};
+
+struct ibe_reward_state_t {
+    bool[IBE_REWARD_MAX] unlocked;
+    int[IBE_REWARD_KIND_MAX] choice;
 };

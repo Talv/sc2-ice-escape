@@ -4,6 +4,38 @@
 // Project page: <http://www.sc2mapster.com/assets/md5-hash/>
 //-------------------------------------------------------------------------------------------------------------
 
+// '>>' operator is currently broken, so we workaround that by using its custom implementation
+// @Talv
+int shift_right(int v, int s)
+{
+    if (v == -1 || v == 0) { // 0xFFFFFFFF || 0x00000000
+        // value won't change in any case, so we just exit early
+        return v;
+    }
+    if (s >= 32) {
+        // most compilers would throw an error if we attempted to shift more bits than there really is
+        // but in case of Galaxy, compiler seems to ignore it and just performs mod 32 as a safety check
+        // so we do the same here
+        s %= 32;
+    }
+
+    if (v & (1 << 31)) {
+        // if MSB is set, we need to clear it
+        // in order to get the correct result from division
+        v = shift_right(v & ~(1 << 31), s);
+        // then we need to set the vacant bits to high
+        // as it would normally happen as a result of sign extension
+        v |= -1 << (31 - s);
+        return v;
+    }
+    // when shifting by more than 18 bits we need to do a second iteration
+    // because int overflows for PowI(2, 19) and above
+    for (; s > 0; s -= 18) {
+        v /= PowI(2, MinI(s, 18));
+    }
+    return v;
+}
+
 // Hash Input
 byte[1024] libHash_HashInputData;
 int libHash_HashInputSize = 0;
@@ -51,22 +83,22 @@ string libHash_GetHexChar( int number )
 string libHash_GetUnsignedLittleEndianHexRepresentation( int unsignedInt )
 {
     string representation = "";
-    representation += libHash_GetHexChar( ( unsignedInt & 0x000000F0 ) >> 4 );
+    representation += libHash_GetHexChar( shift_right(( unsignedInt & 0x000000F0 ), 4) );
     representation += libHash_GetHexChar( ( unsignedInt & 0x0000000F ) );
-    representation += libHash_GetHexChar( ( unsignedInt & 0x0000F000 ) >> 12 );
-    representation += libHash_GetHexChar( ( unsignedInt & 0x00000F00) >> 8 );
-    representation += libHash_GetHexChar( ( unsignedInt & 0x00F00000 ) >> 20 );
-    representation += libHash_GetHexChar( ( unsignedInt & 0x000F0000) >> 16 );
+    representation += libHash_GetHexChar( shift_right(( unsignedInt & 0x0000F000 ), 12) );
+    representation += libHash_GetHexChar( shift_right(( unsignedInt & 0x00000F00), 8) );
+    representation += libHash_GetHexChar( shift_right(( unsignedInt & 0x00F00000 ), 20) );
+    representation += libHash_GetHexChar( shift_right(( unsignedInt & 0x000F0000), 16) );
     if ( unsignedInt >= 0 )
     {
-        representation += libHash_GetHexChar( unsignedInt >> 28 );
+        representation += libHash_GetHexChar( shift_right(unsignedInt, 28) );
     }
     else
     {
         unsignedInt += 0x7FFFFFFF + 1;
-        representation += libHash_GetHexChar( 0x8 + ( unsignedInt >> 28 ) );
+        representation += libHash_GetHexChar( 0x8 + ( shift_right(unsignedInt, 28) ) );
     }
-    representation += libHash_GetHexChar( ( unsignedInt & 0x0F000000) >> 24 );
+    representation += libHash_GetHexChar( shift_right(( unsignedInt & 0x0F000000), 24) );
     return representation;
 }
 string libHash_GetUnsignedHexRepresentation( int unsignedInt )
@@ -75,19 +107,19 @@ string libHash_GetUnsignedHexRepresentation( int unsignedInt )
 
     if ( unsignedInt >= 0 )
     {
-        representation += libHash_GetHexChar( unsignedInt >> 28 );
+        representation += libHash_GetHexChar( shift_right(unsignedInt, 28) );
     }
     else
     {
         unsignedInt += 0x7FFFFFFF + 1;
-        representation += libHash_GetHexChar( 0x8 + ( unsignedInt >> 28 ) );
+        representation += libHash_GetHexChar( 0x8 + ( shift_right(unsignedInt, 28) ) );
     }
-    representation += libHash_GetHexChar( ( unsignedInt & 0x0F000000) >> 24 );
-    representation += libHash_GetHexChar( ( unsignedInt & 0x00F00000 ) >> 20 );
-    representation += libHash_GetHexChar( ( unsignedInt & 0x000F0000) >> 16 );
-    representation += libHash_GetHexChar( ( unsignedInt & 0x0000F000 ) >> 12 );
-    representation += libHash_GetHexChar( ( unsignedInt & 0x00000F00) >> 8 );
-    representation += libHash_GetHexChar( ( unsignedInt & 0x000000F0 ) >> 4 );
+    representation += libHash_GetHexChar( shift_right(( unsignedInt & 0x0F000000), 24) );
+    representation += libHash_GetHexChar( shift_right(( unsignedInt & 0x00F00000 ), 20) );
+    representation += libHash_GetHexChar( shift_right(( unsignedInt & 0x000F0000), 16) );
+    representation += libHash_GetHexChar( shift_right(( unsignedInt & 0x0000F000 ), 12) );
+    representation += libHash_GetHexChar( shift_right(( unsignedInt & 0x00000F00), 8) );
+    representation += libHash_GetHexChar( shift_right(( unsignedInt & 0x000000F0 ), 4) );
     representation += libHash_GetHexChar( ( unsignedInt & 0x0000000F ) );
     return representation;
 }
@@ -103,7 +135,7 @@ int libHash_GetFixedDataAsInt(fixed fixedVar)
 //  Operations
 int libHash_UnsignedRightShift( int input, int shift )  // Right shift pads bit 1's when the value is under zero for signed integers. So this is the work-around.
 {
-    return input >> shift & ~( -1 << ( 32 - shift  ) );
+    return shift_right(input, shift) & ~( -1 << ( 32 - shift  ) );
 }
 int libHash_UnsignedLeftRotate( int input, int rotation )
 {
@@ -188,7 +220,7 @@ string libHash_GeneratelibHash_Md5HashCode()
     //Note: You might want to change this when the hash input increases in size.
     libHash_HashInputData[libHash_HashInputSize] = messageNBits;
     libHash_HashInputSize += 1;
-    libHash_HashInputData[libHash_HashInputSize] = messageNBits >> 8;
+    libHash_HashInputData[libHash_HashInputSize] = shift_right(messageNBits, 8);
     libHash_HashInputSize += 1;
     libHash_HashInputData[libHash_HashInputSize] = 0;
     libHash_HashInputSize += 1;
@@ -364,7 +396,7 @@ string libHash_GenerateSha256HashCode()
     libHash_HashInputSize += 1;
     libHash_HashInputData[libHash_HashInputSize] = 0;
     libHash_HashInputSize += 1;
-    libHash_HashInputData[libHash_HashInputSize] = messageNBits >> 8;
+    libHash_HashInputData[libHash_HashInputSize] = shift_right(messageNBits, 8);
     libHash_HashInputSize += 1;
     libHash_HashInputData[libHash_HashInputSize] = messageNBits;
     libHash_HashInputSize += 1;
@@ -572,9 +604,9 @@ void libHash_AddByteToHashInput (byte lp_byte) {
 void libHash_AddIntegerToHashInput (int lp_integer) {
     // Implementation
     libHash_AddByteToHashInput(lp_integer);
-    libHash_AddByteToHashInput(lp_integer >> 8);
-    libHash_AddByteToHashInput(lp_integer >> 16);
-    libHash_AddByteToHashInput(lp_integer >> 24);
+    libHash_AddByteToHashInput(shift_right(lp_integer, 8));
+    libHash_AddByteToHashInput(shift_right(lp_integer, 16));
+    libHash_AddByteToHashInput(shift_right(lp_integer, 24));
 }
 
 void libHash_AddRealToHashInput (fixed lp_real) {

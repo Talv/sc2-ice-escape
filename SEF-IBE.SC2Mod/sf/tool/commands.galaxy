@@ -50,7 +50,6 @@ bool cmd_on_command(bool testConds, bool runActions) {
     bool parametersDone;
     int flagsCount;
     int paramsCount;
-    int argumentsCount;
     trigger tempTrig;
     sf_tool_command_payload_t cmd_cmdInfo;
 
@@ -80,7 +79,7 @@ bool cmd_on_command(bool testConds, bool runActions) {
     parametersDone = false;
     flagsCount = 0;
     paramsCount = 0;
-    argumentsCount = 0;
+    cmd_cmdInfo.argc = 0;
     for (i = 0; i < wordsCount; i += 1) {
         if (i == 0) {
             cmd_cmdInfo.name = words[i];
@@ -114,8 +113,8 @@ bool cmd_on_command(bool testConds, bool runActions) {
         }
 
         if (parametersDone) {
-            cmd_cmdInfo.arguments[argumentsCount] = words[i];
-            argumentsCount += 1;
+            cmd_cmdInfo.arguments[cmd_cmdInfo.argc] = words[i];
+            cmd_cmdInfo.argc += 1;
         }
     }
 

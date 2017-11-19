@@ -60,4 +60,5 @@ include "sf_ibe/ui/datagrid.galaxy"
 include "sf_ibe/rewards/rewards.galaxy"
 
 include "sf_ibe/votekick.galaxy"
+include "sf_ibe/commands.galaxy"
 include "sf_ibe/ibe.galaxy"

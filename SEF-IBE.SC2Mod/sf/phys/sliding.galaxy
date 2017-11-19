@@ -97,7 +97,7 @@ int sd_getSurfaceAt(point pt) {
 
     //
     for (i = 0; i < 16; i += 1) {
-        if (!lv_surfaceRegions[i]) { continue; }
+        if (lv_surfaceRegions[i] == null) { continue; }
         if (!RegionContainsPoint(lv_surfaceRegions[i], pt)) { continue; }
         return i;
     }

@@ -131,6 +131,8 @@ bool ibe_stat_on_map_init(bool test_conds, bool run_actions)
         ibe_stat_profiles[player].games_started += 1;
     }
 
+    sfi_reward_load();
+
     ibe_stat_grl_init();
     ibe_stat_rk_init();
 

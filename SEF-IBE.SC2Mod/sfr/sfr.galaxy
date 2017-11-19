@@ -1,0 +1,92 @@
+static string [IBE_REWARD_MAX] sfi_reward_actor_names;
+
+static void sfr_reward_apply_effect(int player, int reward_id, bool apply, bool fx)
+{
+    int kind;
+
+    kind = sfi_rewards[reward_id].kind;
+
+    if (apply) {
+        if (fx) {
+            libNtve_gf_CreateModelWithPointFacing("HybridWarpInEffect", libNtve_gf_PointFromPositionAndAngle(libNtve_gf_PointWithZOffset(UnitGetPosition(gm_players[player].hero.mainUnit), 0.0), UnitGetFacing(gm_players[player].hero.mainUnit)));
+            libNtve_gf_PlayAnimation(libNtve_gf_ActorLastCreated(), c_animNameDefault, "Stand", 0, c_animTimeDefault);
+            ActorSend(libNtve_gf_ActorLastCreated(), "SetOpacity 0.000000 1.475000");
+            SoundPlayAtPoint(SoundLink("AbathurA_EvolutionComplete", 0), PlayerGroupAll(), UnitGetPosition(gm_players[player].hero.mainUnit), 0, 120.0, 0);
+        }
+
+        ActorCreate(ActorScopeFromUnit(gm_players[player].hero.mainUnit), sfi_reward_actor_names[reward_id], null, null, null);
+        ActorScopeRefSet(ActorScopeFromUnit(gm_players[player].hero.mainUnit), "::scope.sf_gl", ActorLastCreated());
+    }
+    else {
+        ActorSend(ActorScopeRefGet(ActorScopeFromUnit(gm_players[player].hero.mainUnit), "::scope.sf_gl"), "ModelMaterialRemoveFrom ::Main");
+        ActorSend(ActorScopeRefGet(ActorScopeFromUnit(gm_players[player].hero.mainUnit), "::scope.sf_gl"), "Destroy");
+    }
+}
+
+void sfr_rewards_register()
+{
+    sfi_reward_init();
+
+    sf_core_event_attach(TriggerCreate("sfr_reward_on_player_spawn"), "hero_spawn");
+    sf_core_event_attach(TriggerCreate("sfr_reward_on_activation"), "reward_activation");
+
+    //
+    sfi_reward_register(1, IBE_REWARD_KIND_GLAZE, false, StringToText("Golden"), null, "Assets\\Textures\\btn-ability-protoss-shieldcapacitor.dds");
+    sfi_reward_register(2, IBE_REWARD_KIND_GLAZE, false, StringToText("Aquatic"), null, "Assets\\Textures\\btn-ability-protoss-stasisfield.dds");
+    sfi_reward_register(3, IBE_REWARD_KIND_GLAZE, false, StringToText("Yellow"), null, "Assets\\Textures\\btn-ability-slaynelemental-solaritecocoon.dds");
+    sfi_reward_register(4, IBE_REWARD_KIND_GLAZE, false, StringToText("Shock"), null, "Assets\\Textures\\btn-ability-protoss-voidprison.dds");
+    sfi_reward_register(5, IBE_REWARD_KIND_GLAZE, false, StringToText("Adaptive"), null, "Assets\\Textures\\btn-ability-protoss-timewarp.dds");
+    sfi_reward_register(6, IBE_REWARD_KIND_GLAZE, false, StringToText("Pink"), null, "Assets\\Textures\\btn-ability-stukov-plaugedmunitions.dds");
+    sfi_reward_register(7, IBE_REWARD_KIND_GLAZE, false, StringToText("Poison"), null, "Assets\\Textures\\btn-ability-spearofadun-orbitalassimilator.dds");
+    sfi_reward_register(8, IBE_REWARD_KIND_GLAZE, false, StringToText("Electric"), null, "Assets\\Textures\\btn-ability-protoss-stasistrap.dds");
+    sfi_reward_register(9, IBE_REWARD_KIND_GLAZE, false, StringToText("Flash"), null, "Assets\\Textures\\btn-ability-protoss-shieldrecharge.dds");
+    sfi_reward_register(10, IBE_REWARD_KIND_GLAZE, true, StringToText("Corruption"), StringToText("exclusive!"), "Assets\\Textures\\banelingenvironmentblur.dds");
+
+    sfi_reward_actor_names[1] = "Storm_Glaze_Crusader_Base_FallingSword";
+    sfi_reward_actor_names[2] = "Storm_Glaze_Nova_Novazon_Decoy";
+    sfi_reward_actor_names[3] = "Caev_Glaze_Rainbow_Orange";
+    sfi_reward_actor_names[4] = "Glaze_Tech_Scales_Blue1";
+    sfi_reward_actor_names[5] = "Caev_Glaze_Terrain";
+    sfi_reward_actor_names[6] = "Caev_Glaze_Rainbow_Purple";
+    sfi_reward_actor_names[7] = "Caev_Glaze_Camouflage";
+    sfi_reward_actor_names[8] = "Glaze_Tech";
+    sfi_reward_actor_names[9] = "Storm_Glaze_Kaelthas_Base_LivingBomb";
+    sfi_reward_actor_names[10] = "Storm_Glaze_BlackArrow_TangentSpace";
+}
+
+bool sfr_reward_on_activation(bool test_conds, bool run_actions)
+{
+    int player = sf_core_event_get_int("player");
+    int reward_id = sf_core_event_get_int("reward_id");
+    int kind = sf_core_event_get_int("kind");
+    int choice = sf_core_event_get_int("choice");
+
+    if (UnitIsValid(gm_players[player].hero.mainUnit) && UnitIsAlive(gm_players[player].hero.mainUnit)) {
+        sfr_reward_apply_effect(player, reward_id, false, false);
+        if (choice != -1) {
+            sfr_reward_apply_effect(player, choice, true, true);
+        }
+        // if (choice != reward_id) {
+        //     if (choice != -1) {
+        //     }
+        //     sfr_reward_apply_effect(player, reward_id, true, true);
+        // }
+        // else {
+        // }
+    }
+
+    return true;
+}
+
+bool sfr_reward_on_player_spawn(bool test_conds, bool run_actions)
+{
+    int player;
+
+    player = sf_core_event_get_int("player");
+
+    if (sfi_reward_states[player].choice[IBE_REWARD_KIND_GLAZE] != -1) {
+        sfr_reward_apply_effect(player, sfi_reward_states[player].choice[IBE_REWARD_KIND_GLAZE], true, false);
+    }
+
+    return true;
+}

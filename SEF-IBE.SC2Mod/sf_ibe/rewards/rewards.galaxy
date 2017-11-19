@@ -1,34 +1,129 @@
 static bool[MAX_PLAYERS + 1][IBE_REWARD_MAX] sfi_reward_player_unlocked_temp;
-static string [IBE_REWARD_MAX] sfi_reward_actor_names;
+
+static void ibe_reward_save_to_stream(structref<db_stream_t> stream, structref<ibe_reward_state_t> rewp)
+{
+    int i;
+
+    for (i = 0; i < IBE_REWARD_MAX; i += 1) {
+        db_stream_push_bool(stream, rewp.unlocked[i]);
+    }
+    for (i = 0; i < IBE_REWARD_KIND_MAX; i += 1) {
+        db_stream_push_int(stream, rewp.choice[i]);
+    }
+}
+
+static void ibe_reward_load_from_stream(structref<db_stream_t> stream, structref<ibe_reward_state_t> rewp)
+{
+    int i;
+
+    for (i = 0; i < IBE_REWARD_MAX; i += 1) {
+        rewp.unlocked[i] = db_stream_pop_bool(stream);
+    }
+    for (i = 0; i < IBE_REWARD_KIND_MAX; i += 1) {
+        rewp.choice[i] = db_stream_pop_int(stream);
+    }
+}
+
+bool ibe_reward_state_migrate(structref<db_stream_t> stream, int from_ver)
+{
+    return false;
+}
+
+bool ibe_reward_state_load(int player)
+{
+    int version;
+    string buff;
+    db_stream_t stream;
+    int tmp;
+
+    sfi_reward_banks[player] = BankLoad(sfi_reward_bank_name, player);
+
+    if (!BankSectionExists(sfi_reward_banks[player], "rewards")) {
+        ibe_reward_state_save(player);
+    }
+    else {
+        db_stream_init(stream, DB_STREAM_FIFO);
+
+        buff = ibe_stat_bk_get_value_str(sfi_reward_banks[player], "rewards", "d");
+        tmp = db_crypt_validate(buff);
+        if (tmp != 0) {
+            if (tmp == DB_CRYPT_ERR_CHECKSUM_MISSMATCH) {
+                UIDisplayMessage(PlayerGroupSingle(player), c_messageAreaSubtitle, StringToText("Rewards data couldn't be loaded - checksum missmatch"));
+            }
+            else {
+                Dbg("[reward/load] bank reset");
+                ibe_reward_state_save(player);
+            }
+            return false;
+        }
+
+        db_stream_load(stream, db_crypt_decrypt(ibe_stat_player_encryption_key(player), buff));
+
+        version = BankValueGetAsInt(sfi_reward_banks[player], "rewards", "v");
+        if (version < IBE_REWARD_STATE_CURRENT_VERSION) {
+            if (!ibe_reward_state_migrate(stream, version)) {
+                ibe_reward_state_save(player);
+                return false;
+            }
+            else {
+            }
+        }
+
+        ibe_reward_load_from_stream(stream, sfi_reward_states[player]);
+    }
+
+    return true;
+}
+
+void ibe_reward_state_save(int player)
+{
+    db_stream_t stream;
+    string buff;
+
+    db_stream_init(stream, DB_STREAM_FIFO);
+
+    if (!BankSectionExists(sfi_reward_banks[player], "rewards")) {
+        BankSectionCreate(sfi_reward_banks[player], "rewards");
+    }
+
+    ibe_reward_save_to_stream(stream, sfi_reward_states[player]);
+    buff = db_crypt_encrypt(ibe_stat_player_encryption_key(player), stream.buff);
+    ibe_stat_bk_set_value_str(sfi_reward_banks[player], "rewards", "d", buff);
+    BankValueSetFromInt(sfi_reward_banks[player], "rewards", "v", IBE_REWARD_STATE_CURRENT_VERSION);
+    BankSave(sfi_reward_banks[player]);
+}
 
 void sfi_reward_init()
 {
     int i;
-
-    // TODO: remove after map update
-    if (TriggerExists(TriggerFind("gt_RewardActivation"))) {
-        TriggerDestroy(TriggerFind("gt_RewardActivation"));
-    }
-    if (TriggerExists(TriggerFind("gt_HeroSpawn"))) {
-        TriggerDestroy(TriggerFind("gt_HeroSpawn"));
-    }
-
-    sf_core_event_attach(TriggerCreate("sfi_reward_on_player_spawn"), "hero_spawn");
+    int l;
 
     for (i = 0; i < IBE_REWARD_MAX; i += 1) {
         sfi_rewards[i].kind = -1;
     }
 
-    sfi_reward_actor_names[1] = "Storm_Glaze_Crusader_Base_FallingSword";
-    sfi_reward_actor_names[2] = "Storm_Glaze_Nova_Novazon_Decoy";
-    sfi_reward_actor_names[3] = "Caev_Glaze_Rainbow_Orange";
-    sfi_reward_actor_names[4] = "Glaze_Tech_Scales_Blue1";
-    sfi_reward_actor_names[5] = "Caev_Glaze_Terrain";
-    sfi_reward_actor_names[6] = "Caev_Glaze_Rainbow_Purple";
-    sfi_reward_actor_names[7] = "Caev_Glaze_Camouflage";
-    sfi_reward_actor_names[8] = "Glaze_Tech";
-    sfi_reward_actor_names[9] = "Storm_Glaze_Kaelthas_Base_LivingBomb";
-    sfi_reward_actor_names[10] = "Storm_Glaze_BlackArrow_TangentSpace";
+    for (i = 1; i <= MAX_PLAYERS; i += 1) {
+        for (l = 0; l < IBE_REWARD_KIND_MAX; l += 1) {
+            sfi_reward_states[i].choice[l] = -1;
+        }
+    }
+}
+
+void sfi_reward_load()
+{
+    int player;
+    int i;
+
+    for (player = 1; player <= MAX_PLAYERS; player += 1) {
+        // migrate data from profile
+        for (i = 0; i < IBE_REWARD_MAX; i += 1) {
+            sfi_reward_states[player].unlocked[i] = ibe_stat_profiles[player].rewards_unlocked[i];
+        }
+        for (i = 0; i < IBE_REWARD_KIND_MAX; i += 1) {
+            sfi_reward_states[player].choice[i] = ibe_stat_profiles[player].rewards_choice[i];
+        }
+        ibe_reward_state_load(player);
+    }
 }
 
 bool sfi_reward_register(int reward_id, int kind, bool exclusive, text title, text desc, string icon)
@@ -60,7 +155,7 @@ void sfi_reward_player_unlock_reward(int player, int reward_id)
     }
 
     if (!reward.exclusive) {
-        if (!ibe_stat_profiles[player].rewards_unlocked[reward_id]) {
+        if (!sfi_reward_states[player].unlocked[reward_id]) {
             UIDisplayMessage(
                 PlayerGroupAll(),
                 c_messageAreaSubtitle,
@@ -73,11 +168,11 @@ void sfi_reward_player_unlock_reward(int player, int reward_id)
             sf_core_event_set_int("player", player);
             sf_core_event_send();
 
-            ibe_stat_profiles[player].rewards_unlocked[reward_id] = true;
-            ibe_stat_profile_save(player);
+            sfi_reward_states[player].unlocked[reward_id] = true;
+            ibe_reward_state_save(player);
         }
 
-        if (ibe_stat_profiles[player].rewards_choice[reward.kind] == -1) {
+        if (sfi_reward_states[player].choice[reward.kind] == -1) {
             sfi_reward_player_activate_reward(player, reward_id);
         }
     }
@@ -93,8 +188,8 @@ bool sfi_reward_player_has_reward(int player, int reward_id)
         return sfi_reward_player_unlocked_temp[player][reward_id];
     }
     else {
-        Dbg("[reward/player_has_reward] p = " + IntToString(player) + " ; r_id = " + IntToString(reward_id) + " ; rval = " + libNtve_gf_ConvertBooleanToString(ibe_stat_profiles[player].rewards_unlocked[reward_id]) + " [NON-EXC]");
-        return ibe_stat_profiles[player].rewards_unlocked[reward_id];
+        Dbg("[reward/player_has_reward] p = " + IntToString(player) + " ; r_id = " + IntToString(reward_id) + " ; rval = " + libNtve_gf_ConvertBooleanToString(sfi_reward_states[player].unlocked[reward_id]) + " [NON-EXC]");
+        return sfi_reward_states[player].unlocked[reward_id];
     }
 }
 
@@ -102,7 +197,7 @@ int sfi_reward_player_get_active_reward(int player, int reward_kind)
 {
     int reward_id;
 
-    reward_id = ibe_stat_profiles[player].rewards_choice[reward_kind];
+    reward_id = sfi_reward_states[player].choice[reward_kind];
 
     Dbg("[reward/player_get_active] p = " + IntToString(player) + " ; r_kind = " + IntToString(reward_kind) + " ; r_id = " + IntToString(reward_id));
 
@@ -113,29 +208,6 @@ int sfi_reward_player_get_active_reward(int player, int reward_kind)
     return reward_id;
 }
 
-static void sfi_reward_apply_effect(int player, int reward_id, bool apply, bool fx)
-{
-    int kind;
-
-    kind = sfi_rewards[reward_id].kind;
-
-    if (apply) {
-        if (fx) {
-            libNtve_gf_CreateModelWithPointFacing("HybridWarpInEffect", libNtve_gf_PointFromPositionAndAngle(libNtve_gf_PointWithZOffset(UnitGetPosition(gm_players[player].hero.mainUnit), 0.0), UnitGetFacing(gm_players[player].hero.mainUnit)));
-            libNtve_gf_PlayAnimation(libNtve_gf_ActorLastCreated(), c_animNameDefault, "Stand", 0, c_animTimeDefault);
-            ActorSend(libNtve_gf_ActorLastCreated(), "SetOpacity 0.000000 1.475000");
-            SoundPlayAtPoint(SoundLink("AbathurA_EvolutionComplete", 0), PlayerGroupAll(), UnitGetPosition(gm_players[player].hero.mainUnit), 0, 120.0, 0);
-        }
-
-        ActorCreate(ActorScopeFromUnit(gm_players[player].hero.mainUnit), sfi_reward_actor_names[reward_id], null, null, null);
-        ActorScopeRefSet(ActorScopeFromUnit(gm_players[player].hero.mainUnit), "::scope.sf_gl", ActorLastCreated());
-    }
-    else {
-        ActorSend(ActorScopeRefGet(ActorScopeFromUnit(gm_players[player].hero.mainUnit), "::scope.sf_gl"), "ModelMaterialRemoveFrom ::Main");
-        ActorSend(ActorScopeRefGet(ActorScopeFromUnit(gm_players[player].hero.mainUnit), "::scope.sf_gl"), "Destroy");
-    }
-}
-
 void sfi_reward_player_activate_reward(int player, int reward_id)
 {
     int kind;
@@ -144,29 +216,19 @@ void sfi_reward_player_activate_reward(int player, int reward_id)
 
     kind = sfi_rewards[reward_id].kind;
 
-    if (UnitIsValid(gm_players[player].hero.mainUnit) && UnitIsAlive(gm_players[player].hero.mainUnit)) {
-        if (ibe_stat_profiles[player].rewards_choice[kind] != reward_id) {
-            if (ibe_stat_profiles[player].rewards_choice[kind] != -1) {
-                sfi_reward_apply_effect(player, ibe_stat_profiles[player].rewards_choice[kind], false, false);
-            }
-            sfi_reward_apply_effect(player, reward_id, true, true);
-        }
-        else {
-            sfi_reward_apply_effect(player, reward_id, false, false);
-        }
-    }
-
-    if (ibe_stat_profiles[player].rewards_choice[kind] != reward_id) {
-        ibe_stat_profiles[player].rewards_choice[kind] = reward_id;
+    if (sfi_reward_states[player].choice[kind] != reward_id) {
+        sfi_reward_states[player].choice[kind] = reward_id;
     }
     else {
-        ibe_stat_profiles[player].rewards_choice[kind] = -1;
+        sfi_reward_states[player].choice[kind] = -1;
     }
+    ibe_reward_state_save(player);
 
     sf_core_event_prepare("reward_activation");
     sf_core_event_set_int("reward_id", reward_id);
     sf_core_event_set_int("reward_kind", kind);
     sf_core_event_set_int("player", player);
+    sf_core_event_set_int("choice", sfi_reward_states[player].choice[kind]);
     sf_core_event_send();
 }
 
@@ -178,17 +240,4 @@ void sfi_reward_add_event_activation(trigger trig)
 void sfi_reward_add_event_unlocked(trigger trig)
 {
     sf_core_event_attach(trig, "reward_unlocked");
-}
-
-bool sfi_reward_on_player_spawn(bool test_conds, bool run_actions)
-{
-    int player;
-
-    player = sf_core_event_get_int("player");
-
-    if (ibe_stat_profiles[player].rewards_choice[1] != -1) {
-        sfi_reward_apply_effect(player, ibe_stat_profiles[player].rewards_choice[1], true, false);
-    }
-
-    return true;
 }

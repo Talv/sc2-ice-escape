@@ -156,6 +156,22 @@ void DbgFx(fixed f) {
     Dbg("F: " + FixedToString(f, -1));
 }
 
+void DbgB(int v) {
+    string s;
+    int i;
+
+    for (i = 31; i >= 0; i -= 1) {
+        if (v & (1 << i)) {
+            s += "1";
+        }
+        else {
+            s += "0";
+        }
+    }
+
+    Dbg("B: " + s);
+}
+
 //
 
 void print_t(text msg) {

@@ -48,6 +48,7 @@ string libEBBC9C87_ge_sfPhysicsSurfaceKind_Ident (int lp_val) {
 
 // Functions
 void libEBBC9C87_gf_sfHeroChangePosition (unit lp_herounit, point lp_position, fixed lp_facing) {
+    // Automatic Variable Declarations
     // Implementation
     gm_setHeroPosition(gm_players[UnitGetOwner(lp_herounit)].hero, lp_position, lp_facing, 0);
 }
@@ -68,6 +69,7 @@ void libEBBC9C87_gf_sfChallengeSwap (int lp_id) {
 bool auto_libEBBC9C87_gf_sfChallengeSwap_TriggerFunc (bool testConds, bool runActions) {
     int lp_id = auto_libEBBC9C87_gf_sfChallengeSwap_lp_id;
 
+    // Automatic Variable Declarations
     // Implementation
     lv_setup(lp_id);
     return true;

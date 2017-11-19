@@ -11,6 +11,7 @@ struct sf_tool_command_payload_t {
     string[8] parametersNames;
     string[8] parametersArgs;
     string[8] arguments;
+    int argc;
 };
 
 void sf_tool_command_handler_prototype(structref<sf_tool_command_payload_t> payload);

@@ -44,31 +44,37 @@ void lib3FB28C60_InitCustomScript () {
 // Presets
 // Functions
 int lib3FB28C60_gf_sfiTriggeringRewardId () {
+    // Automatic Variable Declarations
     // Implementation
     return sf_core_event_get_int("reward_id");
 }
 
 int lib3FB28C60_gf_sfiTriggeringRewardKind () {
+    // Automatic Variable Declarations
     // Implementation
     return sf_core_event_get_int("reward_kind");
 }
 
 fixed lib3FB28C60_gf_CircumferenceOfCircle (fixed lp_radius) {
+    // Automatic Variable Declarations
     // Implementation
     return (lp_radius * 2.0 * lib3FB28C60_gv_pI);
 }
 
 fixed lib3FB28C60_gf_PercentValueToMultiplierFactor (fixed lp_perecent) {
+    // Automatic Variable Declarations
     // Implementation
     return (lp_perecent / 100.0);
 }
 
 void lib3FB28C60_gf_RegisterTriggerAsTemporaryForCurrentChallenge (trigger lp_trig) {
+    // Automatic Variable Declarations
     // Implementation
     LevelRegisterTemporaryTrigger(lp_trig);
 }
 
 void lib3FB28C60_gf_ModifyUnitSpeedByPercent (unit lp_unit, fixed lp_percent) {
+    // Automatic Variable Declarations
     // Implementation
     UnitSetPropertyFixed(lp_unit, c_unitPropMovementSpeed, (UnitGetPropertyFixed(lp_unit, c_unitPropMovementSpeed, c_unitPropNormal) * lib3FB28C60_gf_PercentValueToMultiplierFactor(lp_percent)));
 }
@@ -77,6 +83,7 @@ void lib3FB28C60_gf_PortalCreateSimple (point lp_portalposition, point lp_target
     // Variable Declarations
     int lv_tmp;
 
+    // Automatic Variable Declarations
     // Variable Initialization
     lv_tmp = -1;
 
@@ -91,6 +98,7 @@ void lib3FB28C60_gf_PortalCreateComplex (string lp_portalstartpoint, string lp_p
     // Variable Declarations
     int lv_tmp;
 
+    // Automatic Variable Declarations
     // Variable Initialization
     lv_tmp = -1;
 
@@ -110,6 +118,7 @@ void lib3FB28C60_gf_PortalCreateComplex (string lp_portalstartpoint, string lp_p
 }
 
 void lib3FB28C60_gf_TurnForcerCreateSimple (point lp_position, int lp_autorotate, fixed lp_rotationspeed) {
+    // Automatic Variable Declarations
     // Implementation
     sf_envi_turn_forcer_create("DirectionArrow", lp_position);
     sf_envi_turn_forcer_set_rotation_factor(sf_envi_object_last_created(), lib3FB28C60_gv_turnForcerRotationSpeed);
@@ -117,6 +126,7 @@ void lib3FB28C60_gf_TurnForcerCreateSimple (point lp_position, int lp_autorotate
 }
 
 void lib3FB28C60_gf_TurnForcerCreateOnPath (string lp_startpoint, string lp_endpoint, int lp_routeloop) {
+    // Automatic Variable Declarations
     // Implementation
     sf_envi_turn_forcer_create("DirectionArrow", PointFromName(lp_startpoint));
     sf_envi_turn_forcer_set_rotation_factor(sf_envi_object_last_created(), lib3FB28C60_gv_turnForcerRotationSpeed);
@@ -130,6 +140,7 @@ void lib3FB28C60_gf_SpikesCreate (point lp_position, int lp_sizeclass, bool lp_i
     // Variable Declarations
     fixed lv_sizevalue;
 
+    // Automatic Variable Declarations
     // Variable Initialization
 
     // Implementation
@@ -150,6 +161,7 @@ void lib3FB28C60_gf_SpikesCreate (point lp_position, int lp_sizeclass, bool lp_i
 }
 
 void lib3FB28C60_gf_PowerupEssenceCreate (point lp_position) {
+    // Automatic Variable Declarations
     // Implementation
     sf_envi_powerup_create("PickupChronoRiftCharge", lp_position);
 }
@@ -159,6 +171,7 @@ void lib3FB28C60_gf_DynamicSurfaceCreate (point lp_position, int lp_surfacekind,
     region lv_rg;
     fixed lv_scalefactor;
 
+    // Automatic Variable Declarations
     // Variable Initialization
     lv_scalefactor = (lp_radius / 2.0);
 
@@ -169,40 +182,40 @@ void lib3FB28C60_gf_DynamicSurfaceCreate (point lp_position, int lp_surfacekind,
 }
 
 void lib3FB28C60_gf_RandomMoveZoneCreate (region lp_area, string lp_initialunittype, int lp_initialunitcount, fixed lp_delaybetweenroundsmin, fixed lp_delaybetweenroundsmax, fixed lp_unitcountperroundmin, fixed lp_unitcountperroundmax, fixed lp_distancetonextwaypointmin, fixed lp_distancetonextwaypointmax, fixed lp_unitspreadintesivitymin, fixed lp_unitspreadintesivitymax, bool lp_canmoveonlyforward) {
-    int autoD7C47609_ae;
-    int autoD7C47609_ai;
-
     // Variable Declarations
     int lv_i;
+
+    // Automatic Variable Declarations
+    int autoD7C47609_ae;
+    const int autoD7C47609_ai = 1;
 
     // Variable Initialization
 
     // Implementation
     sf_ctrl_zone_random_create(lp_area, lp_delaybetweenroundsmin, lp_delaybetweenroundsmax, lp_unitcountperroundmin, lp_unitcountperroundmax, lp_distancetonextwaypointmin, lp_distancetonextwaypointmax, lp_unitspreadintesivitymin, lp_unitspreadintesivitymax, lib3FB28C60_gv_randomMoveNotifyDelay, false, lp_canmoveonlyforward);
     autoD7C47609_ae = lp_initialunitcount;
-    autoD7C47609_ai = 1;
     lv_i = 1;
-    for ( ; ( (autoD7C47609_ai >= 0 && lv_i <= autoD7C47609_ae) || (autoD7C47609_ai <= 0 && lv_i >= autoD7C47609_ae) ) ; lv_i += autoD7C47609_ai ) {
+    for ( ; ( (autoD7C47609_ai >= 0 && lv_i <= autoD7C47609_ae) || (autoD7C47609_ai < 0 && lv_i >= autoD7C47609_ae) ) ; lv_i += autoD7C47609_ai ) {
         sf_envi_creature_create(lp_initialunittype, RegionRandomPoint(lp_area));
         sf_ctrl_zone_random_append_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(sf_envi_object_last_created()), false);
     }
 }
 
 void lib3FB28C60_gf_StalkerZoneCreate (region lp_area, string lp_initialunittype, int lp_initialunitcount, fixed lp_activationrange) {
-    int auto12034E21_ae;
-    int auto12034E21_ai;
-
     // Variable Declarations
     int lv_i;
+
+    // Automatic Variable Declarations
+    int auto12034E21_ae;
+    const int auto12034E21_ai = 1;
 
     // Variable Initialization
 
     // Implementation
     sf_ctrl_zone_stalker_create(lp_area, lp_activationrange);
     auto12034E21_ae = lp_initialunitcount;
-    auto12034E21_ai = 1;
     lv_i = 1;
-    for ( ; ( (auto12034E21_ai >= 0 && lv_i <= auto12034E21_ae) || (auto12034E21_ai <= 0 && lv_i >= auto12034E21_ae) ) ; lv_i += auto12034E21_ai ) {
+    for ( ; ( (auto12034E21_ai >= 0 && lv_i <= auto12034E21_ae) || (auto12034E21_ai < 0 && lv_i >= auto12034E21_ae) ) ; lv_i += auto12034E21_ai ) {
         sf_envi_creature_create(lp_initialunittype, RegionRandomPoint(lp_area));
         UnitSetTeamColorIndex(sf_envi_object_get_base_unit(sf_envi_object_last_created()), 1);
         if ((lib3FB28C60_gf_DifficultyIsExtreme() == true)) {
@@ -219,6 +232,7 @@ void lib3FB28C60_gf_ExecuteSequenceSwing (int lp_object, fixed lp_time, point lp
     // Variable Declarations
     point lv_currpos;
 
+    // Automatic Variable Declarations
     // Variable Initialization
     lv_currpos = UnitGetPosition(sf_envi_object_get_base_unit(lp_object));
 
@@ -234,6 +248,7 @@ void lib3FB28C60_gf_CreateColoredZealot (int lp_kind, point lp_position) {
     fixed lv_speed;
     int lv_teamcolor;
 
+    // Automatic Variable Declarations
     // Variable Initialization
     lv_teamcolor = 1;
 
@@ -272,6 +287,7 @@ void lib3FB28C60_gf_CreateColoredZealot (int lp_kind, point lp_position) {
 }
 
 void lib3FB28C60_gf_UnitShotMissileAtPoint (unit lp_unit, point lp_target) {
+    // Automatic Variable Declarations
     // Implementation
     if ((UnitGetType(lp_unit) == "HammerSecurity")) {
         libNtve_gf_MakeUnitFacePoint(lp_unit, lp_target, lib3FB28C60_gv_tickPeriod);
@@ -287,12 +303,14 @@ void lib3FB28C60_gf_UnitShotMissileAtPoint (unit lp_unit, point lp_target) {
 }
 
 void lib3FB28C60_gf_UfoLineCreate (point lp_position, fixed lp_width, fixed lp_angle) {
+    // Automatic Variable Declarations
     // Implementation
     sf_envi_imitator_create("Ufo", lp_position, 1.0);
     sf_envi_imitator_compose_line_from_center(sf_envi_object_last_created(), 0.0, lp_angle, lp_width);
 }
 
 void lib3FB28C60_gf_UfoSingleFloatUpAndDown (int lp_object, fixed lp_uptime, fixed lp_downtime) {
+    // Automatic Variable Declarations
     // Implementation
     lib3FB28C60_gf_UfoCreateExecutor(lp_uptime, lp_downtime);
     sf_ctrl_executor_attach_unit(sf_ctrl_controller_last_created(), sf_envi_object_get_base_unit(lp_object));
@@ -300,6 +318,7 @@ void lib3FB28C60_gf_UfoSingleFloatUpAndDown (int lp_object, fixed lp_uptime, fix
 }
 
 void lib3FB28C60_gf_UfoCreateExecutor (fixed lp_uptime, fixed lp_downtime) {
+    // Automatic Variable Declarations
     // Implementation
     sf_ctrl_executor_create(SF_CTRL_ROUTE_LOOP_FORWARD);
     sf_ctrl_executor_insert_sequence_at(sf_ctrl_controller_last_created(), 2, lp_downtime, 0.3, "", SF_CTRL_EXECUTOR_PROP_HEIGHT, lib3FB28C60_gv_ufoFloatHeight, 0.0);
@@ -308,12 +327,14 @@ void lib3FB28C60_gf_UfoCreateExecutor (fixed lp_uptime, fixed lp_downtime) {
 }
 
 void lib3FB28C60_gf_FlamethrowerCreate (point lp_position, fixed lp_flamelength) {
+    // Automatic Variable Declarations
     // Implementation
     sf_envi_flamer_create(lp_position);
     sf_envi_flamer_set_flame_length(sf_envi_object_last_created(), lp_flamelength);
 }
 
 void lib3FB28C60_gf_CrystalWheelCreateBasic (point lp_position, fixed lp_radius, int lp_autorotate, fixed lp_rotationspeed) {
+    // Automatic Variable Declarations
     // Implementation
     sf_envi_imitator_create("iceRingComponent", lp_position, 1.0);
     sf_envi_imitator_compose_wheel(sf_envi_object_last_created(), lp_radius);
@@ -327,52 +348,52 @@ void lib3FB28C60_gf_CrystalWheelCreateBasic (point lp_position, fixed lp_radius,
 }
 
 void lib3FB28C60_gf_CrystalWheelCreateSingleEntry (point lp_position, fixed lp_radius, int lp_autorotate, fixed lp_rotationspeed, int lp_entrylength, fixed lp_entryangle) {
-    int autoBE6D52D7_ae;
-    int autoBE6D52D7_ai;
-
     // Variable Declarations
     int lv_i;
+
+    // Automatic Variable Declarations
+    int autoBE6D52D7_ae;
+    const int autoBE6D52D7_ai = 1;
 
     // Variable Initialization
 
     // Implementation
     lib3FB28C60_gf_CrystalWheelCreateBasic(lp_position, lp_radius, lp_autorotate, lp_rotationspeed);
     autoBE6D52D7_ae = lp_entrylength;
-    autoBE6D52D7_ai = 1;
     lv_i = 1;
-    for ( ; ( (autoBE6D52D7_ai >= 0 && lv_i <= autoBE6D52D7_ae) || (autoBE6D52D7_ai <= 0 && lv_i >= autoBE6D52D7_ae) ) ; lv_i += autoBE6D52D7_ai ) {
+    for ( ; ( (autoBE6D52D7_ai >= 0 && lv_i <= autoBE6D52D7_ae) || (autoBE6D52D7_ai < 0 && lv_i >= autoBE6D52D7_ae) ) ; lv_i += autoBE6D52D7_ai ) {
         sf_envi_imitator_remove_segment_from_center(sf_envi_object_last_created(), lp_radius, lp_entryangle);
     }
 }
 
 void lib3FB28C60_gf_CrystalWheelCreateDoubleEntry (point lp_position, fixed lp_radius, int lp_autorotate, fixed lp_rotationspeed, int lp_entrylength, fixed lp_entryangle, int lp_secondentrylength, fixed lp_secondentryangle) {
-    int auto6CCE0B54_ae;
-    int auto6CCE0B54_ai;
-    int autoCD22ED4E_ae;
-    int autoCD22ED4E_ai;
-
     // Variable Declarations
     int lv_i;
+
+    // Automatic Variable Declarations
+    int auto6CCE0B54_ae;
+    const int auto6CCE0B54_ai = 1;
+    int autoCD22ED4E_ae;
+    const int autoCD22ED4E_ai = 1;
 
     // Variable Initialization
 
     // Implementation
     lib3FB28C60_gf_CrystalWheelCreateBasic(lp_position, lp_radius, lp_autorotate, lp_rotationspeed);
     auto6CCE0B54_ae = lp_entrylength;
-    auto6CCE0B54_ai = 1;
     lv_i = 1;
-    for ( ; ( (auto6CCE0B54_ai >= 0 && lv_i <= auto6CCE0B54_ae) || (auto6CCE0B54_ai <= 0 && lv_i >= auto6CCE0B54_ae) ) ; lv_i += auto6CCE0B54_ai ) {
+    for ( ; ( (auto6CCE0B54_ai >= 0 && lv_i <= auto6CCE0B54_ae) || (auto6CCE0B54_ai < 0 && lv_i >= auto6CCE0B54_ae) ) ; lv_i += auto6CCE0B54_ai ) {
         sf_envi_imitator_remove_segment_from_center(sf_envi_object_last_created(), lp_radius, lp_entryangle);
     }
     autoCD22ED4E_ae = lp_secondentrylength;
-    autoCD22ED4E_ai = 1;
     lv_i = 1;
-    for ( ; ( (autoCD22ED4E_ai >= 0 && lv_i <= autoCD22ED4E_ae) || (autoCD22ED4E_ai <= 0 && lv_i >= autoCD22ED4E_ae) ) ; lv_i += autoCD22ED4E_ai ) {
+    for ( ; ( (autoCD22ED4E_ai >= 0 && lv_i <= autoCD22ED4E_ae) || (autoCD22ED4E_ai < 0 && lv_i >= autoCD22ED4E_ae) ) ; lv_i += autoCD22ED4E_ai ) {
         sf_envi_imitator_remove_segment_from_center(sf_envi_object_last_created(), lp_radius, lp_secondentryangle);
     }
 }
 
 void lib3FB28C60_gf_CrystalBlenderCreate (point lp_position, int lp_autorotate, fixed lp_rotationspeed, fixed lp_edge1Width, fixed lp_edge1Angle, fixed lp_edge2Width, fixed lp_edge2Angle, fixed lp_edge3Width, fixed lp_edge3Angle, fixed lp_edge4Width, fixed lp_edge4Angle) {
+    // Automatic Variable Declarations
     // Implementation
     sf_envi_imitator_create("iceRingComponent", lp_position, 1.0);
     if ((lp_edge1Width > 0.0)) {
@@ -451,11 +472,6 @@ bool auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_TriggerFunc (bool testCond
 
     int init_i;
 
-    int auto5F4A3F6E_ae;
-    int auto5F4A3F6E_ai;
-    int auto18955829_ae;
-    int auto18955829_ai;
-
     // Variable Declarations
     int lv_curr;
     int lv_to;
@@ -465,6 +481,12 @@ bool auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_TriggerFunc (bool testCond
     int lv_gapwidththisturn;
     int[21] lv_ctl;
 
+    // Automatic Variable Declarations
+    int auto5F4A3F6E_ae;
+    const int auto5F4A3F6E_ai = 1;
+    int auto18955829_ae;
+    int auto18955829_ai;
+
     // Variable Initialization
     for (init_i = 0; init_i <= 20; init_i += 1) {
         lv_ctl[init_i] = -1;
@@ -473,9 +495,8 @@ bool auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_TriggerFunc (bool testCond
     // Implementation
     lib3FB28C60_gf_RegisterTriggerAsTemporaryForCurrentChallenge(TriggerGetCurrent());
     auto5F4A3F6E_ae = lp_count;
-    auto5F4A3F6E_ai = 1;
     lv_curr = 0;
-    for ( ; ( (auto5F4A3F6E_ai >= 0 && lv_curr <= auto5F4A3F6E_ae) || (auto5F4A3F6E_ai <= 0 && lv_curr >= auto5F4A3F6E_ae) ) ; lv_curr += auto5F4A3F6E_ai ) {
+    for ( ; ( (auto5F4A3F6E_ai >= 0 && lv_curr <= auto5F4A3F6E_ae) || (auto5F4A3F6E_ai < 0 && lv_curr >= auto5F4A3F6E_ae) ) ; lv_curr += auto5F4A3F6E_ai ) {
         sf_ctrl_route_create();
         sf_ctrl_route_append_waypoints_range_with_offset(sf_ctrl_controller_last_created(), lp_routestartpointname, lp_routeendpointname, (IntToFixed(lv_curr) * lp_distance), lp_angle);
         if ((lp_finalposition != null)) {
@@ -499,7 +520,7 @@ bool auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_TriggerFunc (bool testCond
         auto18955829_ae = lv_to;
         auto18955829_ai = lv_inc;
         lv_curr = lv_from;
-        for ( ; ( (auto18955829_ai >= 0 && lv_curr <= auto18955829_ae) || (auto18955829_ai <= 0 && lv_curr >= auto18955829_ae) ) ; lv_curr += auto18955829_ai ) {
+        for ( ; ( (auto18955829_ai >= 0 && lv_curr <= auto18955829_ae) || (auto18955829_ai < 0 && lv_curr >= auto18955829_ae) ) ; lv_curr += auto18955829_ai ) {
             if ((lp_delaybetweenunits > 0.0)) {
                 Wait(lp_delaybetweenunits, c_timeGame);
             }
@@ -522,6 +543,7 @@ bool auto_lib3FB28C60_gf_CreateCreatureWalkSideBySide_TriggerFunc (bool testCond
 }
 
 void lib3FB28C60_gf_CreatureCreateOnPath (string lp_unittype, string lp_pointstart, string lp_pointend, int lp_loop) {
+    // Automatic Variable Declarations
     // Implementation
     sf_ctrl_route_create();
     sf_ctrl_route_set_loop(sf_ctrl_controller_last_created(), lp_loop);
@@ -531,6 +553,7 @@ void lib3FB28C60_gf_CreatureCreateOnPath (string lp_unittype, string lp_pointsta
 }
 
 void lib3FB28C60_gf_CreatureCreateOnRoute (string lp_unittype, int lp_route) {
+    // Automatic Variable Declarations
     // Implementation
     sf_envi_creature_create(lp_unittype, sf_ctrl_route_get_action_position(lp_route, 0));
     sf_ctrl_route_commit_unit(lp_route, sf_envi_object_get_base_unit(sf_envi_object_last_created()), 0);
@@ -540,6 +563,7 @@ void lib3FB28C60_gf_PutExistingCreatureOnPath (int lp_object, string lp_pointsta
     // Variable Declarations
     int lv_tmpctrl;
 
+    // Automatic Variable Declarations
     // Variable Initialization
     lv_tmpctrl = -1;
 
@@ -559,6 +583,7 @@ void lib3FB28C60_gf_CreatureCreatePatroller (string lp_unittype, point lp_points
     // Variable Declarations
     point lv_spawnpos;
 
+    // Automatic Variable Declarations
     // Variable Initialization
     lv_spawnpos = libNtve_gf_PointOffsetTowardsPoint(lp_pointstart, (DistanceBetweenPoints(lp_pointstart, lp_pointend) * lp_initialpositionshift), lp_pointend);
 
@@ -572,9 +597,6 @@ void lib3FB28C60_gf_CreatureCreatePatroller (string lp_unittype, point lp_points
 }
 
 void lib3FB28C60_gf_PatrollersLineChainCreate (point lp_startpoint, point lp_endpoint, fixed lp_chainmaxdistance, fixed lp_chaindirectionangle, string lp_unittype, int lp_unitamount, fixed lp_spawndelay) {
-    int autoA8C123E8_ae;
-    int autoA8C123E8_ai;
-
     // Variable Declarations
     int lv_i;
     point lv_pos_sta;
@@ -582,13 +604,16 @@ void lib3FB28C60_gf_PatrollersLineChainCreate (point lp_startpoint, point lp_end
     point lv_pos_end;
     fixed lv_pos_shift;
 
+    // Automatic Variable Declarations
+    int autoA8C123E8_ae;
+    const int autoA8C123E8_ai = 1;
+
     // Variable Initialization
 
     // Implementation
     autoA8C123E8_ae = (lp_unitamount - 1);
-    autoA8C123E8_ai = 1;
     lv_i = 0;
-    for ( ; ( (autoA8C123E8_ai >= 0 && lv_i <= autoA8C123E8_ae) || (autoA8C123E8_ai <= 0 && lv_i >= autoA8C123E8_ae) ) ; lv_i += autoA8C123E8_ai ) {
+    for ( ; ( (autoA8C123E8_ai >= 0 && lv_i <= autoA8C123E8_ae) || (autoA8C123E8_ai < 0 && lv_i >= autoA8C123E8_ae) ) ; lv_i += autoA8C123E8_ai ) {
         lv_pos_sta = PointWithOffsetPolar(lp_startpoint, (lp_chainmaxdistance * (IntToFixed(lv_i) / IntToFixed(lp_unitamount))), lp_chaindirectionangle);
         lv_pos_end = PointWithOffsetPolar(lp_endpoint, (lp_chainmaxdistance * (IntToFixed(lv_i) / IntToFixed(lp_unitamount))), lp_chaindirectionangle);
         sf_ctrl_route_create();
@@ -602,20 +627,20 @@ void lib3FB28C60_gf_PatrollersLineChainCreate (point lp_startpoint, point lp_end
 }
 
 void lib3FB28C60_gf_DistributeCreaturesOnRoute (string lp_unittype, int lp_unitamount, int lp_route, fixed lp_startoffsetfactor, fixed lp_endoffsetfactor) {
-    int auto3ACE996D_ae;
-    int auto3ACE996D_ai;
-
     // Variable Declarations
     int lv_i;
     fixed lv_calcoffset;
+
+    // Automatic Variable Declarations
+    int auto3ACE996D_ae;
+    const int auto3ACE996D_ai = 1;
 
     // Variable Initialization
 
     // Implementation
     auto3ACE996D_ae = (lp_unitamount - 1);
-    auto3ACE996D_ai = 1;
     lv_i = 0;
-    for ( ; ( (auto3ACE996D_ai >= 0 && lv_i <= auto3ACE996D_ae) || (auto3ACE996D_ai <= 0 && lv_i >= auto3ACE996D_ae) ) ; lv_i += auto3ACE996D_ai ) {
+    for ( ; ( (auto3ACE996D_ai >= 0 && lv_i <= auto3ACE996D_ae) || (auto3ACE996D_ai < 0 && lv_i >= auto3ACE996D_ae) ) ; lv_i += auto3ACE996D_ai ) {
         lv_calcoffset = (((IntToFixed(lv_i) / IntToFixed(lp_unitamount)) * (lp_endoffsetfactor - lp_startoffsetfactor)) + lp_startoffsetfactor);
         sf_envi_creature_create(lp_unittype, null);
         sf_ctrl_route_shift_unit_position(lp_route, sf_envi_object_get_base_unit(sf_envi_object_last_created()), lv_calcoffset);
@@ -625,6 +650,7 @@ void lib3FB28C60_gf_DistributeCreaturesOnRoute (string lp_unittype, int lp_unita
 }
 
 void lib3FB28C60_gf_CreatureTrainRouteCreate (string lp_unittype, int lp_unitamount, string lp_pointstart, string lp_pointend, fixed lp_startoffsetfactor, fixed lp_endoffsetfactor) {
+    // Automatic Variable Declarations
     // Implementation
     sf_ctrl_route_create();
     sf_ctrl_route_set_loop(sf_ctrl_controller_last_created(), SF_CTRL_ROUTE_LOOP_FORWARD);
@@ -633,22 +659,22 @@ void lib3FB28C60_gf_CreatureTrainRouteCreate (string lp_unittype, int lp_unitamo
 }
 
 int lib3FB28C60_gf_RouteAroundCircleCreate (point lp_center, fixed lp_radius, bool lp_forward) {
-    fixed autoD3041EC5_ae;
-    fixed autoD3041EC5_ai;
-
     // Variable Declarations
     fixed lv_i;
     fixed lv_offset;
+
+    // Automatic Variable Declarations
+    const fixed autoD3041EC5_ae = 359.0;
+    fixed autoD3041EC5_ai;
 
     // Variable Initialization
 
     // Implementation
     sf_ctrl_route_create();
     sf_ctrl_route_set_loop(sf_ctrl_controller_last_created(), SF_CTRL_ROUTE_LOOP_FORWARD);
-    autoD3041EC5_ae = 359.0;
     autoD3041EC5_ai = (360.0 / (lib3FB28C60_gf_CircumferenceOfCircle(lp_radius) * 1.7));
     lv_i = 0.0;
-    for ( ; ( (autoD3041EC5_ai >= 0 && lv_i <= autoD3041EC5_ae) || (autoD3041EC5_ai <= 0 && lv_i >= autoD3041EC5_ae) ) ; lv_i += autoD3041EC5_ai ) {
+    for ( ; ( (autoD3041EC5_ai >= 0 && lv_i <= autoD3041EC5_ae) || (autoD3041EC5_ai < 0 && lv_i >= autoD3041EC5_ae) ) ; lv_i += autoD3041EC5_ai ) {
         if ((lp_forward == true)) {
             lv_offset = lv_i;
         }
@@ -665,6 +691,7 @@ void lib3FB28C60_gf_ButtonCreate (int lp_type, point lp_position, bool lp_stayac
     string lv_unittype;
     region lv_guessedbtnregion;
 
+    // Automatic Variable Declarations
     // Variable Initialization
 
     // Implementation
@@ -689,6 +716,7 @@ void lib3FB28C60_gf_StoneSwitchCreate (point lp_position, region lp_buttonsregio
     // Variable Declarations
     region lv_guessedbtnregion;
 
+    // Automatic Variable Declarations
     // Variable Initialization
 
     // Implementation
@@ -707,6 +735,7 @@ void lib3FB28C60_gf_StoneSwitchCreate (point lp_position, region lp_buttonsregio
 }
 
 void lib3FB28C60_gf_StoneInlayCreate (point lp_position) {
+    // Automatic Variable Declarations
     // Implementation
     sf_envi_button_create("StoneInlay", lp_position, null);
     sf_envi_button_set_pushable(sf_envi_object_last_created(), false);
@@ -715,6 +744,7 @@ void lib3FB28C60_gf_StoneInlayCreate (point lp_position) {
 }
 
 void lib3FB28C60_gf_LightSwitchCircleCreate (point lp_position, bool lp_stayactive, fixed lp_releasetimeout) {
+    // Automatic Variable Declarations
     // Implementation
     sf_envi_button_create("LightSwitch", lp_position, null);
     sf_envi_button_set_pushable(sf_envi_object_last_created(), lp_stayactive);
@@ -726,6 +756,7 @@ void lib3FB28C60_gf_LightSwitchRectCreate (point lp_position) {
     // Variable Declarations
     region lv_guessedbtnregion;
 
+    // Automatic Variable Declarations
     // Variable Initialization
 
     // Implementation
@@ -741,6 +772,7 @@ void lib3FB28C60_gf_IBEPrepareFramework () {
     // Variable Declarations
     bool lv_fui;
 
+    // Automatic Variable Declarations
     // Variable Initialization
     lv_fui = lib3FB28C60_gv_iBELaunchParameters.lv_fastuitransitions;
 
@@ -762,6 +794,7 @@ void lib3FB28C60_gf_IBEPrepareFramework () {
 }
 
 bool lib3FB28C60_gf_DifficultyIsExtreme () {
+    // Automatic Variable Declarations
     // Implementation
     if (ibe_game_difficulty == 1) { return true; } else { return false; }
 }
@@ -771,14 +804,18 @@ bool lib3FB28C60_gf_DifficultyIsExtreme () {
 // Trigger: Detect preplaced obstacles
 //--------------------------------------------------------------------------------------------------
 bool lib3FB28C60_gt_Detectpreplacedobstacles_Func (bool testConds, bool runActions) {
-    int autoDF3D7A44_ae;
-    int autoDF3D7A44_ai;
-
     // Variable Declarations
     region lv_region;
     int lv_challengeid;
     string[5] lv_unittypes;
     int lv_i;
+
+    // Automatic Variable Declarations
+    const int autoDF3D7A44_ae = 3;
+    const int autoDF3D7A44_ai = 1;
+    unitgroup auto751C92A3_g;
+    int auto751C92A3_u;
+    unit auto751C92A3_var;
 
     // Variable Initialization
     lv_challengeid = sf_chal_event_param_challenge_id();
@@ -793,15 +830,15 @@ bool lib3FB28C60_gt_Detectpreplacedobstacles_Func (bool testConds, bool runActio
     lv_unittypes[1] = "sfBushMedium";
     lv_unittypes[2] = "sfBushLarge";
     lv_unittypes[3] = "DarkTemplarNoAttack";
-    autoDF3D7A44_ae = 3;
-    autoDF3D7A44_ai = 1;
     lv_i = 0;
-    for ( ; ( (autoDF3D7A44_ai >= 0 && lv_i <= autoDF3D7A44_ae) || (autoDF3D7A44_ai <= 0 && lv_i >= autoDF3D7A44_ae) ) ; lv_i += autoDF3D7A44_ai ) {
-        UnitGroupLoopBegin(UnitGroup(lv_unittypes[lv_i], c_playerAny, lv_region, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0));
-        for ( ; !UnitGroupLoopDone() ; UnitGroupLoopStep() ) {
-            sf_envi_creature_create_preplaced(UnitGroupLoopCurrent());
+    for ( ; ( (autoDF3D7A44_ai >= 0 && lv_i <= autoDF3D7A44_ae) || (autoDF3D7A44_ai < 0 && lv_i >= autoDF3D7A44_ae) ) ; lv_i += autoDF3D7A44_ai ) {
+        auto751C92A3_g = UnitGroup(lv_unittypes[lv_i], c_playerAny, lv_region, UnitFilter(0, 0, (1 << c_targetFilterMissile), (1 << (c_targetFilterDead - 32)) | (1 << (c_targetFilterHidden - 32))), 0);
+        auto751C92A3_u = UnitGroupCount(auto751C92A3_g, c_unitCountAll);
+        for (;; auto751C92A3_u -= 1) {
+            auto751C92A3_var = UnitGroupUnitFromEnd(auto751C92A3_g, auto751C92A3_u);
+            if (auto751C92A3_var == null) { break; }
+            sf_envi_creature_create_preplaced(auto751C92A3_var);
         }
-        UnitGroupLoopEnd();
     }
     return true;
 }
@@ -816,6 +853,7 @@ void lib3FB28C60_gt_Detectpreplacedobstacles_Init () {
 // Trigger: Marauder explosion
 //--------------------------------------------------------------------------------------------------
 bool lib3FB28C60_gt_Marauderexplosion_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
     // Actions
     if (!runActions) {
         return true;
@@ -838,6 +876,7 @@ bool lib3FB28C60_gt_ChallengeReady_Func (bool testConds, bool runActions) {
     // Variable Declarations
     int lv_rand;
 
+    // Automatic Variable Declarations
     // Variable Initialization
 
     // Actions
@@ -886,13 +925,14 @@ void lib3FB28C60_gt_ChallengeReady_Init () {
 // Trigger: Challenge Completed
 //--------------------------------------------------------------------------------------------------
 bool lib3FB28C60_gt_ChallengeCompleted_Func (bool testConds, bool runActions) {
-    unitgroup autoD9781801_g;
-    int autoD9781801_u;
-
     // Variable Declarations
     int lv_rand;
     int lv_completedchallenges;
     unit lv_unit;
+
+    // Automatic Variable Declarations
+    unitgroup autoD9781801_g;
+    int autoD9781801_u;
 
     // Variable Initialization
     lv_completedchallenges = lv_completedTotal;
@@ -924,9 +964,10 @@ bool lib3FB28C60_gt_ChallengeCompleted_Func (bool testConds, bool runActions) {
     if ((lv_completedchallenges > 0) && (ModI(lv_completedchallenges, 5) == 0)) {
         UIDisplayMessage(PlayerGroupAll(), c_messageAreaSubtitle, (StringExternal("Param/Value/lib_3FB28C60_3C6EDD4F") + IntToText(lv_completedchallenges) + StringExternal("Param/Value/lib_3FB28C60_DEE63ECE")));
         autoD9781801_g = sf_game_hero_get_unitgroup();
-        autoD9781801_u = 1;
-        for ( ; autoD9781801_u <= UnitGroupCount(autoD9781801_g, c_unitCountAll) ; autoD9781801_u += BoolToInt(lv_unit == UnitGroupUnit(autoD9781801_g, autoD9781801_u)) ) {
-            lv_unit = UnitGroupUnit(autoD9781801_g, autoD9781801_u);
+        autoD9781801_u = UnitGroupCount(autoD9781801_g, c_unitCountAll);
+        for (;; autoD9781801_u -= 1) {
+            lv_unit = UnitGroupUnitFromEnd(autoD9781801_g, autoD9781801_u);
+            if (lv_unit == null) { break; }
             sf_game_hero_grant_powerup(lv_unit);
         }
     }
@@ -944,12 +985,13 @@ void lib3FB28C60_gt_ChallengeCompleted_Init () {
 // Trigger: IBE Reset
 //--------------------------------------------------------------------------------------------------
 bool lib3FB28C60_gt_IBEReset_Func (bool testConds, bool runActions) {
-    int auto60759A9F_ae;
-    int auto60759A9F_ai;
-
     // Variable Declarations
     playergroup lv_players;
     int lv_i;
+
+    // Automatic Variable Declarations
+    int auto60759A9F_ae;
+    const int auto60759A9F_ai = 1;
 
     // Variable Initialization
     lv_players = PlayerGroupActive();
@@ -960,9 +1002,8 @@ bool lib3FB28C60_gt_IBEReset_Func (bool testConds, bool runActions) {
     }
 
     auto60759A9F_ae = MinI(lib3FB28C60_gv_iBELaunchParameters.lv_herohelpsquadron, 10);
-    auto60759A9F_ai = 1;
     lv_i = 1;
-    for ( ; ( (auto60759A9F_ai >= 0 && lv_i <= auto60759A9F_ae) || (auto60759A9F_ai <= 0 && lv_i >= auto60759A9F_ae) ) ; lv_i += auto60759A9F_ai ) {
+    for ( ; ( (auto60759A9F_ai >= 0 && lv_i <= auto60759A9F_ae) || (auto60759A9F_ai < 0 && lv_i >= auto60759A9F_ae) ) ; lv_i += auto60759A9F_ai ) {
         PlayerGroupAdd(lv_players, lv_i);
     }
     sf_game_prepare(lv_players);
@@ -984,6 +1025,7 @@ bool lib3FB28C60_gt_IBELoad_Func (bool testConds, bool runActions) {
     // Variable Declarations
     int lv_mode;
 
+    // Automatic Variable Declarations
     // Variable Initialization
     lv_mode = lib3FB28C60_gv_iBELaunchParameters.lv_gamemode;
 
@@ -1011,6 +1053,7 @@ void lib3FB28C60_gt_IBELoad_Init () {
 // Trigger: IBE Begin
 //--------------------------------------------------------------------------------------------------
 bool lib3FB28C60_gt_IBEBegin_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
     // Actions
     if (!runActions) {
         return true;
@@ -1030,6 +1073,7 @@ void lib3FB28C60_gt_IBEBegin_Init () {
 // Trigger: IBE Fail
 //--------------------------------------------------------------------------------------------------
 bool lib3FB28C60_gt_IBEFail_Func (bool testConds, bool runActions) {
+    // Automatic Variable Declarations
     // Actions
     if (!runActions) {
         return true;

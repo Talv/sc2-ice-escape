@@ -87,7 +87,7 @@ struct ibe_stat_gresult_t {
 // GAME RESULT LIST | RANKING
 //
 
-const int IBE_STAT_GRL_PLIMIT = 200;
+const int IBE_STAT_GRL_PLIMIT = 100;
 const int IBE_STAT_GLR_PLAYER_MAX = 1024;
 const int IBE_STAT_GLR_MAX = IBE_STAT_GRL_PLIMIT * MAX_PLAYERS;
 
