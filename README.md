@@ -4,11 +4,20 @@ Brings rich set of utilities for making Ice Escape like maps on Starcraft II eng
 
 It's current configuration is made to recreate **Ice Baneling Escape** map design invented by **DeltaVelocity**. Although it was planned to also support other variants of Ice Escape like maps.
 
+## Showcase
+
+![Preview](https://i.imgur.com/J2a1Qpq.jpg)
+
+**Gallery:** https://imgur.com/a/Hx3uyzj
+
+**Short gameplay videos:**: https://gfycat.com/WealthyAllEmu
+
 ## Notable features
 
 ### Automatic terrain texture recognition
 
-The native API function `string TerrainTexture (point pos);` has its precision limited to one square (IBE map size 256x256 - max.). Thus it's unusable for pathes, curves etc. Because the square in reality is built with 8x8 pixels.
+The native API function `string TerrainTexture (point pos);` has its precision limited to one square (This map size is 256x256 - max.).
+Thus it's unusable for making curvy patches etc. As the square in reality is built with 8x8 pixels.
 
 To solve this problem a custom tool was made. To provide complete texture map data to be accessible from `Galaxy` code. Tool is available to download in its own repo: [sc2-texture-scanner](https://github.com/Talv/sc2-texture-scanner/releases)
 
@@ -66,4 +75,4 @@ Proper docs are yet to be made. But here is something to get you started:
 ## Credits
 - **DeltaVelocity** - There simply would be nothing without him.
 - **Chioy** - Designed pretty much all of the challenges for *Back to Brood Ice Escape* and *Ice Baneling Escape: Cold Voyage*.
-- **Delphinium** and **NanaKey** - Provided 3d models of pillar & lighting beam used for electric fence.
+- **Delphinium** and **NanaKey** - 3d models of pillar & lighting beam used for electric fence.
