@@ -12,6 +12,7 @@ It's current configuration is made to recreate **Ice Baneling Escape** map desig
 
 **Short gameplay videos:**
 - https://gfycat.com/FirmAjarDingo
+- https://gfycat.com/RemorsefulPreciousAcaciarat
 - https://gfycat.com/WealthyAllEmu
 
 ## Notable features
