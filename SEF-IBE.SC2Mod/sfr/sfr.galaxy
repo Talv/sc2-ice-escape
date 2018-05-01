@@ -40,7 +40,7 @@ void sfr_rewards_register()
     sfi_reward_register(7, IBE_REWARD_KIND_GLAZE, false, StringToText("Poison"), null, "Assets\\Textures\\btn-ability-spearofadun-orbitalassimilator.dds");
     sfi_reward_register(8, IBE_REWARD_KIND_GLAZE, false, StringToText("Electric"), null, "Assets\\Textures\\btn-ability-protoss-stasistrap.dds");
     sfi_reward_register(9, IBE_REWARD_KIND_GLAZE, false, StringToText("Flash"), null, "Assets\\Textures\\btn-ability-protoss-shieldrecharge.dds");
-    sfi_reward_register(10, IBE_REWARD_KIND_GLAZE, true, StringToText("Corruption"), StringToText("exclusive!"), "Assets\\Textures\\banelingenvironmentblur.dds");
+    sfi_reward_register(10, IBE_REWARD_KIND_GLAZE, false, StringToText("Corruption"), null, "Assets\\Textures\\banelingenvironmentblur.dds");
 
     sfi_reward_actor_names[1] = "Storm_Glaze_Crusader_Base_FallingSword";
     sfi_reward_actor_names[2] = "Storm_Glaze_Nova_Novazon_Decoy";

@@ -27,16 +27,18 @@ static void ibe_kick_update_info(int playerId)
         IntToText(voteCount) + StringToText("/") + IntToText(voteTotal) + StringToText(" votes to kick ") + sf_player_name_colored(playerId)
     );
 
-    if ( IntToFixed(voteCount) / IntToFixed(MaxI(voteTotal, 1)) >= 0.7 && !TriggerExists(ibe_kick_triggers[playerId])) {
-        ibe_kick_playerId = playerId;
-        ibe_kick_triggers[playerId] = TriggerCreate("ibe_kick_onMain");
-        TriggerExecute(ibe_kick_triggers[playerId], true, false);
+    if (IntToFixed(voteCount) / IntToFixed(MaxI(voteTotal, 1)) >= 0.7) {
+        if (!TriggerExists(ibe_kick_triggers[playerId])) {
+            ibe_kick_playerId = playerId;
+            ibe_kick_triggers[playerId] = TriggerCreate("ibe_kick_onMain");
+            TriggerExecute(ibe_kick_triggers[playerId], true, false);
 
-        UIDisplayMessage(
-            PlayerGroupAll(),
-            c_messageAreaSubtitle,
-            sf_player_name_colored(playerId) + StringToText(" will be kicked within 15 sec! Type -c to cancel.")
-        );
+            UIDisplayMessage(
+                PlayerGroupAll(),
+                c_messageAreaSubtitle,
+                sf_player_name_colored(playerId) + StringToText(" will be kicked within 15 sec! Type -c to cancel.")
+            );
+        }
     }
     else if (TriggerExists(ibe_kick_triggers[playerId])) {
         TriggerStop(ibe_kick_triggers[playerId]);

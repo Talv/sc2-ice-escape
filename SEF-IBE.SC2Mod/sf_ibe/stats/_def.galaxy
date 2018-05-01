@@ -51,3 +51,35 @@ int ibe_stat_rk_chal_counter;
 
 void ibe_stat_rk_init();
 void ibe_stat_rk_set_challenge(int gm_code, int chal_id, int player, fixed time);
+
+//
+// UTIL
+//
+
+// fixed ibe_stat_util_players_best_chal_total(int player)
+// {
+//     int i;
+//     int l;
+//     int chal_per_ch;
+//     int[IBE_STAT_CHALLENGE_MAX] chal_compl_table;
+//     fixed[IBE_STAT_CHALLENGE_MAX] chal_compl_times;
+//     fixed chal_total_time;
+//     for (i = 0; i < IBE_GM_MAX; i += 1) {
+//         for (l = 0; l < IBE_STAT_CHALLENGE_MAX; l += 1) {
+//             if (ibe_stat_profiles[player].gm[i].chal[l].completions > 0) {
+//                 chal_compl_table[l] += ibe_stat_profiles[player].gm[i].chal[l].completions;
+//                 if (chal_compl_times[l] == 0 || ibe_stat_profiles[player].gm[i].chal[l].best_time < chal_compl_times[l]) {
+//                     chal_compl_times[l] = ibe_stat_profiles[player].gm[i].chal[l].best_time;
+//                 }
+//             }
+//         }
+//     }
+
+//     for (i = 0; i < IBE_STAT_CHALLENGE_MAX; i += 1) {
+//         if (chal_compl_table[i] == 0) { continue; }
+//         chal_per_ch += 1;
+//         chal_total_time += chal_compl_times[i];
+//     }
+
+//     return chal_total_time;
+// }

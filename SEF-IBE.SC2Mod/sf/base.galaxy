@@ -17,8 +17,8 @@ int sf_register_mod(structref<SF_MODULE> mod) {
     int i;
 
     for (i = 0; i < SF_MODULE_LEN; i += 1) {
-        if (sf_mods.name != "") { continue; }
-        sf_mods.name = mod.name;
+        if (sf_mods[i].name != "") { continue; }
+        sf_mods[i].name = mod.name;
         // TODO: copy deps
         return i;
     }

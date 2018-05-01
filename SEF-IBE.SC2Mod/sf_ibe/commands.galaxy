@@ -1,4 +1,4 @@
-include "Libsefr_h"
+include "Libsefr"
 
 void sfi_cmd_reward(structref<sf_tool_command_payload_t> payload)
 {

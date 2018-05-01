@@ -3962,6 +3962,7 @@
     </Library>
     <Library Id="3FB28C60">
         <Root>
+            <Item Type="CustomScript" Library="3FB28C60" Id="99A582BD"/>
             <Item Type="Category" Library="3FB28C60" Id="4B33AC3F"/>
             <Item Type="Category" Library="3FB28C60" Id="48E6B664"/>
             <Item Type="Category" Library="3FB28C60" Id="0D70C986"/>
@@ -3977,9 +3978,17 @@
             <Item Type="Category" Library="3FB28C60" Id="367008AD"/>
             <Item Type="Category" Library="3FB28C60" Id="8F9BB53C"/>
             <Item Type="Category" Library="3FB28C60" Id="9BC9DCA2"/>
+            <Item Type="Category" Library="3FB28C60" Id="9A7B9FE0"/>
             <Item Type="Category" Library="3FB28C60" Id="5C07F3AC"/>
-            <Item Type="CustomScript" Library="3FB28C60" Id="99A582BD"/>
         </Root>
+        <Element Type="CustomScript" Id="99A582BD">
+            <ScriptCode>
+                include &quot;sf/entry.galaxy&quot;
+                include &quot;sf_ibe/entry.galaxy&quot;
+                include &quot;sfr/sfr.galaxy&quot;
+            </ScriptCode>
+            <InitFunc>ibe_init</InitFunc>
+        </Element>
         <Element Type="Category" Id="4B33AC3F">
             <Item Type="FunctionDef" Library="3FB28C60" Id="138BEC60"/>
             <Item Type="FunctionDef" Library="3FB28C60" Id="2D74C941"/>
@@ -14605,6 +14614,8 @@
                 if (ibe_game_difficulty == 1) { return true; } else { return false; }
             </ScriptCode>
         </Element>
+        <Element Type="Category" Id="9A7B9FE0">
+        </Element>
         <Element Type="Category" Id="5C07F3AC">
             <Item Type="Preset" Library="3FB28C60" Id="2984C84E"/>
             <Item Type="Preset" Library="3FB28C60" Id="E5E96A5B"/>
@@ -14788,13 +14799,6 @@
             <Identifier>sfi_reward_add_event_unlocked</Identifier>
             <FlagEvent/>
             <FlagNative/>
-        </Element>
-        <Element Type="CustomScript" Id="99A582BD">
-            <ScriptCode>
-                include &quot;sf/entry.galaxy&quot;
-                include &quot;sf_ibe/entry.galaxy&quot;
-            </ScriptCode>
-            <InitFunc>ibe_init</InitFunc>
         </Element>
     </Library>
     <Library Id="sefr">
