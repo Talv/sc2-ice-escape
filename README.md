@@ -79,3 +79,4 @@ Proper docs are yet to be made. But here is something to get you started:
 - **DeltaVelocity** - There simply would be nothing without him.
 - **Chioy** - Designed pretty much all of the challenges for *Back to Brood Ice Escape* and *Ice Baneling Escape: Cold Voyage*.
 - **Delphinium** and **NanaKey** - 3d models of pillar & lighting beam used for electric fence.
+- **DarlD** [Weather.SC2Mod](https://www.sc2mapster.com/projects/weather)

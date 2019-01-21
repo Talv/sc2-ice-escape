@@ -1,0 +1,16 @@
+DocInfo/DescLong=Beta 3.1<n/>Heat Wave hotfix<n/>Balanced sounds<n/><n/>Beta 3<n/>Added Sound FX<n/>Balanced the "Emitters"
+DocInfo/DescShort=Any
+DocInfo/Name=Weather Beta 3
+DocInfo/PatchNote001=Created the Mod
+DocInfo/PatchNote002=Changed the rain from the "Snow Weather Type" from "Rain Emitter Large" to "Rain Sprinkler". 
+DocInfo/PatchNote003=Reworked the "Blizzard". 
+DocInfo/PatchNote004=Added 50% Transparency to the actor. 
+DocInfo/PatchNote005=Changed the model used to achieve the "Blizzard" effect from "Dust Storm" to "Wind Emitter Medium"
+DocInfo/PatchNote006=Created separate version of the mod for very large maps. 
+DocInfo/PatchNote007=Beta 3
+DocInfo/PatchNote008=Sound FX have been added to the game
+DocInfo/PatchNote009=Balanced the "SFX & Weather Emitters"
+DocInfo/PatchNote010=Beta 2 has a maximum of 75 actors and Beta 2.256 has a maximum of 225.
+DocInfo/PatchNote011=Hotfixed "Heat Wave"
+DocInfo/PatchNote012=Balanced sounds
+DocInfo/Website=
