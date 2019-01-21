@@ -2303,4 +2303,11 @@
         <Radius value="0.5"/>
         <InnerRadius value="0.125"/>
     </CUnit>
+    <CUnit id="__">
+        <FlagArray index="Unclickable" value="1"/>
+        <FlagArray index="Unselectable" value="1"/>
+        <FlagArray index="Untargetable" value="1"/>
+        <FlagArray index="Invulnerable" value="1"/>
+    </CUnit>
+    <CUnit id="_" parent="__"/>
 </Catalog>

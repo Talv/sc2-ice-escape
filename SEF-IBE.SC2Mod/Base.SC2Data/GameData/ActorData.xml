@@ -2995,4 +2995,10 @@
     <CActorModelMaterial id="Caev_Glaze_Rainbow_Purple" parent="SfGlaze"/>
     <CActorModelMaterial id="Caev_Glaze_Camouflage" parent="SfGlaze"/>
     <CActorModelMaterial id="Caev_Glaze_Terrain" parent="SfGlaze"/>
+    <CActorUnit id="_" parent="GenericUnitMinimal" unitName="_">
+        <Model value="Invisible"/>
+    </CActorUnit>
+    <CActorUnit id="__" parent="GenericUnitMinimal" unitName="__">
+        <Model value="Invisible"/>
+    </CActorUnit>
 </Catalog>

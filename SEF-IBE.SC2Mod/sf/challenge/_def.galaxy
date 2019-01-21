@@ -13,6 +13,7 @@ int lv_completedTotal = 0;
 bool sf_chal_initialized = false;
 trigger[MAX_LEVELS + 1][LEVEL_MAX_TRIGGERS] lv_exclusiveTriggers;
 trigger[LEVEL_MAX_TRIGGERS] lv_tempTriggers;
+int[LEVEL_MAX_TRIGGERS] lv_completion_order;
 
 struct LEVEL_GLOBAL_TRIGGER {
     trigger trig;

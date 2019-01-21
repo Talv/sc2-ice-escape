@@ -28,6 +28,7 @@ void ibe_votekick_cmdhand_c(structref<sf_tool_command_payload_t> payload);
 //
 
 include "sf_ibe/lib/hash"
+include "sf_ibe/lib/repexport"
 
 include "sf_ibe/db/crypt"
 include "sf_ibe/db/stream"
