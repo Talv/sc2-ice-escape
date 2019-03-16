@@ -1,6 +1,0 @@
-sf_tool_command_t[SF_TOOL_COMMAND_MAX] sf_tool_commands;
-
-void cmd_init();
-void sf_tool_cmd_register(string name, sf_tool_command_handler_t handler);
-
-void sf_tool_dbg_init();

@@ -1,5 +1,0 @@
-STATS_SESSION[MAX_PLAYERS + 1] sf_stat_session_stats;
-
-void sf_stat_init();
-void sf_stat_session_clear();
-void sf_stat_session_expire(int player);

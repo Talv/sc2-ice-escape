@@ -1,4 +1,0 @@
-
-void db_record_edit(int id);
-void db_record_insert();
-int db_record_flush();
